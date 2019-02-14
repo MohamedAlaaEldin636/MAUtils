@@ -8,7 +8,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core_android" />
+            <option value="$PROJECT_DIR$/core_android_support_packages" />
+            <option value="$PROJECT_DIR$/core_kotlin" />
             <option value="$PROJECT_DIR$/sample" />
           </set>
         </option>
