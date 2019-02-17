@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
+    testOptions.unitTests.includeAndroidResources = true
     defaultConfig {
         applicationId 'mohamedalaa.mautils'
         minSdkVersion 15
@@ -35,12 +36,23 @@ dependencies {
     implementation project(':core_kotlin')
     implementation project(':core_android')
     implementation project(':core_android_support_packages')
+    implementation project(':mautils_gson')
+
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core-ktx:1.1.0-alpha04'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    // Testing
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    // Optional -- Robolectric environment
+    testImplementation 'androidx.test:core:1.1.0'
+    testImplementation 'org.robolectric:robolectric:4.2'
+
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
