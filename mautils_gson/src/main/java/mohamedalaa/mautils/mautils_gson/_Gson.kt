@@ -16,6 +16,12 @@ import kotlin.Exception
  * **Common Usage**
  * 1- when trying to deserialize Object of non null type parameter(s), then using [check] is useful isa.
  *
+ * **Notes**
+ * 1- this is used for increasing checking a little bit however, you still can just use [fromJsonOrNull]
+ * only if you do know what you are doing, otherwise an unexpected behavior might occur isa.
+ * 2- Also if [check] is not accurate an unexpected behavior might occur, so either you really
+ * sure about using `this` or consider all type params as might be nullable isa.
+ *
  * @param check if returns false, then null is returned from `this fun`, however if true
  * then conversion is done, which returns <E> or null in case of any error isa.
  *
