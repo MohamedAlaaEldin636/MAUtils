@@ -15,3 +15,8 @@ import android.widget.Toast
 private fun Int.hellodeoidwo() {
     throw toString()
 }*/
+
+private fun aaa111(jClass: Class<*>/*, kClass: KClass<*>*/, obj: Any?) {
+    jClass.isInstance(obj)
+    //kClass.isInstance(obj)
+}

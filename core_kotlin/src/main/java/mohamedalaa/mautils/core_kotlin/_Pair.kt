@@ -1,3 +1,5 @@
+@file:JvmName("PairUtils")
+
 package mohamedalaa.mautils.core_kotlin
 
 /** @return true if first or second == [element] */

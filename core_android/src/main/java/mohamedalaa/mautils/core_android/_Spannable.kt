@@ -1,3 +1,5 @@
+@file:JvmName("SpannableUtils")
+
 package mohamedalaa.mautils.core_android
 
 import android.text.Spannable

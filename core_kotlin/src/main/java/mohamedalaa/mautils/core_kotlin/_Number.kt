@@ -1,3 +1,5 @@
+@file:JvmName("NumberUtils")
+
 package mohamedalaa.mautils.core_kotlin
 
 /**

@@ -7,4 +7,8 @@ package mohamedalaa.mautils.mautils
  * 1- new module of getBySelfOrListOrArrayOrLazy for baseImplementation
  *
  * 2- new module for licences and notes etc.... , privacy isa, and maybe other about app, dev
+ *
+ * todo general
+ * 1- put licence for your own code isa.
+ * 2- put licences and notes in sample isa.
  */

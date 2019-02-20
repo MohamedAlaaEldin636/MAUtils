@@ -1,3 +1,5 @@
+@file:JvmName("IntentUtils")
+
 package mohamedalaa.mautils.core_android
 
 import android.content.Intent

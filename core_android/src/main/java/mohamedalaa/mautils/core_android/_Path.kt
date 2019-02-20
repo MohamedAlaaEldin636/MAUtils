@@ -1,3 +1,5 @@
+@file:JvmName("PathUtils")
+
 package mohamedalaa.mautils.core_android
 
 import android.graphics.Path

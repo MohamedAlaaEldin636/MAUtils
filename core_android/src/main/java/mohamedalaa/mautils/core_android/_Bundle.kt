@@ -1,3 +1,5 @@
+@file:JvmName("BundleUtils")
+
 package mohamedalaa.mautils.core_android
 
 import android.os.Bundle
