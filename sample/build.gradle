@@ -37,6 +37,7 @@ dependencies {
     implementation project(':core_android')
     implementation project(':core_android_support_packages')
     implementation project(':mautils_gson')
+    implementation project(':mautils_gson_java')
 
     implementation 'com.google.code.gson:gson:2.8.5'
 

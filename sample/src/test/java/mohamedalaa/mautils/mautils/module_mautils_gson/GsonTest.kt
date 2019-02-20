@@ -1,13 +1,11 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
-import com.google.gson.reflect.TypeToken
 import mohamedalaa.mautils.mautils.fake_data.CustomObject
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
 import mohamedalaa.mautils.mautils_gson.*
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-
 
 class GsonTest {
 
@@ -110,20 +108,6 @@ class GsonTest {
         assertEquals(customWithTypeParamOneNull, anotherLike)
 
         assertEquals(null, bothNotNullFrom2)
-    }
-
-    // -----
-
-    @Test
-    fun customWithCustomTypeParameters_toAndFromJson3() {
-        val pair = 5 to customObject
-        val triple = Triple("word", listOfCustomObjects, 55)
-
-        val jsonPair = object : GsonConverter<Pair<Int, CustomObject>>(){}.toJsonOrNull(pair)
-        val jsonTriple = object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.toJsonOrNull(triple)
-
-        assertEquals(pair, object : GsonConverter<Pair<Int, CustomObject>>(){}.fromJsonOrNull(jsonPair))
-        assertEquals(triple, object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.fromJsonOrNull(jsonTriple))
     }
 
 }

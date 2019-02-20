@@ -5,6 +5,8 @@ import android.widget.Toast;
 
 import org.w3c.dom.TypeInfo;
 
+import java.util.ArrayList;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import mohamedalaa.mautils.core_android.ContextUtils;
@@ -38,7 +40,25 @@ public class JavaClass {
         //GsonUtils.fromJsonCheck("ksklsms", JsonCheck.NON_NULL_ELEMENTS_LIST);
         //GsonUtils.fromJsonCheckJ();
         //TypeInfo
-        //Integer.class
+
+        //mohamedalaa.mautils.mautils_gson_java.GsonUtils.toJson
+    }
+
+    private void dewiojdoiw() {
+
+
+        /*
+        val pair = 5 to customObject
+        val triple = Triple("word", listOfCustomObjects, 55)
+
+        val jsonPair = object : GsonConverter<Pair<Int, CustomObject>>(){}.toJsonOrNull(pair)
+        val jsonTriple = object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.toJsonOrNull(triple)
+        val jsonList = object : GsonConverter<List<CustomObject>>(){}.toJsonOrNull(listOfCustomObjects)
+
+        assertEquals(pair, object : GsonConverter<Pair<Int, CustomObject>>(){}.fromJsonOrNull(jsonPair))
+        assertEquals(triple, object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.fromJsonOrNull(jsonTriple))
+        assertEquals(listOfCustomObjects, object : GsonConverter<List<CustomObject>>(){}.fromJsonOrNull(jsonList))
+         */
     }
 
 }

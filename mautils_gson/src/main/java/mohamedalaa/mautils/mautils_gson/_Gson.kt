@@ -4,14 +4,12 @@ package mohamedalaa.mautils.mautils_gson
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.internal.`$Gson$Types`
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.Exception
 
 /**
- * Converts `this JSON String` to object of type <E>, or null in case of any error occurs isa,
+ * Converts `this JSON String` to object of type [E], or null in case of any error occurs isa,
  * then depending on [check] if true the conversion result is returned, however if false null is
  * returned instead.
  *
@@ -99,7 +97,7 @@ inline fun <reified E: Any> String?.fromJsonCheck(jsonCheck: JsonCheck): E
     = fromJsonOrNullCheck(jsonCheck) ?: throw RuntimeException("Cannot convert $this to ${E::class}")
 
 /**
- * Converts `this JSON String` to object of type <E>, or null in case of any error occurs isa,
+ * Converts `this JSON String` to object of type [E], or null in case of any error occurs isa,
  *
  * Note all type parameters are erased due to JVM Erasure so type parameters are considered nullable,
  *
@@ -125,13 +123,11 @@ inline fun <reified E: Any> String?.fromJsonCheck(jsonCheck: JsonCheck): E
 inline fun <reified E> String?.fromJsonOrNull(): E? = this?.run {
     val (gson, collectionType) = generateGsonAndCollectionTypeAsPair<E>()
 
-    println(collectionType)
-
     try { gson.fromJson(this, collectionType) } catch (e: Exception) { null }
 }
 
 /**
- * Converts `this JSON String` to object of type <E>, or throws exception in case of any error occurs isa,
+ * Converts `this JSON String` to object of type [E], or throws exception in case of any error occurs isa,
  *
  * Note all type parameters are erased due to JVM Erasure so type parameters are considered nullable,
  *
@@ -213,58 +209,4 @@ internal inline fun <reified E> generateGsonAndCollectionTypeAsPair(): Pair<Gson
     val collectionType = object : TypeToken<E>(){}.type
 
     return gson to collectionType
-}
-
-
-
-// ----- todo limited in java, can have custom objects, and lists isa lessa haktepha isa
-
-/**
- * Only if your Object that needs to be converted to/from JSON-String, has type parameters,
- * otherwise consider using .....
- */
-abstract class GsonConverter<E> {
-
-    fun toJsonOrNull(element: E?): String? {
-        val type = getSuperclassTypeParameter(javaClass)
-
-        return element.toJsonOrNullJava(type)
-    }
-
-    fun fromJsonOrNull(json: String?): E? {
-        val type = getSuperclassTypeParameter(javaClass)
-
-        return json.fromJsonOrNullJava<E>(type)
-    }
-
-    private fun getSuperclassTypeParameter(subclass: Class<*>): Type {
-        val superclass = subclass.genericSuperclass
-        if (superclass is Class<*>) {
-            throw RuntimeException("Missing type parameter isa.")
-        }
-
-        val parameterizedType = superclass as ParameterizedType
-        return `$Gson$Types`.canonicalize(parameterizedType.actualTypeArguments[0])
-    }
-
-}
-
-private fun <E> E?.toJsonOrNullJava(type: Type): String? = this?.run {
-    val gson = GsonBuilder()
-        .serializeNulls()
-        .setLenient()
-        .enableComplexMapKeySerialization()
-        .create()
-
-    try { gson.toJson(this, type) } catch (e: Exception) { null }
-}
-
-private fun <E> String?.fromJsonOrNullJava(type: Type): E? = this?.run {
-    val gson = GsonBuilder()
-        .serializeNulls()
-        .setLenient()
-        .enableComplexMapKeySerialization()
-        .create()
-
-    try { gson.fromJson(this, type) } catch (e: Exception) { null }
 }

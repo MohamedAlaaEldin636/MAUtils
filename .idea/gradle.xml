@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/core_android_support_packages" />
             <option value="$PROJECT_DIR$/core_kotlin" />
             <option value="$PROJECT_DIR$/mautils_gson" />
+            <option value="$PROJECT_DIR$/mautils_gson_java" />
             <option value="$PROJECT_DIR$/sample" />
           </set>
         </option>
