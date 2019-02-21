@@ -28,7 +28,10 @@ class ReadFromAssetsAsyncTask private constructor(context: Context, private val 
         val context = weakReferenceContext?.get() ?: return null
 
         val assetManager = context.applicationContext.assets ?: return null
-        val subPathList = assetManager.list(pathInAssets)?.toList()?.filterNotNull() ?: return null
+        val subPathList = assetManager.list(pathInAssets)?.toList()?.filterNotNull()
+            ?.filter { it.length > 4 && it.endsWith(".txt") } ?: return null
+
+        // todo filter with .txt at end only isa.
 
         subPathList.forEach {
             val fullPath = "$pathInAssets/$it"
