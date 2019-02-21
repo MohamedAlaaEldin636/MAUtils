@@ -1,6 +1,7 @@
 package mohamedalaa.mautils.core_android
 
 import android.content.Context
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 
@@ -8,7 +9,21 @@ import android.widget.Toast
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/13/2019.
  *
  * todo
- * 1- Bundle in tic tac and ma utils
+ * 1- Bundle in ma utils and movies tv for full usage isa.
+ * 2- binding adapter utils movies tv isa.
+ * 3- FirebaseUtils -> movies tv isa.
+ * 4- GlideUtils -> movies tv isa.
+ * 4- NavigationViewUtils -> movies tv isa.
+ * 4- RetrofitCallbackUtils {new module isa.} -> movies tv isa.
+ * 4- NetworkUtils { needs permission so better isa in another module (core_android_with_permissions) } -> movies tv isa.
+ * 0- SharedPrefUtils -> movies tv isa
+ *
+ * didn't check custom classes at all so far isa.
+ * 1- in tic tac toe for password things in text input layout isa.
+ * 2- in movies tv for internet connection thing isa.
+ *
+ * ------- if succeeded to make youtube player with no errors at all isa.
+ * 1- ScreenOrientationUtils isa.
  */
 
 /*
@@ -19,4 +34,18 @@ private fun Int.hellodeoidwo() {
 private fun aaa111(jClass: Class<*>/*, kClass: KClass<*>*/, obj: Any?) {
     jClass.isInstance(obj)
     //kClass.isInstance(obj)
+}
+
+private fun bbb1111(map1: Map<String, String>, map2: Map<String, String>, map3: Map<String, Int>) {
+    if (map1 == map2) {
+        //Math.roun
+    }
+
+    if (map2 == map3) {
+
+    }
+}
+
+private fun ddd111(menuItem: MenuItem) {
+    //menuItem.setIconTintList()
 }

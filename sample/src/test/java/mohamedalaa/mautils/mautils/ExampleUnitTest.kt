@@ -17,4 +17,29 @@ class ExampleUnitTest {
 
         assertTrue { true }
     }
+
+    @Test
+    fun quick1() {
+        println(3.5f.toString())
+        println(3f.toString())
+        println(3.0f.toString())
+    }
+
+    @Test
+    fun mapsEqualityTest() {
+        val map1 = mapOf("a1" to "", "a2" to "", "a3" to "")
+        val map2 = mapOf("a1" to "", "a2" to "", "a3" to "")
+        val map22 = mapOf("a1" to "", "a3" to "")
+        val map3 = mapOf("a1" to 4, "a3" to 9)
+
+        bbb1111(map1, map2, map3)       // true false       -> done el7
+        bbb1111(map1, map22, map3)      // false false      -> done el7
+    }
+
+    private fun bbb1111(map1: Map<String, String>, map2: Map<String, String>, map3: Map<String, Int>) {
+        println(map1 == map2)
+        println()
+        println(map2 == map3)
+        println()
+    }
 }
