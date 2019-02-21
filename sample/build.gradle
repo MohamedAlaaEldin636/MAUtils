@@ -33,6 +33,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Local Libraries
+    //implementation project(':mautils_open_source_licences')
     implementation project(':core_kotlin')
     implementation project(':core_android')
     implementation project(':core_android_support_packages')

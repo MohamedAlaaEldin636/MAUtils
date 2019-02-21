@@ -2,7 +2,11 @@ package mohamedalaa.mautils.mautils.module_mautils_gson
 
 import mohamedalaa.mautils.mautils.fake_data.CustomObject
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
+import mohamedalaa.mautils.mautils.fake_data.Token1
+import mohamedalaa.mautils.mautils.module_mautils_gson_java.GsonTest
 import mohamedalaa.mautils.mautils_gson.*
+import mohamedalaa.mautils.mautils_gson_java.GsonConverter
+import mohamedalaa.mautils.mautils_gson_java.toJsonOrNull
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -109,5 +113,94 @@ class GsonTest {
 
         assertEquals(null, bothNotNullFrom2)
     }
+
+    // todo any nested type param is ok but if nested was primitive then an error will happen, so make own wrapper isa.
+    @Test
+    fun nestedTypeParams() {
+        val any = CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>()
+        any.element1 = CustomObject()
+        any.element2 = listOfCustomObjects to CustomWithTypeParam(element1 = 3.0f to 6, element2 = false)
+
+        val json = any.toJson()
+
+        val retrievedAny = json.fromJson<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>()
+
+        println(any)
+        println()
+        println(retrievedAny)
+
+        //assertNotEquals(any, retrievedAny) // error as Int is converted as Float
+
+        //assertEquals(any, object : GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>(){}.fromJson(json))
+
+        val retrievedAny2 = object :
+            GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>() {
+        }.fromJson(json)
+
+        println(retrievedAny2)
+
+        val int: Int? = retrievedAny2.element2?.second?.element1?.second
+        println(int)
+
+        // todo
+
+    }
+
+    @Test
+    fun nestedTypeParams2() {
+        val any = CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>()
+        any.element1 = CustomObject()
+        any.element2 = listOfCustomObjects to CustomWithTypeParam(element1 = 3.0f to 6, element2 = false)
+
+        val json = any.toJson()
+
+        val retrievedAny = json.fromJson<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>()
+
+        println(any)
+        println()
+        println(retrievedAny)
+
+        //assertNotEquals(any, retrievedAny) // error as Int is converted as Float
+        //assertEquals(any, object : GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>(){}.fromJson(json))
+
+        val retrievedAny2 = object :
+            GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>() {
+        }.fromJson(json)
+
+        println(retrievedAny2)
+
+        class HH: GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<CustomObject, CustomObject>, Boolean>>>>()
+        val a = HH()
+        val retrievedAny4 = a.fromJson(json)
+
+        println(retrievedAny4)
+
+        /*val int: Double? = retrievedAny2.element2?.second?.element1?.second
+        println(int)*/
+
+        // todo assert
+        //assertEquals(any, retrievedAny)
+        //assertEquals(any, retrievedAny2)
+
+        val goal = object :
+            Token1.Goal<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>() {}
+        val j = goal.toJsonOrNull(any)
+        val a2 = goal.fromJsonOrNull(j)
+
+        val a33 = GsonTest.ghjk(any)
+
+        // todo ezan lazm from java isa.
+
+        println()
+        println()
+        println(a33.element2?.second?.element1?.second)
+
+        assertEquals(any, a33)
+    }
+
+
+    data class IntWrapper(val int: Float)
+
+
 
 }

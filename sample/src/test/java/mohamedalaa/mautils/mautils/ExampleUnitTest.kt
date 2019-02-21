@@ -1,5 +1,7 @@
 package mohamedalaa.mautils.mautils
 
+import mohamedalaa.mautils.mautils.fake_data.CustomObject
+import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -41,5 +43,20 @@ class ExampleUnitTest {
         println()
         println(map2 == map3)
         println()
+    }
+
+    @Test
+    fun showClassesIsa() {
+        showClassIsa<Int>()
+        showClassIsa<Boolean>()
+        showClassIsa<String>()
+        showClassIsa<CustomObject>()
+        showClassIsa<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, Int>>>()
+    }
+
+    private inline fun <reified T> showClassIsa() {
+        println(T::class)
+        println(Int::class)
+        println(Boolean::class)
     }
 }

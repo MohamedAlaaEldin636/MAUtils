@@ -18,9 +18,15 @@ import android.widget.Toast
  * 4- NetworkUtils { needs permission so better isa in another module (core_android_with_permissions) } -> movies tv isa.
  * 0- SharedPrefUtils -> movies tv isa
  *
+ * OTHER Modules
+ * 1- licences and notes isa, licence_copyright_and notice
+ *
  * didn't check custom classes at all so far isa.
  * 1- in tic tac toe for password things in text input layout isa.
  * 2- in movies tv for internet connection thing isa.
+ *
+ * aha hatkon module isa soghayara bs bafakar module only for androidx:lifecycle extensions isa,
+ * for getViewModel elle na 3amelha fe el licences isa.
  *
  * ------- if succeeded to make youtube player with no errors at all isa.
  * 1- ScreenOrientationUtils isa.

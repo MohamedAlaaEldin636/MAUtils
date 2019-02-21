@@ -9,7 +9,7 @@ data class CustomObject(val name: String = "Mohamed",
                         val address :String = "Not your business",
                         val friendsNames: List<String> = listOf("Gendy", "Omar", "Afrah"))
 
-data class CustomWithTypeParam<T, R>(val element1: T? = null,
-                                     val element2: R? = null,
+data class CustomWithTypeParam<T, R>(var element1: T? = null,
+                                     var element2: R? = null,
                                      val name: String = "name",
                                      val anotherName: String? = null)

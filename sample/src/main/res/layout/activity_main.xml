@@ -37,4 +37,16 @@
 
         tools:ignore="Autofill,LabelFor" />
 
+    <Button
+        android:id="@+id/button"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="16dp"
+
+        android:text="Test 1"
+        android:textColor="@android:color/black"
+        android:textSize="22sp"/>
+
 </LinearLayout>

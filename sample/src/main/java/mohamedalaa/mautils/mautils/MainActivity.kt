@@ -1,5 +1,6 @@
 package mohamedalaa.mautils.mautils
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,5 +16,9 @@ class MainActivity : AppCompatActivity() {
 
         editText1.setMaxLength(4)
         editText2.setMaxLength(4, true)
+
+        button.setOnClickListener {
+            //startActivity(Intent(this, OpenS))
+        }
     }
 }
