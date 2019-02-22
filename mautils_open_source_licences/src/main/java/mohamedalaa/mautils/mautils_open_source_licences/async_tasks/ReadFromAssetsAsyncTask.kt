@@ -38,17 +38,11 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
     private var weakReferenceContext: WeakReference<Context>? = WeakReference(context)
 
     override fun doInBackground(vararg params: Void?): List<Licence>? {
-        Log.e("AsyncTask", "ch1")
-
         val context = weakReferenceContext?.get() ?: return null
-
-        Log.e("AsyncTask", "ch2")
 
         val assetManager = context.applicationContext.assets ?: return null
         val subPathList = assetManager.list(pathInAssets)?.toList()?.filterNotNull()
             ?.filter { it.length > 4 && it.endsWith(".txt") } ?: return null
-
-        Log.e("AsyncTask", "ch3 -> ${subPathList.size}")
 
         val listOfLicences = subPathList.mapNotNull {
             val fullPath = if (pathInAssets.isNotEmpty()) "$pathInAssets/$it" else it
@@ -66,7 +60,7 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
     }
 
     /**
-     * todo test if there is sub folder isa.
+     * todo test if there is sub folders isa, also generalized sure foreach isa, corrupted licence -> means has no name should be avoided isa.
      * Acc to ->
      * {@name Gson}
      * {@author Google} // usually found in licence 1st line as in Apache isa.
@@ -78,11 +72,7 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
 
         var reader: BufferedReader? = null
         try {
-            Log.e("AsyncTask", "before reader isa.")
-
             reader = BufferedReader(InputStreamReader(assetManager.open(fullPath), "UTF-8"))
-
-            Log.e("AsyncTask", "after reader isa.")
 
             var nameConsumed = false
             var authorConsumed = false
@@ -95,21 +85,13 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
             val licenceContent = StringBuilder()
 
             reader.forEachLine {
-                Log.e("AsyncTask", it)
-
                 if (readFullContent.not()) {
                     if (nameConsumed.not()) {
-                        Log.e("AsyncTask", "q1")
-
                         val nameIndex = it.indexOfOrNull(NAME_KEY)
                         nameIndex?.apply {
                             val starterIndex = nameIndex.plus(NAME_KEY.length).inc()
 
-                            Log.e("AsyncTask", "q1 -> starterIndex isa -> $starterIndex")
-
                             val endIndex = it.indexOfOrNull(ENDING_KEY) ?: throw RuntimeException()
-
-                            Log.e("AsyncTask", "q1 -> endIndex isa -> $endIndex")
 
                             if (starterIndex > endIndex) {
                                 throw RuntimeException()
@@ -119,12 +101,8 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
 
                             nameConsumed = true
 
-                            Log.e("AsyncTask", "q2")
-
                             return@forEachLine
                         }
-
-                        Log.e("AsyncTask", "q3")
                     }
 
                     if (authorConsumed.not()) {
@@ -178,7 +156,6 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
                 }
             }
         }catch (e: Exception) {
-            /* Do nothing */
             Log.e("AsyncTask", e.message ?: "exception msg was null")
         }finally {
             kotlin.runCatching { reader?.close() }

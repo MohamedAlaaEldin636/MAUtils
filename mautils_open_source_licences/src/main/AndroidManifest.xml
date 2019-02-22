@@ -4,8 +4,8 @@
     <application>
 
         <activity
-            android:name=".OpenSourceLicencesActivity"
-            android:theme="@style/AppTheme"/>
+            android:name=".view.OpenSourceLicencesActivity"
+            android:theme="@style/MAUtilsOpenSourceLicencesTheme"/>
 
     </application>
 

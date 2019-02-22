@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<data>
+        <import type="android.view.View"/>
+        <import type="mohamedalaa.mautils.mautils_open_source_licences.model.LicenceKt"/>
+        <variable
+            name="licence"
+            type="mohamedalaa.mautils.mautils_open_source_licences.model.Licence"/>
+    </data>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="16dp"
+
+        android:clickable="true"
+        android:focusable="true"
+
+        android:background="?selectableItemBackground">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/linkButton"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/link"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <View
+            android:id="@+id/view"
+
+            android:layout_width="8dp"
+            android:layout_height="1dp"
+
+            android:background="@android:color/transparent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/linkButton"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/licenceName"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+
+            android:gravity="center_vertical"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/licenceAuthor"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/view"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/licenceAuthor"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:textColor="@android:color/black"
+            android:textSize="22sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+
+            android:gravity="center_vertical"
+
+            app:layout_constraintTop_toBottomOf="@id/licenceName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/licenceName"
+            app:layout_constraintRight_toRightOf="@id/licenceName"/>
+
+        <!-- Just to maintain same height isa. -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/licenceNameAlone"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+
+            android:gravity="center_vertical"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/licenceName"
+            app:layout_constraintRight_toRightOf="@id/licenceName"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

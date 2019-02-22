@@ -7,6 +7,7 @@ import mohamedalaa.mautils.mautils_open_source_licences.custom_classes.QuickMuta
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/21/2019.
  *
+ * todo remove view model khales kda isa.
  */
 class OpenSourceLicencesViewModel(application: Application): AndroidViewModel(application) {
 
