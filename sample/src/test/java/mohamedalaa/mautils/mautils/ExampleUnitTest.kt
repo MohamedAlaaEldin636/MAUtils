@@ -59,4 +59,9 @@ class ExampleUnitTest {
         println(Int::class)
         println(Boolean::class)
     }
+
+    @Test
+    fun a12() {
+        println("name is mido".indexOf("name"))
+    }
 }

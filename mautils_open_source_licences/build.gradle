@@ -40,7 +40,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Local Libraries
-    implementation project(':core_android')
+    api project(':core_android')
 
     api 'com.google.android.material:material:1.0.0'
 

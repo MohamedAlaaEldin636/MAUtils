@@ -4,51 +4,40 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_open_source_licences.*
+import mohamedalaa.mautils.core_android.toast
 import mohamedalaa.mautils.mautils_open_source_licences.async_tasks.ReadFromAssetsAsyncTask
 import mohamedalaa.mautils.mautils_open_source_licences.databinding.ActivityOpenSourceLicencesBinding
 import mohamedalaa.mautils.mautils_open_source_licences.extensions.getViewModel
+import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.view_model.OpenSourceLicencesViewModel
 
 // todo tell whoever uses this MUST isa, have in gradle dataBinding { enabled = true } isa.
-class OpenSourceLicencesActivity : AppCompatActivity() {
+// todo maybe remove live data, view model and data binding since they are not used intensively
+// so no need to increase lib size, also consider as well constraint layout isa.
+class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.Listener {
+
+    private lateinit var viewModel: OpenSourceLicencesViewModel
 
     companion object {
-        /**
-         * Intent key represents Theme of this activity for action bar and loading progress bar
-         * colors pass style res of the theme Ex. E.style.my_theme isa.
-         */
-        const val INTENT_KEY_THEME_RES = "INTENT_KEY_THEME_RES"
+        /** */
+        const val INTENT_KEY_USE_OWN_THEME = "INTENT_KEY_USE_OWN_THEME"
     }
 
-    // TODO or better isa, use only my theme no action bar and user only boolean if use his theme
-    // and set tool bar and colors and others programmatically isa.
-    // todo either theme given by opp must implement no existence of action bar ashan el toolbar yshtaghal isa
-    // todo wala faks a3melo hide programmatically isa.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //intent.getExtraOrNull<Int>(INTENT_KEY_THEME_RES)?.apply { setTheme(this) }
-        //setTheme()
         val binding: ActivityOpenSourceLicencesBinding = DataBindingUtil.setContentView(
             this, R.layout.activity_open_source_licences)
 
-        // todo if it makes it w/ animation instead of immediately isa, see ->
-        // https://developer.android.com/training/system-ui/status
-        // https://stackoverflow.com/questions/19545370/android-how-to-hide-actionbar-on-certain-activities
-        supportActionBar?.hide()
-
         // View model
-        val viewModel = getViewModel<OpenSourceLicencesViewModel>()
+        viewModel = getViewModel()
 
         // setup binding
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        // view model for visibilities, presenter for clicks isa.
-        // and on launch async task isa.
-        // setup rc isa.
+        // TODO see optional colors isa.
         setupXml()
 
         setupData()
@@ -62,9 +51,33 @@ class OpenSourceLicencesActivity : AppCompatActivity() {
     }
 
     private fun setupData() {
-        //applicationContext.assets.list("")
+        // todo see saved instance state isa.
+        ReadFromAssetsAsyncTask.launch(this, "", this)
+    }
 
-        ReadFromAssetsAsyncTask.launch(this, "")
+    private fun unexpectedErrorSoFinish() {
+        toast("Unexpected error occurred")
+
+        finish()
+    }
+
+    // ---- Implementing ReadFromAssetsAsyncTask interface
+
+    override fun deliverResult(result: List<Licence>?) {
+        result?.apply {
+            if (isEmpty()) {
+                unexpectedErrorSoFinish()
+            }
+
+            // todo swap adapter isa.
+            forEach {
+                val msg = "$it\n"
+
+                Log.e("OpenSource", msg)
+            }
+
+            viewModel.loading.value = false
+        } ?: unexpectedErrorSoFinish()
     }
 
 }
