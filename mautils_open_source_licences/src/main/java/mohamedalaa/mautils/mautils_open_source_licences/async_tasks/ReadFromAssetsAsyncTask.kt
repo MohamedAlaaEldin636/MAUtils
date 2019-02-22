@@ -4,15 +4,16 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.os.AsyncTask
 import android.util.Log
+import mohamedalaa.mautils.mautils_open_source_licences.R
 import mohamedalaa.mautils.mautils_open_source_licences.extensions.indexOfOrNull
 import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.ref.WeakReference
 
-class ReadFromAssetsAsyncTask private constructor(context: Context,
-                                                  private val pathInAssets: String,
-                                                  private val listener: Listener?)
+internal class ReadFromAssetsAsyncTask private constructor(context: Context,
+                                                           private val pathInAssets: String,
+                                                           private val listener: Listener?)
     : AsyncTask<Void?, Void, List<Licence>?>() {
 
     companion object {
@@ -44,13 +45,21 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
         val subPathList = assetManager.list(pathInAssets)?.toList()?.filterNotNull()
             ?.filter { it.length > 4 && it.endsWith(".txt") } ?: return null
 
+        val mautilsLicenceName = context.getString(R.string.mautils_licence_name)
+        val mautilsLicenceAuthor = context.getString(R.string.mautils_licence_author)
+        val mautilsLink = context.getString(R.string.mautils_link)
+        val mautilsLicenceContent = context.getString(R.string.mautils_licence_content)
+
         val listOfLicences = subPathList.mapNotNull {
             val fullPath = if (pathInAssets.isNotEmpty()) "$pathInAssets/$it" else it
 
             readTextFile(assetManager, fullPath)
-        }
+        }.toMutableList()
 
         weakReferenceContext?.clear()
+
+        val mautilsLicence = Licence(mautilsLicenceName, mautilsLicenceAuthor, mautilsLink, mautilsLicenceContent)
+        listOfLicences.add(0, mautilsLicence)
 
         return listOfLicences
     }
@@ -59,14 +68,6 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
         listener?.deliverResult(result)
     }
 
-    /**
-     * todo test if there is sub folders isa, also generalized sure foreach isa, corrupted licence -> means has no name should be avoided isa.
-     * Acc to ->
-     * {@name Gson}
-     * {@author Google} // usually found in licence 1st line as in Apache isa.
-     * {@link https://github.com/google/gson}
-     * // from here starts licence content isa.
-     */
     private fun readTextFile(assetManager: AssetManager, fullPath: String): Licence? {
         var licence: Licence? = null
 
@@ -164,7 +165,7 @@ class ReadFromAssetsAsyncTask private constructor(context: Context,
         return licence
     }
 
-    interface Listener {
+    internal interface Listener {
         fun deliverResult(result: List<Licence>?)
     }
 

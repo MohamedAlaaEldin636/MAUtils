@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.mautils_open_source_licences.extensions
+package mohamedalaa.mautils.mautils_view_model.extensions
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel

@@ -18,7 +18,12 @@ class MainActivity : AppCompatActivity() {
         editText2.setMaxLength(4, true)
 
         button.setOnClickListener {
-            startActivity(Intent(this, OpenSourceLicencesActivity::class.java))
+            val intent = Intent(this, OpenSourceLicencesActivity::class.java).apply {
+                putExtra(OpenSourceLicencesActivity.INTENT_KEY_ASSETS_FOLDER_PATH, "licences")
+                putExtra(OpenSourceLicencesActivity.INTENT_KEY_THEME_STYLE_RES, R.style.MyOwnOpenSourceLicencesTheme)
+            }
+
+            startActivity(intent)
         }
     }
 }

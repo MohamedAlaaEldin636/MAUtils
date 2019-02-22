@@ -10,6 +10,8 @@ import android.os.Build
 import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
+import androidx.core.graphics.drawable.DrawableCompat
 
 /**
  * @return [View.getX] for this and all of it's parent viewGroups as a summation isa.
@@ -183,3 +185,10 @@ var View.backgroundCompat: Drawable?
     }else {
         setBackgroundDrawable(value)
     }
+
+/** Sets background tint according to given [color] isa. */
+fun View.setBackgroundTint(@ColorInt color: Int) {
+    val drawable = DrawableCompat.wrap(background)
+    backgroundCompat = drawable
+    DrawableCompat.setTint(drawable, color)
+}

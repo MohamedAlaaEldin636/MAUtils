@@ -9,6 +9,7 @@ import android.widget.Toast
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/13/2019.
  *
  * todo
+ * 0- databinding zy msln click of toolbar from xml directly isa., rc default item adapter we item decoration etc... isa.
  * 1- Bundle in ma utils and movies tv for full usage isa.
  * 2- binding adapter utils movies tv isa.
  * 3- FirebaseUtils -> movies tv isa.

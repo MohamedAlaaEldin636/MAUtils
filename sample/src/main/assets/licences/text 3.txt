@@ -1,14 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">MAUtils Open Source Licences</string>
-    <string name="link">Link</string>
-    <string name="no_licences_found">No Licences Found</string>
-    <string name="by_colon_string">By: %1$s</string>
+{@name Gson}
+{@link https://github.com/google/gson}
 
-    <!-- todo check el licence content shaghala isa, plus change link when done with it isa. -->
-    <string name="mautils_licence_name">MAUtils</string>
-    <string name="mautils_licence_author">Mohamed Alaa</string>
-    <string name="mautils_link">https://github.com/MohamedAlaaEldin636</string>
-    <string name="mautils_licence_content" translatable="false" tools:ignore="TypographyOther">Copyright © 2018 Mohamed Alaa (https://github.com/MohamedAlaaEldin636)
+Copyright 2008 Google Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -197,5 +190,5 @@ Apache License
   incurred by, or claims asserted against, such Contributor by reason
   of your accepting any such warranty or additional liability.
 
-END OF TERMS AND CONDITIONS</string>
-</resources>
+END OF TERMS AND CONDITIONS
+

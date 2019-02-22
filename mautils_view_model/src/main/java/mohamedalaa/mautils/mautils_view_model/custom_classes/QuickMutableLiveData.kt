@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.mautils_open_source_licences.custom_classes
+package mohamedalaa.mautils.mautils_view_model.custom_classes
 
 import androidx.lifecycle.MutableLiveData
 
