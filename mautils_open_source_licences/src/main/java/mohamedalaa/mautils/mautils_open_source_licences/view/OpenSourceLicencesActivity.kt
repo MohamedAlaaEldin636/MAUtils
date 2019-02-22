@@ -13,7 +13,9 @@ import mohamedalaa.mautils.core_android.getExtraOrNull
 import mohamedalaa.mautils.mautils_open_source_licences.R
 import mohamedalaa.mautils.mautils_open_source_licences.async_tasks.ReadFromAssetsAsyncTask
 import mohamedalaa.mautils.mautils_open_source_licences.custom_classes.CustomDividerItemDecoration
+import mohamedalaa.mautils.mautils_open_source_licences.extensions.toArrayList
 import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
+import mohamedalaa.mautils.mautils_open_source_licences.model.toStringList
 import mohamedalaa.mautils.mautils_open_source_licences.view.adapters.RCAdapterLicence
 
 // todo make compileOnly for gson, to save in on save instance state, or let it reload in orient changes isa.
@@ -81,6 +83,35 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         setupData(intent.getExtraOrNull<String>(INTENT_KEY_ASSETS_FOLDER_PATH) ?: "")
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        val keyWithBundle = licences?.mapIndexed { index, licence ->
+            val bundle = Bundle()
+
+            bundle.putStringArrayList(LicenceDetailsActivity.SUB_INTENT_KEY_LIST_AS_ITEM,
+                licence.toStringList().toArrayList())
+
+            index.toString() to bundle
+        }
+
+        outState?.apply {
+            keyWithBundle?.run {
+                forEach {
+                    putBundle(it.first, it.second)
+                }
+
+                putInt(LicenceDetailsActivity.INTENT_KEY_BUNDLES_SIZE, size)
+            }
+        }
+
+        // todo on create to restore isa.
+        // todo and after replace extras for licence details activity isa.
+        //intent.replaceExtras()
+
+        super.onSaveInstanceState(outState)
+    }
+
+    // ---- Private fun
+
     private fun setupXml() {
         // Toolbar
         ViewCompat.setElevation(toolbar, dpToPx(4))
@@ -95,7 +126,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        rcAdapter = RCAdapterLicence(this, licences)
+        rcAdapter = RCAdapterLicence(this, licences, intent)
         recyclerView.adapter = rcAdapter
     }
 

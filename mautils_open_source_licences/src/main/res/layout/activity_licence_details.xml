@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.LicenceDetailsActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:background="?colorPrimary"
+
+        app:title="MAUtils"
+        app:titleTextColor="@android:color/white"
+
+        app:subtitle="By: Mohamed Alaa"
+        app:subtitleTextColor="@color/white_with_alpha_75"
+
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/linkButtonFrameLayout"/>
+
+    <FrameLayout
+        android:id="@+id/linkButtonFrameLayout"
+
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+
+        android:background="?colorPrimary"
+
+        app:layout_constraintLeft_toRightOf="@id/toolbar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/linkButton"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+
+            android:text="@string/link"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
+
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:fillViewport="true"
+
+        android:padding="12dp"
+
+        android:scrollbars="vertical"
+
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <!-- todo font isa. -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/licenceContentTextView"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            tools:text="Copyright © 2018 Mohamed Alaa
+
+Licensed under the Apache License, Version 2.0 (the `License`);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0"/>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

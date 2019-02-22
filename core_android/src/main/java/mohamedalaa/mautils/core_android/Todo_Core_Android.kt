@@ -10,6 +10,7 @@ import android.widget.Toast
  *
  * todo
  * 0- databinding zy msln click of toolbar from xml directly isa., rc default item adapter we item decoration etc... isa.
+ * indexOfOrNull for all variants, in android_core isa.
  * 1- Bundle in ma utils and movies tv for full usage isa.
  * 2- binding adapter utils movies tv isa.
  * 3- FirebaseUtils -> movies tv isa.

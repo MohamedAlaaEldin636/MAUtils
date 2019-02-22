@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mohamedalaa.mautils.mautils_open_source_licences" >
+    package="mohamedalaa.mautils.mautils_open_source_licences">
 
     <application>
-
+        <activity android:name=".view.LicenceDetailsActivity"
+            android:theme="@style/MAUtilsOpenSourceLicencesTheme" />
         <activity
             android:name=".view.OpenSourceLicencesActivity"
-            android:theme="@style/MAUtilsOpenSourceLicencesTheme"/>
-
+            android:theme="@style/MAUtilsOpenSourceLicencesTheme" />
     </application>
 
 </manifest>

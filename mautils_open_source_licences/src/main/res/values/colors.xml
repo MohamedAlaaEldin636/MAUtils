@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="rc_item_divider">#9E9E9E</color>
+
+    <color name="white_with_alpha_75">#BFFFFFFF</color>
 </resources>

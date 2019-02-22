@@ -13,3 +13,6 @@ val Licence.isAuthorExists: Boolean
 
 val Licence.isLinkExists: Boolean
     get() = link.isNullOrEmpty().not()
+
+fun Licence.toStringList(): List<String?>
+    = listOf(licenceName, licenceAuthor, link, licenceContent)

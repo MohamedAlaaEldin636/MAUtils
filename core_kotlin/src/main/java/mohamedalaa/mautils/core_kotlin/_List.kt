@@ -93,3 +93,10 @@ inline fun <reified R> List<*>.firstIsInstance(): R = firstIsInstanceOrNull() ?:
 fun <T> List<T>.getAllIndicesOf(element: T): List<Int> = mapIndexedNotNull { index, it ->
     if (it == element) index else null
 }
+
+/**
+ * Returns a [ArrayList] filled with all elements of `this list` isa.
+ */
+fun <T> List<T>.toArrayList(): ArrayList<T> {
+    return ArrayList(this)
+}
