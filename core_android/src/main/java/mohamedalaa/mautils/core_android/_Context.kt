@@ -1,3 +1,4 @@
+@file:JvmMultifileClass
 @file:JvmName("ContextUtils")
 
 package mohamedalaa.mautils.core_android

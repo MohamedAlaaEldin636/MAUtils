@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
 import kotlinx.android.synthetic.main.activity_licence_details.*
 import mohamedalaa.mautils.core_android.*
 import mohamedalaa.mautils.mautils_open_source_licences.R
@@ -12,7 +13,6 @@ import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.isAuthorExists
 import mohamedalaa.mautils.mautils_open_source_licences.model.isLinkExists
 
-// todo search and sort not added yet isa.
 internal class LicenceDetailsActivity : AppCompatActivity() {
 
     companion object {
@@ -87,6 +87,8 @@ internal class LicenceDetailsActivity : AppCompatActivity() {
     }
 
     private fun setupXml() {
+        ViewCompat.setElevation(toolbar, dpToPx(4))
+        ViewCompat.setElevation(linkButtonFrameLayout, dpToPx(4))
         toolbar.setNavigationOnClickListener {
             finish()
         }

@@ -2,6 +2,11 @@ package mohamedalaa.mautils.mautils_open_source_licences.model
 
 /**
  * Licence item data class, represents everything about the licence isa.
+ *
+ * @param licenceName represents software name isa, Ex. (for this library) MAUtils.
+ * @param licenceAuthor author(s) created that software names separated by comma and space or just comma **", "** isa.
+ * @param link link where the software can be found isa, Ex. https://github.com/MohamedAlaaEldin636/MAUtils
+ * @param licenceContent full licence text of that library isa.
  */
 data class Licence(val licenceName: String,
                    val licenceAuthor: String? = null,

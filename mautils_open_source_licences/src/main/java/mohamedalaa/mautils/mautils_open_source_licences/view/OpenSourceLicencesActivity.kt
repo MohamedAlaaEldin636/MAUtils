@@ -1,27 +1,39 @@
 package mohamedalaa.mautils.mautils_open_source_licences.view
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_open_source_licences.*
+import kotlinx.android.synthetic.main.activity_open_source_licences.view.*
 import mohamedalaa.mautils.core_android.*
 import mohamedalaa.mautils.mautils_open_source_licences.R
 import mohamedalaa.mautils.mautils_open_source_licences.async_tasks.ReadFromAssetsAsyncTask
 import mohamedalaa.mautils.mautils_open_source_licences.custom_classes.CustomDividerItemDecoration
+import mohamedalaa.mautils.mautils_open_source_licences.extensions.setIconsTint
 import mohamedalaa.mautils.mautils_open_source_licences.extensions.toArrayList
 import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.toStringList
 import mohamedalaa.mautils.mautils_open_source_licences.view.adapters.RCAdapterLicence
 
+// todo search and sort not added yet isa, find in details msln isa. (match case, any letter, both so checkbox as chips isa.)
 class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.Listener {
 
     private lateinit var rcAdapter: RCAdapterLicence
 
     private var licences: List<Licence>? = null
+
+    private var searchText: String? = null
+    private var keyboardWasShown: Boolean = false
 
     companion object {
 
@@ -91,6 +103,9 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
         private const val SAVED_INSTANCE_KEY_BUNDLES_SIZE = "SAVED_INSTANCE_KEY_BUNDLES_SIZE"
         private const val SAVED_INSTANCE_KEY_LIST_AS_ITEM = "SAVED_INSTANCE_KEY_LIST_AS_ITEM"
+
+        private const val SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN = "SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN"
+        private const val SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT = "SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +120,12 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         setupDevConfigurations()
 
         setupData(intent.getExtraOrNull<String>(INTENT_KEY_ASSETS_FOLDER_PATH) ?: "")
+    }
+
+    override fun onPause() {
+        keyboardWasShown = isKeyboardShown()
+
+        super.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -125,6 +146,9 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
                 putInt(SAVED_INSTANCE_KEY_BUNDLES_SIZE, size)
             }
+
+            putBoolean(SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN, keyboardWasShown)
+            putString(SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT, if (searchView.visibility == View.VISIBLE) (searchView.text ?: "") else null)
         }
 
         super.onSaveInstanceState(outState)
@@ -134,6 +158,9 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
     private fun checkSavedInstanceState(savedInstanceState: Bundle?){
         savedInstanceState?.apply {
+            searchText = getOrNull(SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT)
+            keyboardWasShown = getOrNull(SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN) ?: false
+
             val size = getOrNull<Int>(SAVED_INSTANCE_KEY_BUNDLES_SIZE) ?: return
 
             licences = (0 until size).mapNotNull {
@@ -149,8 +176,39 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
     private fun setupXml() {
         // Toolbar
         ViewCompat.setElevation(toolbar, dpToPx(4))
+        toolbar.inflateMenu(R.menu.open_source_licences_activity)
         toolbar.setNavigationOnClickListener {
             finish()
+        }
+        toolbar.setOnMenuItemClickListener {
+            when(it.title.toString()) {
+                getString(R.string.search) -> {
+                    searchView.visibility = View.VISIBLE
+
+                    Handler().post {
+                        searchView.isIconified = false
+                    }
+                }
+            }
+
+            true
+        }
+        toolbar.menu.forEach { it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS) }
+        searchText?.also {
+            searchView.visibility = View.VISIBLE
+
+            searchView.postWithReceiver {
+                searchView.isIconified = false
+
+                searchView.text = it
+                searchView.firstMatchingViewIsInstanceOrNull<EditText> { setSelectionToLastChar() }
+
+                if (keyboardWasShown) {
+                    showKeyboardFor(searchView, true)
+                }else {
+                    searchView.clearFocus()
+                }
+            }
         }
 
         // Recycler View
@@ -167,6 +225,32 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
         rcAdapter = RCAdapterLicence(this, licences, intent)
         recyclerView.adapter = rcAdapter
+
+        // Search View
+        ViewCompat.setElevation(searchView, dpToPx(4))
+        // -- no need to use searchView.setOnSearchClickListener {  }, since it is always not iconified isa.
+        searchView.queryHint = getString(R.string.search_view_query_hint)
+        searchView.firstMatchingViewIsInstanceOrNull<EditText> {
+            imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
+        }
+        searchView.setOnQueryTextListenerMA {
+            onQueryTextChange {
+                // todo change rc items with char highlighted isa, acc to match case any letter 2 chips isa.
+
+                true
+            } onQueryTextSubmit {
+                hideKeyboardFrom(searchView)
+
+                true
+            }
+        }
+        searchView.setOnCloseListener {
+            hideKeyboardFrom(searchView)
+
+            searchView.visibility = View.INVISIBLE
+
+            true
+        }
     }
 
     private fun setupDevConfigurations() {
@@ -177,9 +261,28 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
             toolbarTitleColor != null -> {
                 toolbar.setTitleTextColor(toolbarTitleColor)
 
-                toolbar.navigationIcon.tint(toolbarIconColor ?: toolbarTitleColor)
+                val otherColor = toolbarIconColor ?: toolbarTitleColor
+
+                toolbar.setIconsTint(otherColor)
+
+                searchView.textColor = otherColor
+                searchView.hintTextColor = otherColor.addColorAlpha(0.75f)
+                searchView.setIconsTint(otherColor)
             }
-            toolbarIconColor != null -> toolbar.navigationIcon.tint(toolbarIconColor)
+            toolbarIconColor != null -> {
+                toolbar.setIconsTint(toolbarIconColor)
+
+                searchView.textColor = toolbarIconColor
+                searchView.hintTextColor = toolbarIconColor.addColorAlpha(0.75f)
+                searchView.setIconsTint(toolbarIconColor)
+            }
+            else -> {
+                toolbar.setIconsTint(Color.WHITE)
+
+                searchView.textColor = Color.WHITE
+                searchView.hintTextColor = Color.WHITE.addColorAlpha(0.75f)
+                searchView.setIconsTint(Color.WHITE)
+            }
         }
 
         // Recycler View Item Background

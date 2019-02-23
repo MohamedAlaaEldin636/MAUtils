@@ -8,4 +8,7 @@
     <string name="mautils_licence_author">Mohamed Alaa</string>
     <string name="mautils_link">https://github.com/MohamedAlaaEldin636</string>
     <string name="open_source_licences">Open Source Licences</string>
+
+    <string name="search_view_query_hint">Type here…</string>
+    <string name="search">Search</string>
 </resources>
