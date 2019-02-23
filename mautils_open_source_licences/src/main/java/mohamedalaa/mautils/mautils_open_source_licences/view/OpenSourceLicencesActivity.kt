@@ -104,8 +104,6 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         }
 
         // todo on create to restore isa.
-        // todo and after replace extras for licence details activity isa.
-        //intent.replaceExtras()
 
         super.onSaveInstanceState(outState)
     }
