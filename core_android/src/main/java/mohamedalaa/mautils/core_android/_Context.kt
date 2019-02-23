@@ -90,12 +90,16 @@ fun Context.toast(msg: String, duration: Int = Toast.LENGTH_SHORT, modifications
  * @param showToastOnFailure if true a toast msg
  * [R.string.you_do_not_have_application_that_can_open_web_links] will be shown isa.
  */
-fun Context.launchWebLink(url: String, showToastOnFailure: Boolean = true): Boolean {
+fun Context.launchWebLink(url: String, showToastOnFailure: Boolean = true, createIntentChooser: Boolean = false): Boolean {
     val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
     val canHandleIntent = webIntent.resolveActivity(packageManager) != null
     if (canHandleIntent) {
-        startActivity(webIntent)
+        if (createIntentChooser) {
+            startActivity(Intent.createChooser(webIntent, getString(R.string.open_web_link)))
+        }else {
+            startActivity(webIntent)
+        }
     }else if (showToastOnFailure) {
         toast(getString(R.string.you_do_not_have_application_that_can_open_web_links), Toast.LENGTH_SHORT)
     }

@@ -2,27 +2,25 @@ package mohamedalaa.mautils.mautils_open_source_licences.view.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rc_adapter_licence.view.*
-import mohamedalaa.mautils.core_android.inflateLayout
-import mohamedalaa.mautils.core_android.launchWebLink
-import mohamedalaa.mautils.core_android.setBackgroundTint
+import mohamedalaa.mautils.core_android.*
 import mohamedalaa.mautils.mautils_open_source_licences.R
 import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.isAuthorExists
 import mohamedalaa.mautils.mautils_open_source_licences.model.isLinkExists
 import mohamedalaa.mautils.mautils_open_source_licences.view.LicenceDetailsActivity
+import mohamedalaa.mautils.mautils_open_source_licences.view.OpenSourceLicencesActivity
 
 /**
  * [RecyclerView.Adapter] for [List]<[Licence]> isa.
  */
 internal class RCAdapterLicence(private val context: Context,
                                 private var licences: List<Licence>?,
-                                intent: Intent,
-                                @ColorInt private val itemButtonColor: Int? = null)
+                                intent: Intent)
     : RecyclerView.Adapter<RCAdapterLicence.CustomViewHolder>() {
 
     private val licenceIntent = Intent(context, LicenceDetailsActivity::class.java).apply { replaceExtras(intent) }
@@ -30,7 +28,7 @@ internal class RCAdapterLicence(private val context: Context,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val rootView = parent.context.inflateLayout(R.layout.rc_adapter_licence, parent)
 
-        itemButtonColor?.apply { rootView.linkButton.setBackgroundTint(this) }
+        setupDevConfigurations(rootView)
 
         return CustomViewHolder(rootView)
     }
@@ -46,7 +44,7 @@ internal class RCAdapterLicence(private val context: Context,
 
         val linkVisibility = if (licence.isLinkExists) {
             holder.itemView.linkButton.setOnClickListener {
-                licence.link?.apply { context.launchWebLink(this) }
+                licence.link?.apply { context.launchWebLink(this, createIntentChooser = true) }
             }
 
             View.VISIBLE
@@ -74,6 +72,37 @@ internal class RCAdapterLicence(private val context: Context,
         this.licences = licences
 
         notifyDataSetChanged()
+    }
+
+    // ---- Private fun
+
+    private fun setupDevConfigurations(rootView: View) {
+        // Item Background
+        licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_BACKGROUND_COLOR)?.apply {
+            rootView.rootConstraintLayout.backgroundCompat = ColorDrawable(this)
+        } ?: licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_BACKGROUND_DRAWABLE_RES)?.apply {
+            rootView.rootConstraintLayout.backgroundCompat = context.getDrawableFromRes(this)
+        }
+
+        // Toolbar title, subtitle and icon isa.
+        val nameTextColor = licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_LICENCE_NAME_TEXT_COLOR)
+        val authorTextColor = licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_LICENCE_AUTHOR_TEXT_COLOR)
+        when {
+            nameTextColor != null -> {
+                rootView.licenceName.setTextColor(nameTextColor)
+                rootView.licenceNameAlone.setTextColor(nameTextColor)
+
+                rootView.licenceAuthor.setTextColor(authorTextColor ?: nameTextColor)
+            }
+            authorTextColor != null -> rootView.licenceAuthor.setTextColor(authorTextColor)
+        }
+
+        licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_LINK_BUTTON_TEXT_COLOR)?.apply {
+            rootView.linkButton.setTextColor(this)
+        }
+        licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_LINK_BUTTON_TINT)?.apply {
+            rootView.linkButton.setBackgroundTint(this)
+        }
     }
 
     // ----- Custom View Holder

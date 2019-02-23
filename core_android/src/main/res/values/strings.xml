@@ -2,4 +2,5 @@
     <string name="app_name">Core Android</string>
 
     <string name="you_do_not_have_application_that_can_open_web_links">You don\'t have application that can open web links</string>
+    <string name="open_web_link">Open web link</string>
 </resources>

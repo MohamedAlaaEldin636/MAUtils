@@ -1,15 +1,14 @@
 package mohamedalaa.mautils.mautils_open_source_licences.view
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_open_source_licences.*
-import mohamedalaa.mautils.core_android.dpToPx
-import mohamedalaa.mautils.core_android.getColorFromRes
-import mohamedalaa.mautils.core_android.getExtraOrNull
+import mohamedalaa.mautils.core_android.*
 import mohamedalaa.mautils.mautils_open_source_licences.R
 import mohamedalaa.mautils.mautils_open_source_licences.async_tasks.ReadFromAssetsAsyncTask
 import mohamedalaa.mautils.mautils_open_source_licences.custom_classes.CustomDividerItemDecoration
@@ -18,7 +17,6 @@ import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.toStringList
 import mohamedalaa.mautils.mautils_open_source_licences.view.adapters.RCAdapterLicence
 
-// todo make compileOnly for gson, to save in on save instance state, or let it reload in orient changes isa.
 class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.Listener {
 
     private lateinit var rcAdapter: RCAdapterLicence
@@ -51,26 +49,48 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
          */
         const val INTENT_KEY_THEME_STYLE_RES = "INTENT_KEY_THEME_STYLE_RES"
 
+        /**
+         * Change toolbar title color, default is white isa.
+         *
+         * @see INTENT_KEY_THEME_STYLE_RES
+         * @see INTENT_KEY_TOOLBAR_ICON_TINT
+         */
+        const val INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR = "INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR"
+        /**
+         * Change toolbar nav icon tint color, default is [INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR] isa.
+         *
+         * @see INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR
+         * @see INTENT_KEY_THEME_STYLE_RES
+         */
+        const val INTENT_KEY_TOOLBAR_ICON_TINT = "INTENT_KEY_TOOLBAR_ICON_TINT"
 
-        //  better make it ?.apply pattern isa... as Intent ext fun isa.
-        //  see in detail activity if more is needed isa. like text font, size etc... isa.
-
-        // make recycler view color same as below isa, ashan mayeb2ash fe far2 isa.
         const val INTENT_KEY_RC_ITEM_BACKGROUND_COLOR = "INTENT_KEY_RC_ITEM_BACKGROUND_COLOR"
         const val INTENT_KEY_RC_ITEM_BACKGROUND_DRAWABLE_RES = "INTENT_KEY_RC_ITEM_BACKGROUND_DRAWABLE_RES"
 
         const val INTENT_KEY_RC_ITEM_LICENCE_NAME_TEXT_COLOR = "INTENT_KEY_RC_ITEM_LICENCE_NAME_TEXT_COLOR"
-        // LIKE ABOVE ISA.
+        /** Default is [INTENT_KEY_RC_ITEM_LICENCE_NAME_TEXT_COLOR] isa. */
         const val INTENT_KEY_RC_ITEM_LICENCE_AUTHOR_TEXT_COLOR = "INTENT_KEY_RC_ITEM_LICENCE_AUTHOR_TEXT_COLOR"
 
         const val INTENT_KEY_RC_ITEM_DIVIDER_COLOR = "INTENT_KEY_RC_ITEM_LINK_BUTTON"
+        /** Should be [Int] not [Float] isa. */
         const val INTENT_KEY_RC_ITEM_DIVIDER_DIMEN_IN_PX = "INTENT_KEY_RC_ITEM_DIVIDER_DIMEN_IN_PX"
         const val INTENT_KEY_RC_ITEM_DIVIDER_DRAWABLE_RES = "INTENT_KEY_RC_ITEM_DIVIDER_DRAWABLE_RES"
 
         const val INTENT_KEY_RC_ITEM_LINK_BUTTON_TEXT_COLOR = "INTENT_KEY_RC_ITEM_LINK_BUTTON_TEXT_COLOR"
         const val INTENT_KEY_RC_ITEM_LINK_BUTTON_TINT = "INTENT_KEY_RC_ITEM_LINK_BUTTON_TINT"
-        //  DEFAULT LIKE ABOVE ISA.
+
+        const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_NAME = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_NAME"
+        /** Default is 75% opaque of [INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_NAME] isa. */
+        const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_AUTHOR = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_AUTHOR"
+        const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_TOOLBAR_ICONS_TINT = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_TOOLBAR_ICONS_TINT"
+        const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LINK_BUTTON_TEXT_COLOR = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LINK_BUTTON_TEXT_COLOR"
         const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LINK_BUTTON_TINT = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LINK_BUTTON_TINT"
+        const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_TEXT_COLOR = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_TEXT_COLOR"
+        const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_ENABLE_CUSTOM_FONT = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_ENABLE_CUSTOM_FONT"
+        const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_BACKGROUND_COLOR = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_BACKGROUND_COLOR"
+
+        private const val SAVED_INSTANCE_KEY_BUNDLES_SIZE = "SAVED_INSTANCE_KEY_BUNDLES_SIZE"
+        private const val SAVED_INSTANCE_KEY_LIST_AS_ITEM = "SAVED_INSTANCE_KEY_LIST_AS_ITEM"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +98,11 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         intent.getExtraOrNull<Int>(INTENT_KEY_THEME_STYLE_RES)?.run { setTheme(this) }
         setContentView(R.layout.activity_open_source_licences)
 
+        checkSavedInstanceState(savedInstanceState)
+
         setupXml()
+
+        setupDevConfigurations()
 
         setupData(intent.getExtraOrNull<String>(INTENT_KEY_ASSETS_FOLDER_PATH) ?: "")
     }
@@ -87,7 +111,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         val keyWithBundle = licences?.mapIndexed { index, licence ->
             val bundle = Bundle()
 
-            bundle.putStringArrayList(LicenceDetailsActivity.SUB_INTENT_KEY_LIST_AS_ITEM,
+            bundle.putStringArrayList(SAVED_INSTANCE_KEY_LIST_AS_ITEM,
                 licence.toStringList().toArrayList())
 
             index.toString() to bundle
@@ -99,16 +123,28 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
                     putBundle(it.first, it.second)
                 }
 
-                putInt(LicenceDetailsActivity.INTENT_KEY_BUNDLES_SIZE, size)
+                putInt(SAVED_INSTANCE_KEY_BUNDLES_SIZE, size)
             }
         }
-
-        // todo on create to restore isa.
 
         super.onSaveInstanceState(outState)
     }
 
     // ---- Private fun
+
+    private fun checkSavedInstanceState(savedInstanceState: Bundle?){
+        savedInstanceState?.apply {
+            val size = getOrNull<Int>(SAVED_INSTANCE_KEY_BUNDLES_SIZE) ?: return
+
+            licences = (0 until size).mapNotNull {
+                val bundle = getOrNull<Bundle>(SAVED_INSTANCE_KEY_LIST_AS_ITEM) ?: return@mapNotNull null
+
+                val list = bundle.getOrNull<ArrayList<String?>>(it.toString()) ?: return@mapNotNull null
+
+                Licence.fromStringList(list)
+            }
+        }
+    }
 
     private fun setupXml() {
         // Toolbar
@@ -118,14 +154,40 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         }
 
         // Recycler View
+        val dividerColor = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_COLOR)
+        val dimenInPx = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_DIMEN_IN_PX)
+        val dividerDrawableRes = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_DRAWABLE_RES)
         val itemDecoration = CustomDividerItemDecoration(this,
-            dividerColor = getColorFromRes(R.color.rc_item_divider))
+            dividerColor = dividerColor ?: getColorFromRes(R.color.rc_item_divider),
+            dividerDrawable = dividerDrawableRes?.run { getDrawableFromRes(this) },
+            dividerDimenInPx = dimenInPx)
         recyclerView.addItemDecoration(itemDecoration)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         rcAdapter = RCAdapterLicence(this, licences, intent)
         recyclerView.adapter = rcAdapter
+    }
+
+    private fun setupDevConfigurations() {
+        // Toolbar -> title & icon tint isa.
+        val toolbarTitleColor = intent.getExtraOrNull<Int>(INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR)
+        val toolbarIconColor = intent.getExtraOrNull<Int>(INTENT_KEY_TOOLBAR_ICON_TINT)
+        when {
+            toolbarTitleColor != null -> {
+                toolbar.setTitleTextColor(toolbarTitleColor)
+
+                toolbar.navigationIcon.tint(toolbarIconColor ?: toolbarTitleColor)
+            }
+            toolbarIconColor != null -> toolbar.navigationIcon.tint(toolbarIconColor)
+        }
+
+        // Recycler View Item Background
+        intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_BACKGROUND_COLOR)?.apply {
+            recyclerView.backgroundCompat = ColorDrawable(this)
+        } ?: intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_BACKGROUND_DRAWABLE_RES)?.apply {
+            recyclerView.backgroundCompat = getDrawableFromRes(this)
+        }
     }
 
     private fun setupData(folderPathInAssets: String) {

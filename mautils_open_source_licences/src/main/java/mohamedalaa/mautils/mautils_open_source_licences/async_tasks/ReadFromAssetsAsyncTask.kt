@@ -19,7 +19,7 @@ internal class ReadFromAssetsAsyncTask private constructor(context: Context,
     companion object {
 
         private val THIS_LIBRARY_LICENCE_CONTENT = """
-Copyright © 2018 Mohamed Alaa
+Copyright © 2019 Mohamed Alaa
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
