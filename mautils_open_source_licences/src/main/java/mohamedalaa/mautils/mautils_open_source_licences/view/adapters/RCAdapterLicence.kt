@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.buildSpannedString
+import androidx.core.text.getSpans
 import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rc_adapter_licence.view.*
@@ -84,7 +85,8 @@ internal class RCAdapterLicence(private val context: Context,
             }
         }
         val author = buildSpannedString {
-            append(context.getString(R.string.by_colon_string, "").toSpannable())
+            val byWordAsSpannable = context.getString(R.string.by_colon_string, "").toSpannable()
+            append(byWordAsSpannable)
             append(
                 licence.licenceAuthor?.toSpannable()?.applyIf(highlightText) {
                     val generateNewSpan = { BackgroundColorSpan(Color.YELLOW) }
@@ -96,11 +98,12 @@ internal class RCAdapterLicence(private val context: Context,
                             val end = context.getString(R.string.by_colon_string, licence.licenceAuthor).lastIndex
                             indicesList.forEach {
                                 if (it in (start..end)) {
-                                    this@applyIf[start] = generateNewSpan()
+                                    val modifiedStart = start.minus(byWordAsSpannable.length)
+                                    this@applyIf[modifiedStart] = generateNewSpan()
 
                                     holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) {
                                         buildSpannedString {
-                                            append(context.getString(R.string.by_colon_string, "").toSpannable())
+                                            append(byWordAsSpannable)
                                             append(this@applyIf)
                                         }
                                     }else {
