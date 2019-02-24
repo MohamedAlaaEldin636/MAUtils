@@ -32,5 +32,17 @@ inline fun <T> T?.performIfNotNull(block: T.() -> Unit) {
     this?.block()
 }
 
+/**
+ * Only calls [block] fun if [condition] is true.
+ *
+ * @return `receiver` of this fun isa.
+ */
+inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T {
+    if (condition) {
+        return apply { this.block() }
+    }
+
+    return this
+}
 
 

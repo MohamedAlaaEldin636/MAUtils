@@ -37,6 +37,7 @@ dependencies {
 
     // Local Libraries
     api project(':core_android')
+    api project(':core_kotlin')
 
     api 'com.google.android.material:material:1.0.0'
 

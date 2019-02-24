@@ -2,28 +2,50 @@ package mohamedalaa.mautils.mautils_open_source_licences.view.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.text.style.BackgroundColorSpan
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.buildSpannedString
+import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rc_adapter_licence.view.*
 import mohamedalaa.mautils.core_android.*
+import mohamedalaa.mautils.core_kotlin.applyIf
 import mohamedalaa.mautils.mautils_open_source_licences.R
 import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.isAuthorExists
 import mohamedalaa.mautils.mautils_open_source_licences.model.isLinkExists
 import mohamedalaa.mautils.mautils_open_source_licences.view.LicenceDetailsActivity
 import mohamedalaa.mautils.mautils_open_source_licences.view.OpenSourceLicencesActivity
+import kotlin.properties.Delegates
 
 /**
  * [RecyclerView.Adapter] for [List]<[Licence]> isa.
  */
 internal class RCAdapterLicence(private val context: Context,
                                 private var licences: List<Licence>?,
-                                intent: Intent)
+                                intent: Intent,
+                                searchText: String?)
     : RecyclerView.Adapter<RCAdapterLicence.CustomViewHolder>() {
 
     private val licenceIntent = Intent(context, LicenceDetailsActivity::class.java).apply { replaceExtras(intent) }
+
+    private val filteredLicences = computeSearchedLicences()
+
+    // todo checked chips for match case and any letter isa, ignore author.
+    var searchText: String? by Delegates.observable(searchText) { _, _, _ ->
+        filteredLicences.clear()
+        filteredLicences.addAll(computeSearchedLicences())
+
+        try {
+            notifyDataSetChanged()
+        } catch (e: Exception) {
+            Log.e("RCAdapter", e.message ?: "Exception msg is null isa.")
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val rootView = parent.context.inflateLayout(R.layout.rc_adapter_licence, parent)
@@ -34,13 +56,92 @@ internal class RCAdapterLicence(private val context: Context,
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val licence = licences?.get(position) ?: return
+        val (licence, highlightText) = if (searchText.isNullOrEmpty()) {
+            (licences?.get(position) ?: return) to false
+        }else {
+            filteredLicences[position] to true
+        }
 
-        holder.itemView.licenceName.text = if (licence.isAuthorExists) licence.licenceName else ""
+        val name = licence.licenceName.toSpannable().applyIf(highlightText) {
+            val generateNewSpan = { BackgroundColorSpan(Color.YELLOW) }
+            val indicesList = spanChars(searchText, ignoreCase = true, allChars = false, generateNewSpan = generateNewSpan)
 
-        holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) context.getString(R.string.by_colon_string, licence.licenceAuthor) else ""
+            holder.itemView.licenceName.postWithReceiver {
+                if (layout.getEllipsisCount(0) > 0) {
+                    val start = layout.getEllipsisStart(0)
+                    val end = licence.licenceName.lastIndex
+                    indicesList.forEach {
+                        if (it in (start..end)) {
+                            this@applyIf[start] = generateNewSpan()
 
-        holder.itemView.licenceNameAlone.text = if (licence.isAuthorExists) "" else licence.licenceName
+                            holder.itemView.licenceName.text = if (licence.isAuthorExists) this@applyIf else ""
+                            holder.itemView.licenceNameAlone.text = if (licence.isAuthorExists) "" else this@applyIf
+
+                            return@postWithReceiver
+                        }
+                    }
+                }
+            }
+        }
+        val author = buildSpannedString {
+            append(context.getString(R.string.by_colon_string, "").toSpannable())
+            append(
+                licence.licenceAuthor?.toSpannable()?.applyIf(highlightText) {
+                    val generateNewSpan = { BackgroundColorSpan(Color.YELLOW) }
+                    val indicesList = spanChars(searchText, ignoreCase = true, allChars = false, generateNewSpan = generateNewSpan)
+
+                    holder.itemView.licenceAuthor.postWithReceiver {
+                        if (layout.getEllipsisCount(0) > 0) {
+                            val start = layout.getEllipsisStart(0)
+                            val end = context.getString(R.string.by_colon_string, licence.licenceAuthor).lastIndex
+                            indicesList.forEach {
+                                if (it in (start..end)) {
+                                    this@applyIf[start] = generateNewSpan()
+
+                                    holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) {
+                                        buildSpannedString {
+                                            append(context.getString(R.string.by_colon_string, "").toSpannable())
+                                            append(this@applyIf)
+                                        }
+                                    }else {
+                                        ""
+                                    }
+
+                                    return@postWithReceiver
+                                }
+                            }
+                        }
+                    }
+                }
+            )
+        }
+        //Log.e("RR", "$a, ${context.getString(R.string.by_colon_string, "").length};;")
+        /*val author = "".toSpannable() + licence.licenceAuthor?.toSpannable()?.applyIf(highlightText) {
+            val generateNewSpan = { BackgroundColorSpan(Color.YELLOW) }
+            val indicesList = spanChars(searchText, ignoreCase = true, allChars = false, generateNewSpan = generateNewSpan)
+
+            holder.itemView.licenceAuthor.postWithReceiver {
+                if (layout.getEllipsisCount(0) > 0) {
+                    val start = layout.getEllipsisStart(0)
+                    val end = context.getString(R.string.by_colon_string, licence.licenceAuthor).lastIndex
+                    indicesList.forEach {
+                        if (it in (start..end)) {
+                            this@applyIf[start] = generateNewSpan()
+
+                            holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) context.getString(R.string.by_colon_string, author) else ""
+
+                            return@postWithReceiver
+                        }
+                    }
+                }
+            }
+        }*/
+
+        holder.itemView.licenceName.text = if (licence.isAuthorExists) name else ""
+
+        holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) author else ""
+
+        holder.itemView.licenceNameAlone.text = if (licence.isAuthorExists) "" else name
 
         val linkVisibility = if (licence.isLinkExists) {
             holder.itemView.linkButton.setOnClickListener {
@@ -64,7 +165,13 @@ internal class RCAdapterLicence(private val context: Context,
         }
     }
 
-    override fun getItemCount(): Int = licences?.size ?: 0
+    override fun getItemCount(): Int {
+        return if (searchText.isNullOrEmpty()) {
+            licences?.size ?: 0
+        }else {
+            filteredLicences.size
+        }
+    }
 
     // ---- Public fun
 
@@ -103,6 +210,21 @@ internal class RCAdapterLicence(private val context: Context,
         licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_LINK_BUTTON_TINT)?.apply {
             rootView.linkButton.setBackgroundTint(this)
         }
+    }
+
+    private fun computeSearchedLicences(): MutableList<Licence> = try { searchText } catch (e: Exception) { null }.run {
+        if (this.isNullOrEmpty()) {
+            return mutableListOf()
+        }
+
+        licences?.mapNotNull {
+            if (it.licenceName.toLowerCase().contains(this.toLowerCase())
+                || it.licenceAuthor?.toLowerCase()?.contains(this.toLowerCase()) == true) {
+                it
+            }else {
+                null
+            }
+        }?.toMutableList() ?: mutableListOf()
     }
 
     // ----- Custom View Holder

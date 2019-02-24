@@ -25,7 +25,6 @@ import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.toStringList
 import mohamedalaa.mautils.mautils_open_source_licences.view.adapters.RCAdapterLicence
 
-// todo search and sort not added yet isa, find in details msln isa. (match case, any letter, both so checkbox as chips isa.)
 class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.Listener {
 
     private lateinit var rcAdapter: RCAdapterLicence
@@ -223,7 +222,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        rcAdapter = RCAdapterLicence(this, licences, intent)
+        rcAdapter = RCAdapterLicence(this, licences, intent, searchText)
         recyclerView.adapter = rcAdapter
 
         // Search View
@@ -235,7 +234,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         }
         searchView.setOnQueryTextListenerMA {
             onQueryTextChange {
-                // todo change rc items with char highlighted isa, acc to match case any letter 2 chips isa.
+                rcAdapter.searchText = it
 
                 true
             } onQueryTextSubmit {
