@@ -1,8 +1,6 @@
 package mohamedalaa.mautils.core_android
 
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.SearchView
+import android.widget.*
 import androidx.annotation.ColorInt
 
 var SearchView.textColor: Int?

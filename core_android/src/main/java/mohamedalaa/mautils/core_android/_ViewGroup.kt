@@ -81,10 +81,12 @@ fun ViewGroup.allMatchingViewsOrNull(checkThisViewGroup: Boolean = true, predica
     forEach {
         if (predicate(it)) {
             list.add(it)
-        }else if (it is ViewGroup) {
-            it.allMatchingViewsOrNull(false, predicate)?.apply {
-                list.addAll(this)
-            }
+        }
+
+        if (it is ViewGroup) {
+            val innerList = it.allMatchingViewsOrNull(false, predicate) ?: return@forEach
+
+            list.addAll(innerList)
         }
     }
 
@@ -116,7 +118,7 @@ fun ViewGroup.forEachAllViews(block: (View) -> Unit) {
         block(it)
 
         if (it is ViewGroup) {
-            it.forEach(block)
+            it.forEachAllViews(block)
         }
     }
 }

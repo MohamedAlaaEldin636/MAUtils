@@ -8,6 +8,7 @@ import android.os.Handler
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.CompoundButton
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,8 +20,7 @@ import mohamedalaa.mautils.core_android.*
 import mohamedalaa.mautils.mautils_open_source_licences.R
 import mohamedalaa.mautils.mautils_open_source_licences.async_tasks.ReadFromAssetsAsyncTask
 import mohamedalaa.mautils.mautils_open_source_licences.custom_classes.CustomDividerItemDecoration
-import mohamedalaa.mautils.mautils_open_source_licences.extensions.setIconsTint
-import mohamedalaa.mautils.mautils_open_source_licences.extensions.toArrayList
+import mohamedalaa.mautils.mautils_open_source_licences.extensions.*
 import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.toStringList
 import mohamedalaa.mautils.mautils_open_source_licences.view.adapters.RCAdapterLicence
@@ -90,6 +90,8 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         const val INTENT_KEY_RC_ITEM_LINK_BUTTON_TEXT_COLOR = "INTENT_KEY_RC_ITEM_LINK_BUTTON_TEXT_COLOR"
         const val INTENT_KEY_RC_ITEM_LINK_BUTTON_TINT = "INTENT_KEY_RC_ITEM_LINK_BUTTON_TINT"
 
+        const val INTENT_KEY_SEARCH_HIGHLIGHT_COLOR = "INTENT_KEY_SEARCH_HIGHLIGHT_COLOR"
+
         const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_NAME = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_NAME"
         /** Default is 75% opaque of [INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_NAME] isa. */
         const val INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_AUTHOR = "INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_AUTHOR"
@@ -147,7 +149,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
             }
 
             putBoolean(SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN, keyboardWasShown)
-            putString(SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT, if (searchView.visibility == View.VISIBLE) (searchView.text ?: "") else null)
+            putString(SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT, if (group.visibility == View.VISIBLE) (searchView.text ?: "") else null)
         }
 
         super.onSaveInstanceState(outState)
@@ -182,7 +184,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         toolbar.setOnMenuItemClickListener {
             when(it.title.toString()) {
                 getString(R.string.search) -> {
-                    searchView.visibility = View.VISIBLE
+                    group.visibility = View.VISIBLE
 
                     Handler().post {
                         searchView.isIconified = false
@@ -194,7 +196,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         }
         toolbar.menu.forEach { it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS) }
         searchText?.also {
-            searchView.visibility = View.VISIBLE
+            group.visibility = View.VISIBLE
 
             searchView.postWithReceiver {
                 searchView.isIconified = false
@@ -210,6 +212,25 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
             }
         }
 
+        // Chips
+        /*val a: ChipGroup todo make specific listener sam in java isa.
+        a.setOnCheckedChangeListener { chipGroup, i ->
+            chipGroup.findViewById<Chip>(i).isChecked
+        }*/
+        val checkedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            when(buttonView.text.toString()) {
+                getString(R.string.match_case) -> rcAdapter.matchCase = isChecked
+                getString(R.string.any_letter) -> rcAdapter.anyLetter = isChecked
+                getString(R.string.author) -> rcAdapter.includeAuthor = isChecked
+            }
+
+            rcAdapter.reComputeLicencesThenNotifyDataSetChanged()
+            updateStateVisibilities(rcAdapter.getCurrentList())
+        }
+        matchCaseChip.setOnCheckedChangeListener(checkedChangeListener)
+        anyLetterChip.setOnCheckedChangeListener(checkedChangeListener)
+        authorChip.setOnCheckedChangeListener(checkedChangeListener)
+
         // Recycler View
         val dividerColor = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_COLOR)
         val dimenInPx = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_DIMEN_IN_PX)
@@ -222,11 +243,16 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        rcAdapter = RCAdapterLicence(this, licences, intent, searchText)
+        rcAdapter = RCAdapterLicence(this, licences, intent, searchText,
+            matchCaseChip.isChecked, anyLetterChip.isChecked, authorChip.isChecked)
         recyclerView.adapter = rcAdapter
 
         // Search View
         ViewCompat.setElevation(searchView, dpToPx(4))
+        ViewCompat.setElevation(chipsView, dpToPx(4))
+        ViewCompat.setElevation(matchCaseChip, dpToPx(4))
+        ViewCompat.setElevation(anyLetterChip, dpToPx(4))
+        ViewCompat.setElevation(authorChip, dpToPx(4))
         // -- no need to use searchView.setOnSearchClickListener {  }, since it is always not iconified isa.
         searchView.queryHint = getString(R.string.search_view_query_hint)
         searchView.firstMatchingViewIsInstanceOrNull<EditText> {
@@ -235,6 +261,8 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         searchView.setOnQueryTextListenerMA {
             onQueryTextChange {
                 rcAdapter.searchText = it
+
+                updateStateVisibilities(rcAdapter.getCurrentList())
 
                 true
             } onQueryTextSubmit {
@@ -246,7 +274,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         searchView.setOnCloseListener {
             hideKeyboardFrom(searchView)
 
-            searchView.visibility = View.INVISIBLE
+            group.visibility = View.GONE
 
             true
         }
@@ -306,6 +334,10 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         licences = result
         rcAdapter.swapList(licences)
 
+        updateStateVisibilities(licences)
+    }
+
+    private fun updateStateVisibilities(result: List<Licence>?) {
         when {
             result == null -> {
                 recyclerView.visibility = View.GONE

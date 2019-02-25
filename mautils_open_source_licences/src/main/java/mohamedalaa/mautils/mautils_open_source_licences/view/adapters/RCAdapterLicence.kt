@@ -9,13 +9,13 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.buildSpannedString
-import androidx.core.text.getSpans
 import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rc_adapter_licence.view.*
 import mohamedalaa.mautils.core_android.*
 import mohamedalaa.mautils.core_kotlin.applyIf
 import mohamedalaa.mautils.mautils_open_source_licences.R
+import mohamedalaa.mautils.mautils_open_source_licences.logic.computeSearchedLicences
 import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.isAuthorExists
 import mohamedalaa.mautils.mautils_open_source_licences.model.isLinkExists
@@ -29,17 +29,26 @@ import kotlin.properties.Delegates
 internal class RCAdapterLicence(private val context: Context,
                                 private var licences: List<Licence>?,
                                 intent: Intent,
-                                searchText: String?)
+                                searchText: String?,
+                                var matchCase: Boolean,
+                                var anyLetter: Boolean,
+                                var includeAuthor: Boolean)
     : RecyclerView.Adapter<RCAdapterLicence.CustomViewHolder>() {
 
     private val licenceIntent = Intent(context, LicenceDetailsActivity::class.java).apply { replaceExtras(intent) }
 
-    private val filteredLicences = computeSearchedLicences()
+    private val backgroundHighlightColor = licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_SEARCH_HIGHLIGHT_COLOR)
+        ?: Color.YELLOW.addColorAlpha(0.5f)
+    private val generateNewSpan = {
+        BackgroundColorSpan(backgroundHighlightColor)
+    }
+
+    private val filteredLicences = filterLicences()
 
     // todo checked chips for match case and any letter isa, ignore author.
     var searchText: String? by Delegates.observable(searchText) { _, _, _ ->
         filteredLicences.clear()
-        filteredLicences.addAll(computeSearchedLicences())
+        filteredLicences.addAll(filterLicences())
 
         try {
             notifyDataSetChanged()
@@ -64,8 +73,7 @@ internal class RCAdapterLicence(private val context: Context,
         }
 
         val name = licence.licenceName.toSpannable().applyIf(highlightText) {
-            val generateNewSpan = { BackgroundColorSpan(Color.YELLOW) }
-            val indicesList = spanChars(searchText, ignoreCase = true, allChars = false, generateNewSpan = generateNewSpan)
+            val indicesList = spanChars(searchText, ignoreCase = matchCase.not(), allChars = anyLetter, generateNewSpan = generateNewSpan)
 
             holder.itemView.licenceName.postWithReceiver {
                 if (layout.getEllipsisCount(0) > 0) {
@@ -84,61 +92,45 @@ internal class RCAdapterLicence(private val context: Context,
                 }
             }
         }
-        val author = buildSpannedString {
-            val byWordAsSpannable = context.getString(R.string.by_colon_string, "").toSpannable()
-            append(byWordAsSpannable)
-            append(
-                licence.licenceAuthor?.toSpannable()?.applyIf(highlightText) {
-                    val generateNewSpan = { BackgroundColorSpan(Color.YELLOW) }
-                    val indicesList = spanChars(searchText, ignoreCase = true, allChars = false, generateNewSpan = generateNewSpan)
+        val author = if (includeAuthor) {
+            buildSpannedString {
+                val byWordAsSpannable = context.getString(R.string.by_colon_string, "").toSpannable()
+                append(byWordAsSpannable)
+                append(
+                    licence.licenceAuthor?.toSpannable()?.applyIf(highlightText) {
+                        val indicesList = spanChars(searchText, ignoreCase = matchCase.not(), allChars = anyLetter, generateNewSpan = generateNewSpan)
 
-                    holder.itemView.licenceAuthor.postWithReceiver {
-                        if (layout.getEllipsisCount(0) > 0) {
-                            val start = layout.getEllipsisStart(0)
-                            val end = context.getString(R.string.by_colon_string, licence.licenceAuthor).lastIndex
-                            indicesList.forEach {
-                                if (it in (start..end)) {
-                                    val modifiedStart = start.minus(byWordAsSpannable.length)
-                                    this@applyIf[modifiedStart] = generateNewSpan()
+                        holder.itemView.licenceAuthor.postWithReceiver {
+                            if (layout.getEllipsisCount(0) > 0) {
+                                val start = layout.getEllipsisStart(0)
+                                val end = context.getString(R.string.by_colon_string, licence.licenceAuthor).lastIndex
+                                indicesList.forEach {
+                                    if (it in (start..end)) {
+                                        val modifiedStart = start.minus(byWordAsSpannable.length)
+                                        this@applyIf[modifiedStart] = generateNewSpan()
 
-                                    holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) {
-                                        buildSpannedString {
-                                            append(byWordAsSpannable)
-                                            append(this@applyIf)
+                                        holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) {
+                                            buildSpannedString {
+                                                append(byWordAsSpannable)
+                                                append(this@applyIf)
+                                            }
+                                        }else {
+                                            ""
                                         }
-                                    }else {
-                                        ""
-                                    }
 
-                                    return@postWithReceiver
+                                        return@postWithReceiver
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            )
-        }
-        //Log.e("RR", "$a, ${context.getString(R.string.by_colon_string, "").length};;")
-        /*val author = "".toSpannable() + licence.licenceAuthor?.toSpannable()?.applyIf(highlightText) {
-            val generateNewSpan = { BackgroundColorSpan(Color.YELLOW) }
-            val indicesList = spanChars(searchText, ignoreCase = true, allChars = false, generateNewSpan = generateNewSpan)
-
-            holder.itemView.licenceAuthor.postWithReceiver {
-                if (layout.getEllipsisCount(0) > 0) {
-                    val start = layout.getEllipsisStart(0)
-                    val end = context.getString(R.string.by_colon_string, licence.licenceAuthor).lastIndex
-                    indicesList.forEach {
-                        if (it in (start..end)) {
-                            this@applyIf[start] = generateNewSpan()
-
-                            holder.itemView.licenceAuthor.text = if (licence.isAuthorExists) context.getString(R.string.by_colon_string, author) else ""
-
-                            return@postWithReceiver
-                        }
-                    }
-                }
+                )
             }
-        }*/
+        }else {
+            buildSpannedString {
+                append(context.getString(R.string.by_colon_string, licence.licenceAuthor))
+            }
+        }
 
         holder.itemView.licenceName.text = if (licence.isAuthorExists) name else ""
 
@@ -184,6 +176,15 @@ internal class RCAdapterLicence(private val context: Context,
         notifyDataSetChanged()
     }
 
+    fun getCurrentList() = this.filteredLicences
+
+    fun reComputeLicencesThenNotifyDataSetChanged() {
+        filteredLicences.clear()
+        filteredLicences.addAll(filterLicences())
+
+        notifyDataSetChanged()
+    }
+
     // ---- Private fun
 
     private fun setupDevConfigurations(rootView: View) {
@@ -215,19 +216,8 @@ internal class RCAdapterLicence(private val context: Context,
         }
     }
 
-    private fun computeSearchedLicences(): MutableList<Licence> = try { searchText } catch (e: Exception) { null }.run {
-        if (this.isNullOrEmpty()) {
-            return mutableListOf()
-        }
-
-        licences?.mapNotNull {
-            if (it.licenceName.toLowerCase().contains(this.toLowerCase())
-                || it.licenceAuthor?.toLowerCase()?.contains(this.toLowerCase()) == true) {
-                it
-            }else {
-                null
-            }
-        }?.toMutableList() ?: mutableListOf()
+    private fun filterLicences(): MutableList<Licence> = try { searchText } catch (e: Exception) { null }.run {
+        computeSearchedLicences(licences, this, matchCase, anyLetter, includeAuthor)
     }
 
     // ----- Custom View Holder

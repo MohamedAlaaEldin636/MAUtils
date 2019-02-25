@@ -7,7 +7,9 @@
             android:theme="@style/MAUtilsOpenSourceLicencesTheme" />
         <activity
             android:name=".view.OpenSourceLicencesActivity"
-            android:theme="@style/MAUtilsOpenSourceLicencesTheme" />
+            android:theme="@style/MAUtilsOpenSourceLicencesTheme"
+
+            android:windowSoftInputMode="adjustResize"/>
 
         <meta-data
             android:name="preloaded_fonts"

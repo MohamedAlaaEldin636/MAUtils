@@ -11,4 +11,7 @@
 
     <string name="search_view_query_hint">Type here…</string>
     <string name="search">Search</string>
+    <string name="match_case">Match Case</string>
+    <string name="any_letter">Any Letter</string>
+    <string name="author">Author</string>
 </resources>

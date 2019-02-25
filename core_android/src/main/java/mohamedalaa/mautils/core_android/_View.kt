@@ -188,7 +188,7 @@ var View.backgroundCompat: Drawable?
 
 /** Sets background tint according to given [color] isa. */
 fun View.setBackgroundTint(@ColorInt color: Int) {
-    val drawable = DrawableCompat.wrap(background)
+    val drawable = DrawableCompat.wrap(background ?: return) ?: return
     backgroundCompat = drawable
     DrawableCompat.setTint(drawable, color)
 }

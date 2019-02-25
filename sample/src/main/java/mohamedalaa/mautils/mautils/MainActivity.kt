@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
 
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_LINK_BUTTON_TEXT_COLOR, Color.GREEN)
 
+                putExtra(OpenSourceLicencesActivity.INTENT_KEY_SEARCH_HIGHLIGHT_COLOR, Color.BLUE)
+
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_NAME, Color.GREEN)
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_AUTHOR, Color.GREEN)
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_TOOLBAR_ICONS_TINT, Color.GREEN)
