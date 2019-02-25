@@ -18,3 +18,12 @@ internal operator fun String?.contains(charArray: CharArray): Boolean {
 
     return true
 }
+
+internal fun List<String>.toSingleString(): String {
+    var result = ""
+    forEach {
+        result += it
+    }
+
+    return result
+}

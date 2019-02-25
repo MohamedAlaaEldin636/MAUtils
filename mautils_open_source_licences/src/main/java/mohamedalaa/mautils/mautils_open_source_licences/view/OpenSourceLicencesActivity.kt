@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -165,12 +166,13 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
             val size = getOrNull<Int>(SAVED_INSTANCE_KEY_BUNDLES_SIZE) ?: return
 
             licences = (0 until size).mapNotNull {
-                val bundle = getOrNull<Bundle>(SAVED_INSTANCE_KEY_LIST_AS_ITEM) ?: return@mapNotNull null
+                val bundle = getOrNull<Bundle>(it.toString()) ?: return@mapNotNull null
 
-                val list = bundle.getOrNull<ArrayList<String?>>(it.toString()) ?: return@mapNotNull null
+                val list = bundle.getOrNull<ArrayList<String?>>(SAVED_INSTANCE_KEY_LIST_AS_ITEM) ?: return@mapNotNull null
 
                 Licence.fromStringList(list)
             }
+            Log.e("ZZZ", "${licences?.size}")
         }
     }
 
@@ -319,9 +321,14 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
     private fun setupData(folderPathInAssets: String) {
         if (licences.isNullOrEmpty()) {
             ReadFromAssetsAsyncTask.launch(this, folderPathInAssets, this)
-        }
 
-        deliverResult(licences)
+            licences = null
+            rcAdapter.swapList(licences)
+
+            updateStateVisibilities(null)
+        }else {
+            deliverResult(licences)
+        }
     }
 
     // ---- Implementing ReadFromAssetsAsyncTask interface

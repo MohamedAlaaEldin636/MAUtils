@@ -276,7 +276,7 @@ END OF TERMS AND CONDITIONS
             var licenceName: String? = null
             var licenceAuthor: String? = null
             var link: String? = null
-            val licenceContent = StringBuilder()
+            var licenceContent = ""
 
             reader.forEachLine {
                 if (readFullContent.not()) {
@@ -340,21 +340,14 @@ END OF TERMS AND CONDITIONS
                     }
                 }
 
-                if (it.trim().isEmpty()) {
-                    licenceContent.append("""
-
-
-
-                    """.trimIndent())
-                }else {
-                    licenceContent.append(it)
-                }
+                licenceContent += it
+                licenceContent += "\n"
             }
 
             // Check licence isa.
             licenceName?.apply {
                 if (licenceContent.isNotEmpty()) {
-                    licence = Licence(this, licenceAuthor, link, licenceContent.toString().trim())
+                    licence = Licence(this, licenceAuthor, link, licenceContent.trim())
                 }
             }
         }catch (e: Exception) {
