@@ -213,10 +213,6 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         }
 
         // Chips
-        /*val a: ChipGroup todo make specific listener sam in java isa.
-        a.setOnCheckedChangeListener { chipGroup, i ->
-            chipGroup.findViewById<Chip>(i).isChecked
-        }*/
         val checkedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             when(buttonView.text.toString()) {
                 getString(R.string.match_case) -> rcAdapter.matchCase = isChecked
@@ -334,7 +330,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         licences = result
         rcAdapter.swapList(licences)
 
-        updateStateVisibilities(licences)
+        updateStateVisibilities(rcAdapter.getCurrentList())
     }
 
     private fun updateStateVisibilities(result: List<Licence>?) {

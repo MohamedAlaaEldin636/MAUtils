@@ -45,7 +45,6 @@ internal class RCAdapterLicence(private val context: Context,
 
     private val filteredLicences = filterLicences()
 
-    // todo checked chips for match case and any letter isa, ignore author.
     var searchText: String? by Delegates.observable(searchText) { _, _, _ ->
         filteredLicences.clear()
         filteredLicences.addAll(filterLicences())
@@ -66,11 +65,8 @@ internal class RCAdapterLicence(private val context: Context,
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val (licence, highlightText) = if (searchText.isNullOrEmpty()) {
-            (licences?.get(position) ?: return) to false
-        }else {
-            filteredLicences[position] to true
-        }
+        val licence = filteredLicences[position]
+        val highlightText = searchText.isNullOrEmpty().not()
 
         val name = licence.licenceName.toSpannable().applyIf(highlightText) {
             val indicesList = spanChars(searchText, ignoreCase = matchCase.not(), allChars = anyLetter, generateNewSpan = generateNewSpan)
@@ -160,18 +156,15 @@ internal class RCAdapterLicence(private val context: Context,
         }
     }
 
-    override fun getItemCount(): Int {
-        return if (searchText.isNullOrEmpty()) {
-            licences?.size ?: 0
-        }else {
-            filteredLicences.size
-        }
-    }
+    override fun getItemCount(): Int = filteredLicences.size
 
     // ---- Public fun
 
     fun swapList(licences: List<Licence>?) {
         this.licences = licences
+
+        filteredLicences.clear()
+        filteredLicences.addAll(filterLicences())
 
         notifyDataSetChanged()
     }
