@@ -5,10 +5,12 @@ import mohamedalaa.mautils.mautils.fake_data.AnotherPairNoOut
 import mohamedalaa.mautils.mautils.fake_data.CustomObject
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
 import mohamedalaa.mautils.mautils_gson.*
-import mohamedalaa.mautils.mautils_gson_java.toJsonOrNull
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
+import mohamedalaa.mautils.core_kotlin.contains
+import kotlin.test.assertFalse
 
 class GsonTest {
 
@@ -23,10 +25,6 @@ class GsonTest {
     }
 
     private val nullableElementsList = mutableListOf(null, 4, null, 9, null)
-
-    private val customWithTypeParamBothNull: CustomWithTypeParam<CustomObject, Int?> = CustomWithTypeParam()
-    private val customWithTypeParamOneNull: CustomWithTypeParam<CustomObject, Int?>
-        = CustomWithTypeParam(customObject.copy(), null, "carla", "buffy")
 
     @Test
     fun customObjectConversion_toAndFromJson() {
@@ -61,58 +59,20 @@ class GsonTest {
     @Test
     fun listOfNullableElements_toAndFromJson() {
         val jsonNullableElementsList = nullableElementsList.toJson()
-        // Note specifying nullability, since deserialize might returns nullable type parameters
         val fromJson = jsonNullableElementsList.fromJson<List<Int?>>()
 
         assertEquals(nullableElementsList, fromJson)
 
-        // In case a non-type parameters needed then custom check is needed
-        val nonNullElementsListFromJson = jsonNullableElementsList.fromJsonOrNullCheck<List<Int>, List<Int?>> {
-            filterNotNull().size == size
-        }
+        // Although it refer to non null elements in list, it actually is and assertTrue proves it isa.
+        val nonNullElementsListFromJson = jsonNullableElementsList.fromJsonOrNull<List<Int>>()
+        assertTrue { null in nonNullElementsListFromJson }
 
-        assertEquals(null, nonNullElementsListFromJson)
 
-        // Since nullable list elements is commonly needed check, a shortcut exists note below
-        val anotherNonNullElementsListFromJson = jsonNullableElementsList.fromJsonOrNullCheck<List<Int>>(JsonCheck.NON_NULL_ELEMENTS_LIST)
-
-        assertEquals(null, anotherNonNullElementsListFromJson)
-
-        // However if list was originally with non-null elements
-        val ints = listOf(4, 99)
-        val jsonString = ints.toJson()
-        val nonNullList = jsonString.fromJsonCheck<List<Int>>(JsonCheck.NON_NULL_ELEMENTS_LIST)
-
-        assertEquals(ints, nonNullList)
-    }
-
-    @Test
-    fun customWithCustomTypeParameters_toAndFromJson() {
-        val json1 = customWithTypeParamBothNull.toJson()
-        val json2 = customWithTypeParamOneNull.toJson()
-
-        val acceptingNullFrom1 = json1.fromJsonOrNull<CustomWithTypeParam<CustomObject?, Int?>>()
-
-        val likeOriginalOne = json2.fromJsonQuick<CustomWithTypeParam<CustomObject, Int?>> {
-            element1 != null
-        }
-        val likeOriginalOne2 = json2.fromJson<CustomWithTypeParam<CustomObject, Int?>>()
-
-        val bothNotNullFrom2 = json2.fromJsonOrNullCheck<CustomWithTypeParam<CustomObject, Int>, CustomWithTypeParam<CustomObject, Int>> {
-            element1 != null && element2 != null
-        }
-
-        val anotherLike = json2.fromJsonOrNullCheck<CustomWithTypeParam<CustomObject, Int?>, CustomWithTypeParam<CustomObject?, Int?>> {
-            element1 != null
-        }
-
-        assertNotEquals(null, acceptingNullFrom1)
-
-        assertEquals(customWithTypeParamOneNull, likeOriginalOne)
-        assertEquals(customWithTypeParamOneNull, likeOriginalOne2)
-        assertEquals(customWithTypeParamOneNull, anotherLike)
-
-        assertEquals(null, bothNotNullFrom2)
+        val sureNoNullableTypeParam = listOf(6, 6, 6)
+        val sureJson = sureNoNullableTypeParam.toJson()
+        val retrievedSure = sureJson.fromJson<List<Int>>()
+        assertEquals(sureNoNullableTypeParam, retrievedSure)
+        assertFalse { null in retrievedSure }
     }
 
     @Test
@@ -211,7 +171,13 @@ class GsonTest {
         // Currently only way to return the exact result correctly isa.
         val retrievedAny = GsonTestGsonHelper.getCustomWithTypeParam(json)
 
+        val anotherRetrieval = GsonTestGsonHelper.GsonCustomWithTypeParam2().fromJson(json)
+
+        val anotherWay = GsonCustomWithTypeParam3().fromJson(json)
+
         assertEquals(any, retrievedAny) // Must be done by java isa.
+        assertEquals(any, anotherRetrieval) // Must be done by java isa.
+        assertEquals(any, anotherWay) // Must be done by java isa.
     }
 
 }

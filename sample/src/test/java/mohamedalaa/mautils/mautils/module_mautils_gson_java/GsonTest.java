@@ -12,9 +12,9 @@ import kotlin.Pair;
 import mohamedalaa.mautils.mautils.fake_data.CustomObject;
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam;
 import mohamedalaa.mautils.mautils.fake_data.JavaCustomObj;
-import mohamedalaa.mautils.mautils.fake_data.WithVarienceJavaObj;
-import mohamedalaa.mautils.mautils_gson_java.GsonConverter;
-import mohamedalaa.mautils.mautils_gson_java.GsonUtils;
+import mohamedalaa.mautils.mautils.fake_data.WithVarianceJavaObj;
+import mohamedalaa.mautils.mautils_gson.java.GsonConverter;
+import mohamedalaa.mautils.mautils_gson.java.GsonUtils;
 
 import static org.junit.Assert.*;
 
@@ -96,22 +96,22 @@ public class GsonTest {
     @Test
     public void nestedTypeParam2() {
         JavaCustomObj prepare1 = new JavaCustomObj("name", 55);
-        WithVarienceJavaObj<JavaCustomObj, Integer> withVarienceJavaObj = new WithVarienceJavaObj<>(prepare1, 99);
-        WithVarienceJavaObj<JavaCustomObj, WithVarienceJavaObj<JavaCustomObj, Integer>> withVarienceJavaObjParent
-                = new WithVarienceJavaObj<>(prepare1, withVarienceJavaObj);
+        WithVarianceJavaObj<JavaCustomObj, Integer> withVarianceJavaObj = new WithVarianceJavaObj<>(prepare1, 99);
+        WithVarianceJavaObj<JavaCustomObj, WithVarianceJavaObj<JavaCustomObj, Integer>> withVarianceJavaObjParent
+                = new WithVarianceJavaObj<>(prepare1, withVarianceJavaObj);
 
-        String json = GsonUtils.toJson(withVarienceJavaObjParent);
+        String json = GsonUtils.toJson(withVarianceJavaObjParent);
 
-        WithVarienceJavaObj<JavaCustomObj, WithVarienceJavaObj<JavaCustomObj, Integer>> re
-                = new GsonConverter<WithVarienceJavaObj<JavaCustomObj, WithVarienceJavaObj<JavaCustomObj, Integer>>>(){}.fromJson(json);
+        WithVarianceJavaObj<JavaCustomObj, WithVarianceJavaObj<JavaCustomObj, Integer>> re
+                = new GsonConverter<WithVarianceJavaObj<JavaCustomObj, WithVarianceJavaObj<JavaCustomObj, Integer>>>(){}.fromJson(json);
 
-        assertEquals(withVarienceJavaObjParent.integer.integer, re.integer.integer);
-        assertEquals(withVarienceJavaObjParent.javaCustomObj.name, re.javaCustomObj.name);
-        assertEquals(withVarienceJavaObjParent.javaCustomObj.age, re.javaCustomObj.age);
-        assertEquals(withVarienceJavaObjParent.integer.javaCustomObj.name, re.integer.javaCustomObj.name);
-        assertEquals(withVarienceJavaObjParent.integer.javaCustomObj.age, re.integer.javaCustomObj.age);
+        assertEquals(withVarianceJavaObjParent.integer.integer, re.integer.integer);
+        assertEquals(withVarianceJavaObjParent.javaCustomObj.name, re.javaCustomObj.name);
+        assertEquals(withVarianceJavaObjParent.javaCustomObj.age, re.javaCustomObj.age);
+        assertEquals(withVarianceJavaObjParent.integer.javaCustomObj.name, re.integer.javaCustomObj.name);
+        assertEquals(withVarianceJavaObjParent.integer.javaCustomObj.age, re.integer.javaCustomObj.age);
 
-        assertEquals(withVarienceJavaObjParent.toString(), re.toString());
+        assertEquals(withVarianceJavaObjParent.toString(), re.toString());
     }
 
 }

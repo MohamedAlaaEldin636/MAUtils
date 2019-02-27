@@ -5,10 +5,15 @@ import java.util.List;
 import kotlin.Pair;
 import mohamedalaa.mautils.mautils.fake_data.CustomObject;
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam;
-import mohamedalaa.mautils.mautils_gson_java.GsonConverter;
+import mohamedalaa.mautils.mautils_gson.java.GsonConverter;
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 2/26/2019.
+ * Used for Gson conversion by kotlin developers in case of non-invariant nested type parameters isa.
+ *
+ * Note
+ *
+ * Prefer extending class since like in nested class here, as it will make less code isa,
+ * also you can have it in a separate class like GsonCustomWithTypeParam3 instead of nested class isa.
  */
 public class GsonTestGsonHelper {
 
@@ -16,5 +21,7 @@ public class GsonTestGsonHelper {
             String jsonString) {
         return new GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){}.fromJson(jsonString);
     }
+
+    public static class GsonCustomWithTypeParam2 extends GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>> {}
 
 }

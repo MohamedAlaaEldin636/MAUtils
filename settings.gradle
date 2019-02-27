@@ -1,1 +1,1 @@
-include ':sample', ':core_kotlin', ':core_android', ':core_android_support_packages', ':mautils_gson', ':mautils_gson_java', ':mautils_open_source_licences', ':mautils_view_model'
+include ':sample', ':core_kotlin', ':core_android', ':core_android_support_packages', ':mautils_gson', ':mautils_open_source_licences', ':mautils_view_model'

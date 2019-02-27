@@ -1,10 +1,10 @@
 @file:JvmName("GsonUtils")
 
-package mohamedalaa.mautils.mautils_gson_java
+package mohamedalaa.mautils.mautils_gson.java
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.internal.`$Gson$Types`
+import mohamedalaa.mautils.mautils_gson.generateGson
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -15,16 +15,9 @@ import java.lang.reflect.Type
  *
  * If `receiver` has type parameters, then you have to use [GsonConverter.toJsonOrNull] isa.
  *
- * @param gson in case you want a special configuration for [Gson], however the default value used is
- * ```
- * GsonBuilder()
- *      .serializeNulls()
- *      .setLenient()
- *      .enableComplexMapKeySerialization()
- *      .create()
- * ```
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
  *
- * @return JSON String or null if any problem occurs isa.
+ * @return JSON String OR null if any problem occurs isa.
  *
  * @see toJson
  * @see fromJsonOrNull
@@ -43,18 +36,11 @@ fun <E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
  *
  * If `receiver` has type parameters, then you have to use [GsonConverter.toJson] isa.
  *
- * @param gson in case you want a special configuration for [Gson], however the default value used is
- * ```
- * GsonBuilder()
- *      .serializeNulls()
- *      .setLenient()
- *      .enableComplexMapKeySerialization()
- *      .create()
- * ```
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
  *
  * @throws RuntimeException in case if any problem occurred while converting isa.
  *
- * @return JSON String or throws exception if any problem occurs isa.
+ * @return JSON String OR throws exception if any problem occurs isa.
  *
  * @see toJsonOrNull
  * @see fromJson
@@ -64,23 +50,16 @@ fun <E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson)
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
 /**
- * Converts `this JSON String` to object of type [elementClass], or null in case of any error occurs isa.
+ * Converts `this JSON String` to object of type [elementClass], OR null in case of any error occurs isa.
  *
  * **Warning**
  *
  * If `receiver` has type parameters, then you have to use [GsonConverter.fromJsonOrNull] isa.
  *
  * @param elementClass class of the `receiver` to be used isa.
- * @param gson in case you want a special configuration for [Gson], however the default value used is
- * ```
- * GsonBuilder()
- *      .serializeNulls()
- *      .setLenient()
- *      .enableComplexMapKeySerialization()
- *      .create()
- * ```
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
  *
- * @return object of type <E> from given JSON String or null if any problem occurs isa.
+ * @return object of type <E> from given JSON String OR null if any problem occurs isa.
  *
  * @see fromJson
  * @see toJsonOrNull
@@ -93,23 +72,16 @@ fun <E> String?.fromJsonOrNull(elementClass: Class<E>, gson: Gson? = null): E? =
 }
 
 /**
- * Converts `this JSON String` to object of type [elementClass], or throws exception in case of any error occurs isa.
+ * Converts `this JSON String` to object of type [elementClass], OR throws exception in case of any error occurs isa.
  *
  * **Warning**
  *
  * If `receiver` has type parameters, then you have to use [GsonConverter.fromJson] isa.
  *
  * @param elementClass class of the `receiver` to be used isa.
- * @param gson in case you want a special configuration for [Gson], however the default value used is
- * ```
- * GsonBuilder()
- *      .serializeNulls()
- *      .setLenient()
- *      .enableComplexMapKeySerialization()
- *      .create()
- * ```
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
  *
- * @return object of type <E> from given JSON String or throws exception if any problem occurs isa.
+ * @return object of type <[E]> from given JSON String OR throws exception if any problem occurs isa.
  *
  * @throws RuntimeException in case if any problem occurred while converting isa.
  *
@@ -120,20 +92,16 @@ fun <E> String?.fromJsonOrNull(elementClass: Class<E>, gson: Gson? = null): E? =
 fun <E> String?.fromJson(elementClass: Class<E>, gson: Gson? = null): E = fromJsonOrNull(elementClass, gson)
     ?: throw RuntimeException("Cannot convert $this to $elementClass")
 
-private fun generateGson(): Gson {
-    return GsonBuilder()
-        .serializeNulls()
-        .setLenient()
-        .enableComplexMapKeySerialization()
-        .create()
-}
-
 /**
  * ## Description
- * Used only if your Object that needs to be converted to/from JSON-String has type parameters isa.
+ * Used only if your Object that needs to be converted to/from JSON-String has type parameters isa,
  *
  * otherwise consider using [String.fromJsonOrNull], [String.toJsonOrNull], [String.fromJson]
  * OR [String.toJson] isa.
+ *
+ * Used by java developers OR kotlin developers if and only if has non-invariant nested type parameters,
+ *
+ * See [mohamedalaa.mautils.mautils_gson.fromJsonOrNull] for more clarification isa.
  * ## How to use
  * ```
  * CustomWithTypeParam<CustomObject, Integer> customWithTypeParam = new CustomWithTypeParam<>();
@@ -143,14 +111,7 @@ private fun generateGson(): Gson {
  * // by now -> customWithTypeParam == fromJsonObject isa.
  * ```
  *
- * @param gson in case you want a special configuration for [Gson], however the default value used is
- * ```
- * GsonBuilder()
- *      .serializeNulls()
- *      .setLenient()
- *      .enableComplexMapKeySerialization()
- *      .create()
- * ```
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
  */
 abstract class GsonConverter<E>(private val gson: Gson? = null) {
 
@@ -158,7 +119,7 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
      * Converts [element] object to a JSON String OR null in case of any error isa,
      *
      * Even if type [element] has type parameter isa, Note if [element] has no type parameters
-     * Use [String.toJsonOrNull] instead isa.
+     * Use [String.toJsonOrNull] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
@@ -176,7 +137,7 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
      * Converts `receiver` object to a JSON String OR throws exception in case of any error isa,
      *
      * Even if type [element] has type parameter isa, Note if [element] has no type parameters
-     * Use [String.toJsonOrNull] instead isa.
+     * Use [String.toJsonOrNull] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
@@ -193,7 +154,7 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
      * Converts [json] to object of type [E], or null in case of any error occurs isa,
      *
      * Even if type [E] has type parameter isa, Note if [E] has no type parameters
-     * Use [String.fromJsonOrNull] instead isa.
+     * Use [String.fromJsonOrNull] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
@@ -209,7 +170,7 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
      * Converts [json] to object of type [E], or throws exception in case of any error occurs isa,
      *
      * Even if type [E] has type parameter isa, Note if [E] has no type parameters
-     * Use [String.fromJsonOrNull] instead isa.
+     * Use [String.fromJsonOrNull] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
