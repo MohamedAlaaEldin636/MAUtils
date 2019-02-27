@@ -1,9 +1,8 @@
 package mohamedalaa.mautils.core_android
 
-import android.content.Context
-import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
+import android.os.Bundle
+import androidx.core.os.bundleOf
+import java.io.Serializable
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/13/2019.
@@ -50,10 +49,14 @@ private fun bbb1111(map1: Map<String, String>, map2: Map<String, String>, map3: 
     }
 
     if (map2 == map3) {
-
+        bundleOf()
     }
 }
 
-private fun ddd111(menuItem: MenuItem) {
+private fun ddd111(string: String, bundle: Bundle) {
     //menuItem.setIconTintList()
+    if (string is Serializable) {
+        //bundle.put
+        bundleOf()
+    }
 }

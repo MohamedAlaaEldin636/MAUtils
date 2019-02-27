@@ -11,7 +11,8 @@ import java.util.List;
 import kotlin.Pair;
 import mohamedalaa.mautils.mautils.fake_data.CustomObject;
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam;
-import mohamedalaa.mautils.mautils.fake_data.Token1;
+import mohamedalaa.mautils.mautils.fake_data.JavaCustomObj;
+import mohamedalaa.mautils.mautils.fake_data.WithVarienceJavaObj;
 import mohamedalaa.mautils.mautils_gson_java.GsonConverter;
 import mohamedalaa.mautils.mautils_gson_java.GsonUtils;
 
@@ -20,6 +21,7 @@ import static org.junit.Assert.*;
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 2/20/2019.
  */
+
 public class GsonTest {
 
     @Test
@@ -74,9 +76,6 @@ public class GsonTest {
 
     @Test
     public void nestedTypeParams() {
-        // todo if work isa, tell user nested type param use this isa....
-        // todo el7 worked so see nest level of type params, however it is level 2 then tell user
-        // also make 1 gson extension kda kda java will not see reified isa.
         List<CustomObject> list = new ArrayList<>();
         list.add(new CustomObject());
         list.add(new CustomObject("name", 66, "add", new ArrayList<>()));
@@ -91,23 +90,28 @@ public class GsonTest {
         CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> retrievedAny
                 = new GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){}.fromJson(json);
 
-        System.out.println(retrievedAny.toString());
-        System.out.println(retrievedAny.getElement2().getSecond().getElement1().getSecond());
-
-        Token1.Goal<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>> goal
-                = new Token1.Goal<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){};
-        String j = goal.toJsonOrNull(any);
-        CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> a = goal.fromJsonOrNull(j);
-
-        //assertEquals(any, retrievedAny);
-        assertEquals(any, a);
+        assertEquals(any, retrievedAny);
     }
 
-    public static CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> ghjk(CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> any) {
-        Token1.Goal<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>> goal
-                = new Token1.Goal<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){};
-        String j = goal.toJsonOrNull(any);
-        return goal.fromJsonOrNull(j);
+    @Test
+    public void nestedTypeParam2() {
+        JavaCustomObj prepare1 = new JavaCustomObj("name", 55);
+        WithVarienceJavaObj<JavaCustomObj, Integer> withVarienceJavaObj = new WithVarienceJavaObj<>(prepare1, 99);
+        WithVarienceJavaObj<JavaCustomObj, WithVarienceJavaObj<JavaCustomObj, Integer>> withVarienceJavaObjParent
+                = new WithVarienceJavaObj<>(prepare1, withVarienceJavaObj);
+
+        String json = GsonUtils.toJson(withVarienceJavaObjParent);
+
+        WithVarienceJavaObj<JavaCustomObj, WithVarienceJavaObj<JavaCustomObj, Integer>> re
+                = new GsonConverter<WithVarienceJavaObj<JavaCustomObj, WithVarienceJavaObj<JavaCustomObj, Integer>>>(){}.fromJson(json);
+
+        assertEquals(withVarienceJavaObjParent.integer.integer, re.integer.integer);
+        assertEquals(withVarienceJavaObjParent.javaCustomObj.name, re.javaCustomObj.name);
+        assertEquals(withVarienceJavaObjParent.javaCustomObj.age, re.javaCustomObj.age);
+        assertEquals(withVarienceJavaObjParent.integer.javaCustomObj.name, re.integer.javaCustomObj.name);
+        assertEquals(withVarienceJavaObjParent.integer.javaCustomObj.age, re.integer.javaCustomObj.age);
+
+        assertEquals(withVarienceJavaObjParent.toString(), re.toString());
     }
 
 }

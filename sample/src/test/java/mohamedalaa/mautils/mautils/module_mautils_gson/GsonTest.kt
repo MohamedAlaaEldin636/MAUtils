@@ -1,11 +1,10 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
+import mohamedalaa.mautils.mautils.fake_data.AnotherPair
+import mohamedalaa.mautils.mautils.fake_data.AnotherPairNoOut
 import mohamedalaa.mautils.mautils.fake_data.CustomObject
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
-import mohamedalaa.mautils.mautils.fake_data.Token1
-import mohamedalaa.mautils.mautils.module_mautils_gson_java.GsonTest
 import mohamedalaa.mautils.mautils_gson.*
-import mohamedalaa.mautils.mautils_gson_java.GsonConverter
 import mohamedalaa.mautils.mautils_gson_java.toJsonOrNull
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -97,6 +96,7 @@ class GsonTest {
         val likeOriginalOne = json2.fromJsonQuick<CustomWithTypeParam<CustomObject, Int?>> {
             element1 != null
         }
+        val likeOriginalOne2 = json2.fromJson<CustomWithTypeParam<CustomObject, Int?>>()
 
         val bothNotNullFrom2 = json2.fromJsonOrNullCheck<CustomWithTypeParam<CustomObject, Int>, CustomWithTypeParam<CustomObject, Int>> {
             element1 != null && element2 != null
@@ -109,98 +109,109 @@ class GsonTest {
         assertNotEquals(null, acceptingNullFrom1)
 
         assertEquals(customWithTypeParamOneNull, likeOriginalOne)
+        assertEquals(customWithTypeParamOneNull, likeOriginalOne2)
         assertEquals(customWithTypeParamOneNull, anotherLike)
 
         assertEquals(null, bothNotNullFrom2)
     }
 
-    // todo any nested type param is ok but if nested was primitive then an error will happen, so make own wrapper isa.
     @Test
-    fun nestedTypeParams() {
-        val any = CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>()
-        any.element1 = CustomObject()
-        any.element2 = listOfCustomObjects to CustomWithTypeParam(element1 = 3.0f to 6, element2 = false)
+    fun customObjectsWithCustomTypeParameters() {
+        val pairCustomObjectAndInt = customObject to 6
 
-        val json = any.toJson()
+        val jsonPairCustomObjectAndInt = pairCustomObjectAndInt.toJson()
 
-        val retrievedAny = json.fromJson<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>()
+        val retrievedPairCustomObjectAndInt: Pair<CustomObject, Int> = jsonPairCustomObjectAndInt.fromJson()
 
-        println(any)
-        println()
-        println(retrievedAny)
-
-        //assertNotEquals(any, retrievedAny) // error as Int is converted as Float
-
-        //assertEquals(any, object : GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>(){}.fromJson(json))
-
-        val retrievedAny2 = object :
-            GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>() {
-        }.fromJson(json)
-
-        println(retrievedAny2)
-
-        val int: Int? = retrievedAny2.element2?.second?.element1?.second
-        println(int)
-
-        // todo
-
+        assertEquals(pairCustomObjectAndInt, retrievedPairCustomObjectAndInt)
     }
 
     @Test
-    fun nestedTypeParams2() {
-        val any = CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>()
-        any.element1 = CustomObject()
-        any.element2 = listOfCustomObjects to CustomWithTypeParam(element1 = 3.0f to 6, element2 = false)
+    fun nestedTypeParams_1() {
+        val customWithTypeParam = CustomWithTypeParam<CustomWithTypeParam<CustomObject, CustomObject>, CustomObject>().apply {
+            element1 = CustomWithTypeParam(CustomObject(), CustomObject())
+            element2 = CustomObject()
+        }
 
-        val json = any.toJson()
+        val json = customWithTypeParam.toJson()
 
-        val retrievedAny = json.fromJson<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>()
+        val retrievedCustomWithTypeParam = json.fromJson<CustomWithTypeParam<CustomWithTypeParam<CustomObject, CustomObject>, CustomObject>>()
 
-        println(any)
-        println()
-        println(retrievedAny)
+        assertEquals(customWithTypeParam, retrievedCustomWithTypeParam)
 
-        //assertNotEquals(any, retrievedAny) // error as Int is converted as Float
-        //assertEquals(any, object : GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>(){}.fromJson(json))
+        val trial1 = CustomWithTypeParam<CustomWithTypeParam<CustomObject, CustomWithTypeParam<CustomObject, CustomWithTypeParam<CustomObject, CustomWithTypeParam<CustomObject, CustomObject>>>>, CustomObject>().apply {
+            //element1 = CustomWithTypeParam(CustomObject(), CustomWithTypeParam(CustomObject(), CustomObject()))
+            element2 = CustomObject()
+        }
+        val oneJson = trial1.toJson()
+        val reTrial1 = oneJson.fromJson<CustomWithTypeParam<CustomWithTypeParam<CustomObject, CustomWithTypeParam<CustomObject, CustomWithTypeParam<CustomObject, CustomWithTypeParam<CustomObject, CustomObject>>>>, CustomObject>>()
 
-        val retrievedAny2 = object :
-            GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>() {
-        }.fromJson(json)
+        assertEquals(trial1, reTrial1)
 
-        println(retrievedAny2)
+        val trial2 = Pair(8, CustomObject())
+        val twoJson = trial2.toJson()
+        val reTrial2 = twoJson.fromJson<Pair<Int, CustomObject>>()
 
-        class HH: GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<CustomObject, CustomObject>, Boolean>>>>()
-        val a = HH()
-        val retrievedAny4 = a.fromJson(json)
+        assertEquals(trial2, reTrial2)
 
-        println(retrievedAny4)
+        val trial3 = Pair(8, CustomObject() to "7")
+        val threeJson = trial2.toJson()
+        val reTrial3 = threeJson.fromJson<Pair<Int, Pair<CustomObject, String>>>()
 
-        /*val int: Double? = retrievedAny2.element2?.second?.element1?.second
-        println(int)*/
+        // Error here, they should be equal isa.
+        assertNotEquals(trial3, reTrial3)
 
-        // todo assert
-        //assertEquals(any, retrievedAny)
-        //assertEquals(any, retrievedAny2)
+        val trial4 = AnotherPair(8, AnotherPair(CustomObject(), "7"))
+        val json4 = trial4.toJson()
+        val reTrial4 = json4.fromJson<AnotherPair<Int, AnotherPair<CustomObject, String>>>()
 
-        val goal = object :
-            Token1.Goal<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>() {}
-        val j = goal.toJsonOrNull(any)
-        val a2 = goal.fromJsonOrNull(j)
+        // Error here, they should be equal isa.
+        assertNotEquals(trial4, reTrial4)
 
-        val a33 = GsonTest.ghjk(any)
+        val trial5 = AnotherPair(8, CustomObject())
+        val json5 = trial5.toJson()
+        val reTrial5 = json5.fromJson<AnotherPair<Int, CustomObject>>()
 
-        // todo ezan lazm from java isa.
+        assertEquals(trial5, reTrial5)
 
-        println()
-        println()
-        println(a33.element2?.second?.element1?.second)
+        val trial6 = AnotherPairNoOut(8, AnotherPair(CustomObject(), "7"))
+        val json6 = trial6.toJson()
+        val reTrial6 = json6.fromJson<AnotherPairNoOut<Int, AnotherPair<CustomObject, String>>>()
 
-        assertEquals(any, a33)
+        // Succeeds although object with out type parameters is used but itself is not in a nested type parameters so it's ok isa.
+        assertEquals(trial6, reTrial6)
+
+        // So nested param of out type makes error so java must be used isa.
     }
 
+    @Test
+    fun nestedTypeParams_2() {
+        // Preparation of val any
+        val list = ArrayList<CustomObject>()
+        list.add(CustomObject())
+        list.add(CustomObject("name", 66, "add", ArrayList()))
 
-    data class IntWrapper(val int: Float)
+        val any =
+            CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>()
+        any.element1 = CustomObject()
+        any.element2 = Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>(
+            list,
+            CustomWithTypeParam(Pair(3.0f, 6), false, "n1", "an1")
+        )
 
+        // any json string
+        val json = any.toJson()
 
+        // Failure 1
+        //val retrievedAny = json.fromJson<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>()
+
+        // Failure 2
+        //val retrievedAny = object : GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Int>, Boolean>>>>(){}.fromJson(json)
+
+        // Currently only way to return the exact result correctly isa.
+        val retrievedAny = GsonTestGsonHelper.getCustomWithTypeParam(json)
+
+        assertEquals(any, retrievedAny) // Must be done by java isa.
+    }
 
 }

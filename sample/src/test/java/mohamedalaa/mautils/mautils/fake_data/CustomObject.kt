@@ -13,3 +13,7 @@ data class CustomWithTypeParam<T, R>(var element1: T? = null,
                                      var element2: R? = null,
                                      val name: String = "name",
                                      val anotherName: String? = null)
+
+data class AnotherPair<out T, out R>(val element1: T? = null, val element2: R? = null)
+
+data class AnotherPairNoOut<T, R>(val element1: T? = null, val element2: R? = null)

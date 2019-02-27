@@ -26,6 +26,11 @@ import mohamedalaa.mautils.mautils_open_source_licences.model.Licence
 import mohamedalaa.mautils.mautils_open_source_licences.model.toStringList
 import mohamedalaa.mautils.mautils_open_source_licences.view.adapters.RCAdapterLicence
 
+/**
+ * Note this module has been in-purpose coded like that instead of using jetpack for a better
+ * module size, however if more features in the future will be added surely design pattern
+ * and jetpack will be included to facilitate coding isa.
+ */
 class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.Listener {
 
     private lateinit var rcAdapter: RCAdapterLicence

@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    def anko_version = "0.10.8"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -51,6 +53,11 @@ dependencies {
     implementation project(':core_android_support_packages')
     implementation project(':mautils_gson')
     implementation project(':mautils_gson_java')
+
+    // Anko todo delLater isa.
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version" // For SnackBars
+
 
     // Testing
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"

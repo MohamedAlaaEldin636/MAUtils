@@ -23,6 +23,8 @@ class GeneralUseCases {
         val newIntent = Intent()
         newIntent.replaceExtras(baseIntent)
 
+        //val c = ApplicationProvider.getApplicationContext<Context>()
+
         assertEquals(1, newIntent.getExtra("1"))
     }
 
