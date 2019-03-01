@@ -1,32 +1,27 @@
-@file:JvmName("BundleUtils")
+@file:JvmName("GsonBundleUtils")
 
-package mohamedalaa.mautils.core_android
+package mohamedalaa.mautils.mautils_gson
 
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.IBinder
+import android.os.Parcelable
 import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
-import androidx.core.os.bundleOf
+import com.google.gson.Gson
+import mohamedalaa.mautils.mautils_gson.java.GsonConverter
+import mohamedalaa.mautils.mautils_gson.java.fromJsonOrNull
 import java.io.Serializable
-
-/**
- * @return true if `receiver` is null or isEmpty
- */
-fun Bundle?.isNullOrEmpty(): Boolean = this == null || this.isEmpty
-
-inline fun <reified T> Bundle?.getOrNull(key: String?): T? = this?.get(key) as? T
-
-inline fun <reified T> Bundle?.get(key: String?): T = getOrNull<T>(key)
-    ?: throw RuntimeException("Cannot get ${T::class}, from key == $key isa.")
 
 private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"
 
 /**
- * Exactly same as [buildBundle], but for a [Bundle] instance instead of creating a new one isa.
+ * Exactly same as [buildBundleGson], but for a [Bundle] instance instead of creating a new one isa.
  *
- * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
+ * @throws RuntimeException When a value cannot be serialized with [toJson] isa.
  */
-fun Bundle.addValues(vararg values: Any?) {
+fun Bundle.addValuesGson(vararg values: Any?, gson: Gson? = null) {
     values.forEachIndexed { index, value ->
         val key = index.toString()
 
@@ -61,7 +56,13 @@ fun Bundle.addValues(vararg values: Any?) {
             // Other arrays
             is Array<*> -> {
                 val componentType = value::class.java.componentType
-                    ?: throw IllegalArgumentException("Illegal value array type null for key \"$key\"")
+
+                if (componentType == null) {
+                    putString(key, value.toJson(gson))
+
+                    return@forEachIndexed
+                }
+
                 @Suppress("UNCHECKED_CAST") // Checked by reflection.
                 when {
                     Parcelable::class.java.isAssignableFrom(componentType) -> {
@@ -78,9 +79,9 @@ fun Bundle.addValues(vararg values: Any?) {
                         putSerializable(key, value)
                     }
                     else -> {
-                        val valueType = componentType.canonicalName
-                        throw IllegalArgumentException(
-                            "Illegal value array type $valueType for key \"$key\"")
+                        putString(key, value.toJson(gson))
+
+                        return@forEachIndexed
                     }
                 }
             }
@@ -99,8 +100,9 @@ fun Bundle.addValues(vararg values: Any?) {
                 }else if (value is SparseArray<*> && value as? SparseArray<Parcelable> != null) {
                     putSparseParcelableArray(key, value)
                 }else {
-                    val valueType = value.javaClass.canonicalName
-                    throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
+                    putString(key, value.toJson(gson))
+
+                    return@forEachIndexed
                 }
             }
         }
@@ -115,12 +117,12 @@ fun Bundle.addValues(vararg values: Any?) {
  * ```
  * // Kotlin Devs, check sample tests in library for more examples isa.
  *
- * val getterBundle = bundle.getKGetterBundle()
+ * val getterBundle = bundle.getKGetterBundleGson()
  * // Note must be in same order they added in isa.
- * val retrievedInt = getterBundle.get<Int>()
- * val retrievedStringList = getterBundle.getOrNull<List<String>>()
+ * val retrievedCustomObject = getterBundleGson.get<CustomObject>()
+ * val retrievedListOfCustomObject = getterBundleGson.get<List<CustomObject>>()
  *
- * // Java Devs, check sample tests in library for more examples isa.
+ * // Java Devs, check sample tests in library for more examples isa. todo doc
  *
  * JGetterBundle getterBundle = BundleUtils.getJGetterBundle(bundle);
  * // Note must be in same order they added in isa.
@@ -129,61 +131,82 @@ fun Bundle.addValues(vararg values: Any?) {
  * ```
  *
  * **Notes**
- *
- * It's same as [bundleOf] with 2 additional benefits isa.
- *
- * 1- Supports [SparseArray]<[Parcelable]> like regular [Bundle] does, this is currently not in [bundleOf].
- *
- * 2- No need to create keys for insertion and retrieval of values, but must be in order when retrieving it isa.
- *
- * **More VIP Info***
- *
- * 1- Use buildBundleGson of mautils_gson module to support custom classes, which can be
- * serialized/deserialized using gson as well isa.
+ * - It's same as androidx.core.os.bundleOf with 3 additional benefits isa.
+ * 1. Supports [SparseArray]<[Parcelable]> like regular [Bundle] does, this is currently not in androidx.core.os.bundleOf.
+ * 2. No need to create keys for insertion and retrieval of values, but must be in order when retrieving it isa.
+ * 3. Supports any custom classes that can be serialized using [toJson] isa.
  *
  * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
- *
- * @see addValues
  */
-fun buildBundle(vararg values: Any?): Bundle
-    = Bundle().apply { addValues(*values.map { it }.toTypedArray()) }
+@JvmOverloads
+fun buildBundleGson(vararg values: Any?, gson: Gson? = null): Bundle
+    = Bundle().apply { addValuesGson(*values.map { it }.toTypedArray(), gson = gson) }
 
-@JvmSynthetic
-fun Bundle.getKGetterBundle() = KGetterBundle(this)
-
-fun Bundle.getJGetterBundle() = JGetterBundle(this)
-
-class JGetterBundle internal constructor(private val bundle: Bundle) {
-
-    private var counter = 0
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getOrNull(): T? {
-        val key = counter.toString()
-        counter++
-
-        return bundle.get(key) as? T
-    }
-
-    fun <T> get(): T
-        = getOrNull() ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
-
-}
-
-class KGetterBundle internal constructor(@PublishedApi internal val bundle: Bundle) {
+class KGetterBundleGson internal constructor(@PublishedApi internal val bundle: Bundle) {
 
     @PublishedApi
     internal var counter = 0
 
-    inline fun <reified T> getOrNull(): T? {
+    inline fun <reified T> getOrNull(gsonConverter: GsonConverter<T>? = null, gson: Gson? = null): T? {
         val key = counter.toString()
         counter++
 
-        return bundle.get(key) as? T
+        val any = bundle.get(key)
+        return if (any is String && gsonConverter != null) {
+            gsonConverter.fromJsonOrNull(any)
+        }else {
+            (if (any is String) any.fromJsonOrNull<T>(gson) else null) ?: bundle.get(key) as? T
+        }
     }
 
-    inline fun <reified T> get(): T
-        = getOrNull() ?: throw RuntimeException("Cannot get ${T::class} from key `${counter.dec()}`")
+    inline fun <reified T> get(gsonConverter: GsonConverter<T>? = null, gson: Gson? = null): T
+        = getOrNull(gsonConverter, gson) ?: throw RuntimeException("Cannot get ${T::class} from key `${counter.dec()}`")
 
 }
 
+@JvmSynthetic
+fun Bundle.getKGetterBundleGson() = KGetterBundleGson(this)
+
+class JGetterBundleGson internal constructor(private val bundle: Bundle) {
+
+    private var counter = 0
+
+    @Suppress("UNCHECKED_CAST")
+    @JvmOverloads
+    fun <T> getOrNull(elementClass: Class<T>? = null, gson: Gson? = null): T? {
+        val key = counter.toString()
+        counter++
+
+        val any = bundle.get(key)
+        return if (any is String && elementClass != null) {
+            // Custom object added by gson isa.
+            any.fromJsonOrNull(elementClass, gson)
+        }else {
+            bundle.get(key) as? T
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getOrNullWithConverter(gsonConverter: GsonConverter<T>): T? {
+        val key = counter.toString()
+        counter++
+
+        val any = bundle.get(key)
+        return if (any is String) {
+            // Custom object added by gson isa.
+            gsonConverter.fromJsonOrNull(any)
+        }else {
+            bundle.get(key) as? T
+        }
+    }
+
+    @JvmOverloads
+    fun <T> get(elementClass: Class<T>? = null, gson: Gson? = null): T
+        = getOrNull(elementClass, gson) ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
+
+    fun <T> getWithConverter(gsonConverter: GsonConverter<T>): T
+        = getOrNullWithConverter(gsonConverter) ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
+
+}
+
+fun Bundle.getJGetterBundleGson() = JGetterBundleGson(this)

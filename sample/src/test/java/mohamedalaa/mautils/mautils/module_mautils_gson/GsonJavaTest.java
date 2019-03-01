@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.mautils.module_mautils_gson_java;
+package mohamedalaa.mautils.mautils.module_mautils_gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,8 +21,7 @@ import static org.junit.Assert.*;
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 2/20/2019.
  */
-
-public class GsonTest {
+public class GsonJavaTest {
 
     @Test
     public void regularObjects() {
