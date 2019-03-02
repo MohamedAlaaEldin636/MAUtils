@@ -4,12 +4,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.SearchView
-import mohamedalaa.mautils.core_android.allMatchingViewsIsInstanceOrNull
-import mohamedalaa.mautils.core_android.firstMatchingViewIsInstanceOrNull
+import mohamedalaa.mautils.core_android.allNestedViewsIsInstanceOrNull
+import mohamedalaa.mautils.core_android.firstNestedViewIsInstanceOrNull
 
 var SearchView.textColor: Int?
     get() {
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             return this.currentTextColor
         }
 
@@ -20,14 +20,14 @@ var SearchView.textColor: Int?
             return
         }
 
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             this.setTextColor(value)
         }
     }
 
 var SearchView.hintTextColor: Int?
     get() {
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             return this.currentHintTextColor
         }
 
@@ -38,14 +38,14 @@ var SearchView.hintTextColor: Int?
             return
         }
 
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             this.setHintTextColor(value)
         }
     }
 
 var SearchView.text: String?
     get() {
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             return this.text?.toString()
         }
 
@@ -56,13 +56,13 @@ var SearchView.text: String?
             return
         }
 
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             this.setText(value)
         }
     }
 
 fun SearchView.setIconsTint(@ColorInt color: Int) {
-    allMatchingViewsIsInstanceOrNull<ImageView> {
+    allNestedViewsIsInstanceOrNull<ImageView> {
         this.setColorFilter(color)
     }
 }

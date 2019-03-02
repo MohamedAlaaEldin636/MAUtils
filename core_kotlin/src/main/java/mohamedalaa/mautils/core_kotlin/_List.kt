@@ -47,7 +47,8 @@ inline fun <T, R> List<T>.mapOneOrNull(mapped: (old: R, new: R) -> R, block: (T)
 inline fun <T, R> List<T>.mapOne(mapped: (old: R, new: R) -> R, block: (T) -> R): R
         = mapOneOrNull(mapped, block) ?: throw RuntimeException("List was empty")
 
-/** @return same as [List.contains] with benefit that it returns false if `list` is null */
+/** @return same as [List.contains] with benefit that it returns false if `list` is null,
+ * so using operator `in` with nullable value can be achieved isa. */
 operator fun <T> List<T>?.contains(element: T): Boolean = this?.contains(element) ?: false
 
 /**

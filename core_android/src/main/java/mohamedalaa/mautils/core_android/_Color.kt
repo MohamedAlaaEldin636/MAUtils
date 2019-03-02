@@ -61,3 +61,21 @@ fun Int.inOpaqueRange(range: ClosedFloatingPointRange<Float>): Boolean {
         return alpha in range
     }
 }
+
+/**
+ * **Warnings**
+ *
+ * 1- if color is argb, we don't consider alpha.
+ *
+ * 2- we don't consider gamma correctness
+ *
+ * @param color color to be checked isa.
+ * @return true if near to be black than being white isa.
+ */
+fun Int.isNearToBlack(@ColorInt color: Int): Boolean {
+    val greyScale = ((0.2126 * Color.red(color))
+        + (0.7152 * Color.green(color))
+        + (0.0722 * Color.blue(color)))
+
+    return greyScale < 128
+}

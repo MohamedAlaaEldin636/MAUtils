@@ -1,7 +1,5 @@
 package mohamedalaa.mautils.core_android
 
-import android.animation.Animator
-import android.animation.AnimatorSet
 import android.widget.SearchView
 
 typealias SearchView_OnQueryTextListener_Typealias = MASearchViewOnQueryTextListener.() -> Unit

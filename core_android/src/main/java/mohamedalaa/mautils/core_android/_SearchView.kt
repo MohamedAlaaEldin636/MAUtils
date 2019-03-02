@@ -5,7 +5,7 @@ import androidx.annotation.ColorInt
 
 var SearchView.textColor: Int?
     get() {
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             return this.currentTextColor
         }
 
@@ -16,14 +16,14 @@ var SearchView.textColor: Int?
             return
         }
 
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             this.setTextColor(value)
         }
     }
 
 var SearchView.hintTextColor: Int?
     get() {
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             return this.currentHintTextColor
         }
 
@@ -34,14 +34,14 @@ var SearchView.hintTextColor: Int?
             return
         }
 
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             this.setHintTextColor(value)
         }
     }
 
 var SearchView.text: String?
     get() {
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             return this.text?.toString()
         }
 
@@ -52,13 +52,13 @@ var SearchView.text: String?
             return
         }
 
-        firstMatchingViewIsInstanceOrNull<EditText> {
+        firstNestedViewIsInstanceOrNull<EditText> {
             this.setText(value)
         }
     }
 
 fun SearchView.setIconsTint(@ColorInt color: Int) {
-    allMatchingViewsIsInstanceOrNull<ImageView> {
+    allNestedViewsIsInstanceOrNull<ImageView> {
         this.setColorFilter(color)
     }
 }

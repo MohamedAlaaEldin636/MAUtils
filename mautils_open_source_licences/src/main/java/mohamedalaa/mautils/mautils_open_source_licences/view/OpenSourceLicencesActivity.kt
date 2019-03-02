@@ -209,7 +209,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
                 searchView.isIconified = false
 
                 searchView.text = it
-                searchView.firstMatchingViewIsInstanceOrNull<EditText> { setSelectionToLastChar() }
+                searchView.firstNestedViewIsInstanceOrNull<EditText> { setSelectionToLastChar() }
 
                 if (keyboardWasShown) {
                     showKeyboardFor(searchView, true)
@@ -258,7 +258,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         ViewCompat.setElevation(authorChip, dpToPx(4))
         // -- no need to use searchView.setOnSearchClickListener {  }, since it is always not iconified isa.
         searchView.queryHint = getString(R.string.search_view_query_hint)
-        searchView.firstMatchingViewIsInstanceOrNull<EditText> {
+        searchView.firstNestedViewIsInstanceOrNull<EditText> {
             imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
         }
         searchView.setOnQueryTextListenerMA {

@@ -4,26 +4,45 @@ package mohamedalaa.mautils.core_android
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.core.view.forEach
 
 /**
- * loop through `this` and every [ViewGroup] found till [predicate] returns true in that case
- * view is returned else if [predicate] is not met at all, null is returned Instead.
+ * @return the first [View] in [ViewGroup.forEach] that matches the given [predicate] isa.
  *
- * @return view which if sent as param for [predicate] true is returned, or null if not met for all views.
- *
- * @see firstMatchingView
+ * @see firstView
  */
-fun ViewGroup.firstMatchingViewOrNull(checkThisViewGroup: Boolean = true, predicate: (view: View) -> Boolean): View? {
-    if (checkThisViewGroup && predicate(this)) {
-        return this
+inline fun ViewGroup.firstViewOrNull(predicate: (view: View) -> Boolean): View? {
+    forEach {
+        if (predicate(it)) {
+            return it
+        }
     }
 
+    return null
+}
+
+/**
+ * Same as [firstViewOrNull] but instead of returning null if [predicate] not satisfied
+ * a [RuntimeException] is thrown instead isa.
+ *
+ * @throws RuntimeException in case if [predicate] is not met for all views isa.
+ */
+inline fun ViewGroup.firstView(predicate: (view: View) -> Boolean): View
+    = firstViewOrNull(predicate) ?: throw RuntimeException("predicate fun is not satisfied for all views")
+
+/**
+ * @return the first [View] in [ViewGroup.forEachNested] that matches the given [predicate] isa.
+ *
+ * @see firstNestedView
+ * @see allNestedViewsOrNull
+ */
+fun ViewGroup.firstNestedViewOrNull(predicate: (view: View) -> Boolean): View? {
     forEach {
         if (predicate(it)) {
             return it
         }else if (it is ViewGroup) {
-            it.firstMatchingViewOrNull(false, predicate)?.apply {
+            it.firstNestedViewOrNull(predicate)?.apply {
                 return this
             }
         }
@@ -33,92 +52,84 @@ fun ViewGroup.firstMatchingViewOrNull(checkThisViewGroup: Boolean = true, predic
 }
 
 /**
- * loop through `this` and every [ViewGroup] found till [predicate] returns true in that case
- * view is returned else if [predicate] is not met at all, throwing [RuntimeException] is done Instead.
+ * Same as [firstNestedViewOrNull] but instead of returning null if [predicate] not satisfied
+ * a [RuntimeException] is thrown instead isa.
  *
- * @return view which if sent as param for [predicate] true is returned, or throws [RuntimeException] if not met for all views.
- *
- * @throws RuntimeException in case if [predicate] is not met for all views isa.
- *
- * @see firstMatchingViewOrNull
+ * @throws RuntimeException in case if [predicate] is not met for all nested views isa.
  */
-fun ViewGroup.firstMatchingView(checkThisViewGroup: Boolean = true, predicate: (view: View) -> Boolean): View
-    = firstMatchingViewOrNull(checkThisViewGroup, predicate) ?: throw RuntimeException("predicate fun is not satisfied for all views")
+fun ViewGroup.firstNestedView(predicate: (view: View) -> Boolean): View
+    = firstNestedViewOrNull(predicate) ?: throw RuntimeException("predicate fun is not satisfied for all nested views")
 
 /**
- * loop through `this` and every [ViewGroup] found till child view is [T] then return it isa.
- *
- * @param block performs given fun if successfully found the view isa.
- *
- * @return view of type [T] or null if cannot be found isa.
- *
- * @see firstMatchingViewOrNull
- * @see firstMatchingView
+ * performs given [block] on first [View] in [ViewGroup.forEachNested] that is [T] type
+ * then returns it isa.
  */
-inline fun <reified T> ViewGroup.firstMatchingViewIsInstanceOrNull(block: T.() -> Unit): T? {
-    val view = firstMatchingViewOrNull(false) { it is T } as? T
+inline fun <reified T: View> ViewGroup.firstNestedViewIsInstanceOrNull(block: T.() -> Unit): T? {
+    val view = firstNestedViewOrNull { it is T } as? T
     view?.block()
 
     return view
 }
 
-/**
- * todo
- * loop through `this` and every [ViewGroup] found till [predicate] returns true in that case
- * view is returned else if [predicate] is not met at all, null is returned Instead.
- *
- * @return non-empty list of ... or null if no view can apply to given [predicate] isa.
- *
- * @see firstMatchingView
- */
-fun ViewGroup.allMatchingViewsOrNull(checkThisViewGroup: Boolean = true, predicate: (view: View) -> Boolean): List<View>? {
-    val list = mutableListOf<View>()
-
-    if (checkThisViewGroup && predicate(this)) {
-        list.add(this)
-    }
-
-    forEach {
-        if (predicate(it)) {
-            list.add(it)
-        }
-
-        if (it is ViewGroup) {
-            val innerList = it.allMatchingViewsOrNull(false, predicate) ?: return@forEach
-
-            list.addAll(innerList)
-        }
-    }
-
-    return if (list.isNotEmpty()) list else null
-}
+/** @return all [View]s in [ViewGroup.forEachNested] that matches given [predicate] isa. */
+fun ViewGroup.allNestedViewsOrNull(predicate: (view: View) -> Boolean): List<View>?
+    = mapNestedNotNull { if (predicate(it)) it else null }
 
 /**
- * todo
- * loop through `this` and every [ViewGroup] found till child view is [T] then return it isa.
- *
- * @param block performs given fun if successfully found the view isa.
- *
- * @return view of type [T] or null if cannot be found isa.
- *
- * @see firstMatchingViewOrNull
- * @see firstMatchingView
+ * performs given [blockForEach] on all [View]s in [ViewGroup.forEachNested] that is [T] type
+ * then returns them isa.
  */
-inline fun <reified T> ViewGroup.allMatchingViewsIsInstanceOrNull(blockForEach: T.() -> Unit): List<T>? {
-    val list = allMatchingViewsOrNull(false) { it is T }?.map { it as T }
-    list?.forEach {
+inline fun <reified T: View> ViewGroup.allNestedViewsIsInstanceOrNull(blockForEach: T.() -> Unit): List<T>? {
+    val list = mapNestedNotNull { it as? T }
+    list.forEach {
         it.blockForEach()
     }
 
     return list
 }
 
-fun ViewGroup.forEachAllViews(block: (View) -> Unit) {
+/**
+ * performs the given [action] on each [View] in `receiver`, AND if that [View] is [ViewGroup] then
+ * this fun is executed on it as well isa.
+ */
+fun ViewGroup.forEachNested(action: (View) -> Unit) {
     forEach {
-        block(it)
+        action(it)
 
         if (it is ViewGroup) {
-            it.forEachAllViews(block)
+            it.forEachNested(action)
         }
     }
+}
+
+/**
+ * Returns a list containing the results of applying the given [transform] function to each [View]
+ * in `receiver` isa.
+ *
+ * @see [ViewGroup.mapNotNull]
+ */
+inline fun <T> ViewGroup.map(transform: (View) -> T): List<T>
+    = children.toList().map { transform(it) }
+
+/**
+ * Returns a list containing the results of applying the given [transform] function to each [View]
+ * in [ViewGroup.forEachNested] isa.
+ */
+fun <T> ViewGroup.mapNested(transform: (View) -> T): List<T> {
+    val list = mutableListOf<T>()
+
+    forEachNested {
+        list.add(transform(it))
+    }
+
+    return list
+}
+
+/** Same as [ViewGroup.map] but containing only non-null results isa. */
+inline fun <T: Any> ViewGroup.mapNotNull(transform: (View) -> T?): List<T>
+    = map(transform).mapNotNull { it }
+
+/** Same as [ViewGroup.mapNested] but containing only non-null results isa. */
+inline fun <T: Any> ViewGroup.mapNestedNotNull(block: (View) -> T?): List<T> {
+    return mapNested { it }.mapNotNull { block(it) }
 }

@@ -38,11 +38,9 @@ inline fun <T> T?.performIfNotNull(block: T.() -> Unit) {
  * @return `receiver` of this fun isa.
  */
 inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T {
-    if (condition) {
-        return apply { this.block() }
+    return if (condition) {
+        apply { this.block() }
+    }else {
+        this
     }
-
-    return this
 }
-
-
