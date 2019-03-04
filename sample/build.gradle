@@ -52,6 +52,7 @@ dependencies {
     implementation project(':core_android')
     implementation project(':core_android_support_packages')
     implementation project(':mautils_gson')
+    implementation project(':lifecycle_extensions')
 
     // Anko todo delLater isa.
     //implementation "org.jetbrains.anko:anko-commons:$anko_version"

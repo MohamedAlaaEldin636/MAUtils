@@ -1,15 +1,18 @@
+@file:JvmName("FragmentActivityUtils")
+
 package mohamedalaa.mautils.mautils_view_model.extensions
 
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
 /**
- * Returns an existing ViewModel or creates a new one in the scope (usually, a fragment or
- * an activity) isa.
+ * Same as [ViewModelProviders.of] `receiver` then [ViewModelProvider.get]<[VM]>
+ * but is more simplified version of it isa.
  *
- * @see ViewModelProvider.get
+ * @see [Fragment.getViewModel]
  */
 inline fun <reified VM : ViewModel> FragmentActivity.getViewModel()
     = ViewModelProviders.of(this).get(VM::class.java)
