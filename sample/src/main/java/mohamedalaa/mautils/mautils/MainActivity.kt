@@ -46,5 +46,8 @@ class MainActivity : AppCompatActivity() {
 
             startActivity(intent)
         }
+
+        // For Quick Starts isa.
+        startActivity(Intent(this, VisualTestActivity::class.java))
     }
 }
