@@ -20,10 +20,4 @@
 
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/swap_action"
-        android:title="@string/swap"
-
-        app:showAsAction="never"/>
-
 </menu>

@@ -4,18 +4,14 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_visual_test.*
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.core_android.dpToPx
-import mohamedalaa.mautils.core_android.toast
 import mohamedalaa.mautils.recycler_view.ListRecyclerViewAdapter
-import mohamedalaa.mautils.recycler_view.MapRecyclerViewAdapter
 import mohamedalaa.mautils.recycler_view.RCItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
@@ -27,24 +23,15 @@ class VisualTestActivity : AppCompatActivity() {
         setContentView(R.layout.activity_visual_test)
 
         setupXml()
-
-        val linearLayoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = linearLayoutManager
-
-        val itemDecoration = RCItemDecoration(this,
-            dividerColor = Color.RED,
-            dividerDimenInPx = dpToPx(30),
-            additionalOffsetInPx = dpToPx(90)
-        )
-        recyclerView.addItemDecoration(itemDecoration)
-
-        recyclerView.itemAnimator = RCDefaultItemAnimator(recyclerView, itemDecoration)
-
-        rcAdapterFakeNames = RCAdapterFakeNames(itemDecoration, linearLayoutManager)
-        recyclerView.adapter = rcAdapterFakeNames
     }
 
     private fun setupXml() {
+        setupToolbar()
+
+        setupRecyclerView()
+    }
+
+    private fun setupToolbar() {
         toolbar.inflateMenu(R.menu.visual_test_activity)
         toolbar.setOnMenuItemClickListener {
             val index = if (rcAdapterFakeNames.itemCount > 2) 1 else 0
@@ -67,10 +54,6 @@ class VisualTestActivity : AppCompatActivity() {
                             rcAdapterFakeNames.moveItem(fromIndex, toIndex)
                         }
                     }
-                    getString(R.string.swap) -> {
-                        toast("No")
-                        //Toast.makeText(this, "No", Toast.LENGTH_SHORT).show()
-                    }
                 }
             }
 
@@ -78,10 +61,26 @@ class VisualTestActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupRecyclerView() {
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
+
+        val itemDecoration = RCItemDecoration(this,
+            dividerColor = Color.RED,
+            dividerDimenInPx = dpToPx(30),
+            additionalOffsetInPx = dpToPx(90)
+        )
+        recyclerView.addItemDecoration(itemDecoration)
+
+        recyclerView.itemAnimator = RCDefaultItemAnimator(itemDecoration)
+
+        rcAdapterFakeNames = RCAdapterFakeNames(itemDecoration, linearLayoutManager)
+        recyclerView.adapter = rcAdapterFakeNames
+    }
+
 }
 
-class RCDefaultItemAnimator(private val recyclerView: RecyclerView,
-                            private val itemDecoration: RCItemDecoration)
+class RCDefaultItemAnimator(private val itemDecoration: RCItemDecoration)
     : DefaultItemAnimator() {
 
     override fun onRemoveFinished(item: RecyclerView.ViewHolder?) {
@@ -106,9 +105,4 @@ class RCAdapterFakeNames(rcItemDecoration: RCItemDecoration,
         }
     }
 
-}
-
-@Suppress("unused")
-private fun m3(adapter: MapRecyclerViewAdapter<String, Int>) {
-    adapter.dataMap.clear()
 }

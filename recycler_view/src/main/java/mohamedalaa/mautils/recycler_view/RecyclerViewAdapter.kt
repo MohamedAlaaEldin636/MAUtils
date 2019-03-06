@@ -89,7 +89,7 @@ abstract class RecyclerViewAdapter(@LayoutRes private val layoutRes: Int,
 
             notifyDataSetChanged()
         }else {
-            rcItemDecoration.notifyItemRemoved(position)
+            rcItemDecoration.notifyItemRemoved()
 
             removeAction(position)
             notifyItemRemoved(position)
@@ -146,7 +146,7 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
             } ?: false
 
             if (notifyRCItemDecoration) {
-                rcItemDecoration.notifyItemRemoved(position)
+                rcItemDecoration.notifyItemRemoved()
             }
 
             dataList.removeAt(position)

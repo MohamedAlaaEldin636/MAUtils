@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -54,7 +53,7 @@ class RCItemDecoration(context: Context,
 
     private val colorDrawable = dividerColor?.run { ColorDrawable(this) }
 
-    private val ignoreDrawIndices = mutableListOf<Int>()
+    private var ignoreDrawIndices = false
 
     init {
         if (dividerDrawable == null && dividerColor == null) {
@@ -107,18 +106,6 @@ class RCItemDecoration(context: Context,
         }
 
         val bounds = Rect()
-        // todo
-
-        //(parent.layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
-        // todo maybe old approach of on anim finish was right but problem was cuz of above isa, so
-        // 1st solve when scroll from button draw is drawn correctly isa, then check other problem isa.
-        /**
-         todo
-
-         move anim
-        slow scroll from bottom to top ondraw of divider disappears
-        remove at 1 while in bottom removes divider ?!
-         */
         val itemCount = parent.adapter?.itemCount ?: return
         val lastVisible = (parent.layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition() ?: return
 
@@ -130,7 +117,7 @@ class RCItemDecoration(context: Context,
 
         val preLastIndex = untilIndex.dec()
         for (index in 0 until untilIndex) {
-            if (ignoreDrawIndices.isNotEmpty() && index == preLastIndex) {
+            if (ignoreDrawIndices && index == preLastIndex) {
                 continue
             }
 
@@ -172,7 +159,21 @@ class RCItemDecoration(context: Context,
         }
 
         val bounds = Rect()
-        for (index in 0 until parent.childCount.dec()) {
+        val itemCount = parent.adapter?.itemCount ?: return
+        val lastVisible = (parent.layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition() ?: return
+
+        val untilIndex = if (lastVisible == itemCount.dec()) {
+            parent.childCount.dec()
+        }else {
+            parent.childCount
+        }
+
+        val preLastIndex = untilIndex.dec()
+        for (index in 0 until untilIndex) {
+            if (ignoreDrawIndices && index == preLastIndex) {
+                continue
+            }
+
             val child = parent.getChildAt(index)
 
             parent.layoutManager?.getDecoratedBoundsWithMargins(child, bounds)
@@ -197,16 +198,14 @@ class RCItemDecoration(context: Context,
         canvas.restore()
     }
 
-    fun notifyItemRemoved(position: Int) {
-        ignoreDrawIndices.add(position)
+    fun notifyItemRemoved() {
+        ignoreDrawIndices = true
     }
 
     fun onRemoveFinished() {
-        // todo turn it to boolean isa
-        if (ignoreDrawIndices.isNotEmpty()) {
-            ignoreDrawIndices.removeAt(0)
+        if (ignoreDrawIndices) {
+            ignoreDrawIndices = false
         }
-        // ignoreDrawIndices.clear()
     }
 
 }
