@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import mohamedalaa.mautils.recycler_view.extensions.itemDecorations
 
 /**
  * **Usage**
@@ -57,15 +58,27 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * then it maintains proper [RecyclerView.ItemDecoration] drawing and offsets
  *
- * when using [RecyclerView.Adapter.notifyItemRemoved] isa.
+ * when using [RecyclerView.Adapter.notifyItemRemoved] isa,
+ *
+ * **But** Ensure instantiating this class after the given param recyclerView
+ *
+ * has been attached with [RCItemDecoration] AND [RCDefaultItemAnimator]
+ *
+ * @param layoutRes item layout to be inflate isa.
+ * @param recyclerView recycler view instance to fetch [RCItemDecoration] AND [RCDefaultItemAnimator]
+ * from it if exists isa.
  *
  * @see ListRecyclerViewAdapter
- * @see MapRecyclerViewAdapter
  */
 abstract class RecyclerViewAdapter(@LayoutRes private val layoutRes: Int,
-                                   private val rcItemDecoration: RCItemDecoration? = null,
-                                   private val layoutManager: RecyclerView.LayoutManager? = null)
+                                   recyclerView: RecyclerView? = null)
     : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+
+    private val rcItemDecoration: RCItemDecoration?
+        = recyclerView?.itemDecorations?.firstOrNull { it is RCItemDecoration } as? RCItemDecoration
+
+    private val layoutManager: RecyclerView.LayoutManager?
+        = recyclerView?.layoutManager
 
     // ---- Overridden Methods ( Abstract )
 

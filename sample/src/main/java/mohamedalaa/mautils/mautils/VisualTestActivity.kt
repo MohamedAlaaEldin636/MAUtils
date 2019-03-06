@@ -86,17 +86,15 @@ class VisualTestActivity : AppCompatActivity() {
 
         recyclerView.itemAnimator = RCDefaultItemAnimator(itemDecoration)
 
-        rcAdapterFakeNames = RCAdapterFakeNames(itemDecoration, linearLayoutManager)
+        val namesList = listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")
+        rcAdapterFakeNames = RCAdapterFakeNames(namesList, recyclerView)
         recyclerView.adapter = rcAdapterFakeNames
     }
 
 }
 
-val namesList = listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")
-
-class RCAdapterFakeNames(rcItemDecoration: RCItemDecoration,
-                         layoutManager: RecyclerView.LayoutManager)
-    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, namesList, rcItemDecoration, layoutManager) {
+class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
+    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, dataList, recyclerView) {
 
     override fun onBindViewHolder(itemView: View, position: Int) {
         itemView.textView.text = dataList[position]

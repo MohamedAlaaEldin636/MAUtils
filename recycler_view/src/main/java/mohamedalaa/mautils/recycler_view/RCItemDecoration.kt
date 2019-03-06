@@ -36,6 +36,7 @@ import mohamedalaa.mautils.recycler_view.extensions.dpToPx
  */
 // todo zawed type of layout manager, linear walla grid isa, and only those ones are supported isa
 // el staggered msh 3aref ezay for now isa.
+// todo if done maybe make quick classes class kaza for quicker grid isa.
 // todo MUST HAVES
 // 1- IN LAYOUT rc should not be wrap_content isa (last item will blink isa dunno why) ....
 class RCItemDecoration(context: Context,

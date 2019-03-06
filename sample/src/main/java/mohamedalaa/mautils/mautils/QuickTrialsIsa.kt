@@ -1,5 +1,7 @@
 package mohamedalaa.mautils.mautils
 
+import android.content.Context
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +32,14 @@ abstract class CheckTypeParam<E> {
         javaClass.superclass*/
         // new QuickViewModel<>(this) msln isa.
         // but what if viewmodel has type param. ... kda lazm gson approach isa.
+    }
+
+}
+
+private class Abc1(context: Context): AsyncTask<Void?, Void, Void?>() {
+
+    override fun doInBackground(vararg params: Void?): Void? {
+        return null
     }
 
 }

@@ -27,14 +27,11 @@ import androidx.recyclerview.widget.RecyclerView
  * // without coding any line of code.
  * myRecyclerViewAdapter.removeItemAt(index)
  * ```
- *
- * @see MapRecyclerViewAdapter
  */
 abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
                                           dataList: List<E>,
-                                          rcItemDecoration: RCItemDecoration? = null,
-                                          layoutManager: RecyclerView.LayoutManager? = null)
-    : RecyclerViewAdapter(layoutRes, rcItemDecoration, layoutManager) {
+                                          recyclerView: RecyclerView? = null)
+    : RecyclerViewAdapter(layoutRes, recyclerView) {
 
     private val _dataList: MutableList<E> = dataList.toMutableList()
 
