@@ -199,11 +199,14 @@ class RCItemDecoration(context: Context,
 
     fun notifyItemRemoved(position: Int) {
         ignoreDrawIndices.add(position)
-        // todo do we need invalidate isa ?!
     }
 
     fun onRemoveFinished() {
-        ignoreDrawIndices.clear()
+        // todo turn it to boolean isa
+        if (ignoreDrawIndices.isNotEmpty()) {
+            ignoreDrawIndices.removeAt(0)
+        }
+        // ignoreDrawIndices.clear()
     }
 
 }

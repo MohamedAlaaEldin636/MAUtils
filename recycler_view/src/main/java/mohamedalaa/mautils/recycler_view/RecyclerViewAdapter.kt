@@ -1,6 +1,5 @@
 package mohamedalaa.mautils.recycler_view
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -124,7 +123,6 @@ abstract class RecyclerViewAdapter(@LayoutRes private val layoutRes: Int,
  *
  * @see MapRecyclerViewAdapter
  */
-// todo check other methods i.e notify item Inserted / moved etc... isa.
 abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
                                           val dataList: MutableList<E>,
                                           private val rcItemDecoration: RCItemDecoration? = null,
@@ -143,8 +141,6 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
             val notifyRCItemDecoration = (layoutManager as? LinearLayoutManager)?.run {
                 val firstVisible = findFirstVisibleItemPosition()
                 val lastVisible = findLastVisibleItemPosition()
-
-                Log.e("Adapter", "LINEAR LAYOUT MANAGER, $position, $firstVisible, $lastVisible")
 
                 position in (firstVisible..lastVisible)
             } ?: false
@@ -166,8 +162,6 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
 
             notifyDataSetChanged()
         }else {
-            //rcItemDecoration.notifyItemInserted() todo is this necessary ?!
-
             dataList.add(position, element)
             notifyItemInserted(position)
 
@@ -175,108 +169,13 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
         }
     }
 
-    // todo if swap how to do
-    /*
-    notifyItemMoved(fromPosition, toPosition)
-    notifyItemMoved(toPosition, fromPosition)
-     */
-
-    // todo strange anim ?!
     fun moveItem(fromPosition: Int, toPosition: Int) {
-        // todo remove at first is better isa
-        //dataList.move(fromPosition, toPosition)
-
         val element = dataList.elementAt(fromPosition)
 
         removeItemAt(fromPosition)
         insertItemAt(toPosition, element)
-
-        /**if (rcItemDecoration == null) {
-            dataList.move(fromPosition, toPosition)
-
-            notifyDataSetChanged()
-        }else {
-            //rcItemDecoration.notifyItemInserted() todo is this necessary ?!
-
-            dataList.move(fromPosition, toPosition)
-            notifyItemMoved(fromPosition, toPosition)
-
-            notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
-        }*/
     }
 
-    fun swapItems(firstPosition: Int, secondPosition: Int) {
-        // todo remove at first is better isa
-        //dataList.move(fromPosition, toPosition)
-
-        val firstElement = dataList.elementAt(firstPosition)
-        val secondElement = dataList.elementAt(secondPosition)
-
-        if (firstPosition > secondPosition) {
-            removeItemAt(firstPosition)
-            removeItemAt(secondPosition)
-
-            insertItemAt(secondPosition, firstElement)
-            insertItemAt(firstPosition, secondElement)
-        }else {
-            removeItemAt(secondPosition)
-            removeItemAt(firstPosition)
-
-            insertItemAt(firstPosition, secondElement)
-            insertItemAt(secondPosition, firstElement)
-        }
-
-        //notifyItemChanged(, payLoad)
-
-        /*removeItemAt(firstPosition)
-        insertItemAt(secondPosition, firstElement)
-
-        removeItemAt(secondPosition)
-        insertItemAt(firstPosition, secondElement)*/
-
-        /**if (rcItemDecoration == null) {
-        dataList.move(fromPosition, toPosition)
-
-        notifyDataSetChanged()
-        }else {
-        //rcItemDecoration.notifyItemInserted() todo is this necessary ?!
-
-        dataList.move(fromPosition, toPosition)
-        notifyItemMoved(fromPosition, toPosition)
-
-        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
-        }*/
-    }
-
-}
-
-/**
- * Moves element from index [fromIndex] to index [toIndex] isa.
- */
-fun <E> MutableList<E>.move(fromIndex: Int, toIndex: Int) {
-    val element = elementAt(fromIndex)
-
-    removeAt(fromIndex)
-    add(toIndex, element)
-    /*val element = elementAt(fromIndex)
-
-    add(toIndex, element)
-    val indexToBeRemoved = if (fromIndex < toIndex) fromIndex else fromIndex.inc()
-    removeAt(indexToBeRemoved)*/
-}
-
-/**
- * Swap element at [firstIndex] with element at [secondIndex] isa.
- */
-fun <E> MutableList<E>.swap(firstIndex: Int, secondIndex: Int) {
-    val firstElement = elementAt(firstIndex)
-    val secondElement = elementAt(secondIndex)
-
-    add(firstIndex, secondElement)
-    removeAt(firstIndex.inc())
-
-    add(secondIndex, firstElement)
-    removeAt(secondIndex.inc())
 }
 
 /**

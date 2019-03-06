@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_visual_test.*
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.core_android.dpToPx
+import mohamedalaa.mautils.core_android.toast
 import mohamedalaa.mautils.recycler_view.ListRecyclerViewAdapter
 import mohamedalaa.mautils.recycler_view.MapRecyclerViewAdapter
 import mohamedalaa.mautils.recycler_view.RCItemDecoration
@@ -58,18 +60,16 @@ class VisualTestActivity : AppCompatActivity() {
                     getString(R.string.move) -> {
                         if (rcAdapterFakeNames.itemCount > 1) {
                             val fromIndex = 0
-                            val toIndex = fromIndex.inc()
+                            val toIndex = fromIndex.inc().run {
+                                if (rcAdapterFakeNames.itemCount > 2) inc() else this
+                            }
 
                             rcAdapterFakeNames.moveItem(fromIndex, toIndex)
                         }
                     }
                     getString(R.string.swap) -> {
-                        if (rcAdapterFakeNames.itemCount > 1) {
-                            val firstIndex = 0
-                            val secondIndex = firstIndex.inc()
-
-                            rcAdapterFakeNames.swapItems(firstIndex, secondIndex)
-                        }
+                        toast("No")
+                        //Toast.makeText(this, "No", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -84,32 +84,11 @@ class RCDefaultItemAnimator(private val recyclerView: RecyclerView,
                             private val itemDecoration: RCItemDecoration)
     : DefaultItemAnimator() {
 
-    //private var triggeredOnce = false
-
     override fun onRemoveFinished(item: RecyclerView.ViewHolder?) {
-        // todo logs isa.
-        Log.e("RCDef", "onRemoveFinished")
-
         super.onRemoveFinished(item)
 
         itemDecoration.onRemoveFinished()
-
-        //triggeredOnce = false
     }
-
-    // todo if not visible then do not do it isa.
-    /*override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
-        Log.e("RCDef", "on anim finish")
-
-        Handler().post { Log.e("RCDef", "HANDLER on anim finish") }
-
-        if (triggeredOnce) {
-            itemDecoration.onRemoveFinished()
-        }
-        triggeredOnce = triggeredOnce.not()
-
-        super.onAnimationFinished(viewHolder)
-    }*/
 
 }
 
