@@ -183,7 +183,15 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
 
     // todo strange anim ?!
     fun moveItem(fromPosition: Int, toPosition: Int) {
-        if (rcItemDecoration == null) {
+        // todo remove at first is better isa
+        //dataList.move(fromPosition, toPosition)
+
+        val element = dataList.elementAt(fromPosition)
+
+        removeItemAt(fromPosition)
+        insertItemAt(toPosition, element)
+
+        /**if (rcItemDecoration == null) {
             dataList.move(fromPosition, toPosition)
 
             notifyDataSetChanged()
@@ -194,7 +202,50 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
             notifyItemMoved(fromPosition, toPosition)
 
             notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
+        }*/
+    }
+
+    fun swapItems(firstPosition: Int, secondPosition: Int) {
+        // todo remove at first is better isa
+        //dataList.move(fromPosition, toPosition)
+
+        val firstElement = dataList.elementAt(firstPosition)
+        val secondElement = dataList.elementAt(secondPosition)
+
+        if (firstPosition > secondPosition) {
+            removeItemAt(firstPosition)
+            removeItemAt(secondPosition)
+
+            insertItemAt(secondPosition, firstElement)
+            insertItemAt(firstPosition, secondElement)
+        }else {
+            removeItemAt(secondPosition)
+            removeItemAt(firstPosition)
+
+            insertItemAt(firstPosition, secondElement)
+            insertItemAt(secondPosition, firstElement)
         }
+
+        //notifyItemChanged(, payLoad)
+
+        /*removeItemAt(firstPosition)
+        insertItemAt(secondPosition, firstElement)
+
+        removeItemAt(secondPosition)
+        insertItemAt(firstPosition, secondElement)*/
+
+        /**if (rcItemDecoration == null) {
+        dataList.move(fromPosition, toPosition)
+
+        notifyDataSetChanged()
+        }else {
+        //rcItemDecoration.notifyItemInserted() todo is this necessary ?!
+
+        dataList.move(fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
+
+        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
+        }*/
     }
 
 }
@@ -205,9 +256,13 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
 fun <E> MutableList<E>.move(fromIndex: Int, toIndex: Int) {
     val element = elementAt(fromIndex)
 
+    removeAt(fromIndex)
+    add(toIndex, element)
+    /*val element = elementAt(fromIndex)
+
     add(toIndex, element)
     val indexToBeRemoved = if (fromIndex < toIndex) fromIndex else fromIndex.inc()
-    removeAt(indexToBeRemoved)
+    removeAt(indexToBeRemoved)*/
 }
 
 /**

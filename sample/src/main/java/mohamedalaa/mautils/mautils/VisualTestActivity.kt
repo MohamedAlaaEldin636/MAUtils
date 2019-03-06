@@ -63,6 +63,14 @@ class VisualTestActivity : AppCompatActivity() {
                             rcAdapterFakeNames.moveItem(fromIndex, toIndex)
                         }
                     }
+                    getString(R.string.swap) -> {
+                        if (rcAdapterFakeNames.itemCount > 1) {
+                            val firstIndex = 0
+                            val secondIndex = firstIndex.inc()
+
+                            rcAdapterFakeNames.swapItems(firstIndex, secondIndex)
+                        }
+                    }
                 }
             }
 
