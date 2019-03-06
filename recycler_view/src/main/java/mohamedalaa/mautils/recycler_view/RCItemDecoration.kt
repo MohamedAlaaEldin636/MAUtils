@@ -12,9 +12,7 @@ import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 
 /**
  * Same as [DividerItemDecoration], but without divider after last index isa.
@@ -110,8 +108,28 @@ class RCItemDecoration(context: Context,
 
         val bounds = Rect()
         // todo
-        val preLastIndex = parent.childCount.dec().dec()
-        for (index in 0 until parent.childCount.dec()) {
+
+        //(parent.layoutManager as? GridLayoutManager)?.findFirstVisibleItemPosition()
+        // todo maybe old approach of on anim finish was right but problem was cuz of above isa, so
+        // 1st solve when scroll from button draw is drawn correctly isa, then check other problem isa.
+        /**
+         todo
+
+         move anim
+        slow scroll from bottom to top ondraw of divider disappears
+        remove at 1 while in bottom removes divider ?!
+         */
+        val itemCount = parent.adapter?.itemCount ?: return
+        val lastVisible = (parent.layoutManager as? LinearLayoutManager)?.findLastVisibleItemPosition() ?: return
+
+        val untilIndex = if (lastVisible == itemCount.dec()) {
+            parent.childCount.dec()
+        }else {
+            parent.childCount
+        }
+
+        val preLastIndex = untilIndex.dec()
+        for (index in 0 until untilIndex) {
             if (ignoreDrawIndices.isNotEmpty() && index == preLastIndex) {
                 continue
             }

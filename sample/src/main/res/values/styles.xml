@@ -8,6 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppThemeNoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="MyOwnOpenSourceLicencesTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#03A9F4</item>
         <item name="colorPrimaryDark">#0288D1</item>

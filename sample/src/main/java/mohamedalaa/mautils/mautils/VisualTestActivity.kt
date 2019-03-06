@@ -3,10 +3,10 @@ package mohamedalaa.mautils.mautils
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_visual_test.*
@@ -18,11 +18,16 @@ import mohamedalaa.mautils.recycler_view.RCItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
 
+    private lateinit var rcAdapterFakeNames: RCAdapterFakeNames
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_visual_test)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        setupXml()
+
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
 
         val itemDecoration = RCItemDecoration(this,
             dividerColor = Color.RED,
@@ -31,48 +36,87 @@ class VisualTestActivity : AppCompatActivity() {
         )
         recyclerView.addItemDecoration(itemDecoration)
 
-        recyclerView.itemAnimator = Hiiiii(itemDecoration)
+        recyclerView.itemAnimator = RCDefaultItemAnimator(recyclerView, itemDecoration)
 
-        recyclerView.adapter = RCAdapterFakeNames(itemDecoration)
+        rcAdapterFakeNames = RCAdapterFakeNames(itemDecoration, linearLayoutManager)
+        recyclerView.adapter = rcAdapterFakeNames
     }
+
+    private fun setupXml() {
+        toolbar.inflateMenu(R.menu.visual_test_activity)
+        toolbar.setOnMenuItemClickListener {
+            val index = if (rcAdapterFakeNames.itemCount > 2) 1 else 0
+
+            Handler().post {
+                when(it.title.toString()) {
+                    getString(R.string.insert) -> {
+                        rcAdapterFakeNames.insertItemAt(index, "hello, there")
+                    }
+                    getString(R.string.remove) -> {
+                        rcAdapterFakeNames.removeItemAt(index)
+                    }
+                    getString(R.string.move) -> {
+                        if (rcAdapterFakeNames.itemCount > 1) {
+                            val fromIndex = 0
+                            val toIndex = fromIndex.inc()
+
+                            rcAdapterFakeNames.moveItem(fromIndex, toIndex)
+                        }
+                    }
+                }
+            }
+
+            true
+        }
+    }
+
 }
 
-class Hiiiii(val itemDecoration: RCItemDecoration) : DefaultItemAnimator() {
-    override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
-        super.onAnimationFinished(viewHolder)
+class RCDefaultItemAnimator(private val recyclerView: RecyclerView,
+                            private val itemDecoration: RCItemDecoration)
+    : DefaultItemAnimator() {
 
-    }
+    //private var triggeredOnce = false
 
     override fun onRemoveFinished(item: RecyclerView.ViewHolder?) {
+        // todo logs isa.
+        Log.e("RCDef", "onRemoveFinished")
+
         super.onRemoveFinished(item)
 
-        Log.e("HHHHHHH", "finished isa")
-
         itemDecoration.onRemoveFinished()
+
+        //triggeredOnce = false
     }
+
+    // todo if not visible then do not do it isa.
+    /*override fun onAnimationFinished(viewHolder: RecyclerView.ViewHolder) {
+        Log.e("RCDef", "on anim finish")
+
+        Handler().post { Log.e("RCDef", "HANDLER on anim finish") }
+
+        if (triggeredOnce) {
+            itemDecoration.onRemoveFinished()
+        }
+        triggeredOnce = triggeredOnce.not()
+
+        super.onAnimationFinished(viewHolder)
+    }*/
+
 }
 
 val namesList = listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")
 
-class RCAdapterFakeNames(private val itemDecoration: RCItemDecoration)
-    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, namesList.toMutableList()) {
+class RCAdapterFakeNames(rcItemDecoration: RCItemDecoration,
+                         layoutManager: RecyclerView.LayoutManager)
+    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, namesList.toMutableList(), rcItemDecoration, layoutManager) {
 
     override fun onBindViewHolder(itemView: View, position: Int) {
         itemView.textView.text = dataList[position]
 
         itemView.textView.setOnClickListener {
-            Log.e("ZZZ", "position -> $position")
-            removeItem(position)
+            removeItemAt(position)
         }
-    }
-
-    private fun removeItem(position: Int) {
-        itemDecoration.notifyItemRemoved(position)
-
-        dataList.removeAt(position)
-        notifyItemRemoved(position)
-
-        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
     }
 
 }
