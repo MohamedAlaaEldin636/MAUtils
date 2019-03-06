@@ -3,4 +3,5 @@
     <string name="insert">Insert</string>
     <string name="remove">Remove</string>
     <string name="move">Move</string>
+    <string name="change_all_data">Change All Data</string>
 </resources>

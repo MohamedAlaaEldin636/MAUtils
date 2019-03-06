@@ -64,5 +64,5 @@ private fun rcConsumer() {
     val myRecyclerViewAdapter = MyRecyclerViewAdapter3(listOf("name1", "name2"))
 
     val list = myRecyclerViewAdapter.dataList + "" + "saas"
-    myRecyclerViewAdapter.dataList += listOf("")
+    //myRecyclerViewAdapter.dataList += listOf("")
 }

@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_visual_test.*
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.core_android.dpToPx
 import mohamedalaa.mautils.recycler_view.ListRecyclerViewAdapter
+import mohamedalaa.mautils.recycler_view.RCDefaultItemAnimator
 import mohamedalaa.mautils.recycler_view.RCItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
@@ -54,6 +54,18 @@ class VisualTestActivity : AppCompatActivity() {
                             rcAdapterFakeNames.moveItem(fromIndex, toIndex)
                         }
                     }
+                    getString(R.string.change_all_data) -> {
+                        val list = rcAdapterFakeNames.dataList.toMutableList().apply {
+                            clear()
+                            add(0, "0")
+                            add(1, "1")
+                            add(2, "2")
+                            add("pre last")
+                            add("last")
+                        }
+
+                        rcAdapterFakeNames.changeData(list)
+                    }
                 }
             }
 
@@ -80,22 +92,11 @@ class VisualTestActivity : AppCompatActivity() {
 
 }
 
-class RCDefaultItemAnimator(private val itemDecoration: RCItemDecoration)
-    : DefaultItemAnimator() {
-
-    override fun onRemoveFinished(item: RecyclerView.ViewHolder?) {
-        super.onRemoveFinished(item)
-
-        itemDecoration.onRemoveFinished()
-    }
-
-}
-
 val namesList = listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")
 
 class RCAdapterFakeNames(rcItemDecoration: RCItemDecoration,
                          layoutManager: RecyclerView.LayoutManager)
-    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, namesList.toMutableList(), rcItemDecoration, layoutManager) {
+    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, namesList, rcItemDecoration, layoutManager) {
 
     override fun onBindViewHolder(itemView: View, position: Int) {
         itemView.textView.text = dataList[position]

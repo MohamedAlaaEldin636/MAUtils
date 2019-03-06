@@ -20,4 +20,10 @@
 
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/change_all_data_action"
+        android:title="@string/change_all_data"
+
+        app:showAsAction="never"/>
+
 </menu>

@@ -6,19 +6,26 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.recyclerview.widget.*
+import mohamedalaa.mautils.recycler_view.extensions.dpToPx
 
 /**
- * Same as [DividerItemDecoration], but without divider after last index isa.
+ * Same as [DividerItemDecoration], but without divider after last index isa,
  *
- * **Note**
+ * Also if used with [RecyclerViewAdapter] AND [RCDefaultItemAnimator]
  *
- * If [dividerDrawable] is null, then [dividerColor] and [dividerDimenInPx] must be not null isa,
+ * then it maintains proper [RecyclerView.ItemDecoration] drawing and offsets
+ *
+ * when using [RecyclerView.Adapter.notifyItemRemoved] isa.
+ *
+ * **Notes**
+ *
+ * 1- If [dividerDrawable] is null, then [dividerColor] and [dividerDimenInPx] must be not null isa,
+ *
  * however if that happens a fallback to 1 dp with [Color.BLACK] will be used isa.
  *
  * @param dividerDimenInPx if null then [Drawable.getIntrinsicHeight] or [Drawable.getIntrinsicWidth]
@@ -209,8 +216,3 @@ class RCItemDecoration(context: Context,
     }
 
 }
-
-private fun Context.dpToPx(dp: Int): Float = TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_DIP,
-    dp.toFloat(),
-    resources.displayMetrics)
