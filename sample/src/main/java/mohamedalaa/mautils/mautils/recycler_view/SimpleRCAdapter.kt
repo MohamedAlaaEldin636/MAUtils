@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.mautils.R
-import mohamedalaa.mautils.recycler_view.ListRecyclerViewAdapter
-import mohamedalaa.mautils.recycler_view.RecyclerViewAdapter
+import mohamedalaa.mautils.recycler_view.custom_classes.ListRecyclerViewAdapter
+import mohamedalaa.mautils.recycler_view.custom_classes.RecyclerViewAdapter
 
 // More Concise Approach
 

@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.recycler_view
+package mohamedalaa.mautils.recycler_view.custom_classes
 
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView

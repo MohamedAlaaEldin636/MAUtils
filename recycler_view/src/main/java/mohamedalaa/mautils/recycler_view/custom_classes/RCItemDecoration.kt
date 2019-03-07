@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.recycler_view
+package mohamedalaa.mautils.recycler_view.custom_classes
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,7 +11,9 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.recyclerview.widget.*
-import mohamedalaa.mautils.recycler_view.extensions.dpToPx
+import mohamedalaa.mautils.recycler_view.extensions.internal.dpToPx
+import mohamedalaa.mautils.recycler_view.extensions.isBorderRight
+import mohamedalaa.mautils.recycler_view.extensions.isBorderTop
 
 /**
  * Same as [DividerItemDecoration], but without divider after last index isa,
@@ -33,10 +35,16 @@ import mohamedalaa.mautils.recycler_view.extensions.dpToPx
  *
  * @param gravity Effective only when [additionalOffsetInPx] is > 0
  * so divider needs to have [Gravity] values isa.
+ *
+ * @param gridIgnoreBorder true means do not put offsets between items and borders isa.
+ *
+ * @param gridMergeOffsets true means keep equal offset between items, else right border
+ * of first item will be added to left border of second item isa.
  */
 // todo zawed type of layout manager, linear walla grid isa, and only those ones are supported isa
 // el staggered msh 3aref ezay for now isa.
 // todo if done maybe make quick classes class kaza for quicker grid isa.
+// todo secondary qquick constructors ae better isa.
 // todo MUST HAVES
 // 1- IN LAYOUT rc should not be wrap_content isa (last item will blink isa dunno why) ....
 class RCItemDecoration(context: Context,
@@ -45,7 +53,9 @@ class RCItemDecoration(context: Context,
                        @Px private var dividerDimenInPx: Int? = null,
                        @Px private val additionalOffsetInPx: Int = 0,
                        private val gravity: Int = Gravity.CENTER,
-                       private val orientationIsVertical: Boolean = true)
+                       private val orientationIsVertical: Boolean = true,
+                       private val gridIgnoreBorder: Boolean = true,
+                       private val gridMergeOffsets: Boolean = true)
     : RecyclerView.ItemDecoration() {
 
     constructor(context: Context,
@@ -80,24 +90,48 @@ class RCItemDecoration(context: Context,
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        when {
-            parent.layoutManager == null -> Unit
-            orientationIsVertical -> drawVertical(canvas, parent)
-            else -> drawHorizontal(canvas, parent)
+        when(val layoutManager = parent.layoutManager) {
+            is GridLayoutManager -> {
+                drawGrid(canvas, parent)
+            }
+            is LinearLayoutManager -> if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
+                drawVertical(canvas, parent)
+            }else {
+                drawHorizontal(canvas, parent)
+            }
         }
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val position = parent.getChildAdapterPosition(view)
+        val adapter = parent.adapter
+        val layoutManager = parent.layoutManager
+        val fullDimen = dimenInPx.plus(additionalOffsetInPx)
+        when {
+            adapter == null || position == RecyclerView.NO_POSITION -> outRect.setEmpty()
+            layoutManager is GridLayoutManager -> if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
+                // Vertical so top && right isa.
+                // todo here we apply ignore border true && merge true , so make the other cases later isa.
 
-        // hide the divider for the last child
-        parent.adapter.apply {
-            when {
-                (this != null && position == this.itemCount.dec()) -> outRect.setEmpty()
-                orientationIsVertical -> outRect.set(0, 0, 0, dimenInPx.plus(additionalOffsetInPx))
-                else -> outRect.set(0, 0, dimenInPx.plus(additionalOffsetInPx), 0)
+                val top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
+                val right = if (layoutManager.isBorderRight(position)) 0 else fullDimen
+
+                outRect.set(0, top, right, 0)
+            }else {
+                // todo note reverse layout not taken in consideration here yet isa.
+                // Horizontal so top && right isa.
+                // todo
+            }
+            layoutManager is LinearLayoutManager -> when {
+                adapter.itemCount.dec() == position -> outRect.setEmpty()
+                layoutManager.orientation == LinearLayoutManager.VERTICAL -> outRect.set(0, 0, 0, fullDimen)
+                else -> outRect.set(0, 0, fullDimen, 0)
             }
         }
+    }
+
+    private fun drawGrid(canvas: Canvas, parent: RecyclerView) {
+        // todo drawGrid
     }
 
     private fun drawVertical(canvas: Canvas, parent: RecyclerView) {

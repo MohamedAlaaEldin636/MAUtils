@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.recycler_view
+package mohamedalaa.mautils.recycler_view.custom_classes
 
 import android.view.LayoutInflater
 import android.view.View
@@ -70,6 +70,7 @@ import mohamedalaa.mautils.recycler_view.extensions.itemDecorations
  *
  * @see ListRecyclerViewAdapter
  */
+// todo another instance using data binding isa as in onBind isa, think of interfaces as well isa.
 abstract class RecyclerViewAdapter(@LayoutRes private val layoutRes: Int,
                                    recyclerView: RecyclerView? = null)
     : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {

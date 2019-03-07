@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.recycler_view
+package mohamedalaa.mautils.recycler_view.custom_classes
 
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView

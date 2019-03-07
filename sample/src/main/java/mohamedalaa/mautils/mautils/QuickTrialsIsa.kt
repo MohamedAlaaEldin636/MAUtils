@@ -3,13 +3,11 @@ package mohamedalaa.mautils.mautils
 import android.content.Context
 import android.os.AsyncTask
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.recycler_view.RecyclerViewAdapter
 import java.lang.reflect.ParameterizedType
 
 abstract class CheckTypeParam<E> {

@@ -4,4 +4,7 @@
     <string name="remove">Remove</string>
     <string name="move">Move</string>
     <string name="change_all_data">Change All Data</string>
+    <string name="filter">Filter</string>
+    <string name="grid_layout_manager">Grid Layout Manager</string>
+    <string name="linear_layout_manager">Linear Layout Manager</string>
 </resources>

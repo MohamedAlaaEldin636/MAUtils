@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    tools:ignore="AlwaysShowAction">
+
+    <item
+        android:id="@+id/filter_action"
+        android:title="@string/filter"
+
+        android:icon="@drawable/ic_filter_list_black_24dp"
+        app:showAsAction="always">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/linear_layout_manager_action"
+                    android:title="@string/linear_layout_manager"
+                    android:checked="true"/>
+
+                <item
+                    android:id="@+id/grid_layout_manager_action"
+                    android:title="@string/grid_layout_manager"/>
+
+            </group>
+
+        </menu>
+
+    </item>
 
     <item
         android:id="@+id/insert_action"

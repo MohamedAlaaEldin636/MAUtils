@@ -5,14 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_visual_test.*
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.core_android.dpToPx
-import mohamedalaa.mautils.recycler_view.ListRecyclerViewAdapter
-import mohamedalaa.mautils.recycler_view.RCDefaultItemAnimator
-import mohamedalaa.mautils.recycler_view.RCItemDecoration
+import mohamedalaa.mautils.core_android.toast
+import mohamedalaa.mautils.recycler_view.custom_classes.ListRecyclerViewAdapter
+import mohamedalaa.mautils.recycler_view.custom_classes.RCDefaultItemAnimator
+import mohamedalaa.mautils.recycler_view.custom_classes.RCItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
 
@@ -66,6 +68,12 @@ class VisualTestActivity : AppCompatActivity() {
 
                         rcAdapterFakeNames.changeData(list)
                     }
+                    getString(R.string.linear_layout_manager) -> {
+                        recyclerView.layoutManager = LinearLayoutManager(this)
+                    }
+                    getString(R.string.grid_layout_manager) -> {
+                        recyclerView.layoutManager = GridLayoutManager(this, 2)
+                    }
                 }
             }
 
@@ -74,19 +82,20 @@ class VisualTestActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val linearLayoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val itemDecoration = RCItemDecoration(this,
+        val itemDecoration = RCItemDecoration(
+            this,
             dividerColor = Color.RED,
-            dividerDimenInPx = dpToPx(30),
-            additionalOffsetInPx = dpToPx(90)
+            dividerDimenInPx = dpToPx(0),
+            additionalOffsetInPx = dpToPx(16)
         )
         recyclerView.addItemDecoration(itemDecoration)
 
-        recyclerView.itemAnimator = RCDefaultItemAnimator(itemDecoration)
+        recyclerView.itemAnimator =
+            RCDefaultItemAnimator(itemDecoration)
 
-        val namesList = listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")
+        val namesList = List(20) { it.toString() }/*listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")*/
         rcAdapterFakeNames = RCAdapterFakeNames(namesList, recyclerView)
         recyclerView.adapter = rcAdapterFakeNames
     }

@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.recycler_view.extensions
+package mohamedalaa.mautils.recycler_view.extensions.internal
 
 import android.content.Context
 import android.util.TypedValue
