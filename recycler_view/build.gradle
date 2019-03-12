@@ -34,4 +34,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     api 'androidx.recyclerview:recyclerview:1.0.0'
+    api project(':core_android')
 }

@@ -4,7 +4,10 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +22,25 @@ import mohamedalaa.mautils.recycler_view.custom_classes.RCItemDecoration
 class VisualTestActivity : AppCompatActivity() {
 
     private lateinit var rcAdapterFakeNames: RCAdapterFakeNames
+
+    private lateinit var rcItemDecoration: RCItemDecoration
+
+    private var tempCounter = 1
+        set(value) {
+            field = if (value == 4) 0 else value
+        }
+
+    private val gridIgnoreBorder: Boolean
+        get() = when(tempCounter) {
+            0, 1 -> true
+            else -> false
+        }
+
+    private val gridMergeOffsets: Boolean
+        get() = when(tempCounter) {
+            0, 2 -> true
+            else -> false
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +62,41 @@ class VisualTestActivity : AppCompatActivity() {
 
             Handler().post {
                 when(it.title.toString()) {
+                    getString(R.string.screen_rotation) -> {
+                        when (val layoutManager = recyclerView.layoutManager as? GridLayoutManager) {
+                            is GridLayoutManager -> {
+                                val isVertical = layoutManager.orientation == RecyclerView.VERTICAL
+
+                                toast("gridOrientationIsVertical -> ${isVertical.not()}", duration = Toast.LENGTH_LONG)
+
+                                Log.e("Before", "before orient changes isa -> ${isVertical.not()}")
+                                layoutManager.orientation = if (isVertical) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
+                                recyclerView.invalidateItemDecorations()
+                            }
+                            else -> {
+                                // todo linear layout like grid one isa.
+                                toast("(orientation) Not a grid layout manager")
+
+                                return@post
+                            }
+                        }
+                    }
+                    getString(R.string.track_change) -> {
+                        if (recyclerView.layoutManager as? GridLayoutManager == null) {
+                            toast("Not a grid layout manager")
+
+                            return@post
+                        }else {
+                            toast("gridIgnoreBorder -> $gridIgnoreBorder\ngridMergeOffsets -> $gridMergeOffsets", duration = Toast.LENGTH_LONG)
+                        }
+
+                        rcItemDecoration = rcItemDecoration.swapItemDecoration(
+                            recyclerView,
+                            this,
+                            gridIgnoreBorder = gridIgnoreBorder,
+                            gridMergeOffsets = gridMergeOffsets)
+                        tempCounter++
+                    }
                     getString(R.string.insert) -> {
                         rcAdapterFakeNames.insertItemAt(index, "hello, there")
                     }
@@ -72,7 +129,7 @@ class VisualTestActivity : AppCompatActivity() {
                         recyclerView.layoutManager = LinearLayoutManager(this)
                     }
                     getString(R.string.grid_layout_manager) -> {
-                        recyclerView.layoutManager = GridLayoutManager(this, 2)
+                        recyclerView.layoutManager = GridLayoutManager(this, 5)
                     }
                 }
             }
@@ -84,16 +141,16 @@ class VisualTestActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val itemDecoration = RCItemDecoration(
+        rcItemDecoration = RCItemDecoration(
             this,
             dividerColor = Color.RED,
             dividerDimenInPx = dpToPx(0),
             additionalOffsetInPx = dpToPx(16)
         )
-        recyclerView.addItemDecoration(itemDecoration)
+        recyclerView.addItemDecoration(rcItemDecoration)
 
         recyclerView.itemAnimator =
-            RCDefaultItemAnimator(itemDecoration)
+            RCDefaultItemAnimator(rcItemDecoration)
 
         val namesList = List(20) { it.toString() }/*listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")*/
         rcAdapterFakeNames = RCAdapterFakeNames(namesList, recyclerView)
@@ -104,6 +161,15 @@ class VisualTestActivity : AppCompatActivity() {
 
 class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
     : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, dataList, recyclerView) {
+
+    // called after orientation el7
+    /*override fun getItemViewType(position: Int): Int {
+        return super.getItemViewType(position).apply {
+            Log.e("ViewType", "hi")
+        }
+    }*/
+
+    // gela open for getLayout res even law property not fun isa.
 
     override fun onBindViewHolder(itemView: View, position: Int) {
         itemView.textView.text = dataList[position]

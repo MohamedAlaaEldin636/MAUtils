@@ -7,4 +7,6 @@
     <string name="filter">Filter</string>
     <string name="grid_layout_manager">Grid Layout Manager</string>
     <string name="linear_layout_manager">Linear Layout Manager</string>
+    <string name="track_change">Track Change</string>
+    <string name="screen_rotation">Screen Rotation</string>
 </resources>

@@ -20,3 +20,11 @@ fun Path.moveThenLineTo(firstPointF: PointF, secondPointF: PointF) {
     moveTo(firstPointF.x, firstPointF.y)
     lineTo(secondPointF.x, secondPointF.y)
 }
+
+/**
+ * Performs [Path.lineTo] with [x] & [y], then [Path.moveTo] for same [x] & [y] isa.
+ */
+fun Path.lineThenMoveTo(x: Float, y: Float) {
+    lineTo(x, y)
+    moveTo(x, y)
+}

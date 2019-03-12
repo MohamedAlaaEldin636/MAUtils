@@ -1,19 +1,27 @@
 package mohamedalaa.mautils.recycler_view.custom_classes
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Rect
+import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.recyclerview.widget.*
-import mohamedalaa.mautils.recycler_view.extensions.internal.dpToPx
+import mohamedalaa.mautils.core_android.dpToPx
+import mohamedalaa.mautils.recycler_view.extensions.internal.*
+import mohamedalaa.mautils.recycler_view.extensions.isBorderBottom
+import mohamedalaa.mautils.recycler_view.extensions.isBorderLeft
 import mohamedalaa.mautils.recycler_view.extensions.isBorderRight
 import mohamedalaa.mautils.recycler_view.extensions.isBorderTop
+import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderMergeOffsetsVertical
+import android.R.attr.bottom
+import android.R.attr.top
+import androidx.recyclerview.widget.RecyclerView
+
+
 
 /**
  * Same as [DividerItemDecoration], but without divider after last index isa,
@@ -47,6 +55,10 @@ import mohamedalaa.mautils.recycler_view.extensions.isBorderTop
 // todo secondary qquick constructors ae better isa.
 // todo MUST HAVES
 // 1- IN LAYOUT rc should not be wrap_content isa (last item will blink isa dunno why) ....
+// todo make copy fun == constructors isa + swap fun takes rc && own item decor as param isa. rc as weak reference isa.
+// todo treat linear as grid with is border things isa, by that no need for isVertical param isa.
+// todo ignore usage of divider param of drawable keep it color and dimen isa, and nullable drawable isa. , and no need of float constructor isa.
+// todo by that i think notify item on deletion won't be needed so a test or tests are needed to recheck isa.
 class RCItemDecoration(context: Context,
                        private val dividerDrawable: Drawable? = null,
                        @ColorInt private var dividerColor: Int? = null,
@@ -73,6 +85,10 @@ class RCItemDecoration(context: Context,
 
     private var ignoreDrawIndices = false
 
+    internal val paint = Paint()
+
+    internal val fullDimen: Int
+
     init {
         if (dividerDrawable == null && dividerColor == null) {
             dividerColor = Color.BLACK
@@ -87,12 +103,21 @@ class RCItemDecoration(context: Context,
         }else {
             dividerDimenInPx ?: context.dpToPx(1).toInt()
         }
+
+        // Paint setup
+        paint.color = dividerColor ?: Color.BLACK
+        paint.isAntiAlias = true
+        paint.style = Paint.Style.FILL
+
+        fullDimen = dimenInPx.plus(additionalOffsetInPx)
     }
+
+    // ---- Overridden fun
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         when(val layoutManager = parent.layoutManager) {
             is GridLayoutManager -> {
-                drawGrid(canvas, parent)
+                drawGrid(canvas, parent, layoutManager)
             }
             is LinearLayoutManager -> if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
                 drawVertical(canvas, parent)
@@ -102,25 +127,108 @@ class RCItemDecoration(context: Context,
         }
     }
 
+    private val mSizeGridSpacingPx: Int = context.dpToPx(20).toInt()
+    private val mGridSize: Int = 5
+
+    private var mNeedLeftSpacing = false
+
+    /*override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+        val frameWidth =
+            ((parent.width - mSizeGridSpacingPx.toFloat() * (mGridSize - 1)) / mGridSize).toInt()
+        val padding = parent.width / mGridSize - frameWidth
+        val itemPosition = (view.layoutParams as RecyclerView.LayoutParams).viewAdapterPosition
+        if (itemPosition < mGridSize) {
+            outRect.top = 0
+        } else {
+            outRect.top = mSizeGridSpacingPx
+        }
+        if (itemPosition % mGridSize == 0) {
+            outRect.left = 0
+            outRect.right = padding
+            mNeedLeftSpacing = true
+        } else if ((itemPosition + 1) % mGridSize == 0) {
+            mNeedLeftSpacing = false
+            outRect.right = 0
+            outRect.left = padding
+        } else if (mNeedLeftSpacing) {
+            mNeedLeftSpacing = false
+            outRect.left = mSizeGridSpacingPx - padding
+            if ((itemPosition + 2) % mGridSize == 0) {
+                outRect.right = mSizeGridSpacingPx - padding
+            } else {
+                outRect.right = mSizeGridSpacingPx / 2
+            }
+        } else if ((itemPosition + 2) % mGridSize == 0) {
+            mNeedLeftSpacing = false
+            outRect.left = mSizeGridSpacingPx / 2
+            outRect.right = mSizeGridSpacingPx - padding
+        } else {
+            mNeedLeftSpacing = false
+            outRect.left = mSizeGridSpacingPx / 2
+            outRect.right = mSizeGridSpacingPx / 2
+        }
+        outRect.bottom = 0
+    }*/
+
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val position = parent.getChildAdapterPosition(view)
         val adapter = parent.adapter
         val layoutManager = parent.layoutManager
         val fullDimen = dimenInPx.plus(additionalOffsetInPx)
+
         when {
-            adapter == null || position == RecyclerView.NO_POSITION -> outRect.setEmpty()
-            layoutManager is GridLayoutManager -> if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
-                // Vertical so top && right isa.
-                // todo here we apply ignore border true && merge true , so make the other cases later isa.
+            adapter == null || adapter.itemCount < 2 || position == RecyclerView.NO_POSITION -> outRect.setEmpty()
+            layoutManager is GridLayoutManager -> {
+                val top: Int
+                val bottom: Int
+                val left: Int
+                val right: Int
 
-                val top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
-                val right = if (layoutManager.isBorderRight(position)) 0 else fullDimen
+                when(val isVertical = layoutManager.orientation == LinearLayoutManager.VERTICAL) {
+                    gridIgnoreBorder && gridMergeOffsets -> if (isVertical) {
+                        //top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
+                        //right = if (layoutManager.isBorderRight(position)) 0 else fullDimen
+                        //left = 0
+                        //bottom = 0
 
-                outRect.set(0, top, right, 0)
-            }else {
-                // todo note reverse layout not taken in consideration here yet isa.
-                // Horizontal so top && right isa.
-                // todo
+                        val rect = subItemOffsetIgnoreBorderMergeOffsetsVertical2(layoutManager, position)
+                        top = rect.top
+                        right = rect.right
+                        left = rect.left
+                        bottom = rect.bottom
+                    }else {
+                        top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
+                        right = 0
+                        left = if (layoutManager.isBorderLeft(position)) 0 else fullDimen
+                        bottom = 0
+                    }
+                    gridIgnoreBorder -> {
+                        top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
+                        right = if (layoutManager.isBorderRight(position)) 0 else fullDimen
+                        left = if (layoutManager.isBorderLeft(position)) 0 else fullDimen
+                        bottom = if (layoutManager.isBorderBottom(position)) 0 else fullDimen
+                    }
+                    gridMergeOffsets -> if (isVertical) {
+                        top = fullDimen
+                        right = fullDimen
+                        left = if (layoutManager.isBorderLeft(position)) fullDimen else 0
+                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0
+                    }else {
+                        top = fullDimen
+                        right = if (layoutManager.isBorderRight(position)) fullDimen else 0
+                        left = fullDimen
+                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0
+                    }
+                    // Else both booleans are false isa.
+                    else -> {
+                        top = fullDimen
+                        right = fullDimen
+                        left = fullDimen
+                        bottom = fullDimen
+                    }
+                }
+
+                outRect.set(left, top, right, bottom)
             }
             layoutManager is LinearLayoutManager -> when {
                 adapter.itemCount.dec() == position -> outRect.setEmpty()
@@ -130,8 +238,48 @@ class RCItemDecoration(context: Context,
         }
     }
 
-    private fun drawGrid(canvas: Canvas, parent: RecyclerView) {
-        // todo drawGrid
+    // ---- Private fun
+
+    private fun drawGrid(canvas: Canvas, parent: RecyclerView, layoutManager: GridLayoutManager) {
+        canvas.save()
+
+        // Loop boundaries isa.
+        val itemCount = parent.adapter?.itemCount ?: 0
+        if (itemCount < 2) {
+            return
+        }
+        val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (isRCNoPosition()) return }
+        val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (isRCNoPosition()) return }
+
+        // Some Quick Calculations instead of putting them inside the loop isa.
+        val isVertical = layoutManager.orientation == LinearLayoutManager.VERTICAL
+        if (isVertical) {
+            when {
+                gridIgnoreBorder && gridMergeOffsets -> {
+                    for (position in firstVisible..lastVisible) {
+                        val child = parent.getChildAt(position.minus(firstVisible)) ?: continue
+                        val bounds = Rect()
+                        layoutManager.getDecoratedBoundsWithMargins(child, bounds)
+                        Log.e("Check2", "position -> $position, width -> ${child.width}, height -> ${child.height}" +
+                            "bounds -> $bounds --- ${Rect().apply { layoutManager.getDecoratedBoundsWithMargins(child, this) }}")
+                    }
+                    canvas.drawPaint(paint)
+                    //subDrawGridIgnoreBorderAndMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
+                }
+                gridIgnoreBorder -> subDrawGridIgnoreBorderAndNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
+                gridMergeOffsets -> subDrawGridNoIgnoreBorderAndMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
+                else -> subDrawGridNoIgnoreBorderAndNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
+            }
+        }else {
+            when {
+                gridIgnoreBorder && gridMergeOffsets -> subDrawGridIgnoreBorderAndMergeOffsetsHorizontal(canvas, parent, layoutManager, firstVisible, lastVisible)
+                gridIgnoreBorder -> subDrawGridIgnoreBorderAndNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
+                gridMergeOffsets -> subDrawGridNoIgnoreBorderAndMergeOffsetsHorizontal(canvas, parent, layoutManager, firstVisible, lastVisible)
+                else -> subDrawGridNoIgnoreBorderAndNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
+            }
+        }
+
+        canvas.restore()
     }
 
     private fun drawVertical(canvas: Canvas, parent: RecyclerView) {
@@ -240,6 +388,10 @@ class RCItemDecoration(context: Context,
         canvas.restore()
     }
 
+    private fun Int.isRCNoPosition(): Boolean = this == RecyclerView.NO_POSITION
+
+    // ---- Public fun
+
     fun notifyItemRemoved() {
         ignoreDrawIndices = true
     }
@@ -248,6 +400,35 @@ class RCItemDecoration(context: Context,
         if (ignoreDrawIndices) {
             ignoreDrawIndices = false
         }
+    }
+
+    fun swapItemDecoration(recyclerView: RecyclerView,
+                           context: Context,
+                           dividerDrawable: Drawable? = this.dividerDrawable,
+                           @ColorInt dividerColor: Int? = this.dividerColor,
+                           @Px dividerDimenInPx: Int? = this.dividerDimenInPx,
+                           @Px additionalOffsetInPx: Int = this.additionalOffsetInPx,
+                           gravity: Int = this.gravity,
+                           orientationIsVertical: Boolean = this.orientationIsVertical,
+                           gridIgnoreBorder: Boolean = this.gridIgnoreBorder,
+                           gridMergeOffsets: Boolean = this.gridMergeOffsets
+    ): RCItemDecoration {
+        recyclerView.removeItemDecoration(this)
+
+        val newRCItemDecoration = RCItemDecoration(
+            context,
+            dividerDrawable,
+            dividerColor,
+            dividerDimenInPx,
+            additionalOffsetInPx,
+            gravity,
+            orientationIsVertical,
+            gridIgnoreBorder,
+            gridMergeOffsets
+        )
+        recyclerView.addItemDecoration(newRCItemDecoration)
+
+        return newRCItemDecoration
     }
 
 }
