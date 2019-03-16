@@ -1,10 +1,10 @@
 package mohamedalaa.mautils.recycler_view.new_test_1
 
-import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
@@ -12,17 +12,14 @@ import androidx.annotation.Px
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import mohamedalaa.mautils.core_android.dpToPx
-import mohamedalaa.mautils.recycler_view.extensions.isBorderBottom
-import mohamedalaa.mautils.recycler_view.extensions.isBorderLeft
-import mohamedalaa.mautils.recycler_view.extensions.isBorderRight
-import mohamedalaa.mautils.recycler_view.extensions.isBorderTop
 import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderMergeOffsetsVertical
+import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderNoMergeOffsetsVertical
 
 /**
  * TODO (S)
  * 1- secondary constructor takes context and InDp instead of px isa.
+ *
+ * 2- onDraw isn't done yet, but planned to isa.
  *
  * Z- [LinearLayoutManager] not supported yet, but in future isa.
  *
@@ -35,8 +32,8 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                        private val dividerGravity: Int = Gravity.CENTER,
                        private val ignoreBorder: Boolean = true,
                        private val mergeOffsets: Boolean = true,
-                       private val singleItemDivider: Boolean = false)
-    : RecyclerView.ItemDecoration() {
+                       private val singleItemDivider: Boolean = false
+) : RecyclerView.ItemDecoration() {
 
     // ---- Private / Internal properties
 
@@ -50,80 +47,104 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
 
     // ---- Overridden fun
 
-    /*override fun getItemOffsets(
+    override fun getItemOffsets(
         outRect: Rect,
         view: View,
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        val position = parent.getChildAdapterPosition(view)
+        val position = parent.getChildAdapterPosition(view).run { if (this == RecyclerView.NO_POSITION) 0 else this }
         val adapter = parent.adapter
         val layoutManager = parent.layoutManager
-
-        when {
-            adapter == null || position == RecyclerView.NO_POSITION || (singleItemDivider.not() && adapter.itemCount < 2) -> outRect.setEmpty()
+        
+        val rect: Rect = when {
+            adapter == null|| (singleItemDivider.not() && adapter.itemCount < 2) -> Rect()
             layoutManager is GridLayoutManager -> {
-                val top: Int
-                val bottom: Int
-                val left: Int
-                val right: Int
-
-                if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
-                    when { // todo use ext fun isa.
-                        ignoreBorder && mergeOffsets -> {
-                            val rectt = subItemOffsetIgnoreBorderMergeOffsetsVertical()
-
-                            top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
-                            right = if (layoutManager.isBorderRight(position)) 0 else fullDimen
-                            left = 0
-                            bottom = 0
-                        }
-                    }
-                }else {
-
-                }
-
-                when(val isVertical = layoutManager.orientation == LinearLayoutManager.VERTICAL) {
-                    gridIgnoreBorder && gridMergeOffsets -> if (isVertical) {
-                        top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
-                        right = if (layoutManager.isBorderRight(position)) 0 else fullDimen
-                        left = 0
-                        bottom = 0
+                when (val isVertical = layoutManager.orientation == LinearLayoutManager.VERTICAL) {
+                    ignoreBorder && mergeOffsets -> if (isVertical) {
+                        subItemOffsetIgnoreBorderMergeOffsetsVertical(layoutManager, position)
                     }else {
+                        /*
                         top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
                         right = 0
                         left = if (layoutManager.isBorderLeft(position)) 0 else fullDimen
                         bottom = 0
+                        */
+                        Rect() // todo
                     }
-                    gridIgnoreBorder -> {
-                        top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
-                        right = if (layoutManager.isBorderRight(position)) 0 else fullDimen
-                        left = if (layoutManager.isBorderLeft(position)) 0 else fullDimen
-                        bottom = if (layoutManager.isBorderBottom(position)) 0 else fullDimen
+                    ignoreBorder -> {
+                        subItemOffsetIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
+                        // todo if horz ?!
                     }
-                    gridMergeOffsets -> if (isVertical) {
-                        top = fullDimen
+                    mergeOffsets -> if (isVertical) {
+                        /*top = fullDimen
                         right = fullDimen
                         left = if (layoutManager.isBorderLeft(position)) fullDimen else 0
-                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0
+                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0*/
+                        Rect() // todo
                     }else {
-                        top = fullDimen
+                        /*top = fullDimen
                         right = if (layoutManager.isBorderRight(position)) fullDimen else 0
                         left = fullDimen
-                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0
+                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0*/
+                        Rect() // todo
                     }
                     // Else both booleans are false isa.
-                    else -> {
-                        top = fullDimen
-                        right = fullDimen
-                        left = fullDimen
-                        bottom = fullDimen
-                    }
+                    else -> Rect() // todo
                 }
-
-                outRect.set(left, top, right, bottom)
             }
+            layoutManager is LinearLayoutManager -> {
+                Rect() // todo linear layout manager isa.
+            }
+            else -> Rect()
         }
-    }*/
+
+
+        outRect.set(rect)
+    }
+
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        val layoutManager = parent.layoutManager as? GridLayoutManager ?: return
+
+        val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
+        val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
+
+        for (position in firstVisible..lastVisible) {
+            val child = parent.getChildAt(position.minus(firstVisible)) ?: continue
+            val bounds = Rect()
+            layoutManager.getDecoratedBoundsWithMargins(child, bounds)
+            /*Log.e("Check2", "position -> $position, width -> ${child.width}, height -> ${child.height}" +
+                "bounds -> $bounds --- ${Rect().apply { layoutManager.getDecoratedBoundsWithMargins(child, this) }}")*/
+        }
+
+        super.onDraw(c, parent, state)
+    }
+
+    // ---- Public fun
+
+    fun swapItemDecoration(recyclerView: RecyclerView,
+                           @ColorInt dividerColor: Int = this.dividerColor,
+                           @Px dividerDimenInPx: Int = this.dividerDimenInPx,
+                           @Px additionalOffsetInPx: Int = this.additionalOffsetInPx,
+                           dividerGravity: Int = this.dividerGravity,
+                           ignoreBorder: Boolean = this.ignoreBorder,
+                           mergeOffsets: Boolean = this.mergeOffsets,
+                           singleItemDivider: Boolean = this.singleItemDivider
+    ): MAItemDecoration {
+        recyclerView.removeItemDecoration(this)
+
+        val newMAItemDecoration = MAItemDecoration(
+            dividerColor,
+            dividerDimenInPx,
+            additionalOffsetInPx,
+            dividerGravity,
+            ignoreBorder,
+            mergeOffsets,
+            singleItemDivider
+        )
+        recyclerView.addItemDecoration(newMAItemDecoration)
+
+        return newMAItemDecoration
+    }
 
 }

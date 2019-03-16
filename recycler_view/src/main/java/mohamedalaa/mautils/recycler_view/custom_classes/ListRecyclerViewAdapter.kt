@@ -55,10 +55,23 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
     fun removeItemAt(position: Int) = super.removeItemAt(position) {
         _dataList.removeAt(position)
     }
+    fun removeItemAtForceAnim(position: Int) {
+        _dataList.removeAt(position)
+
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
+    }
+
 
     /** Same as [RecyclerViewAdapter.insertItemAt] */
     fun insertItemAt(position: Int, element: E) = super.insertItemAt(position) {
         _dataList.add(position, element)
+    }
+    fun insertItemAtForceAnim(position: Int, element: E) {
+        _dataList.add(position, element)
+        notifyItemInserted(position)
+
+        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
     }
 
     /**
@@ -71,6 +84,12 @@ abstract class ListRecyclerViewAdapter<E>(@LayoutRes private val layoutRes: Int,
 
         removeItemAt(fromPosition)
         insertItemAt(toPosition, element)
+    }
+    fun moveItemForceAnim(fromPosition: Int, toPosition: Int) {
+        val element = _dataList.elementAt(fromPosition)
+
+        removeItemAtForceAnim(fromPosition)
+        insertItemAtForceAnim(toPosition, element)
     }
 
 }

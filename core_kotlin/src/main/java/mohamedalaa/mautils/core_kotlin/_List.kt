@@ -101,3 +101,44 @@ fun <T> List<T>.getAllIndicesOf(element: T): List<Int> = mapIndexedNotNull { ind
 fun <T> List<T>.toArrayList(): ArrayList<T> {
     return ArrayList(this)
 }
+
+inline fun <reified T> List<T>.pairedIteration(): List<Pair<T, T?>> {
+    val pairOfLists = partitionIndexed { index, _ -> index.isEven() }
+
+    return pairOfLists.first.zipFullReceiver(pairOfLists.second)
+}
+
+infix fun <T> List<T>.zipFull(other: List<T>): List<Pair<T?, T?>> {
+    val maxSize = Math.max(size, other.size)
+
+    val result = mutableListOf<Pair<T?, T?>>()
+    for (index in 0 until maxSize) {
+        result += getOrNull(index) to other.getOrNull(index)
+    }
+    return result
+}
+
+inline infix fun <reified T> List<T>.zipFullReceiver(other: List<T>): List<Pair<T, T?>>
+    = zipFull(other).map { (it.first as T) to it.second }
+
+inline infix fun <reified T> List<T>.zipFullReceiverOrNull(other: List<T>): List<Pair<T, T?>>?
+    = zipFull(other).map { (it.first ?: return null) to it.second }
+
+inline infix fun <reified T> List<T>.zipFullOther(other: List<T>): List<Pair<T?, T>>
+    = zipFull(other).map { it.first to (it.second as T) }
+
+inline infix fun <reified T> List<T>.zipFullOtherOrNull(other: List<T>): List<Pair<T?, T>>?
+    = zipFull(other).map { it.first to (it.second ?: return null) }
+
+inline fun <T> Iterable<T>.partitionIndexed(predicate: (index: Int, element: T) -> Boolean): Pair<List<T>, List<T>> {
+    val first = mutableListOf<T>()
+    val second = mutableListOf<T>()
+    for ((index, element) in withIndex()) {
+        if (predicate(index, element)) {
+            first.add(element)
+        }else {
+            second.add(element)
+        }
+    }
+    return Pair(first, second)
+}

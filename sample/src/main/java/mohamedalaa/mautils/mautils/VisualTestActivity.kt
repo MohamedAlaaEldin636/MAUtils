@@ -18,12 +18,13 @@ import mohamedalaa.mautils.core_android.toast
 import mohamedalaa.mautils.recycler_view.custom_classes.ListRecyclerViewAdapter
 import mohamedalaa.mautils.recycler_view.custom_classes.RCDefaultItemAnimator
 import mohamedalaa.mautils.recycler_view.custom_classes.RCItemDecoration
+import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
 
     private lateinit var rcAdapterFakeNames: RCAdapterFakeNames
 
-    private lateinit var rcItemDecoration: RCItemDecoration
+    private lateinit var maItemDecoration: MAItemDecoration
 
     private var tempCounter = 1
         set(value) {
@@ -90,18 +91,17 @@ class VisualTestActivity : AppCompatActivity() {
                             toast("gridIgnoreBorder -> $gridIgnoreBorder\ngridMergeOffsets -> $gridMergeOffsets", duration = Toast.LENGTH_LONG)
                         }
 
-                        rcItemDecoration = rcItemDecoration.swapItemDecoration(
+                        maItemDecoration = maItemDecoration.swapItemDecoration(
                             recyclerView,
-                            this,
-                            gridIgnoreBorder = gridIgnoreBorder,
-                            gridMergeOffsets = gridMergeOffsets)
+                            ignoreBorder = gridIgnoreBorder,
+                            mergeOffsets = gridMergeOffsets)
                         tempCounter++
                     }
                     getString(R.string.insert) -> {
-                        rcAdapterFakeNames.insertItemAt(index, "hello, there")
+                        rcAdapterFakeNames.insertItemAtForceAnim(index, "hello, there")
                     }
                     getString(R.string.remove) -> {
-                        rcAdapterFakeNames.removeItemAt(index)
+                        rcAdapterFakeNames.removeItemAtForceAnim(index)
                     }
                     getString(R.string.move) -> {
                         if (rcAdapterFakeNames.itemCount > 1) {
@@ -110,7 +110,7 @@ class VisualTestActivity : AppCompatActivity() {
                                 if (rcAdapterFakeNames.itemCount > 2) inc() else this
                             }
 
-                            rcAdapterFakeNames.moveItem(fromIndex, toIndex)
+                            rcAdapterFakeNames.moveItemForceAnim(fromIndex, toIndex)
                         }
                     }
                     getString(R.string.change_all_data) -> {
@@ -141,16 +141,15 @@ class VisualTestActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        rcItemDecoration = RCItemDecoration(
-            this,
+        maItemDecoration = MAItemDecoration(
             dividerColor = Color.RED,
-            dividerDimenInPx = dpToPx(0),
-            additionalOffsetInPx = dpToPx(16)
+            dividerDimenInPx = dpToPx(0).toInt(),
+            additionalOffsetInPx = dpToPx(16).toInt()
         )
-        recyclerView.addItemDecoration(rcItemDecoration)
+        recyclerView.addItemDecoration(maItemDecoration)
 
-        recyclerView.itemAnimator =
-            RCDefaultItemAnimator(rcItemDecoration)
+        /*recyclerView.itemAnimator =
+            RCDefaultItemAnimator(maItemDecoration)*/
 
         val namesList = List(20) { it.toString() }/*listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")*/
         rcAdapterFakeNames = RCAdapterFakeNames(namesList, recyclerView)
@@ -175,7 +174,7 @@ class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
         itemView.textView.text = dataList[position]
 
         itemView.textView.setOnClickListener {
-            removeItemAt(position)
+            removeItemAtForceAnim(position)
         }
     }
 

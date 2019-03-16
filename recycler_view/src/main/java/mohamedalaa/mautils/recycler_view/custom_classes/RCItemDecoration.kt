@@ -16,9 +16,6 @@ import mohamedalaa.mautils.recycler_view.extensions.isBorderBottom
 import mohamedalaa.mautils.recycler_view.extensions.isBorderLeft
 import mohamedalaa.mautils.recycler_view.extensions.isBorderRight
 import mohamedalaa.mautils.recycler_view.extensions.isBorderTop
-import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderMergeOffsetsVertical
-import android.R.attr.bottom
-import android.R.attr.top
 import androidx.recyclerview.widget.RecyclerView
 
 

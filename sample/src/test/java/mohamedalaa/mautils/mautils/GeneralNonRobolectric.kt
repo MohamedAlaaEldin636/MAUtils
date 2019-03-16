@@ -16,4 +16,14 @@ class GeneralNonRobolectric {
         val range = (0..10)
     }
 
+    @Test
+    fun signedString() {
+        val numF = -3.4f
+
+        println(numF)
+        println(numF.toString())
+        println(numF.toString().toFloat())
+        println("-3.0f".toFloat())
+    }
+
 }
