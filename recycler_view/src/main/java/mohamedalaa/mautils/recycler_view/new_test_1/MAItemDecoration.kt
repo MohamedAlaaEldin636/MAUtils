@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -13,10 +12,8 @@ import androidx.annotation.Px
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderMergeOffsetsVertical
-import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderNoMergeOffsetsVertical
-import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetNoIgnoreBorderMergeOffsetsVertical
-import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical
+import mohamedalaa.mautils.core_kotlin.applyIf
+import mohamedalaa.mautils.recycler_view.new_test_1.extensions.*
 
 /**
  * TODO (S)
@@ -63,36 +60,28 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
         val rect: Rect = when {
             adapter == null|| (singleItemDivider.not() && adapter.itemCount < 2) -> Rect()
             layoutManager is GridLayoutManager -> {
-                when (val isVertical = layoutManager.orientation == LinearLayoutManager.VERTICAL) {
-                    ignoreBorder && mergeOffsets -> if (isVertical) {
+                val isHorizontal = layoutManager.orientation != LinearLayoutManager.VERTICAL
+                when {
+                    ignoreBorder && mergeOffsets -> if(isHorizontal) {
+                        subItemOffsetIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
+                    }else {
                         subItemOffsetIgnoreBorderMergeOffsetsVertical(layoutManager, position)
-                    }else {
-                        /*
-                        top = if (layoutManager.isBorderTop(position)) 0 else fullDimen
-                        right = 0
-                        left = if (layoutManager.isBorderLeft(position)) 0 else fullDimen
-                        bottom = 0
-                        */
-                        Rect() // todo
                     }
-                    ignoreBorder -> {
+                    ignoreBorder -> if (isHorizontal) {
+                        subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
+                    }else {
                         subItemOffsetIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
-                        // todo if horz ?!
                     }
-                    mergeOffsets -> if (isVertical) {
-                        subItemOffsetNoIgnoreBorderMergeOffsetsVertical(layoutManager, position)
+                    mergeOffsets -> if (isHorizontal) {
+                        subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
                     }else {
-                        /*top = fullDimen
-                        right = if (layoutManager.isBorderRight(position)) fullDimen else 0
-                        left = fullDimen
-                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0*/
-                        Rect() // todo
+                        subItemOffsetNoIgnoreBorderMergeOffsetsVertical(layoutManager, position)
                     }
                     // Else both booleans are false isa.
-                    else -> if (isVertical) {
-                        subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
+                    else -> if (isHorizontal) {
+                        subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
                     }else {
-                        Rect() // todo was no horz
+                        subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
                     }
                 }
             }
@@ -102,11 +91,8 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
             else -> Rect()
         }
 
-
         outRect.set(rect)
     }
-
-    // todo kda elle na2es no ignore and no merge fe ghalta f el equations t2reban isa.
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val layoutManager = parent.layoutManager as? GridLayoutManager ?: return

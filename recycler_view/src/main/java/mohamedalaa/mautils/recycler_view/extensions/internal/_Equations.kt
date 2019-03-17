@@ -1,7 +1,5 @@
 package mohamedalaa.mautils.recycler_view.extensions.internal
 
-import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.core_kotlin.isNegative
 
 /* ==> LIMITATION
@@ -128,7 +126,7 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
     val aVariable = variables[1]
     var counterForVariables = 2
 
-    if (variables.size == 2) {
+    val calculateReturnResults: List<String>.() -> Map<Char, Int> = {
         solutions[xVariable] = this[0].toTerms().substituteAndGroupToSingleTerm(solutions)
 
         val knownVariableTerm: Term = withResultGivenSide.toTerms().substituteAndGroupToSingleTerm(solutions)
@@ -154,10 +152,13 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
             throw RuntimeException("code 980fhiw7382823")
         }
 
-        return realMap
+        realMap
     }
 
-    // todo lessa double check of counter isa.
+    if (variables.size == 2) {
+        return this.calculateReturnResults()
+    }
+
     val lastResortNotSolvedEquations: MutableList<Pair<Char, List<Term>>> = mutableListOf()
     val keepLooping = true
     var listOfEquationSides = this
@@ -165,9 +166,8 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
         // Get all `b` equations isa.
         val solveForVariable = variables[counterForVariables] // loop here isa
         val baseSide = listOfEquationSides[0]
-        var bEquationsSides: List<List<Term>> = listOfEquationSides.drop(1).mapNotNull {
-            Log.e("BeforeError", "$baseSide=$it === $solveForVariable")
-            val pair = "$baseSide=$it".solveForOnlyTwoSides(solveForVariable) // todo here is the prob isa.
+        var equationsSidesTerms: List<List<Term>> = listOfEquationSides.drop(1).mapNotNull {
+            val pair = "$baseSide=$it".solveForOnlyTwoSides(solveForVariable)
 
             if (pair.first.removeZero() != null) {
                 pair.second.removeZeros()
@@ -194,7 +194,7 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
 
         // if solutions not empty then start substituting isa.
         if (solutions.isNotEmpty()) {
-            bEquationsSides = bEquationsSides.map {
+            equationsSidesTerms = equationsSidesTerms.map {
                 val fromVariable = it.containsAndGet(solutions.keys.toList())
                 val toTerm = solutions[fromVariable]
 
@@ -207,7 +207,7 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
         }
 
         // if bEquationSides can be solutions Ex. b = 2a
-        bEquationsSides.forEach {
+        equationsSidesTerms.forEach {
             if (it.size == 1 && it[0].variables[0] == aVariable) {
                 solutions[solveForVariable] = it[0]
             }
@@ -215,41 +215,14 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
 
         // if solutions are done isa.
         if (solutions.size == variables.size.minus(2)) {
-            // 1- solve for x respect to a isa then return all isa.
-            // 2- or instead of return add param for FullDimen as float or int with x and a so solve for a with real num and others as well isa
-            solutions[xVariable] = this[0].toTerms().substituteAndGroupToSingleTerm(solutions)
-
-            val knownVariableTerm: Term = withResultGivenSide.toTerms().substituteAndGroupToSingleTerm(solutions)
-
-            val realMap = mutableMapOf<Char, Int>()
-
-            // a variable value isa.
-            val baseVariable = knownVariableTerm.variables[0]
-            val baseVariableValue = Math.round(withResultValue.div(knownVariableTerm.numMultiplier))
-            realMap[baseVariable] = baseVariableValue
-
-            variables.forEach {
-                if (baseVariable == it) {
-                    return@forEach
-                }
-
-                val multiplier = Math.round(solutions[it]?.numMultiplier ?: throw RuntimeException("code 902830292023902"))
-
-                realMap[it] = multiplier.times(baseVariableValue)
-            }
-
-            if (realMap.size != variables.size) {
-                throw RuntimeException("code 980fhiw7382823")
-            }
-
-            return realMap
+            return this.calculateReturnResults()
         }
 
-        bEquationsSides.forEach {
+        equationsSidesTerms.forEach {
             lastResortNotSolvedEquations += solveForVariable to it
         }
 
-        listOfEquationSides = bEquationsSides.map { it.toEquation() }
+        listOfEquationSides = equationsSidesTerms.map { it.toEquation() }
         counterForVariables++
 
         // Check of counter
@@ -268,43 +241,14 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
         if (counterForVariables == variables.size) {
             val notSolvedVariables = variables.mapNotNull { if (it in solutions || it == xVariable || it == aVariable) null else it }
             notSolvedVariables.reversed().forEach {
-                Log.e("Unique1", "$it === $lastResortNotSolvedEquations \n===\n -> $solutions \n===\n -> not solved $notSolvedVariables")
                 val tempListOfTerms = lastResortNotSolvedEquations.groupBy { innerIt -> innerIt.first }[it]?.get(0)?.second
                     ?: throw RuntimeException("Unresolvable error 32839283 isa.")
-                Log.e("AfterUnique", "-> $tempListOfTerms")
 
-                solutions[it] = tempListOfTerms.substituteAndGroupToSingleTerm(solutions) // todo here is the probbbbbbblem isa.
+                solutions[it] = tempListOfTerms.substituteAndGroupToSingleTerm(solutions)
             }
 
             if (solutions.size == variables.size.minus(2)) {
-                // 1- solve for x respect to a isa then return all isa.
-                // 2- or instead of return add param for FullDimen as float or int with x and a so solve for a with real num and others as well isa
-                solutions[xVariable] = this[0].toTerms().substituteAndGroupToSingleTerm(solutions)
-
-                val knownVariableTerm: Term = withResultGivenSide.toTerms().substituteAndGroupToSingleTerm(solutions)
-
-                val realMap = mutableMapOf<Char, Int>()
-
-                // a variable value isa.
-                val baseVariable = knownVariableTerm.variables[0]
-                val baseVariableValue = Math.round(withResultValue.div(knownVariableTerm.numMultiplier))
-                realMap[baseVariable] = baseVariableValue
-
-                variables.forEach {
-                    if (baseVariable == it) {
-                        return@forEach
-                    }
-
-                    val multiplier = Math.round(solutions[it]?.numMultiplier ?: throw RuntimeException("code 902830292023902"))
-
-                    realMap[it] = multiplier.times(baseVariableValue)
-                }
-
-                if (realMap.size != variables.size) {
-                    throw RuntimeException("code 980fhiw7382823")
-                }
-
-                return realMap
+                return this.calculateReturnResults()
             }else {
                 throw RuntimeException("Cannot solve it isa.")
             }
@@ -312,18 +256,4 @@ internal fun List<String>.solveAllVariables(variables: List<Char>, withResultVal
     } while (keepLooping)
 
     throw RuntimeException("End of loop code 3827398792")
-}
-
-
-private fun solvedEl7() {
-    // el7 done successfully el7.
-    // lessa na2es el horizontal + el drawing isa.
-    val a: RecyclerView.LayoutManager
-
-    /*class L1 : RecyclerView.LayoutManager {
-        override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
-
-        }
-
-    }*/
 }

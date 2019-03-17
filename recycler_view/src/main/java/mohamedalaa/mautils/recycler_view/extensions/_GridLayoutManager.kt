@@ -2,6 +2,7 @@ package mohamedalaa.mautils.recycler_view.extensions
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 // todo what if layout was reversed
 
@@ -87,4 +88,27 @@ fun GridLayoutManager.isBorderBottom(index: Int): Boolean {
     }else {
         index.inc().rem(spanCount) == 0
     }
+}
+
+/** @return row and col as pair each starts from 1 to positive infinity isa. */
+fun GridLayoutManager.rowAndColumn(position: Int): Pair<Int, Int> {
+    val row = position.rem(spanCount).inc()
+    val col = position.div(spanCount).inc()
+
+    return if (orientation == LinearLayoutManager.VERTICAL) col to row else row to col
+}
+
+/** @return position of item in [RecyclerView.Adapter] isa. */
+fun GridLayoutManager.positionFromRowAndCol(row: Int, col: Int): Int {
+    val isVertical = orientation == LinearLayoutManager.VERTICAL
+
+    var fromRow = row.dec()
+    var fromCol = col.dec().times(spanCount)
+    if (isVertical) {
+        val temp = fromRow
+        fromRow = fromCol
+        fromCol = temp
+    }
+
+    return fromRow + fromCol
 }

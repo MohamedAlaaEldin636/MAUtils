@@ -1,6 +1,7 @@
 package mohamedalaa.mautils.mautils
 
 import android.graphics.Color
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -129,7 +130,7 @@ class VisualTestActivity : AppCompatActivity() {
                         recyclerView.layoutManager = LinearLayoutManager(this)
                     }
                     getString(R.string.grid_layout_manager) -> {
-                        recyclerView.layoutManager = GridLayoutManager(this, 5)
+                        recyclerView.layoutManager = GridLayoutManager(this, 5/*, RecyclerView.HORIZONTAL, false*/)
                     }
                 }
             }
@@ -151,7 +152,7 @@ class VisualTestActivity : AppCompatActivity() {
         /*recyclerView.itemAnimator =
             RCDefaultItemAnimator(maItemDecoration)*/
 
-        val namesList = List(20) { it.toString() }/*listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")*/
+        val namesList = List(60) { it.toString() }/*listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")*/
         rcAdapterFakeNames = RCAdapterFakeNames(namesList, recyclerView)
         recyclerView.adapter = rcAdapterFakeNames
     }
@@ -159,7 +160,7 @@ class VisualTestActivity : AppCompatActivity() {
 }
 
 class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
-    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item, dataList, recyclerView) {
+    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item_hz/*_hz todo */, dataList, recyclerView) {
 
     // called after orientation el7
     /*override fun getItemViewType(position: Int): Int {
@@ -173,6 +174,7 @@ class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
     override fun onBindViewHolder(itemView: View, position: Int) {
         itemView.textView.text = dataList[position]
 
+        //Rect() left top right bottom
         itemView.textView.setOnClickListener {
             removeItemAtForceAnim(position)
         }

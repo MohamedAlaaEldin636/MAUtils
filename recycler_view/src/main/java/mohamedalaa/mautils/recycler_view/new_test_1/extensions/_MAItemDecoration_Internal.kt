@@ -1,7 +1,6 @@
 package mohamedalaa.mautils.recycler_view.new_test_1.extensions
 
 import android.graphics.Rect
-import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.core_kotlin.divRound
@@ -25,20 +24,73 @@ internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsVertical(
     position: Int
 ): Rect = subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen)
 
+internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsHorizontal(
+    layoutManager: GridLayoutManager,
+    position: Int
+): Rect = subItemOffsetIgnoreBorderMergeOffsetsVertical(layoutManager, position).apply {
+    reverseLeftRightToTopBottomAndViceVersa()
+
+    val half = fullDimen.divRound(2)
+    left = if (layoutManager.isBorderLeft(position)) 0 else half
+    right = if (layoutManager.isBorderRight(position)) 0 else half
+}
+
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsVertical(
     layoutManager: GridLayoutManager,
     position: Int
 ): Rect = subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen.times(2))
+
+internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(
+    layoutManager: GridLayoutManager,
+    position: Int
+): Rect {
+    val fullDimen = fullDimen.times(2)
+    return subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen).apply {
+        reverseLeftRightToTopBottomAndViceVersa()
+
+        val half = fullDimen.divRound(2)
+        left = if (layoutManager.isBorderLeft(position)) 0 else half
+        right = if (layoutManager.isBorderRight(position)) 0 else half
+    }
+}
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderMergeOffsetsVertical(
     layoutManager: GridLayoutManager,
     position: Int
 ): Rect = subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, true)
 
+internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(
+    layoutManager: GridLayoutManager,
+    position: Int
+): Rect {
+    val mergeOffsets = true
+    return subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, mergeOffsets).apply {
+        reverseLeftRightToTopBottomAndViceVersa()
+
+        val half = fullDimen.divRound(2)
+        left = if (layoutManager.isBorderLeft(position) || mergeOffsets.not()) fullDimen else half
+        right = if (layoutManager.isBorderRight(position) || mergeOffsets.not()) fullDimen else half
+    }
+}
+
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(
     layoutManager: GridLayoutManager,
     position: Int
 ): Rect = subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, false)
+
+internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizontal(
+    layoutManager: GridLayoutManager,
+    position: Int
+): Rect {
+    val mergeOffsets = false
+    return subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, mergeOffsets).apply {
+        reverseLeftRightToTopBottomAndViceVersa()
+
+        val half = fullDimen.divRound(2)
+        left = if (layoutManager.isBorderLeft(position) || mergeOffsets.not()) fullDimen else half
+        right = if (layoutManager.isBorderRight(position) || mergeOffsets.not()) fullDimen else half
+    }
+}
 
 // ---- Private fun
 
@@ -140,74 +192,70 @@ private fun subItemOffsetNoIgnoreBorderVertical(
     rect.top = if (layoutManager.isBorderTop(position) || mergeOffsets.not()) fullDimen else fullDimen.divRound(2)
     rect.bottom = if (layoutManager.isBorderBottom(position) || mergeOffsets.not()) fullDimen else fullDimen.divRound(2)
 
-    try {
-        // Left & Right isa.
-        if (layoutManager.spanCount == 1) {
-            rect.left = fullDimen
-            rect.right = fullDimen
+    // Left & Right isa.
+    if (layoutManager.spanCount == 1) {
+        rect.left = fullDimen
+        rect.right = fullDimen
 
-            return rect
-        }
-
-        val numOfVariables = layoutManager.spanCount
-        val variables = List(numOfVariables) { if (it == 0) 'x' else 'a'.plus(it.dec()) }
-
-        val xVariable = variables[0]
-        val xEquations = variables.drop(1).pairedIteration().map {
-            if (mergeOffsets) {
-                "${it.first}+${it.second ?: it.first}"
-            }else {
-                "0.5${it.first}+0.5${it.second ?: it.first}"
-            }
-        }.toMutableList()
-
-        // Item Full Width Equations as well isa.
-        val fwEquations = variables.pairedIteration().map {
-            "${it.first}+${it.second ?: it.first}"
-        }
-
-        val baseSide = fwEquations[0]
-        for (index in 1 until fwEquations.size) {
-            val equation = baseSide + "=" + fwEquations[index]
-            Log.e("Topic", "eq -> $equation")
-            xEquations += equation.solveForOnlyTwoSides(xVariable).second.toEquation()
-        }
-        val withResultValue = fullDimen.toFloat()
-        Log.e("Top2", "$variables === $withResultValue === $xVariable === $xEquations")
-        val solvedVariablesMap = xEquations.solveAllVariables(variables, withResultValue, xVariable.toString())
-
-        val remPosition = position.rem(layoutManager.spanCount)
-        val palindromeResult = (0 until layoutManager.spanCount).palindromeToMin(remPosition)
-        val pairedVariables = mutableListOf<Char>().apply { addAll(variables) }.pairedIteration()
-        val (left, right) = when (palindromeResult) {
-            null -> {
-                val variable = pairedVariables[remPosition].first
-
-                val offset = solvedVariablesMap[variable] ?: throw RuntimeException("Unexpected error contact dev 3024309392")
-                offset to offset
-            }
-            else -> {
-                val (varLeft, varRight) = pairedVariables[palindromeResult.second]
-
-                val (offsetLeft, offsetRight) = solvedVariablesMap[varLeft] to solvedVariablesMap[varRight]
-
-                if (offsetLeft == null || offsetRight == null) {
-                    throw RuntimeException("Unexpected error contact dev 30392")
-                }
-
-                if (palindromeResult.first) offsetRight to offsetLeft else offsetLeft to offsetRight
-            }
-        }
-
-        Log.e("ZZZ", "show time isa -> $solvedVariablesMap")
-
-        rect.left = left
-        rect.right = right
-    }catch (e: Exception) {
-        Log.e("ERROR", "msg -> ${e.message ?: "WAS NULL"}, ${e.stackTrace.toList()}")
+        return rect
     }
 
+    val numOfVariables = layoutManager.spanCount
+    val variables = List(numOfVariables) { if (it == 0) 'x' else 'a'.plus(it.dec()) }
+
+    val xVariable = variables[0]
+    val xEquations = variables.drop(1).pairedIteration().map {
+        if (mergeOffsets) {
+            "${it.first}+${it.second ?: it.first}"
+        }else {
+            "0.5${it.first}+0.5${it.second ?: it.first}"
+        }
+    }.toMutableList()
+
+    // Item Full Width Equations as well isa.
+    val fwEquations = variables.pairedIteration().map {
+        "${it.first}+${it.second ?: it.first}"
+    }
+
+    val baseSide = fwEquations[0]
+    for (index in 1 until fwEquations.size) {
+        val equation = baseSide + "=" + fwEquations[index]
+        xEquations += equation.solveForOnlyTwoSides(xVariable).second.toEquation()
+    }
+    val withResultValue = fullDimen.toFloat()
+    val solvedVariablesMap = xEquations.solveAllVariables(variables, withResultValue, xVariable.toString())
+
+    val remPosition = position.rem(layoutManager.spanCount)
+    val palindromeResult = (0 until layoutManager.spanCount).palindromeToMin(remPosition)
+    val pairedVariables = mutableListOf<Char>().apply { addAll(variables) }.pairedIteration()
+    val (left, right) = when (palindromeResult) {
+        null -> {
+            val variable = pairedVariables[remPosition].first
+
+            val offset = solvedVariablesMap[variable] ?: throw RuntimeException("Unexpected error contact dev 3024309392")
+            offset to offset
+        }
+        else -> {
+            val (varLeft, varRight) = pairedVariables[palindromeResult.second]
+
+            val (offsetLeft, offsetRight) = solvedVariablesMap[varLeft] to solvedVariablesMap[varRight]
+
+            if (offsetLeft == null || offsetRight == null) {
+                throw RuntimeException("Unexpected error contact dev 30392")
+            }
+
+            if (palindromeResult.first) offsetRight to offsetLeft else offsetLeft to offsetRight
+        }
+    }
+
+    rect.left = left
+    rect.right = right
+
     return rect
+}
+
+private fun Rect.reverseLeftRightToTopBottomAndViceVersa() {
+    set(top, left, bottom, right)
 }
 
 /**

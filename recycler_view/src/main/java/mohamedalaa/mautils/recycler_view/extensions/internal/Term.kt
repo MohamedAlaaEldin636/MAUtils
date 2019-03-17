@@ -1,6 +1,6 @@
 package mohamedalaa.mautils.recycler_view.extensions.internal
 
-/** todo make it internal after making all it's extension fun as internal after done with testing isa.
+/**
  * @param variables Ex. [x, y] OR emptyList so just see numMultiplier isa.
  * @param numMultiplier Ex. 3.0, -2.4 etc... isa.
  */
