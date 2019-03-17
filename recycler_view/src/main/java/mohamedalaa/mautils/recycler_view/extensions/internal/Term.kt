@@ -4,7 +4,7 @@ package mohamedalaa.mautils.recycler_view.extensions.internal
  * @param variables Ex. [x, y] OR emptyList so just see numMultiplier isa.
  * @param numMultiplier Ex. 3.0, -2.4 etc... isa.
  */
-data class Term(val variables: List<Char>, var numMultiplier: Float) {
+internal data class Term(val variables: List<Char>, var numMultiplier: Float) {
 
     companion object {
 

@@ -8,7 +8,7 @@ import kotlin.math.absoluteValue
  * Converts [List]<[Term]> to String as equation side
  * Ex. given b+c-a result -> +1.0b+1.0c-1.0a isa.
  */
-fun List<Term>.toEquation(): String
+internal fun List<Term>.toEquation(): String
     = joinToString(separator = "") { "${if (it.numMultiplier >= 0) "+" else "-"}${it.numMultiplier.absoluteValue}${it.variables.joinToString(separator = "")}" }
 
 /**

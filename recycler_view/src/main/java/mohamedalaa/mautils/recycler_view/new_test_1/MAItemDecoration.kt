@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderMergeOffsetsVertical
 import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetIgnoreBorderNoMergeOffsetsVertical
+import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetNoIgnoreBorderMergeOffsetsVertical
+import mohamedalaa.mautils.recycler_view.new_test_1.extensions.subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical
 
 /**
  * TODO (S)
@@ -56,7 +59,7 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
         val position = parent.getChildAdapterPosition(view).run { if (this == RecyclerView.NO_POSITION) 0 else this }
         val adapter = parent.adapter
         val layoutManager = parent.layoutManager
-        
+
         val rect: Rect = when {
             adapter == null|| (singleItemDivider.not() && adapter.itemCount < 2) -> Rect()
             layoutManager is GridLayoutManager -> {
@@ -77,11 +80,7 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                         // todo if horz ?!
                     }
                     mergeOffsets -> if (isVertical) {
-                        /*top = fullDimen
-                        right = fullDimen
-                        left = if (layoutManager.isBorderLeft(position)) fullDimen else 0
-                        bottom = if (layoutManager.isBorderBottom(position)) fullDimen else 0*/
-                        Rect() // todo
+                        subItemOffsetNoIgnoreBorderMergeOffsetsVertical(layoutManager, position)
                     }else {
                         /*top = fullDimen
                         right = if (layoutManager.isBorderRight(position)) fullDimen else 0
@@ -90,7 +89,11 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                         Rect() // todo
                     }
                     // Else both booleans are false isa.
-                    else -> Rect() // todo
+                    else -> if (isVertical) {
+                        subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
+                    }else {
+                        Rect() // todo was no horz
+                    }
                 }
             }
             layoutManager is LinearLayoutManager -> {
@@ -103,6 +106,8 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
         outRect.set(rect)
     }
 
+    // todo kda elle na2es no ignore and no merge fe ghalta f el equations t2reban isa.
+
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val layoutManager = parent.layoutManager as? GridLayoutManager ?: return
 
@@ -113,8 +118,8 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
             val child = parent.getChildAt(position.minus(firstVisible)) ?: continue
             val bounds = Rect()
             layoutManager.getDecoratedBoundsWithMargins(child, bounds)
-            /*Log.e("Check2", "position -> $position, width -> ${child.width}, height -> ${child.height}" +
-                "bounds -> $bounds --- ${Rect().apply { layoutManager.getDecoratedBoundsWithMargins(child, this) }}")*/
+            Log.e("OnDrawCheck", "position -> $position, width -> ${child.width}, height -> ${child.height}" +
+                "bounds -> $bounds --- ${Rect().apply { layoutManager.getDecoratedBoundsWithMargins(child, this) }}")
         }
 
         super.onDraw(c, parent, state)
