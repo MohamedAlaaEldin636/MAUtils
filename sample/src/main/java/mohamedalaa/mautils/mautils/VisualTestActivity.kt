@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_visual_test.*
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.core_android.dpToPx
 import mohamedalaa.mautils.core_android.toast
-import mohamedalaa.mautils.recycler_view.custom_classes.ListRecyclerViewAdapter
+import mohamedalaa.mautils.recycler_view.custom_classes.MAListRCAdapter
 import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
@@ -89,10 +89,10 @@ class VisualTestActivity : AppCompatActivity() {
                         tempCounter++
                     }
                     getString(R.string.insert) -> {
-                        rcAdapterFakeNames.insertItemAtForceAnim(index, "hello, there")
+                        rcAdapterFakeNames.insertItemAt(index, "hello, there")
                     }
                     getString(R.string.remove) -> {
-                        rcAdapterFakeNames.removeItemAtForceAnim(index)
+                        rcAdapterFakeNames.removeItemAt(index)
                     }
                     getString(R.string.move) -> {
                         if (rcAdapterFakeNames.itemCount > 1) {
@@ -101,7 +101,7 @@ class VisualTestActivity : AppCompatActivity() {
                                 if (rcAdapterFakeNames.itemCount > 2) inc() else this
                             }
 
-                            rcAdapterFakeNames.moveItemForceAnim(fromIndex, toIndex)
+                            rcAdapterFakeNames.moveItem(fromIndex, toIndex)
                         }
                     }
                     getString(R.string.change_all_data) -> {
@@ -121,10 +121,14 @@ class VisualTestActivity : AppCompatActivity() {
                         recyclerView.invalidateItemDecorations()
                     }
                     getString(R.string.linear_layout_manager) -> {
-                        recyclerView.layoutManager = LinearLayoutManager(this)
+                        val layoutManager = LinearLayoutManager(this)
+                        recyclerView.layoutManager = layoutManager
+                        rcAdapterFakeNames.layoutManager = layoutManager
                     }
                     getString(R.string.grid_layout_manager) -> {
-                        recyclerView.layoutManager = GridLayoutManager(this, 5/*, RecyclerView.HORIZONTAL, false*/)
+                        val layoutManager = GridLayoutManager(this, 5)
+                        recyclerView.layoutManager = layoutManager
+                        rcAdapterFakeNames.layoutManager = layoutManager
                     }
                 }
             }
@@ -134,7 +138,8 @@ class VisualTestActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
 
         maItemDecoration = MAItemDecoration(
             dividerColor = Color.RED,
@@ -145,31 +150,24 @@ class VisualTestActivity : AppCompatActivity() {
         /*recyclerView.itemAnimator =
             RCDefaultItemAnimator(maItemDecoration)*/
 
-        val namesList = List(60) { it.toString() }/*listOf("Mido", "Mohamed", "Mayar", "Alyaa", "Baba", "Mama", "Amr", "Selena")*/
-        rcAdapterFakeNames = RCAdapterFakeNames(namesList, recyclerView)
+        val namesList = List(60) { it.toString() }
+        rcAdapterFakeNames = RCAdapterFakeNames(namesList, linearLayoutManager)
         recyclerView.adapter = rcAdapterFakeNames
     }
 
 }
 
-class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
-    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item/*_hz*//*_hz*//*_hz todo */, dataList, recyclerView) {
+class RCAdapterFakeNames(dataList: List<String>, var layoutManager: LinearLayoutManager)
+    : MAListRCAdapter<String>(dataList) {
 
-    // called after orientation el7
-    /*override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position).apply {
-            Log.e("ViewType", "hi")
-        }
-    }*/
-
-    // gela open for getLayout res even law property not fun isa.
+    override fun getLayoutRes(): Int
+        = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) R.layout.my_rc_item else R.layout.my_rc_item_hz
 
     override fun onBindViewHolder(itemView: View, position: Int) {
         itemView.textView.text = dataList[position]
 
-        //Rect() left top right bottom
-        itemView.textView.setOnClickListener {
-            removeItemAtForceAnim(position)
+        itemView.setOnClickListener {
+            removeItemAt(position)
         }
     }
 

@@ -60,7 +60,7 @@ internal fun MAItemDecoration.subOnDraw(
             val right = left.plus(fullDimen)
             val rect2 = Rect(
                 left,
-                parent.top,
+                min(parent.top, bottom),
                 right,
                 min(parent.bottom, bounds.bottom - layoutManager.getBottomDecorationHeight(child) + additionalDimen)
             )

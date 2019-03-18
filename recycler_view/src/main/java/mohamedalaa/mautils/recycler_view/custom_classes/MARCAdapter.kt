@@ -4,9 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.recycler_view.extensions.itemDecorations
 
 /**
  * **Usage**
@@ -15,11 +13,15 @@ import mohamedalaa.mautils.recycler_view.extensions.itemDecorations
  * ```
  * // ==> More Concise Approach
  * class MyRecyclerViewAdapter(private val namesList: List<String>)
- *      : RecyclerViewAdapter(R.layout.my_rc_item) {
+ *      : MARCAdapter(R.layout.my_rc_item) {
+ *
+ *      override fun getLayoutRes(): Int
+ *          = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) R.layout.my_rc_item else R.layout.my_rc_item_hz
  *
  *      override fun onBindViewHolder(itemView: View, position: Int) {
- *          // By Kotlin Android Extensions
- *          itemView.textView.text = namesList[position]
+ *          itemView.rootView.setOnClickListener {
+ *              removeItemAt(position)
+ *          }
  *      }
  *
  *      override fun getItemCount(): Int = namesList.size
@@ -52,41 +54,37 @@ import mohamedalaa.mautils.recycler_view.extensions.itemDecorations
  * }
  * ```
  *
- * - Working with other classes for better common item animation approach
- *
- * if used with [RCItemDecoration] AND [RCDefaultItemAnimator]
- *
- * then it maintains proper [RecyclerView.ItemDecoration] drawing and offsets
- *
- * when using [RecyclerView.Adapter.notifyItemRemoved] isa,
- *
- * **But** Ensure instantiating this class after the given param recyclerView
- *
- * has been attached with [RCItemDecoration] AND [RCDefaultItemAnimator]
- *
- * @param layoutRes item layout to be inflate isa.
- * @param recyclerView recycler view instance to fetch [RCItemDecoration] AND [RCDefaultItemAnimator]
- * from it if exists isa.
- *
- * @see ListRecyclerViewAdapter
+ * @see MAListRCAdapter
  */
 // todo another instance using data binding isa as in onBind isa, think of interfaces as well isa.
-abstract class RecyclerViewAdapter(@LayoutRes private val layoutRes: Int,
-                                   recyclerView: RecyclerView? = null)
-    : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+abstract class MARCAdapter : RecyclerView.Adapter<MARCAdapter.ViewHolder>() {
 
-    private val rcItemDecoration: RCItemDecoration?
-        = recyclerView?.itemDecorations?.firstOrNull { it is RCItemDecoration } as? RCItemDecoration
+    // ---- Abstract fun
 
-    private val layoutManager: RecyclerView.LayoutManager?
-        = recyclerView?.layoutManager
+    /**
+     * @return layout resource for the item layout, Note this is tied to [getItemViewType]
+     * so returning several layout resources will auto-change [getItemViewType] isa.
+     */
+    @LayoutRes
+    abstract fun getLayoutRes(): Int
 
-    // ---- Overridden Methods ( Abstract )
+    /**
+     * Same as [onBindViewHolder] but provides [itemView] (Root view of item layout)
+     * as param instead of [ViewHolder] for quick access to [ViewHolder.itemView] isa.
+     *
+     * **Note**
+     *
+     * Use [itemView] instead of [itemView].[View.getRootView] as second approach is
+     * not logic plus makes errors sometimes isa.
+     */
+    abstract fun onBindViewHolder(itemView: View, position: Int)
+
+    // ---- Overridden fun
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
-        val view = inflater.inflate(layoutRes, parent, false)
+        val view = inflater.inflate(getLayoutRes(), parent, false)
 
         return ViewHolder(view)
     }
@@ -94,15 +92,15 @@ abstract class RecyclerViewAdapter(@LayoutRes private val layoutRes: Int,
     final override fun onBindViewHolder(holder: ViewHolder, position: Int)
         = onBindViewHolder(holder.itemView, position)
 
-    /**
-     * Same as [onBindViewHolder] but provides [itemView] as param instead of [ViewHolder]
-     * for quick access to [ViewHolder.itemView] isa.
-     */
-    abstract fun onBindViewHolder(itemView: View, position: Int)
+    final override fun getItemViewType(position: Int): Int {
+        return getLayoutRes()
+    }
 
     // ---- Public fun
 
-    /** Changes whole data by executing [changeAction] then calling [notifyDataSetChanged] afterwards isa. */
+    /**
+     * Changes whole data by executing [changeAction] then calling [notifyDataSetChanged] afterwards isa.
+     * */
     fun changeData(changeAction: () -> Unit) {
         changeAction()
 
@@ -110,29 +108,15 @@ abstract class RecyclerViewAdapter(@LayoutRes private val layoutRes: Int,
     }
 
     /**
-     * Takes care of [notifyItemRemoved] in case of using [rcItemDecoration],
-     * else then [notifyDataSetChanged] is used instead isa.
+     * Uses [notifyItemRemoved] so animation can be done isa.
      *
      * @param removeAction fun that changes data which affects [getItemCount] isa.
      */
     fun removeItemAt(position: Int, removeAction: (Int) -> Unit) {
-        if (rcItemDecoration == null || layoutManager !is LinearLayoutManager) {
-            removeAction(position)
+        removeAction(position)
+        notifyItemRemoved(position)
 
-            notifyDataSetChanged()
-        }else {
-            val firstVisible = layoutManager.findFirstVisibleItemPosition()
-            val lastVisible = layoutManager.findLastVisibleItemPosition()
-
-            if (position in (firstVisible..lastVisible)) {
-                rcItemDecoration.notifyItemRemoved()
-            }
-
-            removeAction(position)
-            notifyItemRemoved(position)
-
-            notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
-        }
+        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
     }
 
     /**
