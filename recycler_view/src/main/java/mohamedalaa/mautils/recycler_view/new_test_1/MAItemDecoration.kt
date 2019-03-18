@@ -17,9 +17,7 @@ import mohamedalaa.mautils.recycler_view.new_test_1.extensions.*
  * TODO (S)
  * 1- secondary constructor takes context and InDp instead of px isa.
  *
- * 2- onDraw isn't done yet, but planned to isa.
- *
- * Z- [LinearLayoutManager] not supported yet, but in future isa.
+ * 2- [LinearLayoutManager] not supported yet, but in future isa.
  *
  * @param singleItemDivider true means if [RecyclerView] has only 1 item, it will still draw
  * divider, and surely after considering [ignoreBorder] & [mergeOffsets] values isa.
@@ -98,22 +96,8 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                 val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
                 val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
 
-                val isHorizontal = layoutManager.orientation != LinearLayoutManager.VERTICAL
-                when {
-                    ignoreBorder && mergeOffsets -> {
-                        subOnDrawIgnoreBorderMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
-                    }
-                    ignoreBorder -> {
-                        subOnDrawIgnoreBorderNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
-                    }
-                    mergeOffsets -> {
-                        subOnDrawNoIgnoreBorderMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
-                    }
-                    // Else both booleans are false isa.
-                    else -> {
-                        subOnDrawNoIgnoreBorderNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
-                    }
-                }
+                val fullDimen = if (mergeOffsets) fullDimen else fullDimen.times(2)
+                subOnDraw(canvas, parent, layoutManager, firstVisible, lastVisible, fullDimen, ignoreBorder)
             }
             is LinearLayoutManager -> {
                 // todo draw linear isa.

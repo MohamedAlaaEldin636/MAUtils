@@ -7,42 +7,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
+import kotlin.math.min
 
-fun MAItemDecoration.subOnDrawIgnoreBorderMergeOffsets(
-    canvas: Canvas,
-    parent: RecyclerView,
-    layoutManager: GridLayoutManager,
-    firstVisible: Int,
-    lastVisible: Int
-) = subOnDraw(canvas, parent, layoutManager, firstVisible, lastVisible, fullDimen, true)
-
-fun MAItemDecoration.subOnDrawIgnoreBorderNoMergeOffsets(
-    canvas: Canvas,
-    parent: RecyclerView,
-    layoutManager: GridLayoutManager,
-    firstVisible: Int,
-    lastVisible: Int
-) = subOnDraw(canvas, parent, layoutManager, firstVisible, lastVisible, fullDimen.times(2), true)
-
-fun MAItemDecoration.subOnDrawNoIgnoreBorderMergeOffsets(
-    canvas: Canvas,
-    parent: RecyclerView,
-    layoutManager: GridLayoutManager,
-    firstVisible: Int,
-    lastVisible: Int
-) = subOnDraw(canvas, parent, layoutManager, firstVisible, lastVisible, fullDimen, false)
-
-fun MAItemDecoration.subOnDrawNoIgnoreBorderNoMergeOffsets(
-    canvas: Canvas,
-    parent: RecyclerView,
-    layoutManager: GridLayoutManager,
-    firstVisible: Int,
-    lastVisible: Int
-) = subOnDraw(canvas, parent, layoutManager, firstVisible, lastVisible, fullDimen.times(2), false)
-
-// ---- Private fun
-
-private fun MAItemDecoration.subOnDraw(
+internal fun MAItemDecoration.subOnDraw(
     canvas: Canvas,
     parent: RecyclerView,
     layoutManager: GridLayoutManager,
@@ -81,10 +48,9 @@ private fun MAItemDecoration.subOnDraw(
         val bounds = Rect()
         layoutManager.getDecoratedBoundsWithMargins(child, bounds)
 
-        if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
-            val additionalDimen = if (ignoreBorder) 0 else this.fullDimen
-
-            val top = bounds.bottom - child.height - fullDimen - additionalDimen
+        val additionalDimen = if (ignoreBorder) 0 else this.fullDimen
+        val (rect1, rect2) = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
+            val top = bounds.top + layoutManager.getTopDecorationHeight(child) - fullDimen
             val bottom = top.plus(fullDimen)
             val rect1 = Rect(parent.left, top, parent.right, bottom)
 
@@ -92,17 +58,21 @@ private fun MAItemDecoration.subOnDraw(
             val right = left.plus(fullDimen)
             val rect2 = Rect(
                 left,
-                bottom,
+                parent.top,
                 right,
-                bottom.plus(child.height).plus(additionalDimen)
+                min(parent.bottom, bounds.bottom - layoutManager.getBottomDecorationHeight(child) + additionalDimen)
             )
 
-            canvas.drawRect(rect1, paint)
-            canvas.drawRect(rect2, paint)
+            rect1 to rect2
         }else {
             val top = bounds.bottom - layoutManager.getBottomDecorationHeight(child)
             val bottom = top.plus(fullDimen)
-            val rect1 = Rect(parent.left, top, parent.right, bottom)
+            val rect1 = Rect(
+                parent.left,
+                top,
+                min(parent.right, bounds.right - layoutManager.getRightDecorationWidth(child) + additionalDimen),
+                bottom
+            )
 
             val left = bounds.left + layoutManager.getLeftDecorationWidth(child) - fullDimen
             val right = left.plus(fullDimen)
@@ -113,8 +83,10 @@ private fun MAItemDecoration.subOnDraw(
                 parent.bottom
             )
 
-            canvas.drawRect(rect1, paint)
-            canvas.drawRect(rect2, paint)
+            rect1 to rect2
         }
+
+        canvas.drawRect(rect1, paint)
+        canvas.drawRect(rect2, paint)
     }
 }
