@@ -105,46 +105,22 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                         //subItemOffsetIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
                     }else {
                         subOnDrawIgnoreBorderMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
-
-                        // Last item draw check isa. todo
-                        if (layoutManager.itemCount/*.dec()*/.rem(layoutManager.spanCount) != 0
-                            && lastVisible == layoutManager.itemCount.dec()) {
-
-                            val child = parent.getChildAt(lastVisible.minus(firstVisible))
-
-                            val bounds = Rect()
-                            layoutManager.getDecoratedBoundsWithMargins(child, bounds)
-
-                            val top = bounds.bottom - child.height - fullDimen
-                            val left = parent.left
-
-                            val rect1 = Rect(left, top, parent.right, top.plus(fullDimen))
-                            val rect2 = Rect(
-                                bounds.right.minus(layoutManager.getRightDecorationWidth(child)),
-                                top.plus(fullDimen),
-                                bounds.right.minus(layoutManager.getRightDecorationWidth(child)).plus(fullDimen),
-                                top.plus(fullDimen).plus(child.height)
-                            )
-
-                            canvas.drawRect(rect1, paint)
-                            canvas.drawRect(rect2, paint)
-                        }
                     }
                     ignoreBorder -> if (isHorizontal) {
                         //subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
                     }else {
-                        //subItemOffsetIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
+                        subOnDrawIgnoreBorderNoMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
                     }
                     mergeOffsets -> if (isHorizontal) {
                         //subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
                     }else {
-                        //subItemOffsetNoIgnoreBorderMergeOffsetsVertical(layoutManager, position)
+                        subOnDrawNoIgnoreBorderMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
                     }
                     // Else both booleans are false isa.
                     else -> if (isHorizontal) {
                         //subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
                     }else {
-                        //subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
+                        subOnDrawNoIgnoreBorderNoMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
                     }
                 }
             }
