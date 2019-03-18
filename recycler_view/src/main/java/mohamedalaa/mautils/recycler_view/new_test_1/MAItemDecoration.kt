@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.recycler_view.new_test_1.extensions.*
@@ -17,15 +16,13 @@ import mohamedalaa.mautils.recycler_view.new_test_1.extensions.*
  * TODO (S)
  * 1- secondary constructor takes context and InDp instead of px isa.
  *
- * 2- [LinearLayoutManager] not supported yet, but in future isa.
- *
  * @param singleItemDivider true means if [RecyclerView] has only 1 item, it will still draw
- * divider, and surely after considering [ignoreBorder] & [mergeOffsets] values isa.
+ * divider, and surely after considering [ignoreBorder] & [mergeOffsets] values isa. todo test it isa.
  */
 class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                        @Px private val dividerDimenInPx: Int = 0,
                        @Px private val additionalOffsetInPx: Int = 0,
-                       private val dividerGravity: Int = Gravity.CENTER,
+                       private val dividerGravity: Int = Gravity.CENTER /* todo not done yet */,
                        private val ignoreBorder: Boolean = true,
                        private val mergeOffsets: Boolean = true,
                        private val singleItemDivider: Boolean = false
@@ -55,7 +52,7 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
 
         val rect: Rect = when {
             adapter == null|| (singleItemDivider.not() && adapter.itemCount < 2) -> Rect()
-            layoutManager is GridLayoutManager -> {
+            layoutManager is LinearLayoutManager -> {
                 val isHorizontal = layoutManager.orientation != LinearLayoutManager.VERTICAL
                 when {
                     ignoreBorder && mergeOffsets -> if(isHorizontal) {
@@ -81,9 +78,6 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                     }
                 }
             }
-            layoutManager is LinearLayoutManager -> {
-                Rect() // todo linear layout manager isa.
-            }
             else -> Rect()
         }
 
@@ -92,15 +86,12 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         when (val layoutManager = parent.layoutManager) {
-            is GridLayoutManager -> {
+            is LinearLayoutManager -> {
                 val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
                 val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
 
                 val fullDimen = if (mergeOffsets) fullDimen else fullDimen.times(2)
                 subOnDraw(canvas, parent, layoutManager, firstVisible, lastVisible, fullDimen, ignoreBorder)
-            }
-            is LinearLayoutManager -> {
-                // todo draw linear isa.
             }
         }
     }

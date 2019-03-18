@@ -2,6 +2,7 @@ package mohamedalaa.mautils.recycler_view.new_test_1.extensions
 
 import android.graphics.Rect
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.core_kotlin.divRound
 import mohamedalaa.mautils.core_kotlin.pairedIteration
@@ -20,12 +21,12 @@ import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
  * @param position position of item in [RecyclerView.Adapter] isa.
  */
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsVertical(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect = subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen)
 
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsHorizontal(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect = subItemOffsetIgnoreBorderMergeOffsetsVertical(layoutManager, position).apply {
     reverseLeftRightToTopBottomAndViceVersa()
@@ -36,12 +37,12 @@ internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsHorizontal(
 }
 
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsVertical(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect = subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen.times(2))
 
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect {
     val fullDimen = fullDimen.times(2)
@@ -55,12 +56,12 @@ internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(
 }
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderMergeOffsetsVertical(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect = subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, true)
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect {
     val mergeOffsets = true
@@ -74,12 +75,12 @@ internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(
 }
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect = subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, false)
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizontal(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int
 ): Rect {
     val mergeOffsets = false
@@ -100,10 +101,12 @@ internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizonta
  * @param position position of item in [RecyclerView.Adapter] isa.
  */
 private fun subItemOffsetIgnoreBorderVertical(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int,
     fullDimen: Int
 ): Rect {
+    val spanCount = if (layoutManager is GridLayoutManager) layoutManager.spanCount else 1
+
     val rect = Rect()
 
     // Top & Bottom isa
@@ -113,16 +116,16 @@ private fun subItemOffsetIgnoreBorderVertical(
     // Left & Right isa.
     val isBorderLeft = layoutManager.isBorderLeft(position)
     val isBorderRight = layoutManager.isBorderRight(position)
-    if (layoutManager.spanCount == 1) {
+    if (spanCount == 1) {
         return rect
-    }else if (layoutManager.spanCount == 2) {
+    }else if (spanCount == 2) {
         rect.left = if (isBorderLeft) 0 else fullDimen.divRound(2)
         rect.right = if (isBorderRight) 0 else fullDimen.divRound(2)
 
         return rect
     }
 
-    val numOfVariables = layoutManager.spanCount.dec()
+    val numOfVariables = spanCount.dec()
     val variables = List(numOfVariables) { if (it == 0) 'x' else 'a'.plus(it.dec()) }
 
     val xVariable = variables[0]
@@ -142,8 +145,8 @@ private fun subItemOffsetIgnoreBorderVertical(
     }
     val solvedVariablesMap = xEquations.solveAllVariables(variables, fullDimen.toFloat(), baseSide)
 
-    val remPosition = position.rem(layoutManager.spanCount)
-    val palindromeResult = (0 until layoutManager.spanCount).palindromeToMin(remPosition)
+    val remPosition = position.rem(spanCount)
+    val palindromeResult = (0 until spanCount).palindromeToMin(remPosition)
     val withZeroVariablesPaired = mutableListOf('0').apply { addAll(variables) }.pairedIteration()
     val (left, right) = when (palindromeResult) {
         null -> {
@@ -181,11 +184,13 @@ private fun subItemOffsetIgnoreBorderVertical(
  * @param position position of item in [RecyclerView.Adapter] isa.
  */
 private fun subItemOffsetNoIgnoreBorderVertical(
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     position: Int,
     fullDimen: Int,
     mergeOffsets: Boolean
 ): Rect {
+    val spanCount = if (layoutManager is GridLayoutManager) layoutManager.spanCount else 1
+
     val rect = Rect()
 
     // Top & Bottom isa
@@ -193,15 +198,14 @@ private fun subItemOffsetNoIgnoreBorderVertical(
     rect.bottom = if (layoutManager.isBorderBottom(position) || mergeOffsets.not()) fullDimen else fullDimen.divRound(2)
 
     // Left & Right isa.
-    if (layoutManager.spanCount == 1) {
+    if (spanCount == 1) {
         rect.left = fullDimen
         rect.right = fullDimen
 
         return rect
     }
 
-    val numOfVariables = layoutManager.spanCount
-    val variables = List(numOfVariables) { if (it == 0) 'x' else 'a'.plus(it.dec()) }
+    val variables = List(spanCount) { if (it == 0) 'x' else 'a'.plus(it.dec()) }
 
     val xVariable = variables[0]
     val xEquations = variables.drop(1).pairedIteration().map {
@@ -225,8 +229,8 @@ private fun subItemOffsetNoIgnoreBorderVertical(
     val withResultValue = fullDimen.toFloat()
     val solvedVariablesMap = xEquations.solveAllVariables(variables, withResultValue, xVariable.toString())
 
-    val remPosition = position.rem(layoutManager.spanCount)
-    val palindromeResult = (0 until layoutManager.spanCount).palindromeToMin(remPosition)
+    val remPosition = position.rem(spanCount)
+    val palindromeResult = (0 until spanCount).palindromeToMin(remPosition)
     val pairedVariables = mutableListOf<Char>().apply { addAll(variables) }.pairedIteration()
     val (left, right) = when (palindromeResult) {
         null -> {

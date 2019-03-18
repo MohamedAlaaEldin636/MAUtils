@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * Then indices 0, 2, 4, etc... has left border isa.
  */
-fun GridLayoutManager.isBorderLeft(index: Int): Boolean {
+fun LinearLayoutManager.isBorderLeft(index: Int): Boolean {
+    val spanCount = if (this is GridLayoutManager) spanCount else 1
+
     return if (orientation == LinearLayoutManager.VERTICAL) {
         index.rem(spanCount) == 0
     }else {
@@ -22,7 +24,9 @@ fun GridLayoutManager.isBorderLeft(index: Int): Boolean {
 }
 
 /** @return true if [index] has border from top, to read an Ex. See [isBorderLeft] isa. */
-fun GridLayoutManager.isBorderTop(index: Int): Boolean {
+fun LinearLayoutManager.isBorderTop(index: Int): Boolean {
+    val spanCount = if (this is GridLayoutManager) spanCount else 1
+
     return if (orientation == LinearLayoutManager.VERTICAL) {
         index in (0 until spanCount)
     }else {
@@ -31,7 +35,9 @@ fun GridLayoutManager.isBorderTop(index: Int): Boolean {
 }
 
 /** @return true if [index] has border from right, to read an Ex. See [isBorderLeft] isa. */
-fun GridLayoutManager.isBorderRight(index: Int): Boolean {
+fun LinearLayoutManager.isBorderRight(index: Int): Boolean {
+    val spanCount = if (this is GridLayoutManager) spanCount else 1
+
     return if (orientation == LinearLayoutManager.VERTICAL) {
         index.inc().rem(spanCount) == 0
     }else {
@@ -61,7 +67,9 @@ fun GridLayoutManager.isBorderRight(index: Int): Boolean {
 }
 
 /** @return true if [index] has border from bottom, to read an Ex. See [isBorderLeft] isa. */
-fun GridLayoutManager.isBorderBottom(index: Int): Boolean {
+fun LinearLayoutManager.isBorderBottom(index: Int): Boolean {
+    val spanCount = if (this is GridLayoutManager) spanCount else 1
+
     return if (orientation == LinearLayoutManager.VERTICAL) {
         var breakIteration = false
 

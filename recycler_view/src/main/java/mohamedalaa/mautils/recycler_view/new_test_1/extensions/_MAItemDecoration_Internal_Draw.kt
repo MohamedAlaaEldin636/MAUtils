@@ -12,12 +12,14 @@ import kotlin.math.min
 internal fun MAItemDecoration.subOnDraw(
     canvas: Canvas,
     parent: RecyclerView,
-    layoutManager: GridLayoutManager,
+    layoutManager: LinearLayoutManager,
     firstVisible: Int,
     lastVisible: Int,
     fullDimen: Int,
     ignoreBorder: Boolean
 ) {
+    val spanCount = if (layoutManager is GridLayoutManager) layoutManager.spanCount else 1
+
     val list = mutableListOf<Path>()
 
     for (position in firstVisible..lastVisible) {
@@ -40,7 +42,7 @@ internal fun MAItemDecoration.subOnDraw(
     }
 
     // Last item draw check isa.
-    if (layoutManager.itemCount.rem(layoutManager.spanCount) != 0
+    if (layoutManager.itemCount.rem(spanCount) != 0
         && lastVisible == layoutManager.itemCount.dec()) {
 
         val child = parent.getChildAt(lastVisible.minus(firstVisible))

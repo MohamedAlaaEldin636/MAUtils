@@ -65,8 +65,8 @@ class VisualTestActivity : AppCompatActivity() {
             Handler().post {
                 when(it.title.toString()) {
                     getString(R.string.screen_rotation) -> {
-                        when (val layoutManager = recyclerView.layoutManager as? GridLayoutManager) {
-                            is GridLayoutManager -> {
+                        when (val layoutManager = recyclerView.layoutManager) {
+                            is LinearLayoutManager -> {
                                 val isVertical = layoutManager.orientation == RecyclerView.VERTICAL
 
                                 toast("gridOrientationIsVertical -> ${isVertical.not()}", duration = Toast.LENGTH_LONG)
@@ -84,13 +84,14 @@ class VisualTestActivity : AppCompatActivity() {
                         }
                     }
                     getString(R.string.track_change) -> {
-                        if (recyclerView.layoutManager as? GridLayoutManager == null) {
+                        /*if (recyclerView.layoutManager as? GridLayoutManager == null) {
                             toast("Not a grid layout manager")
 
                             return@post
                         }else {
                             toast("gridIgnoreBorder -> $gridIgnoreBorder\ngridMergeOffsets -> $gridMergeOffsets", duration = Toast.LENGTH_LONG)
-                        }
+                        }*/
+                        toast("gridIgnoreBorder -> $gridIgnoreBorder\ngridMergeOffsets -> $gridMergeOffsets", duration = Toast.LENGTH_LONG)
 
                         maItemDecoration = maItemDecoration.swapItemDecoration(
                             recyclerView,
@@ -160,7 +161,7 @@ class VisualTestActivity : AppCompatActivity() {
 }
 
 class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
-    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item_hz/*_hz*//*_hz todo */, dataList, recyclerView) {
+    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item/*_hz*//*_hz*//*_hz todo */, dataList, recyclerView) {
 
     // called after orientation el7
     /*override fun getItemViewType(position: Int): Int {
