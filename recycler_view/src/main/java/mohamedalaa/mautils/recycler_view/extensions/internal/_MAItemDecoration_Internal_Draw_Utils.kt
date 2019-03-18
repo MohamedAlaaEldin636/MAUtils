@@ -1,12 +1,12 @@
 @file:Suppress("unused")
 
-package mohamedalaa.mautils.recycler_view.new_test_1.extensions
+package mohamedalaa.mautils.recycler_view.extensions.internal
 
 import android.graphics.Path
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
+import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 
 internal fun MAItemDecoration.addTopPath(
     list: MutableList<Path>,

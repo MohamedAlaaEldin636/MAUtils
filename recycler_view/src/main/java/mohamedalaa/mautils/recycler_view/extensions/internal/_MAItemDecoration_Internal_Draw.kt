@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.recycler_view.new_test_1.extensions
+package mohamedalaa.mautils.recycler_view.extensions.internal
 
 import android.graphics.Canvas
 import android.graphics.Path
@@ -6,7 +6,7 @@ import android.graphics.Rect
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
+import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 import kotlin.math.min
 
 internal fun MAItemDecoration.subOnDraw(
@@ -50,7 +50,7 @@ internal fun MAItemDecoration.subOnDraw(
         val bounds = Rect()
         layoutManager.getDecoratedBoundsWithMargins(child, bounds)
 
-        val additionalDimen = if (ignoreBorder) 0 else this.fullDimen
+        val additionalDimen = if (ignoreBorder) 0 else this.dividerDimenInPx
         val (rect1, rect2) = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
             val top = bounds.top + layoutManager.getTopDecorationHeight(child) - fullDimen
             val bottom = top.plus(fullDimen)

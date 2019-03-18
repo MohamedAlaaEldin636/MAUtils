@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.recycler_view.new_test_1.extensions
+package mohamedalaa.mautils.recycler_view.extensions.internal
 
 import android.graphics.Rect
 import androidx.recyclerview.widget.GridLayoutManager
@@ -6,14 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.core_kotlin.divRound
 import mohamedalaa.mautils.core_kotlin.pairedIteration
-import mohamedalaa.mautils.recycler_view.extensions.internal.solveAllVariables
-import mohamedalaa.mautils.recycler_view.extensions.internal.solveForOnlyTwoSides
-import mohamedalaa.mautils.recycler_view.extensions.internal.toEquation
 import mohamedalaa.mautils.recycler_view.extensions.isBorderBottom
 import mohamedalaa.mautils.recycler_view.extensions.isBorderLeft
 import mohamedalaa.mautils.recycler_view.extensions.isBorderRight
 import mohamedalaa.mautils.recycler_view.extensions.isBorderTop
-import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
+import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 
 /**
  * If isBorder then offset is 0 else suitable offset to maintain merged offsets isa.
@@ -23,7 +20,11 @@ import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsVertical(
     layoutManager: LinearLayoutManager,
     position: Int
-): Rect = subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen)
+): Rect = subItemOffsetIgnoreBorderVertical(
+    layoutManager,
+    position,
+    dividerDimenInPx
+)
 
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsHorizontal(
     layoutManager: LinearLayoutManager,
@@ -31,7 +32,7 @@ internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsHorizontal(
 ): Rect = subItemOffsetIgnoreBorderMergeOffsetsVertical(layoutManager, position).apply {
     reverseLeftRightToTopBottomAndViceVersa()
 
-    val half = fullDimen.divRound(2)
+    val half = dividerDimenInPx.divRound(2)
     left = if (layoutManager.isBorderLeft(position)) 0 else half
     right = if (layoutManager.isBorderRight(position)) 0 else half
 }
@@ -39,17 +40,25 @@ internal fun MAItemDecoration.subItemOffsetIgnoreBorderMergeOffsetsHorizontal(
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsVertical(
     layoutManager: LinearLayoutManager,
     position: Int
-): Rect = subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen.times(2))
+): Rect = subItemOffsetIgnoreBorderVertical(
+    layoutManager,
+    position,
+    dividerDimenInPx.times(2)
+)
 
 internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(
     layoutManager: LinearLayoutManager,
     position: Int
 ): Rect {
-    val fullDimen = fullDimen.times(2)
-    return subItemOffsetIgnoreBorderVertical(layoutManager, position, fullDimen).apply {
+    val dividerDimenInPx = dividerDimenInPx.times(2)
+    return subItemOffsetIgnoreBorderVertical(
+        layoutManager,
+        position,
+        dividerDimenInPx
+    ).apply {
         reverseLeftRightToTopBottomAndViceVersa()
 
-        val half = fullDimen.divRound(2)
+        val half = dividerDimenInPx.divRound(2)
         left = if (layoutManager.isBorderLeft(position)) 0 else half
         right = if (layoutManager.isBorderRight(position)) 0 else half
     }
@@ -58,60 +67,80 @@ internal fun MAItemDecoration.subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderMergeOffsetsVertical(
     layoutManager: LinearLayoutManager,
     position: Int
-): Rect = subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, true)
+): Rect = subItemOffsetNoIgnoreBorderVertical(
+    layoutManager,
+    position,
+    dividerDimenInPx,
+    true
+)
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(
     layoutManager: LinearLayoutManager,
     position: Int
 ): Rect {
     val mergeOffsets = true
-    return subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, mergeOffsets).apply {
+    return subItemOffsetNoIgnoreBorderVertical(
+        layoutManager,
+        position,
+        dividerDimenInPx,
+        mergeOffsets
+    ).apply {
         reverseLeftRightToTopBottomAndViceVersa()
 
-        val half = fullDimen.divRound(2)
-        left = if (layoutManager.isBorderLeft(position) || mergeOffsets.not()) fullDimen else half
-        right = if (layoutManager.isBorderRight(position) || mergeOffsets.not()) fullDimen else half
+        val half = dividerDimenInPx.divRound(2)
+        left = if (layoutManager.isBorderLeft(position) || mergeOffsets.not()) dividerDimenInPx else half
+        right = if (layoutManager.isBorderRight(position) || mergeOffsets.not()) dividerDimenInPx else half
     }
 }
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(
     layoutManager: LinearLayoutManager,
     position: Int
-): Rect = subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, false)
+): Rect = subItemOffsetNoIgnoreBorderVertical(
+    layoutManager,
+    position,
+    dividerDimenInPx,
+    false
+)
 
 internal fun MAItemDecoration.subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizontal(
     layoutManager: LinearLayoutManager,
     position: Int
 ): Rect {
     val mergeOffsets = false
-    return subItemOffsetNoIgnoreBorderVertical(layoutManager, position, fullDimen, mergeOffsets).apply {
+    return subItemOffsetNoIgnoreBorderVertical(
+        layoutManager,
+        position,
+        dividerDimenInPx,
+        mergeOffsets
+    ).apply {
         reverseLeftRightToTopBottomAndViceVersa()
 
-        val half = fullDimen.divRound(2)
-        left = if (layoutManager.isBorderLeft(position) || mergeOffsets.not()) fullDimen else half
-        right = if (layoutManager.isBorderRight(position) || mergeOffsets.not()) fullDimen else half
+        val half = dividerDimenInPx.divRound(2)
+        left = if (layoutManager.isBorderLeft(position) || mergeOffsets.not()) dividerDimenInPx else half
+        right = if (layoutManager.isBorderRight(position) || mergeOffsets.not()) dividerDimenInPx else half
     }
 }
 
 // ---- Private fun
 
 /**
- * If isBorder then offset is 0 else suitable offset to maintain [fullDimen] between items isa.
+ * If isBorder then offset is 0 else suitable offset to maintain [dividerDimenInPx] between items isa.
  *
  * @param position position of item in [RecyclerView.Adapter] isa.
  */
 private fun subItemOffsetIgnoreBorderVertical(
     layoutManager: LinearLayoutManager,
     position: Int,
-    fullDimen: Int
+    dividerDimenInPx: Int
 ): Rect {
     val spanCount = if (layoutManager is GridLayoutManager) layoutManager.spanCount else 1
 
     val rect = Rect()
 
     // Top & Bottom isa
-    rect.top = if (layoutManager.isBorderTop(position)) 0 else fullDimen.divRound(2)
-    rect.bottom = if (layoutManager.isBorderBottom(position)) 0 else fullDimen.divRound(2)
+    rect.top = if (layoutManager.isBorderTop(position)) 0 else dividerDimenInPx.divRound(2)
+    rect.bottom = if (layoutManager.isBorderBottom(position)) 0 else dividerDimenInPx.divRound(2)
 
     // Left & Right isa.
     val isBorderLeft = layoutManager.isBorderLeft(position)
@@ -119,8 +148,8 @@ private fun subItemOffsetIgnoreBorderVertical(
     if (spanCount == 1) {
         return rect
     }else if (spanCount == 2) {
-        rect.left = if (isBorderLeft) 0 else fullDimen.divRound(2)
-        rect.right = if (isBorderRight) 0 else fullDimen.divRound(2)
+        rect.left = if (isBorderLeft) 0 else dividerDimenInPx.divRound(2)
+        rect.right = if (isBorderRight) 0 else dividerDimenInPx.divRound(2)
 
         return rect
     }
@@ -143,7 +172,7 @@ private fun subItemOffsetIgnoreBorderVertical(
         val equation = baseSide + "=" + fdEquations[index]
         xEquations += equation.solveForOnlyTwoSides(xVariable).second.toEquation()
     }
-    val solvedVariablesMap = xEquations.solveAllVariables(variables, fullDimen.toFloat(), baseSide)
+    val solvedVariablesMap = xEquations.solveAllVariables(variables, dividerDimenInPx.toFloat(), baseSide)
 
     val remPosition = position.rem(spanCount)
     val palindromeResult = (0 until spanCount).palindromeToMin(remPosition)
@@ -178,7 +207,7 @@ private fun subItemOffsetIgnoreBorderVertical(
 }
 
 /**
- * If isBorder then offset is [fullDimen] else suitable offset to maintain [fullDimen]
+ * If isBorder then offset is [dividerDimenInPx] else suitable offset to maintain [dividerDimenInPx]
  * or it's doubled value between items according to [mergeOffsets] isa.
  *
  * @param position position of item in [RecyclerView.Adapter] isa.
@@ -186,7 +215,7 @@ private fun subItemOffsetIgnoreBorderVertical(
 private fun subItemOffsetNoIgnoreBorderVertical(
     layoutManager: LinearLayoutManager,
     position: Int,
-    fullDimen: Int,
+    dividerDimenInPx: Int,
     mergeOffsets: Boolean
 ): Rect {
     val spanCount = if (layoutManager is GridLayoutManager) layoutManager.spanCount else 1
@@ -194,13 +223,13 @@ private fun subItemOffsetNoIgnoreBorderVertical(
     val rect = Rect()
 
     // Top & Bottom isa
-    rect.top = if (layoutManager.isBorderTop(position) || mergeOffsets.not()) fullDimen else fullDimen.divRound(2)
-    rect.bottom = if (layoutManager.isBorderBottom(position) || mergeOffsets.not()) fullDimen else fullDimen.divRound(2)
+    rect.top = if (layoutManager.isBorderTop(position) || mergeOffsets.not()) dividerDimenInPx else dividerDimenInPx.divRound(2)
+    rect.bottom = if (layoutManager.isBorderBottom(position) || mergeOffsets.not()) dividerDimenInPx else dividerDimenInPx.divRound(2)
 
     // Left & Right isa.
     if (spanCount == 1) {
-        rect.left = fullDimen
-        rect.right = fullDimen
+        rect.left = dividerDimenInPx
+        rect.right = dividerDimenInPx
 
         return rect
     }
@@ -226,7 +255,7 @@ private fun subItemOffsetNoIgnoreBorderVertical(
         val equation = baseSide + "=" + fwEquations[index]
         xEquations += equation.solveForOnlyTwoSides(xVariable).second.toEquation()
     }
-    val withResultValue = fullDimen.toFloat()
+    val withResultValue = dividerDimenInPx.toFloat()
     val solvedVariablesMap = xEquations.solveAllVariables(variables, withResultValue, xVariable.toString())
 
     val remPosition = position.rem(spanCount)

@@ -1,13 +1,11 @@
 package mohamedalaa.mautils.mautils
 
 import android.graphics.Color
-import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,9 +15,7 @@ import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.core_android.dpToPx
 import mohamedalaa.mautils.core_android.toast
 import mohamedalaa.mautils.recycler_view.custom_classes.ListRecyclerViewAdapter
-import mohamedalaa.mautils.recycler_view.custom_classes.RCDefaultItemAnimator
-import mohamedalaa.mautils.recycler_view.custom_classes.RCItemDecoration
-import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
+import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
 
@@ -75,12 +71,6 @@ class VisualTestActivity : AppCompatActivity() {
                                 layoutManager.orientation = if (isVertical) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
                                 recyclerView.invalidateItemDecorations()
                             }
-                            else -> {
-                                // todo linear layout like grid one isa.
-                                toast("(orientation) Not a grid layout manager")
-
-                                return@post
-                            }
                         }
                     }
                     getString(R.string.track_change) -> {
@@ -93,10 +83,9 @@ class VisualTestActivity : AppCompatActivity() {
                         }*/
                         toast("gridIgnoreBorder -> $gridIgnoreBorder\ngridMergeOffsets -> $gridMergeOffsets", duration = Toast.LENGTH_LONG)
 
-                        maItemDecoration = maItemDecoration.swapItemDecoration(
-                            recyclerView,
-                            ignoreBorder = gridIgnoreBorder,
-                            mergeOffsets = gridMergeOffsets)
+                        maItemDecoration.ignoreBorder = gridIgnoreBorder
+                        maItemDecoration.mergeOffsets = gridMergeOffsets
+                        recyclerView.invalidateItemDecorations()
                         tempCounter++
                     }
                     getString(R.string.insert) -> {
@@ -126,6 +115,10 @@ class VisualTestActivity : AppCompatActivity() {
                         }
 
                         rcAdapterFakeNames.changeData(list)
+
+                        maItemDecoration.singleItemDivider = maItemDecoration.singleItemDivider.not()
+                        maItemDecoration.dividerColor = Color.BLUE
+                        recyclerView.invalidateItemDecorations()
                     }
                     getString(R.string.linear_layout_manager) -> {
                         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -145,8 +138,7 @@ class VisualTestActivity : AppCompatActivity() {
 
         maItemDecoration = MAItemDecoration(
             dividerColor = Color.RED,
-            dividerDimenInPx = dpToPx(0).toInt(),
-            additionalOffsetInPx = dpToPx(16).toInt()
+            dividerDimenInPx = dpToPx(16).toInt()
         )
         recyclerView.addItemDecoration(maItemDecoration)
 

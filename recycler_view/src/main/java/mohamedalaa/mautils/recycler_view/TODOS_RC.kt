@@ -5,11 +5,6 @@ package mohamedalaa.mautils.recycler_view
  *
  * TODO
  *
- * 1- for linear layout manager isa, make isBorderTop as it is isa easy and there is no probs at all isa
- * and test it vertically and horizontally isa.
- *
- * 2- delete other unnecessary classes and files
- *
  * 3- put flavor for data binding isa
  *
  * 4- enhance rc adapter to name MA prefixing and getLayoutRes depending on position for

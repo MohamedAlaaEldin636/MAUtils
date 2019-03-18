@@ -1,3 +1,5 @@
+@file:JvmName("RecyclerViewUtils")
+
 package mohamedalaa.mautils.recycler_view.extensions
 
 import androidx.recyclerview.widget.RecyclerView

@@ -1,36 +1,41 @@
-package mohamedalaa.mautils.recycler_view.new_test_1
+package mohamedalaa.mautils.recycler_view.custom_classes
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.recycler_view.new_test_1.extensions.*
+import mohamedalaa.mautils.recycler_view.extensions.internal.*
 
 /**
- * TODO (S)
- * 1- secondary constructor takes context and InDp instead of px isa.
+ * **Notes**
+ *
+ * 1- Whenever you want to change any property use [RecyclerView.invalidateItemDecorations]
+ * afterwards so that changes take effect isa.
  *
  * @param singleItemDivider true means if [RecyclerView] has only 1 item, it will still draw
- * divider, and surely after considering [ignoreBorder] & [mergeOffsets] values isa. todo test it isa.
+ * divider, and surely after considering [ignoreBorder] & [mergeOffsets] values isa.
  */
-class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
-                       @Px private val dividerDimenInPx: Int = 0,
-                       @Px private val additionalOffsetInPx: Int = 0,
-                       private val dividerGravity: Int = Gravity.CENTER /* todo not done yet */,
-                       private val ignoreBorder: Boolean = true,
-                       private val mergeOffsets: Boolean = true,
-                       private val singleItemDivider: Boolean = false
+class MAItemDecoration(@ColorInt dividerColor: Int = Color.BLACK,
+                       @Px var dividerDimenInPx: Int = 0,
+                       var ignoreBorder: Boolean = true,
+                       var mergeOffsets: Boolean = true,
+                       var singleItemDivider: Boolean = false
 ) : RecyclerView.ItemDecoration() {
 
-    // ---- Private / Internal properties
+    // ---- Properties
 
-    internal val fullDimen = dividerDimenInPx.plus(additionalOffsetInPx)
+    @ColorInt var dividerColor = dividerColor
+        set(value) {
+            paint.color = value
+            field = value
+        }
+
+    // ---- Private / Internal properties
 
     internal val paint = Paint().apply {
         color = dividerColor
@@ -90,37 +95,10 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
                 val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
                 val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
 
-                val fullDimen = if (mergeOffsets) fullDimen else fullDimen.times(2)
+                val fullDimen = if (mergeOffsets) dividerDimenInPx else dividerDimenInPx.times(2)
                 subOnDraw(canvas, parent, layoutManager, firstVisible, lastVisible, fullDimen, ignoreBorder)
             }
         }
-    }
-
-    // ---- Public fun
-
-    fun swapItemDecoration(recyclerView: RecyclerView,
-                           @ColorInt dividerColor: Int = this.dividerColor,
-                           @Px dividerDimenInPx: Int = this.dividerDimenInPx,
-                           @Px additionalOffsetInPx: Int = this.additionalOffsetInPx,
-                           dividerGravity: Int = this.dividerGravity,
-                           ignoreBorder: Boolean = this.ignoreBorder,
-                           mergeOffsets: Boolean = this.mergeOffsets,
-                           singleItemDivider: Boolean = this.singleItemDivider
-    ): MAItemDecoration {
-        recyclerView.removeItemDecoration(this)
-
-        val newMAItemDecoration = MAItemDecoration(
-            dividerColor,
-            dividerDimenInPx,
-            additionalOffsetInPx,
-            dividerGravity,
-            ignoreBorder,
-            mergeOffsets,
-            singleItemDivider
-        )
-        recyclerView.addItemDecoration(newMAItemDecoration)
-
-        return newMAItemDecoration
     }
 
 }
