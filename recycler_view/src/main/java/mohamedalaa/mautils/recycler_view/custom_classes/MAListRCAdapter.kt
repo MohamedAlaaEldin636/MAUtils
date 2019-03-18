@@ -1,5 +1,7 @@
 package mohamedalaa.mautils.recycler_view.custom_classes
 
+import androidx.annotation.LayoutRes
+
 /**
  * Same as [MARCAdapter] but facilitates methods in it and even add more,
  * 1. [MARCAdapter.removeItemAt] is replaced with [removeItemAt] using [dataList],
@@ -10,13 +12,13 @@ package mohamedalaa.mautils.recycler_view.custom_classes
  * **Example of extending this class**
  * ```
  * class MyRecyclerViewAdapter(namesList: List<String>)
- *      : MAListRCAdapter<String>(R.layout.my_rc_item, namesList) {
+ *      : MAListRCAdapter<String>(namesList) {
  *
  *      override fun getLayoutRes(): Int
  *          = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) R.layout.my_rc_item else R.layout.my_rc_item_hz
  *
  *      override fun onBindViewHolder(itemView: View, position: Int) {
- *          itemView.rootView.setOnClickListener {
+ *          itemView.setOnClickListener {
  *              removeItemAt(position)
  *          }
  *      }
@@ -27,9 +29,12 @@ package mohamedalaa.mautils.recycler_view.custom_classes
  * // without coding any line of code.
  * myRecyclerViewAdapter.removeItemAt(index)
  * ```
+ *
+ * @param dataList list of items in the recycler view adapter.
+ * @param layoutRes better use this instead of [getLayoutRes] if you have single item type isa.
  */
-abstract class MAListRCAdapter<E>(dataList: List<E>)
-    : MARCAdapter() {
+abstract class MAListRCAdapter<E>(dataList: List<E>, @LayoutRes layoutRes: Int? = null)
+    : MARCAdapter(layoutRes) {
 
     private val _dataList: MutableList<E> = dataList.toMutableList()
 

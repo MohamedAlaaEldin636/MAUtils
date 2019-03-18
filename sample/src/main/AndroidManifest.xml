@@ -13,7 +13,7 @@
 
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".VisualTestActivity"
+        <activity android:name=".recycler_view.VisualTestActivity"
             android:theme="@style/AppThemeNoActionBar"/>
 
         <activity android:name=".MainActivity">

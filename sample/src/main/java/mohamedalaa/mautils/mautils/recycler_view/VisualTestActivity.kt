@@ -1,20 +1,18 @@
-package mohamedalaa.mautils.mautils
+package mohamedalaa.mautils.mautils.recycler_view
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_visual_test.*
-import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.core_android.dpToPx
 import mohamedalaa.mautils.core_android.toast
-import mohamedalaa.mautils.recycler_view.custom_classes.MAListRCAdapter
+import mohamedalaa.mautils.mautils.R
 import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
@@ -153,22 +151,6 @@ class VisualTestActivity : AppCompatActivity() {
         val namesList = List(60) { it.toString() }
         rcAdapterFakeNames = RCAdapterFakeNames(namesList, linearLayoutManager)
         recyclerView.adapter = rcAdapterFakeNames
-    }
-
-}
-
-class RCAdapterFakeNames(dataList: List<String>, var layoutManager: LinearLayoutManager)
-    : MAListRCAdapter<String>(dataList) {
-
-    override fun getLayoutRes(): Int
-        = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) R.layout.my_rc_item else R.layout.my_rc_item_hz
-
-    override fun onBindViewHolder(itemView: View, position: Int) {
-        itemView.textView.text = dataList[position]
-
-        itemView.setOnClickListener {
-            removeItemAt(position)
-        }
     }
 
 }

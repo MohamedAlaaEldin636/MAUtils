@@ -13,13 +13,28 @@ import androidx.recyclerview.widget.RecyclerView
  * ```
  * // ==> More Concise Approach
  * class MyRecyclerViewAdapter(private val namesList: List<String>)
- *      : MARCAdapter(R.layout.my_rc_item) {
+ *      : MARCAdapter() {
  *
  *      override fun getLayoutRes(): Int
  *          = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) R.layout.my_rc_item else R.layout.my_rc_item_hz
  *
  *      override fun onBindViewHolder(itemView: View, position: Int) {
- *          itemView.rootView.setOnClickListener {
+ *          itemView.setOnClickListener {
+ *              removeItemAt(position)
+ *          }
+ *      }
+ *
+ *      override fun getItemCount(): Int = namesList.size
+ *
+ * }
+ *
+ * // ==> Note if you have 1 item type layout resource then add it
+ * // in constructor instead (Alternative More Concise Approach)
+ * class MyRecyclerViewAdapter(private val namesList: List<String>)
+ *      : MARCAdapter(R.layout.my_rc_item) {
+ *
+ *      override fun onBindViewHolder(itemView: View, position: Int) {
+ *          itemView.setOnClickListener {
  *              removeItemAt(position)
  *          }
  *      }
@@ -54,10 +69,11 @@ import androidx.recyclerview.widget.RecyclerView
  * }
  * ```
  *
+ * @param layoutRes better use this instead of [getLayoutRes] if you have single item type isa.
+ *
  * @see MAListRCAdapter
  */
-// todo another instance using data binding isa as in onBind isa, think of interfaces as well isa.
-abstract class MARCAdapter : RecyclerView.Adapter<MARCAdapter.ViewHolder>() {
+abstract class MARCAdapter(@LayoutRes private val layoutRes: Int? = null) : RecyclerView.Adapter<MARCAdapter.ViewHolder>() {
 
     // ---- Abstract fun
 
@@ -66,7 +82,7 @@ abstract class MARCAdapter : RecyclerView.Adapter<MARCAdapter.ViewHolder>() {
      * so returning several layout resources will auto-change [getItemViewType] isa.
      */
     @LayoutRes
-    abstract fun getLayoutRes(): Int
+    open fun getLayoutRes(): Int = layoutRes ?: 0
 
     /**
      * Same as [onBindViewHolder] but provides [itemView] (Root view of item layout)

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import mohamedalaa.mautils.core_android.setMaxLength
+import mohamedalaa.mautils.mautils.recycler_view.VisualTestActivity
 import mohamedalaa.mautils.core_android.toast as toast1
 import mohamedalaa.mautils.mautils_open_source_licences.view.OpenSourceLicencesActivity
 
