@@ -12,7 +12,6 @@ import androidx.annotation.Px
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.core_kotlin.applyIf
 import mohamedalaa.mautils.recycler_view.new_test_1.extensions.*
 
 /**
@@ -39,7 +38,7 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
 
     internal val fullDimen = dividerDimenInPx.plus(additionalOffsetInPx)
 
-    private val paint = Paint().apply {
+    internal val paint = Paint().apply {
         color = dividerColor
         isAntiAlias = true
         style = Paint.Style.FILL
@@ -94,21 +93,65 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
         outRect.set(rect)
     }
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val layoutManager = parent.layoutManager as? GridLayoutManager ?: return
+    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        when (val layoutManager = parent.layoutManager) {
+            is GridLayoutManager -> {
+                val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
+                val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
 
-        val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
-        val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
+                val isHorizontal = layoutManager.orientation != LinearLayoutManager.VERTICAL
+                when {
+                    ignoreBorder && mergeOffsets -> if(isHorizontal) {
+                        //subItemOffsetIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
+                    }else {
+                        subOnDrawIgnoreBorderMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
 
-        for (position in firstVisible..lastVisible) {
-            val child = parent.getChildAt(position.minus(firstVisible)) ?: continue
-            val bounds = Rect()
-            layoutManager.getDecoratedBoundsWithMargins(child, bounds)
-            Log.e("OnDrawCheck", "position -> $position, width -> ${child.width}, height -> ${child.height}" +
-                "bounds -> $bounds --- ${Rect().apply { layoutManager.getDecoratedBoundsWithMargins(child, this) }}")
+                        // Last item draw check isa. todo
+                        if (layoutManager.itemCount/*.dec()*/.rem(layoutManager.spanCount) != 0
+                            && lastVisible == layoutManager.itemCount.dec()) {
+
+                            val child = parent.getChildAt(lastVisible.minus(firstVisible))
+
+                            val bounds = Rect()
+                            layoutManager.getDecoratedBoundsWithMargins(child, bounds)
+
+                            val top = bounds.bottom - child.height - fullDimen
+                            val left = parent.left
+
+                            val rect1 = Rect(left, top, parent.right, top.plus(fullDimen))
+                            val rect2 = Rect(
+                                bounds.right.minus(layoutManager.getRightDecorationWidth(child)),
+                                top.plus(fullDimen),
+                                bounds.right.minus(layoutManager.getRightDecorationWidth(child)).plus(fullDimen),
+                                top.plus(fullDimen).plus(child.height)
+                            )
+
+                            canvas.drawRect(rect1, paint)
+                            canvas.drawRect(rect2, paint)
+                        }
+                    }
+                    ignoreBorder -> if (isHorizontal) {
+                        //subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
+                    }else {
+                        //subItemOffsetIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
+                    }
+                    mergeOffsets -> if (isHorizontal) {
+                        //subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
+                    }else {
+                        //subItemOffsetNoIgnoreBorderMergeOffsetsVertical(layoutManager, position)
+                    }
+                    // Else both booleans are false isa.
+                    else -> if (isHorizontal) {
+                        //subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
+                    }else {
+                        //subItemOffsetNoIgnoreBorderNoMergeOffsetsVertical(layoutManager, position)
+                    }
+                }
+            }
+            is LinearLayoutManager -> {
+                // todo draw linear isa.
+            }
         }
-
-        super.onDraw(c, parent, state)
     }
 
     // ---- Public fun

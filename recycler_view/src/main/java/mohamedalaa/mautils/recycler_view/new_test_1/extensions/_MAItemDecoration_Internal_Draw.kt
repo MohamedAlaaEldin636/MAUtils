@@ -3,65 +3,60 @@ package mohamedalaa.mautils.recycler_view.new_test_1.extensions
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.Rect
-import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.recycler_view.custom_classes.RCItemDecoration
-import mohamedalaa.mautils.recycler_view.extensions.internal.addRightPath
-import mohamedalaa.mautils.recycler_view.extensions.internal.addTopPath
-import mohamedalaa.mautils.recycler_view.extensions.internal.addTopRightCornerPath
+import mohamedalaa.mautils.recycler_view.extensions.isBorderBottom
+import mohamedalaa.mautils.recycler_view.extensions.isBorderLeft
 import mohamedalaa.mautils.recycler_view.extensions.isBorderRight
 import mohamedalaa.mautils.recycler_view.extensions.isBorderTop
 import mohamedalaa.mautils.recycler_view.new_test_1.MAItemDecoration
 
-// todo wait child.width is fine but gaps are NOT
-internal fun MAItemDecoration.subDrawGridIgnoreBorderAndMergeOffsetsVertical(
+fun MAItemDecoration.subOnDrawIgnoreBorderMergeOffsetsVertical(
     canvas: Canvas,
     parent: RecyclerView,
     layoutManager: GridLayoutManager,
     firstVisible: Int,
     lastVisible: Int
 ) {
-    /** Number of offsets counted horizontally isa */
-    val horzNumberOfGaps = layoutManager.spanCount.dec().apply { if (this == 0) return}
-    val horzTotalGapsDimen = fullDimen * horzNumberOfGaps
+    val list = mutableListOf<Path>()
 
-    // -- Left & Right -- //
-    val xCount = 2 // each x == 2y
-    val yCount = layoutManager.spanCount.minus(xCount).times(2)
-
-    val totalCountOfY = yCount.plus(xCount.times(2))
-
-    val yDistance = Math.round(horzTotalGapsDimen.toFloat().div(totalCountOfY.toFloat()))
-    val xDistance = yDistance.times(2)
-
-
-
-
-
-    /*val bounds = Rect()
     for (position in firstVisible..lastVisible) {
+        val child = parent.getChildAt(position.minus(firstVisible)) ?: continue
+        val bounds = Rect()
+        layoutManager.getDecoratedBoundsWithMargins(child, bounds)
+
         val isBorderTop = layoutManager.isBorderTop(position)
+        val isBorderBottom = layoutManager.isBorderBottom(position)
+        val isBorderLeft = layoutManager.isBorderLeft(position)
         val isBorderRight = layoutManager.isBorderRight(position)
 
-        val child = parent.getChildAt(position.minus(firstVisible)) ?: continue
-        layoutManager.getDecoratedBoundsWithMargins(child, bounds)
-        Log.e("Check2", "position -> $position, width -> ${child.width}")
-
-        val list = mutableListOf<Path>()
-
-        when {
-            isBorderTop -> addRightPath(list, child, bounds, layoutManager)
-            isBorderRight -> addTopPath(list, child, bounds, layoutManager)
-            else -> {
-                addRightPath(list, child, bounds, layoutManager)
-                addTopPath(list, child, bounds, layoutManager)
-                addTopRightCornerPath(list, child, bounds)
-            }
+        if (!isBorderTop) {
+            addTopPath(list, child, bounds, layoutManager)
         }
-
-        list.forEach {
-            canvas.drawPath(it, paint)
+        if (!isBorderBottom) {
+            addBottomPath(list, child, bounds, layoutManager)
         }
-    }*/
+        if (!isBorderRight) {
+            addRightPath(list, child, bounds, layoutManager)
+        }
+        if (!isBorderLeft) {
+            addLeftPath(list, child, bounds, layoutManager)
+        }
+        if (!isBorderTop && !isBorderRight) {
+            addTopRightCornerPath(list, child, bounds, layoutManager)
+        }
+        if (!isBorderTop && !isBorderLeft) {
+            addTopLeftCornerPath(list, child, bounds, layoutManager)
+        }
+        if (!isBorderBottom && !isBorderRight) {
+            addBottomRightCornerPath(list, child, bounds, layoutManager)
+        }
+        if (!isBorderBottom && !isBorderLeft) {
+            addBottomLeftCornerPath(list, child, bounds, layoutManager)
+        }
+    }
+
+    list.forEach {
+        canvas.drawPath(it, paint)
+    }
 }
