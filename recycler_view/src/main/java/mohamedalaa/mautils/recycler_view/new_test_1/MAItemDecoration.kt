@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.ColorInt
@@ -101,26 +100,18 @@ class MAItemDecoration(@ColorInt private var dividerColor: Int = Color.BLACK,
 
                 val isHorizontal = layoutManager.orientation != LinearLayoutManager.VERTICAL
                 when {
-                    ignoreBorder && mergeOffsets -> if(isHorizontal) {
-                        //subItemOffsetIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
-                    }else {
-                        subOnDrawIgnoreBorderMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
+                    ignoreBorder && mergeOffsets -> {
+                        subOnDrawIgnoreBorderMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
                     }
-                    ignoreBorder -> if (isHorizontal) {
-                        //subItemOffsetIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
-                    }else {
-                        subOnDrawIgnoreBorderNoMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
+                    ignoreBorder -> {
+                        subOnDrawIgnoreBorderNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
                     }
-                    mergeOffsets -> if (isHorizontal) {
-                        //subItemOffsetNoIgnoreBorderMergeOffsetsHorizontal(layoutManager, position)
-                    }else {
-                        subOnDrawNoIgnoreBorderMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
+                    mergeOffsets -> {
+                        subOnDrawNoIgnoreBorderMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
                     }
                     // Else both booleans are false isa.
-                    else -> if (isHorizontal) {
-                        //subItemOffsetNoIgnoreBorderNoMergeOffsetsHorizontal(layoutManager, position)
-                    }else {
-                        subOnDrawNoIgnoreBorderNoMergeOffsetsVertical(canvas, parent, layoutManager, firstVisible, lastVisible)
+                    else -> {
+                        subOnDrawNoIgnoreBorderNoMergeOffsets(canvas, parent, layoutManager, firstVisible, lastVisible)
                     }
                 }
             }

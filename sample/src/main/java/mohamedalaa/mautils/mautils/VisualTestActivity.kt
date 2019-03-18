@@ -160,7 +160,7 @@ class VisualTestActivity : AppCompatActivity() {
 }
 
 class RCAdapterFakeNames(dataList: List<String>, recyclerView: RecyclerView)
-    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item/*_hz*//*_hz todo */, dataList, recyclerView) {
+    : ListRecyclerViewAdapter<String>(R.layout.my_rc_item_hz/*_hz*//*_hz todo */, dataList, recyclerView) {
 
     // called after orientation el7
     /*override fun getItemViewType(position: Int): Int {
