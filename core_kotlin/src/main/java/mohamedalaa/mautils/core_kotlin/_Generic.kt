@@ -44,3 +44,9 @@ inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T {
         this
     }
 }
+
+/** @return true if any of [others] is == `receiver` isa. */
+fun <T> T.equalAny(vararg others: T): Boolean = this in others
+
+/** @return true if each object in [others] is == `receiver` isa. */
+fun <T> T.equalAll(vararg others: T): Boolean = others.all { it == this }

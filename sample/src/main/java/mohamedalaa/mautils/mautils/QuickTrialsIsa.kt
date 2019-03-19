@@ -9,8 +9,8 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import mohamedalaa.mautils.core_kotlin.*
 import java.lang.reflect.ParameterizedType
-import mohamedalaa.mautils.core_kotlin.contains
 
 abstract class CheckTypeParam<E> {
 
@@ -84,8 +84,38 @@ abstract class DataBindingRCAdapter<VDB: ViewDataBinding>(@LayoutRes private val
 }
 
 
-private fun f1(charSequence1: CharSequence?, string1: String?) {
+private fun f1(charSequence1: CharSequence?, string1: String?, list1: List<CharSequence>) {
     if (charSequence1 in string1) {
         //ProgressBar
     }
+
+    val charSequence = list1[8]
+    //val string = list1.firstIsInstance<String>()
+    val string = list1
+
+    //showcasing()
+
+
+}
+
+private fun showcasing(list: List<CharSequence>) {
+    val string1 = list.firstIsInstance<String>()
+    val string2 = list.first { it is String } as String
+
+    val a: Float? = 3f
+    //a.toStringOrNull()
+}
+
+// if Need To Return Unit Due To Interface Signature given int as param
+private fun fun1(int: Int?) = int.performIfNotNull {
+    // Your code here
+}
+
+// Instead of -> 2 curly braces
+private fun fun2(int: Int?) {
+    int?.apply {
+        // Your code here
+    }
+
+    listOf(3, 4, 5).pairedIteration()
 }

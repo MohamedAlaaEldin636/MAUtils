@@ -2,9 +2,6 @@
 
 package mohamedalaa.mautils.core_kotlin
 
-/** @return next element in `receiver` or null if no more elements in `receiver`. */
-fun <T> Iterator<T>.safeNext(): T? = if (hasNext()) next() else null
-
 /**
  * Same as [Iterable.sumByDouble] but for [Float].
  *
@@ -111,7 +108,7 @@ fun <T> Iterable<T>.allIndicesOf(element: T): List<Int> = mapIndexedNotNull { in
  *
  * @see Iterable.zipWithNext
  */
-inline fun <reified T> Iterable<T>.pairedIteration(): List<Pair<T, T?>> {
+fun <T> Iterable<T>.pairedIteration(): List<Pair<T, T?>> {
     val pairOfLists = partitionIndexed { index, _ -> index.isEven() }
 
     return pairOfLists.first.zipFullReceiver(pairOfLists.second)
