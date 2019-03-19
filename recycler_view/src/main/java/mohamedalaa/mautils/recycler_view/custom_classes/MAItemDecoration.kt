@@ -56,7 +56,7 @@ class MAItemDecoration(@ColorInt dividerColor: Int = Color.BLACK,
         val layoutManager = parent.layoutManager
 
         val rect: Rect = when {
-            adapter == null|| (singleItemDivider.not() && adapter.itemCount < 2) -> Rect()
+            adapter == null || (singleItemDivider.not() && adapter.itemCount < 2) -> Rect()
             layoutManager is LinearLayoutManager -> {
                 val isHorizontal = layoutManager.orientation != LinearLayoutManager.VERTICAL
                 when {
@@ -90,8 +90,11 @@ class MAItemDecoration(@ColorInt dividerColor: Int = Color.BLACK,
     }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        when (val layoutManager = parent.layoutManager) {
-            is LinearLayoutManager -> {
+        val adapter = parent.adapter
+        val layoutManager = parent.layoutManager
+        when {
+            adapter == null || (singleItemDivider.not() && adapter.itemCount < 2) -> Rect()
+            layoutManager is LinearLayoutManager -> {
                 val firstVisible = layoutManager.findFirstVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
                 val lastVisible = layoutManager.findLastVisibleItemPosition().apply { if (this == RecyclerView.NO_POSITION) return }
 

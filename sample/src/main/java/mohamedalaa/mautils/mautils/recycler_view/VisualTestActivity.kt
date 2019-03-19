@@ -114,7 +114,6 @@ class VisualTestActivity : AppCompatActivity() {
 
                         rcAdapterFakeNames.changeData(list)
 
-                        maItemDecoration.singleItemDivider = maItemDecoration.singleItemDivider.not()
                         maItemDecoration.dividerColor = Color.BLUE
                         recyclerView.invalidateItemDecorations()
                     }
@@ -127,6 +126,12 @@ class VisualTestActivity : AppCompatActivity() {
                         val layoutManager = GridLayoutManager(this, 5)
                         recyclerView.layoutManager = layoutManager
                         rcAdapterFakeNames.layoutManager = layoutManager
+                    }
+                    getString(R.string.toggle_single_item) -> {
+                        maItemDecoration.singleItemDivider = maItemDecoration.singleItemDivider.not().apply {
+                            toast("Single item divider -> $this")
+                        }
+                        recyclerView.invalidateItemDecorations()
                     }
                 }
             }

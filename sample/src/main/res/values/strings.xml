@@ -9,4 +9,5 @@
     <string name="linear_layout_manager">Linear Layout Manager</string>
     <string name="track_change">Track Change</string>
     <string name="screen_rotation">Screen Rotation</string>
+    <string name="toggle_single_item">Toggle Single Item</string>
 </resources>
