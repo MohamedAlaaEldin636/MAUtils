@@ -60,6 +60,7 @@ fun Long.isOdd(): Boolean = isEven().not()
  */
 fun Double.isOdd(): Boolean = isEven().not()
 
+/** @return true if `receiver` number is positive, otherwise false. */
 fun Number.isPositive(): Boolean {
     return when (this) {
         is Int -> this >= 0
@@ -72,6 +73,7 @@ fun Number.isPositive(): Boolean {
     }
 }
 
+/** @return true if `receiver` number is negative, otherwise false. */
 fun Number.isNegative(): Boolean = isPositive().not()
 
 /** rounds the division result so 3.divRound() == 2 instead of 3.div(2) == 1 as 1.5 is rounded to 2 */

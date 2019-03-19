@@ -1,4 +1,3 @@
-@file:JvmMultifileClass
 @file:JvmName("ListUtils")
 
 package mohamedalaa.mautils.core_kotlin

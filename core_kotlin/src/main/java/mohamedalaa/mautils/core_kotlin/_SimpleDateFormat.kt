@@ -12,5 +12,6 @@ import java.util.*
  *
  * @see SimpleDateFormat.format
  */
+@JvmOverloads
 fun Long.format(pattern: String, local: Locale = Locale.getDefault()): String
     = SimpleDateFormat(pattern, local).format(Date(this))

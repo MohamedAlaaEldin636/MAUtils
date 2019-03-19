@@ -1,6 +1,7 @@
 package mohamedalaa.mautils.mautils
 
 import androidx.core.os.bundleOf
+import java.util.*
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/18/2019.
@@ -29,4 +30,14 @@ private fun z1(any: Any, ss: String) {
 
     val strs = listOf("a", "bc", "def")
     println(strs.map(String::length)) // [1,2,3]
+}
+
+private fun z1(iterable: Iterable<*>, queue: Queue<*>) {
+    iterable.count()
+
+    //queue.offer()
+    //queue.peek()
+    //queue.poll()
+
+    //listOf(3).indexof
 }

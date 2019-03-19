@@ -4,11 +4,13 @@ import android.content.Context
 import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.reflect.ParameterizedType
+import mohamedalaa.mautils.core_kotlin.contains
 
 abstract class CheckTypeParam<E> {
 
@@ -79,4 +81,11 @@ abstract class DataBindingRCAdapter<VDB: ViewDataBinding>(@LayoutRes private val
 
     class ViewHolder<VDB: ViewDataBinding>(val binding: VDB): RecyclerView.ViewHolder(binding.root)
 
+}
+
+
+private fun f1(charSequence1: CharSequence?, string1: String?) {
+    if (charSequence1 in string1) {
+        //ProgressBar
+    }
 }

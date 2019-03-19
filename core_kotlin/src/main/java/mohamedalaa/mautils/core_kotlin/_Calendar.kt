@@ -1,3 +1,5 @@
+@file:JvmName("CalendarUtils")
+
 package mohamedalaa.mautils.core_kotlin
 
 import java.util.*
