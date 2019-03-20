@@ -112,22 +112,6 @@ fun View.performClickWithPressed(initialDelayInMillis: Long = 0L, pressedEffectD
 }
 
 /**
- * Invokes [block] inside [View.post], however `this` view will be [block]'s receiver isa,
- * and if [addHandlerPost] then [View.post] will be wrapped inside [Handler.post] isa.
- */
-inline fun <V: View> V.postWithReceiver(addHandlerPost: Boolean = false, crossinline block: V.() -> Unit) {
-    post {
-        if (addHandlerPost) {
-            Handler().post {
-                block()
-            }
-        }else {
-            block()
-        }
-    }
-}
-
-/**
  * Animate [View.getHeight], and [View.getWidth] with given [durationInMillis] and [listener] isa.
  *
  * **Note**
@@ -191,4 +175,22 @@ fun View.setBackgroundTint(@ColorInt color: Int) {
     val drawable = DrawableCompat.wrap(background ?: return) ?: return
     backgroundCompat = drawable
     DrawableCompat.setTint(drawable, color)
+}
+
+// ---- Generic type parameters
+
+/**
+ * Invokes [block] inside [View.post], however `this` view will be [block]'s receiver isa,
+ * and if [addHandlerPost] then [View.post] will be wrapped inside [Handler.post] isa.
+ */
+inline fun <V: View> V.postWithReceiver(addHandlerPost: Boolean = false, crossinline block: V.() -> Unit) {
+    post {
+        if (addHandlerPost) {
+            Handler().post {
+                block()
+            }
+        }else {
+            block()
+        }
+    }
 }

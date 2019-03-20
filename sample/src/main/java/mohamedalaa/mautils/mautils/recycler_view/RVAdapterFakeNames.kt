@@ -5,12 +5,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.mautils.R
-import mohamedalaa.mautils.recycler_view.custom_classes.MAListRCAdapter
-import mohamedalaa.mautils.recycler_view_data_binding.MAListRCAdapterDB
-import mohamedalaa.mautils.recycler_view_data_binding.MAListRCAdapterMultipleDB
+import mohamedalaa.mautils.recycler_view.custom_classes.MAListRVAdapter
+import mohamedalaa.mautils.recycler_view.custom_classes.MAListRVAdapterDB
+import mohamedalaa.mautils.recycler_view.custom_classes.MAListRVAdapterMultiDB
 
-class RCAdapterFakeNames(dataList: List<String>, var layoutManager: LinearLayoutManager)
-    : MAListRCAdapter<String>(dataList) {
+class RVAdapterFakeNames(dataList: List<String>, var layoutManager: LinearLayoutManager)
+    : MAListRVAdapter<String>(dataList) {
 
     override fun getLayoutRes(): Int
         = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) R.layout.my_rc_item else R.layout.my_rc_item_hz
@@ -25,8 +25,8 @@ class RCAdapterFakeNames(dataList: List<String>, var layoutManager: LinearLayout
 
 }
 
-class RCAdapterFakeNamesDB22(dataList: List<String>, var layoutManager: LinearLayoutManager)
-    : MAListRCAdapterDB<String, ViewDataBinding>(dataList) {
+class RVAdapterFakeNamesDB22(dataList: List<String>, var layoutManager: LinearLayoutManager)
+    : MAListRVAdapterDB<String, ViewDataBinding>(dataList, R.layout.my_rc_item) {
 
     override fun onBindViewHolder(binding: ViewDataBinding, position: Int) {
 
@@ -34,8 +34,8 @@ class RCAdapterFakeNamesDB22(dataList: List<String>, var layoutManager: LinearLa
 
 }
 
-class RCAdapterFakeNamesDB(dataList: List<String>, var layoutManager: LinearLayoutManager)
-    : MAListRCAdapterMultipleDB<String>(dataList) {
+class RVAdapterFakeNamesDB(dataList: List<String>, var layoutManager: LinearLayoutManager)
+    : MAListRVAdapterMultiDB<String>(dataList) {
 
     override fun getLayoutRes(): Int {
         return super.getLayoutRes()

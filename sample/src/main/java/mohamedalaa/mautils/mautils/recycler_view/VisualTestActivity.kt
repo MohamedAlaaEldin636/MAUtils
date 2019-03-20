@@ -17,7 +17,7 @@ import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
 
-    private lateinit var rcAdapterFakeNames: RCAdapterFakeNames
+    private lateinit var rcAdapterFakeNames: RVAdapterFakeNames
 
     private lateinit var maItemDecoration: MAItemDecoration
 
@@ -154,7 +154,7 @@ class VisualTestActivity : AppCompatActivity() {
             RCDefaultItemAnimator(maItemDecoration)*/
 
         val namesList = List(60) { it.toString() }
-        rcAdapterFakeNames = RCAdapterFakeNames(namesList, linearLayoutManager)
+        rcAdapterFakeNames = RVAdapterFakeNames(namesList, linearLayoutManager)
         recyclerView.adapter = rcAdapterFakeNames
     }
 

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
+import mohamedalaa.mautils.recycler_view.custom_classes.internal.MABaseRVAdapter
 
 /**
  * **Usage**
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
  * ```
  * // ==> More Concise Approach
  * class MyRecyclerViewAdapter(private val namesList: List<String>)
- *      : MARCAdapter() {
+ *      : MARVAdapter() {
  *
  *      override fun getLayoutRes(): Int
  *          = if (layoutManager.orientation == LinearLayoutManager.VERTICAL) R.layout.my_rc_item else R.layout.my_rc_item_hz
@@ -31,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
  * // ==> Note if you have 1 item type layout resource then add it
  * // in constructor instead (Alternative More Concise Approach)
  * class MyRecyclerViewAdapter(private val namesList: List<String>)
- *      : MARCAdapter(R.layout.my_rc_item) {
+ *      : MARVAdapter(R.layout.my_rc_item) {
  *
  *      override fun onBindViewHolder(itemView: View, position: Int) {
  *          itemView.setOnClickListener {
@@ -68,25 +69,22 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * }
  * ```
+ * - [getLayoutRes] is tied to [RecyclerView.Adapter.getItemViewType] so you don't need to worry
+ * about item types, just make your condition checking in [getLayoutRes] and it will auto
+ * generate item view types isa.
  *
  * @param layoutRes better use this instead of [getLayoutRes] if you have single item type isa.
  *
- * @see MAListRCAdapter
+ * @see MAListRVAdapter
  */
-abstract class MARCAdapter(@LayoutRes private val layoutRes: Int? = null) : RecyclerView.Adapter<MARCAdapter.ViewHolder>() {
+abstract class MARVAdapter(@LayoutRes layoutRes: Int? = null)
+    : MABaseRVAdapter(layoutRes) {
 
     // ---- Abstract fun
 
     /**
-     * @return layout resource for the item layout, Note this is tied to [getItemViewType]
-     * so returning several layout resources will auto-change [getItemViewType] isa.
-     */
-    @LayoutRes
-    open fun getLayoutRes(): Int = layoutRes ?: 0
-
-    /**
      * Same as [onBindViewHolder] but provides [itemView] (Root view of item layout)
-     * as param instead of [ViewHolder] for quick access to [ViewHolder.itemView] isa.
+     * as param instead of [MABaseRVAdapter.ViewHolder] for quick access to [MABaseRVAdapter.ViewHolder.itemView] isa.
      *
      * **Note**
      *
@@ -105,50 +103,7 @@ abstract class MARCAdapter(@LayoutRes private val layoutRes: Int? = null) : Recy
         return ViewHolder(view)
     }
 
-    final override fun onBindViewHolder(holder: ViewHolder, position: Int)
+    final override fun internalOnBindViewHolder(holder: ViewHolder, position: Int)
         = onBindViewHolder(holder.itemView, position)
-
-    final override fun getItemViewType(position: Int): Int {
-        return getLayoutRes()
-    }
-
-    // ---- Public fun
-
-    /**
-     * Changes whole data by executing [changeAction] then calling [notifyDataSetChanged] afterwards isa.
-     * */
-    fun changeData(changeAction: () -> Unit) {
-        changeAction()
-
-        notifyDataSetChanged()
-    }
-
-    /**
-     * Uses [notifyItemRemoved] so animation can be done isa.
-     *
-     * @param removeAction fun that changes data which affects [getItemCount] isa.
-     */
-    fun removeItemAt(position: Int, removeAction: (Int) -> Unit) {
-        removeAction(position)
-        notifyItemRemoved(position)
-
-        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
-    }
-
-    /**
-     * call [insertAction] with [position] then call [notifyItemInserted] for animation isa.
-     *
-     * @param insertAction fun that changes data which affects [getItemCount] isa.
-     */
-    fun insertItemAt(position: Int, insertAction: (Int) -> Unit) {
-        insertAction(position)
-        notifyItemInserted(position)
-
-        notifyItemRangeChanged(0, itemCount, java.lang.Boolean.FALSE)
-    }
-
-    // ----- View Holder
-
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
 }

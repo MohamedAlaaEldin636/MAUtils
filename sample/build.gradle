@@ -54,7 +54,6 @@ dependencies {
     implementation project(':mautils_gson')
     implementation project(':lifecycle_extensions')
     implementation project(':recycler_view')
-    implementation project(':recycler_view_data_binding')
 
     // Anko todo delLater isa.
     //implementation "org.jetbrains.anko:anko-commons:$anko_version"
