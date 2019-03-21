@@ -1,6 +1,6 @@
 @file:JvmName("TransitionSetUtils")
 
-package mohamedalaa.mautils.core_android_support_packages
+package mohamedalaa.mautils.material_design
 
 import androidx.transition.Transition
 import androidx.transition.TransitionSet

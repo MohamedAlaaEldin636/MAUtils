@@ -50,7 +50,7 @@ dependencies {
     implementation project(':mautils_open_source_licences')
     implementation project(':core_kotlin')
     implementation project(':core_android')
-    implementation project(':core_android_support_packages')
+    implementation project(':material_design')
     implementation project(':mautils_gson')
     implementation project(':lifecycle_extensions')
     implementation project(':recycler_view')

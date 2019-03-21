@@ -1,6 +1,6 @@
 @file:JvmName("TextInputLayoutUtils")
 
-package mohamedalaa.mautils.core_android_support_packages
+package mohamedalaa.mautils.material_design
 
 import android.content.res.ColorStateList
 import android.view.View

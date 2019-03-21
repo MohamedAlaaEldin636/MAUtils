@@ -1,3 +1,4 @@
+@file:JvmMultifileClass
 @file:JvmName("ContextUtils")
 
 package mohamedalaa.mautils.core_android
@@ -11,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
+
+// ==> Layout
 
 /** Layout inflater from `this context`, used [LayoutInflater.from] */
 val Context.layoutInflater: LayoutInflater
@@ -32,6 +35,8 @@ fun Context.inflateLayout(@LayoutRes layoutRes: Int,
     return layoutInflater.inflate(layoutRes, parent, attachToRoot)
 }
 
+// ==> Color
+
 /** @return color from res color with compatibility in consideration. */
 @ColorInt
 fun Context.getColorFromRes(@ColorRes res: Int): Int = ContextCompat.getColor(this, res)
@@ -44,6 +49,8 @@ fun Context.getColorFromAttrRes(@AttrRes attrRes: Int): Int {
 
     return ContextCompat.getColor(this, typedValue.resourceId)
 }
+
+// ==> Drawable
 
 /** @return Drawable object from drawable res */
 fun Context.getDrawableFromResOrNull(@DrawableRes drawableRes: Int): Drawable? {
@@ -58,6 +65,8 @@ fun Context.getDrawableFromResOrNull(@DrawableRes drawableRes: Int): Drawable? {
 fun Context.getDrawableFromRes(@DrawableRes drawableRes: Int): Drawable
         = getDrawableFromResOrNull(drawableRes) ?: throw RuntimeException("invalid drawable res provided")
 
+// ==> Dimen
+
 /** @return converted dimen from dp (density-independent pixels) to px (pixels) */
 fun Context.dpToPx(dp: Int): Float = TypedValue.applyDimension(
     TypedValue.COMPLEX_UNIT_DIP,
@@ -69,20 +78,3 @@ fun Context.spToPx(sp: Int): Float = TypedValue.applyDimension(
     TypedValue.COMPLEX_UNIT_SP,
     sp.toFloat(),
     resources.displayMetrics)
-
-/**
- * Shows toast message with [duration], after making any modifications in the [modifications] fun isa.
- *
- * @param msg Message to show the user in the [Toast]
- * @param duration duration of the msg, Either [Toast.LENGTH_SHORT] OR [Toast.LENGTH_LONG], default is [Toast.LENGTH_SHORT] isa.
- * @param modifications any modifications to the [Toast] object before showing, Ex. changing background Using [Toast.getView], default is `null`.
- */
-@JvmOverloads
-fun Context.toast(msg: String, duration: Int = Toast.LENGTH_SHORT, modifications: ((Toast) -> Unit)? = null) {
-    Toast.makeText(this, msg, duration).apply {
-        // User modifications
-        modifications?.invoke(this)
-
-        show()
-    }
-}

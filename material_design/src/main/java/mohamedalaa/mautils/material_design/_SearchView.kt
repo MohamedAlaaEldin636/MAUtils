@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.core_android_support_packages
+package mohamedalaa.mautils.material_design
 
 import android.widget.EditText
 import android.widget.ImageView
