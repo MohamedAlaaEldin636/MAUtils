@@ -1,12 +1,9 @@
-@file:JvmMultifileClass
 @file:JvmName("ContextUtils")
 
 package mohamedalaa.mautils.core_android
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -22,12 +19,17 @@ val Context.layoutInflater: LayoutInflater
 /**
  * Inflates a layout from res
  *
+ * @param parent provide [ViewGroup.LayoutParams] to the returned root view, default is `null`
+ * @param attachToRoot if true then the returned view will be attached to [parent] if not `null`,
+ * default is false isa.
+ *
  * @return rootView in the provided [layoutRes] isa.
  */
+@JvmOverloads
 fun Context.inflateLayout(@LayoutRes layoutRes: Int,
-                          viewGroup: ViewGroup? = null,
+                          parent: ViewGroup? = null,
                           attachToRoot: Boolean = false): View {
-    return layoutInflater.inflate(layoutRes, viewGroup, attachToRoot)
+    return layoutInflater.inflate(layoutRes, parent, attachToRoot)
 }
 
 /** @return color from res color with compatibility in consideration. */
@@ -72,9 +74,10 @@ fun Context.spToPx(sp: Int): Float = TypedValue.applyDimension(
  * Shows toast message with [duration], after making any modifications in the [modifications] fun isa.
  *
  * @param msg Message to show the user in the [Toast]
- * @param duration duration of the msg, Either [Toast.LENGTH_SHORT] OR [Toast.LENGTH_LONG] isa.
- * @param modifications any modifications to the [Toast] object before showing, Ex. changing background Using [Toast.getView].
+ * @param duration duration of the msg, Either [Toast.LENGTH_SHORT] OR [Toast.LENGTH_LONG], default is [Toast.LENGTH_SHORT] isa.
+ * @param modifications any modifications to the [Toast] object before showing, Ex. changing background Using [Toast.getView], default is `null`.
  */
+@JvmOverloads
 fun Context.toast(msg: String, duration: Int = Toast.LENGTH_SHORT, modifications: ((Toast) -> Unit)? = null) {
     Toast.makeText(this, msg, duration).apply {
         // User modifications
@@ -82,28 +85,4 @@ fun Context.toast(msg: String, duration: Int = Toast.LENGTH_SHORT, modifications
 
         show()
     }
-}
-
-/**
- * Using [Context.startActivity] with given [url] to launch a browser isa.
- *
- * @param url web link url to launch isa.
- * @param showToastOnFailure if true a toast msg
- * [R.string.you_do_not_have_application_that_can_open_web_links] will be shown isa.
- */
-fun Context.launchWebLink(url: String, showToastOnFailure: Boolean = true, createIntentChooser: Boolean = false): Boolean {
-    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-    val canHandleIntent = webIntent.resolveActivity(packageManager) != null
-    if (canHandleIntent) {
-        if (createIntentChooser) {
-            startActivity(Intent.createChooser(webIntent, getString(R.string.open_web_link)))
-        }else {
-            startActivity(webIntent)
-        }
-    }else if (showToastOnFailure) {
-        toast(getString(R.string.you_do_not_have_application_that_can_open_web_links), Toast.LENGTH_SHORT)
-    }
-
-    return canHandleIntent
 }

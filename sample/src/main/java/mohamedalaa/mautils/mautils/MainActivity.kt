@@ -4,12 +4,48 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
+import mohamedalaa.mautils.core_android.addValues
+import mohamedalaa.mautils.core_android.getKGetterBundle
 import mohamedalaa.mautils.core_android.setMaxLength
 import mohamedalaa.mautils.mautils.recycler_view.VisualTestActivity
 import mohamedalaa.mautils.core_android.toast as toast1
 import mohamedalaa.mautils.mautils_open_source_licences.view.OpenSourceLicencesActivity
 
 class MainActivity : AppCompatActivity() {
+
+    /*var intVal: Int
+    var stringVal: String
+    var doubleVal: Double
+    var floatArray: FloatArray
+
+    // Add all variables to Bundle immediately instead of creating keys for it.
+    // add any objects that is supported by Bundle
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.apply {
+            addValues(
+                intVal,
+                stringVal,
+                doubleVal,
+                floatArray
+            )
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    // But when you retrieve it only limitation is
+    // it MUST be retrieved in same order
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // ...
+        savedInstanceState?.apply {
+            val getterBundle = getKGetterBundle()
+
+            intVal = getterBundle.get()
+            stringVal = getterBundle.getOrNull() ?: "fallback"
+            doubleVal = getterBundle.get()
+            floatArray = getterBundle.get()
+        }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

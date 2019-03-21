@@ -1,5 +1,9 @@
 package mohamedalaa.mautils.mautils;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.view.animation.Animation;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -7,6 +11,9 @@ import kotlin.Pair;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
+import mohamedalaa.mautils.core_android.AnimatorSetUtils;
+import mohamedalaa.mautils.core_android.ColorUtils;
+import mohamedalaa.mautils.core_android.MAAnimatorAnimatorListener;
 import mohamedalaa.mautils.core_kotlin.CalendarUtils;
 import mohamedalaa.mautils.core_kotlin.CollectionsUtils;
 import mohamedalaa.mautils.core_kotlin.GenericUtils;
@@ -66,6 +73,31 @@ public class JavaQuickTrialIsa {
                 isMatched = false;
                 break;
         }
+
+    }
+
+    private void f111(AnimatorSet animatorSet, final Animator a1) {
+        AnimatorSetUtils.addListenerMA(animatorSet, maAnimatorAnimatorListener -> {
+            maAnimatorAnimatorListener.onAnimationStart(maAnimatorAnimatorListener, animator -> {
+                //
+
+                return null;
+            });
+
+            maAnimatorAnimatorListener.onAnimationCancel(maAnimatorAnimatorListener, animator -> {
+                // animator.someThing()
+
+                return null;
+            });
+
+            return null;
+        });
+    }
+
+    private void ff1(int color) {
+        // Add alpha to color so result is same color but with 50% transparency
+        color = ColorUtils.addColorAlpha(color, 0.5f);
+
     }
 
 }

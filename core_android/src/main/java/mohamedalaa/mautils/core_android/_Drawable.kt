@@ -10,8 +10,9 @@ import androidx.annotation.ColorInt
 /**
  * Set tint for `receiver` drawable isa, and if `receiver` is null nothing will happen isa.
  *
- * @param mutate if you want to make drawable mutable before applying [Drawable.setColorFilter] isa.
+ * @param mutate if you want to make drawable mutable before applying [Drawable.setColorFilter], default is false isa.
  */
+@JvmOverloads
 fun Drawable?.tint(@ColorInt color: Int, mutate: Boolean = false) {
     this?.apply {
         if (mutate) {

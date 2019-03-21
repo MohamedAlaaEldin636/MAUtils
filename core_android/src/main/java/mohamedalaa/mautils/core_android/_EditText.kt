@@ -12,6 +12,7 @@ import android.widget.EditText
  * @param maxLength maxLength required, Ex. if == 1, then only 1 char can be typed isa.
  * @param overrideOtherFilters if true a new array is used for [EditText.setFilters] isa.
  */
+@JvmOverloads
 fun EditText.setMaxLength(maxLength: Int, overrideOtherFilters: Boolean = false) {
     val listOfFilters: MutableList<InputFilter> = if (overrideOtherFilters) {
         mutableListOf()
@@ -30,6 +31,7 @@ fun EditText.setMaxLength(maxLength: Int, overrideOtherFilters: Boolean = false)
  * @param handlerExecution performs the action after [Handler.post], and if [postExecution] is true
  * then action is performed after [Handler.post] after [EditText.post] isa.
  */
+@JvmOverloads
 fun EditText.setSelectionToLastChar(postExecution: Boolean = false, handlerExecution: Boolean = false) {
     val block: EditText.() -> Unit = { setSelection(this.text?.length ?: 0) }
 

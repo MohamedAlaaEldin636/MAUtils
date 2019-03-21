@@ -1,5 +1,6 @@
 package mohamedalaa.mautils.mautils
 
+import android.animation.AnimatorSet
 import android.content.Context
 import android.os.AsyncTask
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import mohamedalaa.mautils.core_android.addColorAlpha
+import mohamedalaa.mautils.core_android.addListenerMA
 import mohamedalaa.mautils.core_kotlin.*
 import java.lang.reflect.ParameterizedType
 
@@ -32,6 +35,20 @@ abstract class CheckTypeParam<E> {
         javaClass.superclass*/
         // new QuickViewModel<>(this) msln isa.
         // but what if viewmodel has type param. ... kda lazm gson approach isa.
+    }
+
+    private fun f111(animatorSet: AnimatorSet) {
+        animatorSet.addListenerMA {
+            onAnimationCancel {
+
+            }
+        }
+    }
+
+    var color = 9
+    private fun ff1() {
+        // Add alpha to color so result is same color but with 50% transparency
+        color = color.addColorAlpha(0.5f)
     }
 
 }

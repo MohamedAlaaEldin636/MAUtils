@@ -9,13 +9,13 @@ import android.util.SparseArray
 import androidx.core.os.bundleOf
 import java.io.Serializable
 
-/**
- * @return true if `receiver` is null or isEmpty
- */
+/** @return true if `receiver` is null or isEmpty */
 fun Bundle?.isNullOrEmpty(): Boolean = this == null || this.isEmpty
 
+/** @return [T] instance corresponding to given [key] after being casted or null if not found isa. */
 inline fun <reified T> Bundle?.getOrNull(key: String?): T? = this?.get(key) as? T
 
+/** @return [T] instance corresponding to given [key] after being casted or throws [RuntimeException] if not found isa. */
 inline fun <reified T> Bundle?.get(key: String?): T = getOrNull<T>(key)
     ?: throw RuntimeException("Cannot get ${T::class}, from key == $key isa.")
 
@@ -136,10 +136,11 @@ fun Bundle.addValues(vararg values: Any?) {
  *
  * 2- No need to create keys for insertion and retrieval of values, but must be in order when retrieving it isa.
  *
- * **More VIP Info***
+ * **More VIP Info**
  *
- * 1- Use buildBundleGson of mautils_gson module to support custom classes, which can be
- * serialized/deserialized using gson as well isa.
+ * 1- Use buildBundleGson of mautils_gson module to support **custom classes** as well,
+ *
+ * which can be serialized/deserialized using gson as well isa.
  *
  * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
  *
@@ -148,15 +149,30 @@ fun Bundle.addValues(vararg values: Any?) {
 fun buildBundle(vararg values: Any?): Bundle
     = Bundle().apply { addValues(*values.map { it }.toTypedArray()) }
 
+/**
+ * Used by kotlin devs only, for same functionality for java devs see [KGetterBundle]
+ *
+ * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
+ */
 @JvmSynthetic
 fun Bundle.getKGetterBundle() = KGetterBundle(this)
 
+/**
+ * Used by java devs only, for same functionality for kotlin devs see [JGetterBundle]
+ *
+ * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
+ */
 fun Bundle.getJGetterBundle() = JGetterBundle(this)
 
 class JGetterBundle internal constructor(private val bundle: Bundle) {
 
     private var counter = 0
 
+    /**
+     * @return [T] instance after being casted or null if not found isa,
+     *
+     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     */
     @Suppress("UNCHECKED_CAST")
     fun <T> getOrNull(): T? {
         val key = counter.toString()
@@ -165,6 +181,11 @@ class JGetterBundle internal constructor(private val bundle: Bundle) {
         return bundle.get(key) as? T
     }
 
+    /**
+     * @return [T] instance after being casted or throws [RuntimeException] if not found isa,
+     *
+     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     */
     fun <T> get(): T
         = getOrNull() ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
 
@@ -175,6 +196,11 @@ class KGetterBundle internal constructor(@PublishedApi internal val bundle: Bund
     @PublishedApi
     internal var counter = 0
 
+    /**
+     * @return [T] instance after being casted or null if not found isa,
+     *
+     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     */
     inline fun <reified T> getOrNull(): T? {
         val key = counter.toString()
         counter++
@@ -182,6 +208,11 @@ class KGetterBundle internal constructor(@PublishedApi internal val bundle: Bund
         return bundle.get(key) as? T
     }
 
+    /**
+     * @return [T] instance after being casted or throws [RuntimeException] if not found isa,
+     *
+     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     */
     inline fun <reified T> get(): T
         = getOrNull() ?: throw RuntimeException("Cannot get ${T::class} from key `${counter.dec()}`")
 
