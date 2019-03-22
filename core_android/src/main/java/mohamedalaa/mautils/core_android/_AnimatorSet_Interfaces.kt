@@ -1,5 +1,3 @@
-@file:JvmName("AnimatorSetUtils")
-
 package mohamedalaa.mautils.core_android
 
 import android.animation.Animator
@@ -14,11 +12,12 @@ typealias Animator_AnimatorListener_Typealias = MAAnimatorAnimatorListener.() ->
 
 /**
  * More concise & idiomatic way for using more than 1 fun interface,
+ *
  * Now it is easier than before to add [Animator.AnimatorListener],
  *
  * 1- instead of being obligated to override all fun (while you need only 1 or two), use only what you need isa.
  *
- * 2- Using lambda directly instead of object: Anim...Listener isa.
+ * 2- Using lambda directly instead of object : Anim...Listener isa.
  *
  * See below Example [Animator.addListener]
  *
@@ -100,15 +99,4 @@ class MAAnimatorAnimatorListener(listener: Animator_AnimatorListener_Typealias?)
     infix fun MAAnimatorAnimatorListener.onAnimationRepeat(action: ((Animator?) -> Unit)?): MAAnimatorAnimatorListener
         = apply { _onAnimationRepeat = action }
 
-}
-
-/**
- * Using [listener] for [AnimatorSet.addListener] instead of regular [Animator.AnimatorListener],
- * for more concise & idiomatic coding isa.
- *
- * @see [MAAnimatorAnimatorListener]
- */
-fun AnimatorSet.addListenerMA(listener: Animator_AnimatorListener_Typealias?) {
-    val genListener = MAAnimatorAnimatorListener(listener)
-    addListener(genListener)
 }

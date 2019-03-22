@@ -1,3 +1,5 @@
+@file:JvmName("DataBindingUtils")
+
 package mohamedalaa.mautils.core_android
 
 import android.view.View

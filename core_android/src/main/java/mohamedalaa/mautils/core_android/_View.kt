@@ -21,7 +21,7 @@ import androidx.core.graphics.drawable.DrawableCompat
  */
 fun View.getRootX(): Float {
     var value = 0f
-    for (view in listOfParentViews()) {
+    for (view in listOfParentViews(true)) {
         value += view.x
     }
 
@@ -36,7 +36,7 @@ fun View.getRootX(): Float {
  */
 fun View.getRootY(): Float {
     var value = 0f
-    for (view in listOfParentViews()) {
+    for (view in listOfParentViews(true)) {
         value += view.y
     }
 
@@ -55,9 +55,12 @@ fun View.getRootCenterPointF(): PointF {
 }
 
 /**
+ * @param includeThisView if true then add `receiver` at index 0, in case it's needed in the list, default is false isa.
+ *
  * @return list containing all parents [ViewGroup]s, including `this` if [includeThisView] is true isa.
  */
-fun View.listOfParentViews(includeThisView: Boolean = true): MutableList<View> {
+@JvmOverloads
+fun View.listOfParentViews(includeThisView: Boolean = false): MutableList<View> {
     val listOfViews = mutableListOf<View>()
 
     var view: View? = this
@@ -86,6 +89,7 @@ fun View.listOfParentViews(includeThisView: Boolean = true): MutableList<View> {
  * @param initialDelayInMillis delay before performing [View.performClick] isa.
  * @param pressedEffectDurationInMillis duration where [View.isPressed] is kept true, after [View.performClick] isa.
  */
+@JvmOverloads
 fun View.performClickWithPressed(initialDelayInMillis: Long = 0L, pressedEffectDurationInMillis: Long = 250L) {
     val block = {
         performClick()
@@ -124,6 +128,7 @@ fun View.performClickWithPressed(initialDelayInMillis: Long = 0L, pressedEffectD
  * @param newHeight new Height to animate to, if null then only width is animated isa.
  * @param newWidth new Width to animate to, if null then only height is animated isa.
  */
+@JvmOverloads
 fun View.animHeightAndWidth(newHeight: Int?, newWidth: Int?, durationInMillis: Long = 250L, listener: Animator_AnimatorListener_Typealias? = null) {
     if (newHeight == null && newWidth == null) {
         return
@@ -162,6 +167,7 @@ fun View.animHeightAndWidth(newHeight: Int?, newWidth: Int?, durationInMillis: L
  * Easier approach than repeating checks of [Build.VERSION] to toggle between [View.setBackground]
  * & [View.setBackgroundDrawable]
  */
+@Suppress("DEPRECATION")
 var View.backgroundCompat: Drawable?
     get() = background
     set(value) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -183,6 +189,7 @@ fun View.setBackgroundTint(@ColorInt color: Int) {
  * Invokes [block] inside [View.post], however `this` view will be [block]'s receiver isa,
  * and if [addHandlerPost] then [View.post] will be wrapped inside [Handler.post] isa.
  */
+@JvmOverloads
 inline fun <V: View> V.postWithReceiver(addHandlerPost: Boolean = false, crossinline block: V.() -> Unit) {
     post {
         if (addHandlerPost) {

@@ -41,14 +41,3 @@ class MATextViewTextWatcher(listener: TextView_TextWatcher_Typealias?): TextWatc
         = apply { _afterTextChanged = action }
 
 }
-
-/**
- * Using [listener] for [TextView.addTextChangedListener] instead of regular approach,
- * for more concise & idiomatic coding isa.
- *
- * @see [MATextViewTextWatcher]
- */
-fun TextView.addTextChangedListenerMA(listener: TextView_TextWatcher_Typealias?) {
-    val genListener = MATextViewTextWatcher(listener)
-    addTextChangedListener(genListener)
-}

@@ -50,8 +50,15 @@ fun Intent?.isNullOrEmpty(): Boolean = this == null || extras.isNullOrEmpty()
  *
  * @param url web link url to launch isa.
  * @param showToastOnFailure if true a toast msg
- * [R.string.you_do_not_have_application_that_can_open_web_links] will be shown isa.
+ * [R.string.you_do_not_have_application_that_can_open_web_links] will be shown, default is true isa.
+ * @param createIntentChooser if true [Intent.createChooser] will be used, default is false.
+ *
+ * @return true if [Intent] can be handled by the system, false means no app can handle it,
+ * which if [showToastOnFailure] is true then it's msg will be shown isa.
+ *
+ * @see toast
  */
+@JvmOverloads
 fun Context.launchWebLink(url: String, showToastOnFailure: Boolean = true, createIntentChooser: Boolean = false): Boolean {
     val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 

@@ -1,6 +1,8 @@
 package mohamedalaa.mautils.core_android
 
 import android.os.Bundle
+import android.view.View
+import androidx.core.app.NavUtils
 import androidx.core.os.bundleOf
 import java.io.Serializable
 
@@ -8,8 +10,7 @@ import java.io.Serializable
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/13/2019.
  *
  * todo
- * 0- databinding zy msln click of toolbar from xml directly isa., rc default item adapter we item decoration etc... isa.
- * indexOfOrNull for all variants, in android_core isa.
+ * 0- databinding zy msln click of toolbar from xml directly isa.
  * 1- Bundle in ma utils and movies tv for full usage isa.
  * 2- binding adapter utils movies tv isa.
  * 3- FirebaseUtils -> movies tv isa.
@@ -41,6 +42,7 @@ private fun Int.hellodeoidwo() {
 private fun aaa111(jClass: Class<*>/*, kClass: KClass<*>*/, obj: Any?) {
     jClass.isInstance(obj)
     //kClass.isInstance(obj)
+    //val a: Tool
 }
 
 private fun bbb1111(map1: Map<String, String>, map2: Map<String, String>, map3: Map<String, Int>) {
@@ -51,6 +53,11 @@ private fun bbb1111(map1: Map<String, String>, map2: Map<String, String>, map3: 
     if (map2 == map3) {
         bundleOf()
     }
+}
+
+private fun View.aaaa() {
+    //NavUtils.
+
 }
 
 private fun ddd111(string: String, bundle: Bundle) {

@@ -16,15 +16,5 @@ fun Path.moveThenLineTo(firstX: Float, firstY: Float, secondX: Float, secondY: F
 /**
  * Performs [Path.moveTo] with [firstPointF], the [Path.lineTo] with [secondPointF] isa.
  */
-fun Path.moveThenLineTo(firstPointF: PointF, secondPointF: PointF) {
-    moveTo(firstPointF.x, firstPointF.y)
-    lineTo(secondPointF.x, secondPointF.y)
-}
-
-/**
- * Performs [Path.lineTo] with [x] & [y], then [Path.moveTo] for same [x] & [y] isa.
- */
-fun Path.lineThenMoveTo(x: Float, y: Float) {
-    lineTo(x, y)
-    moveTo(x, y)
-}
+fun Path.moveThenLineTo(firstPointF: PointF, secondPointF: PointF)
+    = moveThenLineTo(firstPointF.x, firstPointF.y, secondPointF.x, secondPointF.y)

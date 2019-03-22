@@ -3,28 +3,39 @@
 package mohamedalaa.mautils.core_android
 
 import android.text.Spannable
-import android.text.Spanned
+import androidx.core.text.set
 
 /**
  * Uses [Spannable.setSpan] for the whole [Spannable] isa.
  */
 operator fun Spannable.plusAssign(span: Any) {
-    // todo use this isa, bs ba3d check below isa.
-    setSpan(span, 0, length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-}
-
-operator fun Spannable.set(index: Int, span: Any) {
-    setSpan(span, index, index.inc(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-}
-
-/** excludes last char isa. */
-operator fun Spannable.set(intRange: IntRange, span: Any) {
-    setSpan(span, intRange.start, intRange.endInclusive, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    this[0..length] = span
 }
 
 /**
+ * Uses [Spannable.setSpan] for the [Char] at provided [index] only isa.
+ */
+operator fun Spannable.set(index: Int, span: Any) {
+    this[index..(index.inc())] = span
+}
+
+/**
+ * Spans evey char in [string] by returned value of [generateNewSpan],
+ * if conditions of [ignoreCase], [allChars] are met.
+ *
+ * @param string all characters that need to be spanned.
+ * @param ignoreCase if true then the spanning process will be case sensitive, default is false isa.
+ * @param allChars true means all chars in `receiver` will be spanned if found inside [string], default is true,
+ *
+ * while false means the span will happen if whole [string] is in `receiver`, see below for more explanation isa.
+ *
+ * Ex. "ab ac ab ac".[spanChars] ("ac", allChars = true, ...) then each 'a' in receiver will be spanned
+ *
+ * while if it was false -> then only both "ac" will be spanned
+ *
  * @return list of indices that got spanned isa.
  */
+@JvmOverloads
 fun Spannable.spanChars(string: String?,
                         ignoreCase: Boolean = false,
                         allChars: Boolean = true,

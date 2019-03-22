@@ -1,3 +1,5 @@
+@file:JvmName("SearchViewUtils")
+
 package mohamedalaa.mautils.core_android
 
 import android.widget.*
@@ -61,4 +63,13 @@ fun SearchView.setIconsTint(@ColorInt color: Int) {
     allNestedViewsIsInstanceOrNull<ImageView> {
         this.setColorFilter(color)
     }
+}
+
+/**
+ * Using [listener] for [SearchView.setOnQueryTextListener] instead of regular [SearchView.OnQueryTextListener],
+ * for more concise & idiomatic coding, for an example See [MASearchViewOnQueryTextListener] isa.
+ */
+fun SearchView.setOnQueryTextListenerMA(listener: SearchView_OnQueryTextListener_Typealias?) {
+    val genListener = MASearchViewOnQueryTextListener(listener)
+    setOnQueryTextListener(genListener)
 }

@@ -14,6 +14,7 @@ import kotlin.jvm.functions.Function1;
 import mohamedalaa.mautils.core_android.AnimatorSetUtils;
 import mohamedalaa.mautils.core_android.ColorUtils;
 import mohamedalaa.mautils.core_android.MAAnimatorAnimatorListener;
+import mohamedalaa.mautils.core_android.SpannableUtils;
 import mohamedalaa.mautils.core_kotlin.CalendarUtils;
 import mohamedalaa.mautils.core_kotlin.CollectionsUtils;
 import mohamedalaa.mautils.core_kotlin.GenericUtils;
@@ -92,6 +93,8 @@ public class JavaQuickTrialIsa {
 
             return null;
         });
+
+        //SpannableUtils.spanChars()
     }
 
     private void ff1(int color) {

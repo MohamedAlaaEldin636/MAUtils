@@ -4,6 +4,26 @@ import android.widget.SearchView
 
 typealias SearchView_OnQueryTextListener_Typealias = MASearchViewOnQueryTextListener.() -> Unit
 
+/**
+ * More concise & idiomatic way for using more than 1 fun interface, See example below.
+ * ```
+ * fun setupOnQueryTextListener(searchView: SearchView) {
+ *      searchView.setOnQueryTextListenerMA {
+ *          onQueryTextChange {
+ *              // Your code here
+ *
+ *              true // Depends on what you wanna achieve
+ *          } onQueryTextSubmit {
+ *              // Your code here
+ *
+ *              false // Depends on what you wanna achieve
+ *          }
+ *      }
+ * }
+ * ```
+ *
+ * @see [SearchView.setOnQueryTextListenerMA]
+ */
 class MASearchViewOnQueryTextListener(listener: SearchView_OnQueryTextListener_Typealias?): SearchView.OnQueryTextListener {
 
     init {
@@ -27,15 +47,4 @@ class MASearchViewOnQueryTextListener(listener: SearchView_OnQueryTextListener_T
     infix fun MASearchViewOnQueryTextListener.onQueryTextSubmit(action: ((String?) -> Boolean)?): MASearchViewOnQueryTextListener
         = apply { _onQueryTextSubmit = action }
 
-}
-
-/**
- * Using [listener] for [SearchView.setOnQueryTextListener] instead of regular [SearchView.OnQueryTextListener],
- * for more concise & idiomatic coding isa.
- *
- * @see [MASearchViewOnQueryTextListener]
- */
-fun SearchView.setOnQueryTextListenerMA(listener: SearchView_OnQueryTextListener_Typealias?) {
-    val genListener = MASearchViewOnQueryTextListener(listener)
-    setOnQueryTextListener(genListener)
 }

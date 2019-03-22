@@ -10,7 +10,7 @@ import android.widget.EditText
  * Sets max maxLength that can be typed in `this` [EditText], using [InputFilter.LengthFilter] isa.
  *
  * @param maxLength maxLength required, Ex. if == 1, then only 1 char can be typed isa.
- * @param overrideOtherFilters if true a new array is used for [EditText.setFilters] isa.
+ * @param overrideOtherFilters if true a new array is used for [EditText.setFilters], default is false isa.
  */
 @JvmOverloads
 fun EditText.setMaxLength(maxLength: Int, overrideOtherFilters: Boolean = false) {
@@ -27,9 +27,9 @@ fun EditText.setMaxLength(maxLength: Int, overrideOtherFilters: Boolean = false)
  * Sets blinking cursor's position to be after last char.
  *
  * @param postExecution performs the action after [EditText.post], and if [handlerExecution] is true
- * then action is performed after [Handler.post] after [EditText.post] isa.
+ * then action is performed after [Handler.post] after [EditText.post], default is false isa.
  * @param handlerExecution performs the action after [Handler.post], and if [postExecution] is true
- * then action is performed after [Handler.post] after [EditText.post] isa.
+ * then action is performed after [Handler.post] after [EditText.post], default is false isa.
  */
 @JvmOverloads
 fun EditText.setSelectionToLastChar(postExecution: Boolean = false, handlerExecution: Boolean = false) {

@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_PARAMETER", "unused", "UNUSED_VARIABLE")
+
 package mohamedalaa.mautils.mautils
 
 import android.animation.AnimatorSet
@@ -5,13 +7,14 @@ import android.content.Context
 import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ProgressBar
+import android.widget.SearchView
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.core_android.addColorAlpha
 import mohamedalaa.mautils.core_android.addListenerMA
+import mohamedalaa.mautils.core_android.setOnQueryTextListenerMA
 import mohamedalaa.mautils.core_kotlin.*
 import java.lang.reflect.ParameterizedType
 
@@ -49,7 +52,23 @@ abstract class CheckTypeParam<E> {
     private fun ff1() {
         // Add alpha to color so result is same color but with 50% transparency
         color = color.addColorAlpha(0.5f)
+
     }
+
+    fun setupOnQueryTextListener(searchView: SearchView) {
+        searchView.setOnQueryTextListenerMA {
+            onQueryTextChange {
+                // Your code here
+
+                true // Depends on what you wanna achieve
+            } onQueryTextSubmit {
+                // Your code here
+
+                false // Depends on what you wanna achieve
+            }
+        }
+    }
+
 
 }
 
@@ -119,6 +138,8 @@ private fun showcasing(list: List<CharSequence>) {
     val string1 = list.firstIsInstance<String>()
     val string2 = list.first { it is String } as String
 
+    R.layout.my_rc_item
+
     val a: Float? = 3f
     //a.toStringOrNull()
 }
@@ -136,3 +157,9 @@ private fun fun2(int: Int?) {
 
     listOf(3, 4, 5).pairedIteration()
 }
+
+fun zzzzP() {
+
+}
+
+class SmallUser(val name: String, val age: Int)
