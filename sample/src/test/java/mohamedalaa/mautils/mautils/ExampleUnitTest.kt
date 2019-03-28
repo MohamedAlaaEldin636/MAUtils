@@ -1,10 +1,14 @@
 package mohamedalaa.mautils.mautils
 
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import mohamedalaa.mautils.mautils.fake_data.CustomObject
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.io.IOException
 import kotlin.test.assertTrue
 
 /**
@@ -63,5 +67,19 @@ class ExampleUnitTest {
     @Test
     fun a12() {
         println("name is mido".indexOf("name"))
+    }
+
+    fun deuwhd() {
+        val ta = object : TypeAdapter<Int>() {
+            @Throws(IOException::class)
+            override fun write(out: JsonWriter, value: Int?) {
+
+            }
+
+            @Throws(IOException::class)
+            override fun read(`in`: JsonReader): Int? {
+                return null
+            }
+        }
     }
 }

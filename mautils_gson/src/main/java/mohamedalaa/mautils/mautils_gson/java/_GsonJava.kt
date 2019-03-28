@@ -13,17 +13,18 @@ import java.lang.reflect.Type
  *
  * **Warning**
  *
- * If `receiver` has type parameters, then you have to use [GsonConverter.toJsonOrNull] isa.
+ * If `receiver` has type parameters, then you have to use [GsonConverter.toJsonOrNullJava] isa.
  *
  * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
  *
  * @return JSON String OR null if any problem occurs isa.
  *
- * @see toJson
- * @see fromJsonOrNull
+ * @see toJsonJava
+ * @see fromJsonOrNullJava
  */
 @JvmOverloads
-fun <E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
+@JvmName("toJsonOrNull")
+fun <E> E?.toJsonOrNullJava(gson: Gson? = null): String? = this?.run {
     val usedGson = gson ?: generateGson()
 
     try { usedGson.toJson(this) } catch (e: Exception) { null }
@@ -34,7 +35,7 @@ fun <E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
  *
  * **Warning**
  *
- * If `receiver` has type parameters, then you have to use [GsonConverter.toJson] isa.
+ * If `receiver` has type parameters, then you have to use [GsonConverter.toJsonJava] isa.
  *
  * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
  *
@@ -42,11 +43,12 @@ fun <E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
  *
  * @return JSON String OR throws exception if any problem occurs isa.
  *
- * @see toJsonOrNull
- * @see fromJson
+ * @see toJsonOrNullJava
+ * @see fromJsonJava
  */
 @JvmOverloads
-fun <E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson)
+@JvmName("toJson")
+fun <E> E?.toJsonJava(gson: Gson? = null): String = toJsonOrNullJava(gson)
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
 /**
@@ -61,11 +63,12 @@ fun <E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson)
  *
  * @return object of type <E> from given JSON String OR null if any problem occurs isa.
  *
- * @see fromJson
- * @see toJsonOrNull
+ * @see fromJsonJava
+ * @see toJsonOrNullJava
  */
 @JvmOverloads
-fun <E> String?.fromJsonOrNull(elementClass: Class<E>, gson: Gson? = null): E? = this?.run {
+@JvmName("fromJsonOrNull")
+fun <E> String?.fromJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): E? = this?.run {
     val usedGson = gson ?: generateGson()
 
     try { usedGson.fromJson(this, elementClass) } catch (e: Exception) { null }
@@ -85,19 +88,20 @@ fun <E> String?.fromJsonOrNull(elementClass: Class<E>, gson: Gson? = null): E? =
  *
  * @throws RuntimeException in case if any problem occurred while converting isa.
  *
- * @see fromJsonOrNull
- * @see toJson
+ * @see fromJsonOrNullJava
+ * @see toJsonJava
  */
 @JvmOverloads
-fun <E> String?.fromJson(elementClass: Class<E>, gson: Gson? = null): E = fromJsonOrNull(elementClass, gson)
+@JvmName("fromJson")
+fun <E> String?.fromJsonJava(elementClass: Class<E>, gson: Gson? = null): E = fromJsonOrNullJava(elementClass, gson)
     ?: throw RuntimeException("Cannot convert $this to $elementClass")
 
 /**
  * ## Description
  * Used only if your Object that needs to be converted to/from JSON-String has type parameters isa,
  *
- * otherwise consider using [String.fromJsonOrNull], [String.toJsonOrNull], [String.fromJson]
- * OR [String.toJson] isa.
+ * otherwise consider using [String.fromJsonOrNullJava], [String.toJsonOrNullJava], [String.fromJsonJava]
+ * OR [String.toJsonJava] isa.
  *
  * Used by java developers OR kotlin developers if and only if has non-invariant nested type parameters,
  *
@@ -105,9 +109,9 @@ fun <E> String?.fromJson(elementClass: Class<E>, gson: Gson? = null): E = fromJs
  * ## How to use
  * ```
  * CustomWithTypeParam<CustomObject, Integer> customWithTypeParam = new CustomWithTypeParam<>();
- * String jsonString = new GsonConverter<CustomWithTypeParam<CustomObject, Integer>>(){}.toJsonOrNull(customWithTypeParam);
+ * String jsonString = new GsonConverter<CustomWithTypeParam<CustomObject, Integer>>(){}.toJsonOrNullJava(customWithTypeParam);
  * CustomWithTypeParam<CustomObject, Integer> fromJsonObject
- *      = new GsonConverter<CustomWithTypeParam<CustomObject, Integer>>(){}.fromJsonOrNull(jsonString);
+ *      = new GsonConverter<CustomWithTypeParam<CustomObject, Integer>>(){}.fromJsonOrNullJava(jsonString);
  * // by now -> customWithTypeParam == fromJsonObject isa.
  * ```
  *
@@ -119,7 +123,7 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
      * Converts [element] object to a JSON String OR null in case of any error isa,
      *
      * Even if type [element] has type parameter isa, Note if [element] has no type parameters
-     * Use [String.toJsonOrNull] instead, since it's more concise syntax isa.
+     * Use [String.toJsonOrNullJava] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
@@ -130,14 +134,14 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
     fun toJsonOrNull(element: E?): String? {
         val type = getSuperclassTypeParameter(javaClass)
 
-        return element.toJsonOrNullJava(type, gson)
+        return element.toJsonOrNullJavaPrivate(type, gson)
     }
 
     /**
      * Converts `receiver` object to a JSON String OR throws exception in case of any error isa,
      *
      * Even if type [element] has type parameter isa, Note if [element] has no type parameters
-     * Use [String.toJsonOrNull] instead, since it's more concise syntax isa.
+     * Use [String.toJsonOrNullJava] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
@@ -154,7 +158,7 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
      * Converts [json] to object of type [E], or null in case of any error occurs isa,
      *
      * Even if type [E] has type parameter isa, Note if [E] has no type parameters
-     * Use [String.fromJsonOrNull] instead, since it's more concise syntax isa.
+     * Use [String.fromJsonOrNullJava] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
@@ -163,14 +167,14 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
     fun fromJsonOrNull(json: String?): E? {
         val type = getSuperclassTypeParameter(javaClass)
 
-        return json.fromJsonOrNullJava<E>(type, gson)
+        return json.fromJsonOrNullJavaPrivate<E>(type, gson)
     }
 
     /**
      * Converts [json] to object of type [E], or throws exception in case of any error occurs isa,
      *
      * Even if type [E] has type parameter isa, Note if [E] has no type parameters
-     * Use [String.fromJsonOrNull] instead, since it's more concise syntax isa.
+     * Use [String.fromJsonOrNullJava] instead, since it's more concise syntax isa.
      *
      * For **How to use example** See [GsonConverter]
      *
@@ -193,13 +197,13 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
 
 }
 
-private fun <E> E?.toJsonOrNullJava(type: Type, gson: Gson?): String? = this?.run {
+private fun <E> E?.toJsonOrNullJavaPrivate(type: Type, gson: Gson?): String? = this?.run {
     val usedGson = gson ?: generateGson()
 
     try { usedGson.toJson(this, type) } catch (e: Exception) { null }
 }
 
-private fun <E> String?.fromJsonOrNullJava(type: Type, gson: Gson?): E? = this?.run {
+private fun <E> String?.fromJsonOrNullJavaPrivate(type: Type, gson: Gson?): E? = this?.run {
     val usedGson = gson ?: generateGson()
 
     try { usedGson.fromJson(this, type) } catch (e: Exception) { null }

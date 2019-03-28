@@ -38,12 +38,12 @@ public class JavaClass {
         //ListUtils.performIfNotNullNorEmpty();
         //StringBuilderUtils.plusAssign(b1, "");
         //b1.append()
-        //GsonUtils.fromJsonOrNull("ksklsms");
+        //GsonUtils.fromJsonOrNullJava("ksklsms");
         //GsonUtils.fromJsonCheck("ksklsms", JsonCheck.NON_NULL_ELEMENTS_LIST);
         //GsonUtils.fromJsonCheckJ();
         //TypeInfo
 
-        //mohamedalaa.mautils.mautils_gson_java.GsonUtils.toJson
+        //mohamedalaa.mautils.mautils_gson_java.GsonUtils.toJsonJava
     }
 
     private void dewiojdoiw() {
@@ -53,13 +53,13 @@ public class JavaClass {
         val pair = 5 to customObject
         val triple = Triple("word", listOfCustomObjects, 55)
 
-        val jsonPair = object : GsonConverter<Pair<Int, CustomObject>>(){}.toJsonOrNull(pair)
-        val jsonTriple = object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.toJsonOrNull(triple)
-        val jsonList = object : GsonConverter<List<CustomObject>>(){}.toJsonOrNull(listOfCustomObjects)
+        val jsonPair = object : GsonConverter<Pair<Int, CustomObject>>(){}.toJsonOrNullJava(pair)
+        val jsonTriple = object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.toJsonOrNullJava(triple)
+        val jsonList = object : GsonConverter<List<CustomObject>>(){}.toJsonOrNullJava(listOfCustomObjects)
 
-        assertEquals(pair, object : GsonConverter<Pair<Int, CustomObject>>(){}.fromJsonOrNull(jsonPair))
-        assertEquals(triple, object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.fromJsonOrNull(jsonTriple))
-        assertEquals(listOfCustomObjects, object : GsonConverter<List<CustomObject>>(){}.fromJsonOrNull(jsonList))
+        assertEquals(pair, object : GsonConverter<Pair<Int, CustomObject>>(){}.fromJsonOrNullJava(jsonPair))
+        assertEquals(triple, object : GsonConverter<Triple<String, List<CustomObject>, Int>>(){}.fromJsonOrNullJava(jsonTriple))
+        assertEquals(listOfCustomObjects, object : GsonConverter<List<CustomObject>>(){}.fromJsonOrNullJava(jsonList))
          */
     }
 

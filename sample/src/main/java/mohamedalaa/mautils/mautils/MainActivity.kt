@@ -10,6 +10,7 @@ import mohamedalaa.mautils.core_android.setMaxLength
 import mohamedalaa.mautils.mautils.recycler_view.VisualTestActivity
 import mohamedalaa.mautils.core_android.toast as toast1
 import mohamedalaa.mautils.mautils_open_source_licences.view.OpenSourceLicencesActivity
+import kotlin.reflect.full.primaryConstructor
 
 class MainActivity : AppCompatActivity() {
 

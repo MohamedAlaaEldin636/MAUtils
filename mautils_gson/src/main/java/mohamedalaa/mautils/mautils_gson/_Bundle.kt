@@ -11,7 +11,7 @@ import android.util.SizeF
 import android.util.SparseArray
 import com.google.gson.Gson
 import mohamedalaa.mautils.mautils_gson.java.GsonConverter
-import mohamedalaa.mautils.mautils_gson.java.fromJsonOrNull
+import mohamedalaa.mautils.mautils_gson.java.fromJsonOrNullJava
 import java.io.Serializable
 
 private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"
@@ -180,7 +180,7 @@ class JGetterBundleGson internal constructor(private val bundle: Bundle) {
         val any = bundle.get(key)
         return if (any is String && elementClass != null) {
             // Custom object added by gson isa.
-            any.fromJsonOrNull(elementClass, gson)
+            any.fromJsonOrNullJava(elementClass, gson)
         }else {
             bundle.get(key) as? T
         }

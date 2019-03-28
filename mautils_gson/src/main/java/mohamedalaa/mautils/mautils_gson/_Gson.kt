@@ -1,7 +1,6 @@
 package mohamedalaa.mautils.mautils_gson
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import kotlin.Exception
@@ -14,9 +13,9 @@ import mohamedalaa.mautils.mautils_gson.java.GsonConverter
  * ```
  * val jsonString = listOf(6, null, 53) // Nullable elements list (Nullable type parameter)
  * // below code makes no error will occur however listOfInts is currently actually List<Int?>?
- * val listOfInts: List<Int>? = jsonString.fromJsonOrNull()
+ * val listOfInts: List<Int>? = jsonString.fromJsonOrNullJava()
  * // so to workaround it, either be sure 100% type parameter is not null or BETTER use nullable type parameters isa.
- * val listOfInts: List<Int?>? = jsonString.fromJsonOrNull()
+ * val listOfInts: List<Int?>? = jsonString.fromJsonOrNullJava()
  * ```
  *
  * **Second Warning** (Nested Type Parameters)
@@ -33,7 +32,7 @@ import mohamedalaa.mautils.mautils_gson.java.GsonConverter
  * public class HelperJavaClass {
  *      public static CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> getCustomWithTypeParam(
  *              String jsonString) {
- *          return new GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){}.fromJson(jsonString);
+ *          return new GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){}.fromJsonJava(jsonString);
  *      }
  * }
  *
@@ -119,6 +118,12 @@ inline fun <reified E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson
 @PublishedApi
 internal fun generateGson(): Gson {
     return GsonBuilder()
+        // todo using annotation processor power should be here isa
+        // et2akked en el fun de by7salaha call only when .toJson is called isa.
+
+        //.registerTypeHierarchyAdapter(WithArgsSealedClass::class.java, JsonSerializerForSealedClasses())
+        //.registerTypeHierarchyAdapter(WithArgsSealedClass::class.java, JsonDeserializerForSealedClasses())
+
         .serializeNulls()
         .setLenient()
         .enableComplexMapKeySerialization()

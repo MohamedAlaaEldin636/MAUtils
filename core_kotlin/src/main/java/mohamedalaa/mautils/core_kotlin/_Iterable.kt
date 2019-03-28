@@ -150,6 +150,15 @@ infix fun <T, R> Iterable<T>.zipFullOther(other: Iterable<R>): List<Pair<T?, R>>
     }
 }
 
+/**
+ * @return Ensure both [Iterable]s (`receiver` and [other]) have same size or throws [RuntimeException]
+ * then calls [Iterable.zip]
+ */
+infix fun <T, R> Iterable<T>.zipSameSize(other: Iterable<R>): List<Pair<T, R>> {
+    if (count() != other.count()) throw RuntimeException("Different sizes")
+    return zip(other)
+}
+
 /** @return Same as [Iterable.partition] but with indices as well. */
 inline fun <T> Iterable<T>.partitionIndexed(predicate: (index: Int, element: T) -> Boolean): Pair<List<T>, List<T>> {
     val first = mutableListOf<T>()
