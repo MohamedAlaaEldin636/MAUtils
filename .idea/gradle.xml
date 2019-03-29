@@ -13,6 +13,8 @@
             <option value="$PROJECT_DIR$/lifecycle_extensions" />
             <option value="$PROJECT_DIR$/material_design" />
             <option value="$PROJECT_DIR$/mautils_gson" />
+            <option value="$PROJECT_DIR$/mautils_gson_annotation" />
+            <option value="$PROJECT_DIR$/mautils_gson_processor" />
             <option value="$PROJECT_DIR$/mautils_open_source_licences" />
             <option value="$PROJECT_DIR$/recycler_view" />
             <option value="$PROJECT_DIR$/sample" />

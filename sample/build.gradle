@@ -51,7 +51,10 @@ dependencies {
     implementation project(':core_kotlin')
     implementation project(':core_android')
     implementation project(':material_design')
+
     implementation project(':mautils_gson')
+    annotationProcessor project(':mautils_gson_processor')
+
     implementation project(':lifecycle_extensions')
     implementation project(':recycler_view')
 
