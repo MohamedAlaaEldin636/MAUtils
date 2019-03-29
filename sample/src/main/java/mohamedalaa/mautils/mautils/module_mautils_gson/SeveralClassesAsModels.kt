@@ -1,7 +1,10 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
+import mohamedalaa.myapplication.mautils_gson_annotation.MASealedAbstractOrInterface
+
 // todo test annotation here isa.
 
+@MASealedAbstractOrInterface
 sealed class NoArgsSealedClass {
 
     data class NoDataClass(val bool: Boolean?) : NoArgsSealedClass()
@@ -10,6 +13,7 @@ sealed class NoArgsSealedClass {
 
 }
 
+@MASealedAbstractOrInterface
 sealed class WithArgsSealedClass {
 
     object WithSingleton : WithArgsSealedClass()
@@ -32,6 +36,7 @@ data class ParentUsingBoth(
     val implAbstractClass: ImplAbstractClass
 )
 
+@MASealedAbstractOrInterface
 interface SomeInterface {
     val someInterfaceInt: Int
 }
@@ -42,6 +47,7 @@ class ImplSomeInterface(override val someInterfaceInt: Int, s: String) : SomeInt
 
 }
 
+@MASealedAbstractOrInterface
 abstract class AbstractClass(val abstractClassInt: Int)
 
 class ImplAbstractClass(int: Int, val b: Boolean) : AbstractClass(int)

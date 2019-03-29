@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion COMPILE_SDK_VERSION
 
@@ -52,8 +54,10 @@ dependencies {
     implementation project(':core_android')
     implementation project(':material_design')
 
+    implementation 'com.google.code.gson:gson:2.8.5'
+
     implementation project(':mautils_gson')
-    annotationProcessor project(':mautils_gson_processor')
+    kapt project(':mautils_gson_processor')
 
     implementation project(':lifecycle_extensions')
     implementation project(':recycler_view')

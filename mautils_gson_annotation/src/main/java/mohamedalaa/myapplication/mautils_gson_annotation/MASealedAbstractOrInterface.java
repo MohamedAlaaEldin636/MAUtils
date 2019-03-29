@@ -6,7 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/29/2019.
+ * Annotate Sealed Class, Abstract Class or Interface
+ * <br></br>
+ * in case it's inside one of the objects that needs to be serialized/deserialized
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)

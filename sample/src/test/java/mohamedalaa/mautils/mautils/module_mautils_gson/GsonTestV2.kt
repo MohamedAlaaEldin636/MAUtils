@@ -1,6 +1,5 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
-import com.google.gson.internal.`$Gson$Types`
 import mohamedalaa.mautils.core_kotlin.zipSameSize
 import mohamedalaa.mautils.mautils.for_unit_testing.TestingLog
 import mohamedalaa.mautils.mautils_gson.fromJson
@@ -158,7 +157,7 @@ class GsonTestV2 {
         println()
     }
 
-    private fun getSuperclassTypeAndClassParameter(
+    /*private fun getSuperclassTypeAndClassParameter(
         paramType: Type
     ): Pair<Type, Class<*>> {
         return try {
@@ -191,6 +190,6 @@ class GsonTestV2 {
         println()
         println()
         getSuperclassTypeAndClassParameter(nestedListOfInts::class.java.apply(::println)).apply(::println)
-    }
+    }*/
 
 }

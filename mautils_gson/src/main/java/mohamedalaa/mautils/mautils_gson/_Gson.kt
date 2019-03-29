@@ -2,9 +2,12 @@ package mohamedalaa.mautils.mautils_gson
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import mohamedalaa.mautils.mautils_gson.internal.JsonDeserializerForSealedClasses
+import mohamedalaa.mautils.mautils_gson.internal.JsonSerializerForSealedClasses
 import java.lang.reflect.Type
 import kotlin.Exception
 import mohamedalaa.mautils.mautils_gson.java.GsonConverter
+import mohamedalaa.myapplication.mautils_gson_annotation.GsonAnnotationConstants
 
 /**
  * Converts `this JSON String` to object of type [E], or null in case of any error occurs isa.
@@ -105,6 +108,19 @@ inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run 
 inline fun <reified E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson)
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
+@Suppress("UNCHECKED_CAST")
+private val allAnnotatedClasses: List<Class<*>>? = runCatching {
+    val jClass = Class.forName(GsonAnnotationConstants.generatedMASealedAbstractOrInterfaceFullName)
+
+    val method = jClass.declaredMethods[0]
+
+    val listOfClassesFullNames = method.invoke(null) as List<String>
+
+    listOfClassesFullNames.mapNotNull {
+        runCatching { Class.forName(it) }.getOrNull()
+    }
+}.getOrNull()
+
 /**
  * @return Default [Gson] object used for serialization/deserialization, the generated object is created by below code isa.
  * ```
@@ -117,13 +133,14 @@ inline fun <reified E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson
  */
 @PublishedApi
 internal fun generateGson(): Gson {
-    return GsonBuilder()
-        // todo using annotation processor power should be here isa
-        // et2akked en el fun de by7salaha call only when .toJson is called isa.
+    val gsonBuilder = GsonBuilder()
 
-        //.registerTypeHierarchyAdapter(WithArgsSealedClass::class.java, JsonSerializerForSealedClasses())
-        //.registerTypeHierarchyAdapter(WithArgsSealedClass::class.java, JsonDeserializerForSealedClasses())
+    allAnnotatedClasses?.forEach {
+        gsonBuilder.registerTypeHierarchyAdapter(it, JsonSerializerForSealedClasses())
+        gsonBuilder.registerTypeHierarchyAdapter(it, JsonDeserializerForSealedClasses())
+    }
 
+    return gsonBuilder
         .serializeNulls()
         .setLenient()
         .enableComplexMapKeySerialization()

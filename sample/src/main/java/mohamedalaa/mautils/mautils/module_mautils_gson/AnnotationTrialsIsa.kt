@@ -4,3 +4,6 @@ import mohamedalaa.myapplication.mautils_gson_annotation.MASealedAbstractOrInter
 
 @MASealedAbstractOrInterface
 class Mido
+
+@MASealedAbstractOrInterface
+class AboAlaaEldin
