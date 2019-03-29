@@ -1,4 +1,4 @@
-package mohamedalaa.myapplication.mautils_gson_annotation
+package mohamedalaa.mautils.gson_annotation
 
 /**
  * Used only for mautils_gson_processor library module isa.

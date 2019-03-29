@@ -1,6 +1,6 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
-import mohamedalaa.myapplication.mautils_gson_annotation.MASealedAbstractOrInterface
+import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 
 @MASealedAbstractOrInterface
 class Mido

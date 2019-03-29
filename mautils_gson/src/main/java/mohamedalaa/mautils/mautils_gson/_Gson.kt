@@ -2,12 +2,12 @@ package mohamedalaa.mautils.mautils_gson
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import mohamedalaa.mautils.gson_annotation.GsonAnnotationConstants
 import mohamedalaa.mautils.mautils_gson.internal.JsonDeserializerForSealedClasses
 import mohamedalaa.mautils.mautils_gson.internal.JsonSerializerForSealedClasses
 import java.lang.reflect.Type
 import kotlin.Exception
 import mohamedalaa.mautils.mautils_gson.java.GsonConverter
-import mohamedalaa.myapplication.mautils_gson_annotation.GsonAnnotationConstants
 
 /**
  * Converts `this JSON String` to object of type [E], or null in case of any error occurs isa.

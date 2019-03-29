@@ -2,7 +2,7 @@ package mohamedalaa.myapplication.mautils_gson_processor
 
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
-import mohamedalaa.myapplication.mautils_gson_annotation.GsonAnnotationConstants
+import mohamedalaa.mautils.gson_annotation.GsonAnnotationConstants
 
 import java.io.IOException
 
@@ -17,7 +17,7 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.element.Modifier
 import mohamedalaa.myapplication.mautils_gson_processor.utils.buildMethodSpec
 
-@SupportedAnnotationTypes("mohamedalaa.myapplication.mautils_gson_annotation.MASealedAbstractOrInterface")
+@SupportedAnnotationTypes("mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 class ProcessorOfMASealedAbstractOrInterface : AbstractProcessor() {
 
