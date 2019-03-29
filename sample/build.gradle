@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation project(':mautils_gson')
-    kapt project(':mautils_gson_processor')
+    kapt project(':gson_processor')
 
     implementation project(':lifecycle_extensions')
     implementation project(':recycler_view')

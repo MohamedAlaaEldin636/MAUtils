@@ -1,4 +1,4 @@
-package mohamedalaa.myapplication.mautils_gson_processor.utils
+package mohamedalaa.mautils.gson_processor.utils
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
