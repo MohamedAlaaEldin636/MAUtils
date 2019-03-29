@@ -115,14 +115,14 @@ fun Bundle.addValuesGson(vararg values: Any?, gson: Gson? = null) {
  * Returns a new [Bundle] with the given [values] as elements, and keys are the indices
  * so when retrieve it ensure same order of indices isa, to retrieve it use below code.
  * ```
- * // Kotlin Devs, check sample tests in library for more examples isa.
+ * // Kotlin Devs
  *
  * val getterBundle = bundle.getKGetterBundleGson()
  * // Note must be in same order they added in isa.
  * val retrievedCustomObject = getterBundleGson.get<CustomObject>()
  * val retrievedListOfCustomObject = getterBundleGson.get<List<CustomObject>>()
  *
- * // Java Devs, check sample tests in library for more examples isa. todo doc
+ * // Java Devs
  *
  * JGetterBundle getterBundle = BundleUtils.getJGetterBundle(bundle);
  * // Note must be in same order they added in isa.
