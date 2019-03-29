@@ -9,10 +9,17 @@ package mohamedalaa.myapplication.mautils_gson_annotation
  */
 object GsonAnnotationConstants {
 
-    const val prefixOfAllAnnotations = "_Generated"
+    private const val prefixOfAllAnnotations = "_Generated"
 
-    private val jClass = MASealedAbstractOrInterface::class.java
+    val maSealedAbstractOrInterfaceJClass = MASealedAbstractOrInterface::class.java
+
+    val generatedMASealedAbstractOrInterfacePackageName: String
+        = maSealedAbstractOrInterfaceJClass.getPackage().name
+
+    val generatedMASealedAbstractOrInterfaceSimpleName: String
+        = prefixOfAllAnnotations + maSealedAbstractOrInterfaceJClass.simpleName
+
     val generatedMASealedAbstractOrInterfaceFullName: String
-        = jClass.getPackage().name + "." + GsonAnnotationConstants.prefixOfAllAnnotations + jClass.simpleName
+        = "$generatedMASealedAbstractOrInterfacePackageName.$generatedMASealedAbstractOrInterfaceSimpleName"
 
 }

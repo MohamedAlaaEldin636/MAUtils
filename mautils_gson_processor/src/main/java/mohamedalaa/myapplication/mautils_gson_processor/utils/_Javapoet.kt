@@ -2,6 +2,7 @@ package mohamedalaa.myapplication.mautils_gson_processor.utils
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.ParameterizedTypeName
 import javax.lang.model.element.Modifier
 
 /** Generate public static final method that returns given [init] isa. */
@@ -9,7 +10,7 @@ fun buildMethodSpec(init: List<String>, methodName: String = "method1"): MethodS
     return MethodSpec.methodBuilder(methodName)
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
 
-        .returns(ProcessorsUtils.jParameterizedTypeName(List::class.java, String::class.java))
+        .returns(ParameterizedTypeName.get(List::class.java, String::class.java))
 
         .init(init)
 
