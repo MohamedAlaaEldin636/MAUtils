@@ -42,4 +42,19 @@ class GsonTestV3 {
         assertEquality(o1, r1)
     }
 
+    @Test
+    fun direct_sealedClass() {
+        val o1: WithArgsSealedClass = WithArgsSealedClass.WithDataClass(true)
+        val j1 = o1.toJson()
+        val r1 = j1.fromJson<WithArgsSealedClass>()
+
+        println(o1)
+        println()
+        println(j1)
+        println()
+        println(r1)
+
+        assertEquality(o1, r1)
+    }
+
 }

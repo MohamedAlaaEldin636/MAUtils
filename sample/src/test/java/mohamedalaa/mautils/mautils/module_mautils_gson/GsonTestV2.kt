@@ -17,9 +17,7 @@ import kotlin.test.*
 class GsonTestV2 {
 
     internal class C1 {
-        companion object {
-
-        }
+        companion object
     }
 
     internal object O1

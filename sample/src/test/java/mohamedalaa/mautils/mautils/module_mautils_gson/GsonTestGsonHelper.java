@@ -24,7 +24,4 @@ public class GsonTestGsonHelper {
 
     public static class GsonCustomWithTypeParam2 extends GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>> {}
 
-
-    public static class Contain111 extends GsonConverter<GsonTest.Contain1> {}
-
 }

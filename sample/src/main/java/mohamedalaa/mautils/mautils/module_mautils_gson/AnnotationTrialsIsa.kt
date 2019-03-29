@@ -1,9 +1,0 @@
-package mohamedalaa.mautils.mautils.module_mautils_gson
-
-import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
-
-@MASealedAbstractOrInterface
-class Mido
-
-@MASealedAbstractOrInterface
-class AboAlaaEldin

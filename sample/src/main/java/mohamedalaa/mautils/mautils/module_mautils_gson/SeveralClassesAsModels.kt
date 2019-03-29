@@ -2,8 +2,6 @@ package mohamedalaa.mautils.mautils.module_mautils_gson
 
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 
-// todo test annotation here isa.
-
 @MASealedAbstractOrInterface
 sealed class NoArgsSealedClass {
 

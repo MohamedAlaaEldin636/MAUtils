@@ -27,7 +27,7 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
             return null
         }
 
-        val normalSerializationJsonString = runCatchingToNull { gson.toJson(src, typeOfSrc) } ?: return null
+        val normalSerializationJsonString = runCatchingToNull { gson.toJson(src, src::class.java) } ?: return null
 
         val jsonObject = JSONObject()
         jsonObject.put(KEY_CLASS_FULL_NAME, src.javaClass.name)
