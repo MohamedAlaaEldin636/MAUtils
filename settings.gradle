@@ -1,3 +1,3 @@
 // todo in case u made isa, gson and gson_java who needs _private_shared_core make like :sample that
 // it is not done by jitpack msln w shof kda isa law feh errors aw la2a isa.
-include ':sample', ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':recycler_view', ':gson_annotation', ':gson_processor', ':gson'
+include ':sample', ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':recycler_view', ':gson_annotation', ':gson_processor', ':gson', ':reflection'
