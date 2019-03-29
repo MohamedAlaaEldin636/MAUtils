@@ -138,7 +138,7 @@ fun Bundle.addValues(vararg values: Any?) {
  *
  * **More VIP Info**
  *
- * 1- Use buildBundleGson of mautils_gson module to support **custom classes** as well,
+ * 1- Use buildBundleGson of gson module to support **custom classes** as well,
  *
  * which can be serialized/deserialized using gson as well isa.
  *

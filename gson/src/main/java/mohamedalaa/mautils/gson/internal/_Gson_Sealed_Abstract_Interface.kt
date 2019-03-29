@@ -1,4 +1,4 @@
-package mohamedalaa.mautils.mautils_gson.internal
+package mohamedalaa.mautils.gson.internal
 
 import com.google.gson.*
 import org.json.JSONObject
@@ -54,7 +54,9 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 
         val classFullName = jsonObject.optString(KEY_CLASS_FULL_NAME) ?: return null
         val jClass = runCatchingToNull { Class.forName(classFullName) } ?: return null
-        val normalSerializationJsonString = jsonObject.optString(KEY_NORMAL_SERIALIZATION_JSON_STRING) ?: return null
+        val normalSerializationJsonString = jsonObject.optString(
+            KEY_NORMAL_SERIALIZATION_JSON_STRING
+        ) ?: return null
 
         return runCatchingToNull { gson.fromJson(normalSerializationJsonString, jClass) }
     }

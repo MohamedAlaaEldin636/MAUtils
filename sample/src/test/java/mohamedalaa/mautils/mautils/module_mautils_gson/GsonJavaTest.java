@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kotlin.Pair;
+import mohamedalaa.mautils.gson.java.GsonConverter;
+import mohamedalaa.mautils.gson.java.GsonUtils;
 import mohamedalaa.mautils.mautils.fake_data.CustomObject;
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam;
 import mohamedalaa.mautils.mautils.fake_data.JavaCustomObj;
 import mohamedalaa.mautils.mautils.fake_data.WithVarianceJavaObj;
-import mohamedalaa.mautils.mautils_gson.java.GsonConverter;
-import mohamedalaa.mautils.mautils_gson.java.GsonUtils;
 
 import static org.junit.Assert.*;
 

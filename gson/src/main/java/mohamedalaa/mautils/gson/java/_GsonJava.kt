@@ -1,10 +1,10 @@
 @file:JvmName("GsonUtils")
 
-package mohamedalaa.mautils.mautils_gson.java
+package mohamedalaa.mautils.gson.java
 
 import com.google.gson.Gson
 import com.google.gson.internal.`$Gson$Types`
-import mohamedalaa.mautils.mautils_gson.generateGson
+import mohamedalaa.mautils.gson.generateGson
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -105,7 +105,7 @@ fun <E> String?.fromJsonJava(elementClass: Class<E>, gson: Gson? = null): E = fr
  *
  * Used by java developers OR kotlin developers if and only if has non-invariant nested type parameters,
  *
- * See [mohamedalaa.mautils.mautils_gson.fromJsonOrNull] for more clarification isa.
+ * See [mohamedalaa.mautils.gson.fromJsonOrNull] for more clarification isa.
  * ## How to use
  * ```
  * CustomWithTypeParam<CustomObject, Integer> customWithTypeParam = new CustomWithTypeParam<>();

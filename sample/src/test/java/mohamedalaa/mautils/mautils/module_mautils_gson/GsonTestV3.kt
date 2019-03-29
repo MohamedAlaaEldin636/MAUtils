@@ -1,8 +1,8 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
+import mohamedalaa.mautils.gson.fromJson
+import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.mautils.assertEquality
-import mohamedalaa.mautils.mautils_gson.fromJson
-import mohamedalaa.mautils.mautils_gson.toJson
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

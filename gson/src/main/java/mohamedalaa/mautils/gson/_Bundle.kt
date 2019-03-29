@@ -1,6 +1,6 @@
 @file:JvmName("GsonBundleUtils")
 
-package mohamedalaa.mautils.mautils_gson
+package mohamedalaa.mautils.gson
 
 import android.os.Build
 import android.os.Bundle
@@ -10,8 +10,8 @@ import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
 import com.google.gson.Gson
-import mohamedalaa.mautils.mautils_gson.java.GsonConverter
-import mohamedalaa.mautils.mautils_gson.java.fromJsonOrNullJava
+import mohamedalaa.mautils.gson.java.GsonConverter
+import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
 import java.io.Serializable
 
 private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"

@@ -11,11 +11,11 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import mohamedalaa.mautils.gson.GsonBundleUtils;
+import mohamedalaa.mautils.gson.JGetterBundleGson;
+import mohamedalaa.mautils.gson.java.GsonConverter;
 import mohamedalaa.mautils.mautils.fake_data.CustomObject;
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam;
-import mohamedalaa.mautils.mautils_gson.GsonBundleUtils;
-import mohamedalaa.mautils.mautils_gson.JGetterBundleGson;
-import mohamedalaa.mautils.mautils_gson.java.GsonConverter;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/1/2019.

@@ -41,9 +41,6 @@ public class JavaClass {
         //GsonUtils.fromJsonOrNullJava("ksklsms");
         //GsonUtils.fromJsonCheck("ksklsms", JsonCheck.NON_NULL_ELEMENTS_LIST);
         //GsonUtils.fromJsonCheckJ();
-        //TypeInfo
-
-        //mohamedalaa.mautils.mautils_gson_java.GsonUtils.toJsonJava
     }
 
     private void dewiojdoiw() {

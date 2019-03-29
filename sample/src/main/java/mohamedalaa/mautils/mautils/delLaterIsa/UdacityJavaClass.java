@@ -2,7 +2,7 @@ package mohamedalaa.mautils.mautils.delLaterIsa;
 
 import java.util.List;
 
-import mohamedalaa.mautils.mautils_gson.java.GsonConverter;
+import mohamedalaa.mautils.gson.java.GsonConverter;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 2/24/2019.

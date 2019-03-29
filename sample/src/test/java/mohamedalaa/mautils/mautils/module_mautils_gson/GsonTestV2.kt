@@ -1,15 +1,12 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
 import mohamedalaa.mautils.core_kotlin.zipSameSize
+import mohamedalaa.mautils.gson.fromJson
+import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.mautils.for_unit_testing.TestingLog
-import mohamedalaa.mautils.mautils_gson.fromJson
-import mohamedalaa.mautils.mautils_gson.internal.*
-import mohamedalaa.mautils.mautils_gson.toJson
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.memberExtensionProperties

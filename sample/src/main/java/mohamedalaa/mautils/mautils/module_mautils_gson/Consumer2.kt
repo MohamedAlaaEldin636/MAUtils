@@ -9,3 +9,6 @@ fun weuidwed() {
 
 @MASealedAbstractOrInterface
 class ABCDEFGHIG
+
+@MASealedAbstractOrInterface
+class ZZZZZZZZZZZZ

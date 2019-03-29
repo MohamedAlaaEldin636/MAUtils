@@ -1,7 +1,7 @@
 package mohamedalaa.mautils.mautils
 
-import mohamedalaa.mautils.mautils_gson.fromJson
-import mohamedalaa.mautils.mautils_gson.toJson
+import mohamedalaa.mautils.gson.fromJson
+import mohamedalaa.mautils.gson.toJson
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

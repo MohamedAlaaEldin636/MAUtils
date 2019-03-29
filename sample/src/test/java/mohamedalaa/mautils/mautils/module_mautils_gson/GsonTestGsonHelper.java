@@ -3,9 +3,9 @@ package mohamedalaa.mautils.mautils.module_mautils_gson;
 import java.util.List;
 
 import kotlin.Pair;
+import mohamedalaa.mautils.gson.java.GsonConverter;
 import mohamedalaa.mautils.mautils.fake_data.CustomObject;
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam;
-import mohamedalaa.mautils.mautils_gson.java.GsonConverter;
 
 /**
  * Used for Gson conversion by kotlin developers in case of non-invariant nested type parameters isa.

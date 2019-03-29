@@ -1,7 +1,7 @@
 package mohamedalaa.mautils.gson_annotation
 
 /**
- * Used only for mautils_gson_processor library module isa.
+ * Used only for gson_processor library module isa.
  *
  * Name of generated code should be as follows isa,
  *
