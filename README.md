@@ -27,7 +27,7 @@ Ensure having mautils_version defined in your Gradle **Top-level build file** as
 
 ``` groovy
 buildscript {
-    ext.mautils_version = '1.0.0'
+    ext.mautils_version = '1.0.0-alpha'
 }    
 ```
 
@@ -35,7 +35,7 @@ _**OR**_ in your gradle **app module** as below
 
 ``` groovy
 dependencies {
-    def mautils_version = '1.0.0'
+    def mautils_version = '1.0.0-alpha'
 }
 ```
 
