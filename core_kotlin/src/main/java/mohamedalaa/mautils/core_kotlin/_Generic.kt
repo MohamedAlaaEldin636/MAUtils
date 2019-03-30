@@ -50,3 +50,11 @@ fun <T> T.equalAny(vararg others: T): Boolean = this in others
 
 /** @return true if each object in [others] is == `receiver` isa. */
 fun <T> T.equalAll(vararg others: T): Boolean = others.all { it == this }
+
+/**
+ * Used with when statement to make it expression so you ensure all events are consumed isa.
+ *
+ * Inspired from [link](https://www.youtube.com/watch?v=NNWejxBORgc)
+ */
+val <T> T.exhaustive: T
+    get() = this

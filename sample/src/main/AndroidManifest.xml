@@ -11,7 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".trial_activity.ForDataBindingActivity"></activity>
+        <activity android:name=".material_design.BoatActivity"></activity>
+        <activity
+            android:name=".material_design.MaterialDesignMainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".trial_activity.ForDataBindingActivity" />
         <activity
             android:name=".recycler_view.VisualTestActivity"
             android:theme="@style/AppThemeNoActionBar" />

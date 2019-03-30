@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion COMPILE_SDK_VERSION
 
@@ -38,7 +40,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Local Libraries
-    api project(':core_android')
+    implementation project(':core_android')
 
-    api 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
 }
