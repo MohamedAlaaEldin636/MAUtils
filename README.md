@@ -6,7 +6,22 @@ so no need in future to re-invent the wheel OR re-build known boiler-plate code
 
 ---
 
-### Library version
+## Initial Setup
+
+### Jitpack Environment
+
+in your Gradle **Top-level build file** add below code
+
+``` groovy
+allprojects {
+    repositories {
+    		// ...
+    		maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+### Library Version
 
 Ensure having mautils_version defined in your Gradle **Top-level build file** as below
 
@@ -37,6 +52,11 @@ is only for kotlin developers, and java developers won't be able to use it isa.
 3- several modules are used intentionly for 2 reasons
     A- To reduce size as much as possiblt for developers who doesn't need all of the features 
     B- so you will not add unneeded features in your app
+    
+4- If you try to add the whole project by jitpack feature
+an intentional error will happen since that feature will as well add
+sample module to your project which in no way is needed
+use all module instead to get all modules except sample in this library isa.
 
 ---
 

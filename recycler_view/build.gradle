@@ -17,6 +17,10 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.MohamedAlaaEldin636'
+
 android {
     compileSdkVersion COMPILE_SDK_VERSION
 
