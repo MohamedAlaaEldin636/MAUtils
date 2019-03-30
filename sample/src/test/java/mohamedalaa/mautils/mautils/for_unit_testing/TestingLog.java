@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Mohamed Alaa (https://github.com/MohamedAlaaEldin636)
+ * Copyright (c) 2019 Mohamed Alaa
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
