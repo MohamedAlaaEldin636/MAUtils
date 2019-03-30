@@ -67,7 +67,7 @@ use all module instead to get all modules except sample in this library isa.
 ### Setup
 
 ``` groovy
-implementation 'mohamedalaa.mautils:core_kotlin:$mautils_version'
+implementation 'com.github.MohamedAlaaEldin636.MAUtils:core_kotlin:$mautils_version'
 ```
 
 ### Dependencies
@@ -171,7 +171,7 @@ android {
 }
 
 dependencies {
-    implementation 'mohamedalaa.mautils:core_android:$mautils_version'
+    implementation 'com.github.MohamedAlaaEldin636.MAUtils:core_android:$mautils_version'
 }
 ```
 
@@ -321,14 +321,14 @@ if java only android project can use kotlin-kapt plugin and kapt in dependencies
 apply plugin: 'kotlin-kapt'
 // ...
 dependencies {
-    implementation project(':gson')
-    kapt project(':gson_processor')
+    implementation 'com.github.MohamedAlaaEldin636.MAUtils:gson:$mautils_version'
+    kapt 'com.github.MohamedAlaaEldin636.MAUtils:gson_processor:$mautils_version'
 }
 
 // -------- OR if you don't need the feature --------
 
 dependencies {
-    implementation project(':gson')
+    implementation 'com.github.MohamedAlaaEldin636.MAUtils:gson:$mautils_version'
 }
 ```
 
@@ -397,7 +397,7 @@ val value = GsonCustomWithTypeParam2().fromJson(json)
 ### Setup
 
 ``` groovy
-implementation 'mohamedalaa.mautils:lifecycle_extensions:$mautils_version'
+implementation 'com.github.MohamedAlaaEldin636.MAUtils:lifecycle_extensions:$mautils_version'
 ```
 
 ### Dependencies
