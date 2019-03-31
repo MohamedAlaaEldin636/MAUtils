@@ -1,3 +1,9 @@
+# MAUtils
+[![](https://jitpack.io/v/MohamedAlaaEldin636/MAUtils.svg)](https://jitpack.io/#MohamedAlaaEldin636/MAUtils)
+[![API](https://img.shields.io/badge/API-15%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=15)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
+
 # Library is In Progress (alpha release)
 
 This library is about general utilities, everytime I run into
@@ -15,8 +21,8 @@ in your Gradle **Top-level build file** add below code
 ``` groovy
 allprojects {
     repositories {
-    		// ...
-    		maven { url 'https://jitpack.io' }
+    	// ...
+    	maven { url 'https://jitpack.io' }
     }
 }
 ```
@@ -242,7 +248,7 @@ animatorSet.addListenerMA {
 } 
 
 // Quick inflation of a layout.xml
-val rootViewOfLayout = inflateLayout(R.layout.layout/*, parent optional viewGroup, false optional attachToParent*/)
+val rootViewOfLayout = context.inflateLayout(R.layout.layout/*, parent optional viewGroup, false optional attachToParent*/)
 
 // And alot of other utilities for other classes exist as well check docs
 ```
@@ -479,7 +485,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ```
 
-
-
-
-
+| Permissions         | Limitations           | Conditions   |
+| ------------------- | --------------------- | ----------- |
+| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Commercial Use         | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/disable_use_icon.png" height="15" width="15"/> Trademark use | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/warning_icon.png" height="15" width="15"/> License and copyright notice |
+| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Modification           | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/disable_use_icon.png" height="15" width="15"/> Liability     |   <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/warning_icon.png" height="15" width="15"/> State changes |
+| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Distribution           | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/disable_use_icon.png" height="15" width="15"/> Warranty      |    - |
+| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Patent use             | -         |   - |
+| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Private use            | -                 |  - |
