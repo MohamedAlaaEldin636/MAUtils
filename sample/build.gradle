@@ -77,6 +77,8 @@ dependencies {
     implementation project(':lifecycle_extensions')
     implementation project(':recycler_view')
 
+    implementation project(':reflection')
+
     // Anko todo delLater isa.
     //implementation "org.jetbrains.anko:anko-commons:$anko_version"
     //implementation "org.jetbrains.anko:anko-design:$anko_version" // For SnackBars
@@ -93,6 +95,8 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
+
     // For Binding Adapter in -> material_design
-    kapt "com.android.databinding:compiler:3.1.4"
+    kapt "androidx.databinding:databinding-compiler:3.3.2"
+
 }

@@ -28,6 +28,15 @@ fun <T> MutableList<T>.addIfNotInside(element: T): Boolean = (element !in this).
     }
 }
 
+// todo rename above to addDistinct afdal isa.
+fun <T : Any> MutableList<T>.addIfNotNull(element: T?): Boolean {
+    if (element != null) {
+        add(element)
+    }
+
+    return element != null
+}
+
 /**
  * Moves element from index [fromIndex] to index [toIndex] isa.
  */

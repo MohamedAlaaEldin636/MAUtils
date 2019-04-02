@@ -15,9 +15,12 @@
 
 package mohamedalaa.mautils.mautils.material_design
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import kotlinx.android.synthetic.main.activity_material_design_main.*
+import mohamedalaa.mautils.core_android.setBackgroundTint
 import mohamedalaa.mautils.mautils.R
 import mohamedalaa.mautils.mautils.databinding.ActivityMaterialDesignMainBinding
 
@@ -26,5 +29,9 @@ class MaterialDesignMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivityMaterialDesignMainBinding>(this, R.layout.activity_material_design_main)
+
+
+
+        //textView.setBackgroundTint(Color.BLUE)
     }
 }

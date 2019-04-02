@@ -19,6 +19,11 @@ package mohamedalaa.mautils.core_android
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.core.graphics.alpha
+
+/** alpha value of color between 0f full transparent to 1f full opaque */
+val Int.alphaAsFloat: Float
+    get() = Color.alpha(this).toFloat().div(255f)
 
 /**
  * Converts `receiver` color to same color but with given [alpha] ranging from 0f full transparent
@@ -68,29 +73,26 @@ fun Int.addColorAlpha(alpha: Float, dependOnCurrentAlpha: Boolean = false): Int 
  * @see addColorAlpha
  */
 fun Int.inOpaqueRange(range: ClosedFloatingPointRange<Float>): Boolean {
-    val alpha = Color.alpha(this).toFloat()
-
     if (range.start < 0f || range.start > 1f || range.endInclusive < 0f || range.endInclusive > 1f) {
         throw RuntimeException("Incorrect range, since value == $range isa.")
     }else {
-        return alpha in range
+        return alphaAsFloat in range
     }
 }
 
 /**
- * **Warnings**
- *
- * 1- if color is argb, we don't consider alpha.
- *
- * 2- we don't consider gamma correctness
- *
- * @param color color to be checked isa.
- * @return true if near to be black than being white isa.
+ * @return true if near to be black than being white, **Warning** we don't consider alpha,
+ * being blended however if alpha is < 50% opaque then this fun return false
+ * regardless of rgb value in color isa.
  */
-fun Int.isNearToBlack(@ColorInt color: Int): Boolean {
-    val greyScale = ((0.2126 * Color.red(color))
-        + (0.7152 * Color.green(color))
-        + (0.0722 * Color.blue(color)))
+fun Int.isNearToBlack(): Boolean {
+    if (alphaAsFloat < 0.5f) {
+        return false
+    }
+
+    val greyScale = ((0.2126 * Color.red(this))
+        + (0.7152 * Color.green(this))
+        + (0.0722 * Color.blue(this)))
 
     return greyScale < 128
 }

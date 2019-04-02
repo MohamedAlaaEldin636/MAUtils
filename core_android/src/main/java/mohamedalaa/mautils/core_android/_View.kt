@@ -20,6 +20,7 @@ package mohamedalaa.mautils.core_android
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.graphics.PointF
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Handler
@@ -27,6 +28,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.databinding.BindingAdapter
 
 /**
  * @return [View.getX] for this and all of it's parent viewGroups as a summation isa.
@@ -191,11 +193,20 @@ var View.backgroundCompat: Drawable?
         setBackgroundDrawable(value)
     }
 
-/** Sets background tint according to given [color] isa. */
-fun View.setBackgroundTint(@ColorInt color: Int) {
+/**
+ * Sets background tint color according to given [color], if is `null` then nothing happens to tint color isa,
+ *
+ * Sets background tint mode according to given [porterDuffMode], if is `null` then nothing happens to tint mode isa.
+ *
+ * So this fun is useless if both params are `null`.
+ *
+ * @param porterDuffMode Tinting mode used, if null nothing changes in mode, default is [PorterDuff.Mode.DST_ATOP]
+ */
+fun View.setBackgroundTint(@ColorInt color: Int? = null, porterDuffMode: PorterDuff.Mode? = PorterDuff.Mode.DST_ATOP) {
     val drawable = DrawableCompat.wrap(background ?: return) ?: return
     backgroundCompat = drawable
-    DrawableCompat.setTint(drawable, color)
+    porterDuffMode?.apply { DrawableCompat.setTintMode(drawable, porterDuffMode) }
+    color?.apply { DrawableCompat.setTint(drawable, color) }
 }
 
 // ---- Generic type parameters

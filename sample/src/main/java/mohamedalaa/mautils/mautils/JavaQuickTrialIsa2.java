@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.material_design.binding_adapter
+package mohamedalaa.mautils.mautils;
 
-import androidx.databinding.BindingAdapter
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
+import android.graphics.ColorSpace;
 
-/** app:tabLayout_ */
-object TabLayout {
+import java.util.function.DoubleUnaryOperator;
 
+/**
+ * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
+ */
+public class JavaQuickTrialIsa2 {
 
-    @JvmStatic
-    @BindingAdapter("app:tabLayout_viewPager")
-    fun setupWithViewPager(tabLayout: TabLayout, viewPager: ViewPager?) {
-        viewPager?.apply { tabLayout.setupWithViewPager(this) }
+    public void dew() {
+
     }
-
 
 }

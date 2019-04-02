@@ -18,6 +18,7 @@
 
     <data>
         <import type="mohamedalaa.mautils.mautils.R"/>
+        <import type="android.graphics.Color"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,6 +40,27 @@
             app:toolbar_menuRes="@{R.menu.visual_test_activity}"
 
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/textView"
+
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+
+            android:background="@drawable/circle_transparent"
+
+            app:view_setBackgroundTintColor="@{Color.BLUE}"
+
+            android:text="M"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+
+            android:textSize="14sp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 

@@ -15,6 +15,7 @@
 
 package mohamedalaa.mautils.mautils
 
+import android.graphics.Color
 import androidx.core.os.bundleOf
 import java.util.*
 
@@ -55,4 +56,9 @@ private fun z1(iterable: Iterable<*>, queue: Queue<*>) {
     //queue.poll()
 
     //listOf(3).indexof
+}
+
+private fun z2(color: Int) {
+    /*Color.luminance(Color.RED)
+    ColorContez*/
 }
