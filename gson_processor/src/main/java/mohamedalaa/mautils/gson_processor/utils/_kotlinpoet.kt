@@ -33,9 +33,7 @@ fun buildObject(objectName: String, propertySpec: PropertySpec): TypeSpec {
         .build()
 }
 
-/**
- * @param init all classes available from all annotated classes isa.
- */
+/** @param init all classes available from all annotated classes isa. */
 fun buildProperty(init: List<Class<*>>, propertyName: String = "propertyName"): PropertySpec {
     return PropertySpec.builder(propertyName, KotlinpoetUtils.parameterizedTypeName(List::class, Class::class, Any::class))
         .addModifiers(KModifier.PUBLIC, KModifier.FINAL)
