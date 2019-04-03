@@ -15,9 +15,7 @@
 
 package mohamedalaa.mautils.gson_processor.utils
 
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.PropertySpec
-import com.squareup.kotlinpoet.asTypeName
+import com.squareup.kotlinpoet.*
 import mohamedalaa.mautils.reflection.isInterface
 import kotlin.reflect.KClass
 import kotlin.reflect.KClassifier
@@ -26,42 +24,59 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.javaType
 import kotlin.reflect.jvm.jvmErasure
 
-fun buildProperty1(classFullName: String) {
-    val propertySpec = PropertySpec.builder("propertyName", String::class)
+fun buildObject(objectName: String, propertySpec: PropertySpec): TypeSpec {
+    return TypeSpec.objectBuilder(objectName)
         .addModifiers(KModifier.PUBLIC, KModifier.FINAL)
-        //.initializer()
+
+        .addProperty(propertySpec)
+
         .build()
 }
 
-fun PropertySpec.Builder.init(classFullName: String) = apply {
-    val kClass = kotlin.runCatching { Class.forName(classFullName).kotlin }.getOrNull() ?: return@apply
+/**
+ * @param init all classes available from all annotated classes isa.
+ */
+fun buildProperty(init: List<Class<*>>, propertyName: String = "propertyName"): PropertySpec {
+    return PropertySpec.builder(propertyName, KotlinpoetUtils.parameterizedTypeName(List::class, Class::class, Any::class))
+        .addModifiers(KModifier.PUBLIC, KModifier.FINAL)
 
-    // in case include self, include unlimited nesting isa.
-    //val listOfKClass: List<KClass<*>>
-    var string: String = ""
-    kClass.declaredMemberProperties.forEach {
-        //it.returnType.asTypeName()
-        it.returnType.jvmErasure.qualifiedName
+        .init(init)
 
-        it.returnType
-        it.returnType.asTypeName()
-
-        //kClass.instan
-
-        it.returnType.classifier?.createType(
-
-        )
-
-        kotlin.jvm.internal.ClassReference(Class.forName("")).createType(
-
-        ).javaType
-
-        // create
-    }
-
-
-    initializer("")
+        .build()
 }
 
-val KClass<*>.isAvailableForMASealedAbstractOrInterfaceAnnotation
-    get() = isSealed || isAbstract || isInterface
+fun PropertySpec.Builder.init(list: List<Class<*>>) = apply {
+    val string = buildString {
+        append("kotlin.collections.listOfNotNull(")
+
+        for (index in 0 until list.size) {
+            append("kotlin.runCatching { Class.forName(\"${list[index].name}\") }.getOrNull()")
+
+            if (index != list.lastIndex) {
+                append(",")
+            }
+        }
+
+        append(")")
+    }
+
+    initializer(string)
+}
+
+fun PropertySpec.Builder.initListString(list: List<String>) = apply {
+    val string = buildString {
+        append("kotlin.collections.listOfNotNull(")
+
+        for (index in 0 until list.size) {
+            append("kotlin.runCatching { Class.forName(\"${list[index]}\") }.getOrNull()")
+
+            if (index != list.lastIndex) {
+                append(",")
+            }
+        }
+
+        append(")")
+    }
+
+    initializer(string)
+}

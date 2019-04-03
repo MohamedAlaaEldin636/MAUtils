@@ -18,6 +18,7 @@ package mohamedalaa.mautils.gson_processor
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import mohamedalaa.mautils.gson_annotation.GsonAnnotationConstants
+import mohamedalaa.mautils.gson_processor.utils.*
 
 import java.io.IOException
 
@@ -30,7 +31,6 @@ import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
 
 import javax.lang.model.element.Modifier
-import mohamedalaa.mautils.gson_processor.utils.buildMethodSpec
 
 @SupportedAnnotationTypes("mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
@@ -39,7 +39,11 @@ class ProcessorOfMASealedAbstractOrInterface : AbstractProcessor() {
     override fun process(annotations: Set<TypeElement>, roundEnv: RoundEnvironment): Boolean {
         val mutableList = mutableListOf<String>()
         for (element in roundEnv.getElementsAnnotatedWith(GsonAnnotationConstants.maSealedAbstractOrInterfaceJClass)) {
-            mutableList += (element as TypeElement).qualifiedName.toString()
+            if (element !is TypeElement) {
+                continue
+            }
+
+            mutableList += element.qualifiedName.toString()
         }
 
         // method
