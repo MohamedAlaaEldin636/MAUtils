@@ -99,4 +99,6 @@ dependencies {
     // For Binding Adapter in -> material_design
     kapt "androidx.databinding:databinding-compiler:3.3.2"
 
+    testImplementation project(':test_core')
+
 }

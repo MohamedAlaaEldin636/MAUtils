@@ -20,6 +20,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import mohamedalaa.mautils.mautils.fake_data.CustomObject
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
+import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -37,6 +38,8 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
 
         assertTrue { true }
+
+        TestingLog.e("hello")
     }
 
     @Test
