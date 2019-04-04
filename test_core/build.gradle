@@ -13,7 +13,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':recycler_view', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core'
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
 
-if (!System.env.JITPACK)
-    include ':sample'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.MohamedAlaaEldin636'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':core_kotlin')
+    implementation project(':reflection')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8

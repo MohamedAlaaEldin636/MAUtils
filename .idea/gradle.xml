@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/recycler_view" />
             <option value="$PROJECT_DIR$/reflection" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/test_core" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

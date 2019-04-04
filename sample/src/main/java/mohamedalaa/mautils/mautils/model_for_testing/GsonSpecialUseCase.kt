@@ -43,3 +43,23 @@ sealed class SpecialIndirectSealedClass {
 
     data class DataClass1(val int: Int) : SpecialIndirectSealedClass()
 }
+
+@MASealedAbstractOrInterface
+sealed class NestedSealedClassParent {
+
+    //@MASealedAbstractOrInterface // optional
+    sealed class SealedClass1 : NestedSealedClassParent() {
+        object Object1 : NestedSealedClassParent.SealedClass1()
+
+        data class Data1(val int: Int) : NestedSealedClassParent.SealedClass1()
+    }
+
+    object Object1 : NestedSealedClassParent()
+
+}
+
+data class NestedSealedClassDataClass(
+    val nestedSealedClassParent: NestedSealedClassParent,
+    val double: Double
+)
+

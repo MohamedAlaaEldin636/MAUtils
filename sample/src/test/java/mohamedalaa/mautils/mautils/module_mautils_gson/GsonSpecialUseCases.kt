@@ -18,10 +18,7 @@ package mohamedalaa.mautils.mautils.module_mautils_gson
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.mautils.assertEquality
-import mohamedalaa.mautils.mautils.model_for_testing.SpecialDataClass
-import mohamedalaa.mautils.mautils.model_for_testing.SpecialIndirectSealedClass
-import mohamedalaa.mautils.mautils.model_for_testing.SpecialJust
-import mohamedalaa.mautils.mautils.model_for_testing.SpecialSealedClass
+import mohamedalaa.mautils.mautils.model_for_testing.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -32,6 +29,28 @@ import org.robolectric.RobolectricTestRunner
  */
 @RunWith(RobolectricTestRunner::class)
 class GsonSpecialUseCases {
+
+    @Test
+    fun nested_sealed_class() {
+        val o1 = NestedSealedClassDataClass(
+            NestedSealedClassParent.SealedClass1.Data1(
+                789
+            ),
+            56.6
+        )
+
+        val j1 = o1.toJson()
+
+        val r1 = j1.fromJson<NestedSealedClassDataClass>()
+
+        println(o1)
+        println()
+        println(j1)
+        println()
+        println(r1)
+
+        assertEquality(o1, r1)
+    }
 
     @Test
     fun normal_class() {
