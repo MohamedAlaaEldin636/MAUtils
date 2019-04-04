@@ -46,9 +46,9 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
         val jsonObject = JSONObject()
         jsonObject.put(KEY_CLASS_FULL_NAME, src.javaClass.name)
-        jsonObject.put(KEY_NORMAL_SERIALIZATION_JSON_STRING, normalSerializationJsonString)
+        jsonObject.put(KEY_NORMAL_SERIALIZATION_JSON_STRING, kotlin.runCatching { JSONObject(normalSerializationJsonString) }.getOrElse { return null })
 
-        return JsonParser().parse(jsonObject.toString())
+        return kotlin.runCatching { JsonParser().parse(jsonObject.toString()) }.getOrNull()
     }
 
 }
@@ -69,11 +69,11 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 
         val classFullName = jsonObject.optString(KEY_CLASS_FULL_NAME) ?: return null
         val jClass = runCatchingToNull { Class.forName(classFullName) } ?: return null
-        val normalSerializationJsonString = jsonObject.optString(
+        val normalSerializationJsonObject = jsonObject.optJSONObject(
             KEY_NORMAL_SERIALIZATION_JSON_STRING
         ) ?: return null
 
-        return runCatchingToNull { gson.fromJson(normalSerializationJsonString, jClass) }
+        return runCatchingToNull { gson.fromJson(normalSerializationJsonObject.toString(), jClass) }
     }
 
 }
