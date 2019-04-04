@@ -37,16 +37,4 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface MASealedAbstractOrInterface {
-    boolean includeSelf() default true;
-    boolean checkSelfTypeParams() default false;
-
-    boolean checkDeclaredProperties() default false;
-    boolean checkNestedDeclaredProperties() default false;
-    boolean checkAllDeclaredPropertiesTypeParams() default false;
-
-    boolean excludeInterfaces() default false;
-    boolean excludeAbstractClasses() default false;
-    boolean excludeSealedClasses() default false;
-    Class<?>[] excludeClasses() default {};
-}
+public @interface MASealedAbstractOrInterface {}
