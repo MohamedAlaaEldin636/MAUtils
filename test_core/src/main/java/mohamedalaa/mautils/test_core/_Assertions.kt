@@ -42,6 +42,12 @@ private var toggler: Boolean = true
  * for more explanation isa,
  *
  * Also prints logs for each equality process via [TestingLog] isa.
+ *
+ * todo maybe add 2 more params in [actionOnReflectionAccessError] of expectedValue we newValue
+ * ashan el user ye compare bra7to isa.
+ *
+ * todo list of el mafrod ::class msh instances ya zaki isa. so change it isa.
+ * see est calc it is solved there el7.
  */
 fun <T : Any> assertEquality(
     expected: T,
