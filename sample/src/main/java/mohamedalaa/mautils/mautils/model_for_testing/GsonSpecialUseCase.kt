@@ -22,6 +22,11 @@ data class SpecialDataClass(
     var specialSealedClass: SpecialSealedClass
 )
 
+data class SpecialJust(
+    val int: Int,
+    val specialIndirectSealedClass: SpecialIndirectSealedClass
+)
+
 @MASealedAbstractOrInterface
 sealed class SpecialSealedClass {
     object Object1 : SpecialSealedClass()

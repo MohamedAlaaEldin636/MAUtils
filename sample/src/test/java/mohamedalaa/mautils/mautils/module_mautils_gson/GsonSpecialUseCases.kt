@@ -17,8 +17,10 @@ package mohamedalaa.mautils.mautils.module_mautils_gson
 
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
+import mohamedalaa.mautils.mautils.assertEquality
 import mohamedalaa.mautils.mautils.model_for_testing.SpecialDataClass
 import mohamedalaa.mautils.mautils.model_for_testing.SpecialIndirectSealedClass
+import mohamedalaa.mautils.mautils.model_for_testing.SpecialJust
 import mohamedalaa.mautils.mautils.model_for_testing.SpecialSealedClass
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,6 +34,17 @@ import org.robolectric.RobolectricTestRunner
 class GsonSpecialUseCases {
 
     @Test
+    fun normal_class() {
+        val o1 = SpecialIndirectSealedClass.DataClass1(99)
+
+        val j1 = o1.toJson()
+
+        val r1 = j1.fromJson<SpecialIndirectSealedClass.DataClass1>()
+
+        assertEquality(o1, r1)
+    }
+
+    @Test
     fun not_direct_sealed_like_subclass_class() {
         val o1 = SpecialDataClass(
             4,
@@ -41,15 +54,42 @@ class GsonSpecialUseCases {
             )
         )
 
+        println(o1)
+        println()
+
         val json = o1.toJson()
+
+        println(json)
+        println()
 
         val r1 = json.fromJson<SpecialDataClass>()
 
-        println(o1)
-        println()
-        println(json)
-        println()
         println(r1)
+        println()
+
+        assertEquality(o1, r1)
+    }
+
+    @Test
+    fun just_custom_with_sealed() {
+        val o1 = SpecialJust(
+            5,
+            SpecialIndirectSealedClass.DataClass1(99)
+        )
+
+        val j1 = o1.toJson()
+
+        val r1 = j1.fromJson<SpecialJust>()
+
+        println("-")
+        println(o1)
+        println("-")
+        println(j1)
+        println("-")
+        println(r1)
+        println()
+
+        assertEquality(o1, r1)
     }
 
 }

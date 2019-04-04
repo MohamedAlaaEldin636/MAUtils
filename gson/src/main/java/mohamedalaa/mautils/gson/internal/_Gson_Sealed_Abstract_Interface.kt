@@ -16,6 +16,9 @@
 package mohamedalaa.mautils.gson.internal
 
 import com.google.gson.*
+import mohamedalaa.mautils.gson.allAnnotatedClasses
+import mohamedalaa.mautils.gson.java.fromJsonJava
+import mohamedalaa.mautils.gson.toJson
 import org.json.JSONObject
 import java.lang.reflect.Type
 
@@ -24,6 +27,12 @@ private val gson = GsonBuilder()
     .setLenient()
     .enableComplexMapKeySerialization()
     .create()
+
+private val doubleCheckGson: Gson = gson.newBuilder().apply {
+    allAnnotatedClasses?.forEach {
+        registerTypeAdapter(it, JsonSerializerAndDeserializerForDoubleChecks())
+    }
+}.create()
 
 private const val KEY_CLASS_FULL_NAME = "KEY_CLASS_FULL_NAME"
 private const val KEY_NORMAL_SERIALIZATION_JSON_STRING = "KEY_NORMAL_SERIALIZATION_JSON_STRING"
@@ -42,7 +51,11 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
             return null
         }
 
-        val normalSerializationJsonString = runCatchingToNull { gson.toJson(src, src::class.java) } ?: return null
+        var normalSerializationJsonString = runCatchingToNull { gson.toJson(src, src::class.java) } ?: return null
+
+        if (src.toJson(doubleCheckGson) != normalSerializationJsonString) {
+            normalSerializationJsonString = src.toJson()
+        }
 
         val jsonObject = JSONObject()
         jsonObject.put(KEY_CLASS_FULL_NAME, src.javaClass.name)
@@ -73,7 +86,33 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
             KEY_NORMAL_SERIALIZATION_JSON_STRING
         ) ?: return null
 
-        return runCatchingToNull { gson.fromJson(normalSerializationJsonObject.toString(), jClass) }
+        var normalDeserialization = runCatchingToNull { gson.fromJson(normalSerializationJsonObject.toString(), jClass) }
+
+        if (normalDeserialization != normalSerializationJsonObject.toString().fromJsonJava(jClass, doubleCheckGson)) {
+            normalDeserialization = normalSerializationJsonObject.toString().fromJsonJava(jClass)
+        }
+
+        return normalDeserialization
+    }
+
+}
+
+private class JsonSerializerAndDeserializerForDoubleChecks : JsonSerializer<Any>, JsonDeserializer<Any> {
+
+    override fun serialize(
+        src: Any?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement? {
+        return null
+    }
+
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): Any? {
+        return null
     }
 
 }

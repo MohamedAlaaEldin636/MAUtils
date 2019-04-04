@@ -124,7 +124,7 @@ inline fun <reified E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
 @Suppress("UNCHECKED_CAST")
-private val allAnnotatedClasses: List<Class<*>>? = runCatching {
+internal val allAnnotatedClasses: List<Class<*>>? = runCatching {
     val jClass = Class.forName(GsonAnnotationConstants.generatedMASealedAbstractOrInterfaceFullName)
 
     val method = jClass.declaredMethods[0]
@@ -151,8 +151,8 @@ internal fun generateGson(): Gson {
     val gsonBuilder = GsonBuilder()
 
     allAnnotatedClasses?.forEach {
-        gsonBuilder.registerTypeHierarchyAdapter(it, JsonSerializerForSealedClasses())
-        gsonBuilder.registerTypeHierarchyAdapter(it, JsonDeserializerForSealedClasses())
+        gsonBuilder.registerTypeAdapter(it, JsonSerializerForSealedClasses())
+        gsonBuilder.registerTypeAdapter(it, JsonDeserializerForSealedClasses())
     }
 
     return gsonBuilder
