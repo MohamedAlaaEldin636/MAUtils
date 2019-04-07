@@ -32,6 +32,8 @@ import mohamedalaa.mautils.core_android.addListenerMA
 import mohamedalaa.mautils.core_android.setOnQueryTextListenerMA
 import mohamedalaa.mautils.core_kotlin.*
 import java.lang.reflect.ParameterizedType
+import kotlin.reflect.KClass
+import kotlin.reflect.full.IllegalCallableAccessException
 
 abstract class CheckTypeParam<E> {
 
@@ -178,3 +180,16 @@ fun zzzzP() {
 }
 
 class SmallUser(val name: String, val age: Int)
+
+private fun f1(list: List<KClass<*>>) {
+
+}
+
+private fun f2() {
+    f1(listOf(
+        IllegalCallableAccessException::class,
+        RuntimeException::class
+    ))
+}
+
+

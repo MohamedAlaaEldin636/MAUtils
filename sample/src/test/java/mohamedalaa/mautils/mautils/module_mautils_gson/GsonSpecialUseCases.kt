@@ -19,6 +19,7 @@ import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.mautils.assertEquality
 import mohamedalaa.mautils.mautils.model_for_testing.*
+import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -29,6 +30,16 @@ import org.robolectric.RobolectricTestRunner
  */
 @RunWith(RobolectricTestRunner::class)
 class GsonSpecialUseCases {
+
+    @Test
+    fun justPrint2() {
+        TestingLog.e("dede222222")
+    }
+
+    @Test
+    fun justPrint() {
+        TestingLog.e("dede")
+    }
 
     @Test
     fun nested_sealed_class() {
