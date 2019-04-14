@@ -17,114 +17,104 @@
 
 package mohamedalaa.mautils.gson
 
-import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
 import android.os.Parcelable
-import android.util.Size
-import android.util.SizeF
 import android.util.SparseArray
 import com.google.gson.Gson
+import mohamedalaa.mautils.core_android.addValue
+import mohamedalaa.mautils.core_android.buildBundle
 import mohamedalaa.mautils.gson.java.GsonConverter
 import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
-import java.io.Serializable
 
 private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"
 
 /**
- * Exactly same as [buildBundleGson], but for a [Bundle] instance instead of creating a new one isa.
+ * Used in case you want any object to be added as string in Bundle while using
+ * [buildBundleGson], [addValuesGson] or [addValueGson]
  *
- * @throws RuntimeException When a value cannot be serialized with [toJson] isa.
+ * **Benefits**
+ * 1. Sometimes String is lighter in being saved in bundle than a serializable object
+ * Ex. Imagine a huge complicated object and you want to save a small list of it in bundle
+ * using any of the 3 fun above will save list as serializable which makes huge size
+ * while there is specific limit for bundle in android see [Link](https://developer.android.com/guide/components/activities/parcelables-and-bundles)
+ *
+ * **Usage**
+ * buildBundleGson(
+ *      customObject.forceUsingJsonInBundle(),
+ *      12,
+ *      "other objects"
+ * )
  */
-fun Bundle.addValuesGson(vararg values: Any?, gson: Gson? = null) {
+inline fun <reified E> E?.forceUsingJsonInBundle(gson: Gson? = null) = ForceUsingJsonInBundle(toJsonOrNull(gson))
+
+data class ForceUsingJsonInBundle @PublishedApi internal constructor (val jsonString: String?)
+
+/**
+ * Same as [buildBundleGson] but for 1 value only isa.
+ *
+ * @see addValuesGson
+ * @see buildBundleGson
+ * @see getKGetterBundleGson
+ * @see getJGetterBundleGson
+ */
+@JvmOverloads
+fun Bundle.addValueGson(key: String?, value: Any?, gson: Gson? = null) {
+    if (value is ForceUsingJsonInBundle) {
+        putString(key, value.jsonString)
+    }else {
+        runCatching {
+            addValue(key, value)
+        }.getOrElse {
+            putString(key, value.toJsonOrNull(gson))
+        }
+    }
+}
+
+/**
+ * Same as [buildBundleGsonForced] but for 1 value only isa.
+ *
+ * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
+ */
+@JvmOverloads
+fun Bundle.addValueGsonForced(key: String?, value: Any?, gson: Gson? = null) {
+    val stringValue = value.toJsonOrNull(gson)
+
+    stringValue?.apply {
+        putString(key, this)
+    } ?: addValue(key, value)
+}
+
+private fun Bundle.privateAddValuesGson(vararg values: Any?, gson: Gson?, forced: Boolean) {
     values.forEachIndexed { index, value ->
         val key = index.toString()
 
-        when(value) {
-            null -> putString(key, null) // Any nullable type will suffice.
-
-            // Primitives
-            is Boolean -> putBoolean(key, value)
-            is Byte -> putByte(key, value)
-            is Char -> putChar(key, value)
-            is Double -> putDouble(key, value)
-            is Float -> putFloat(key, value)
-            is Int -> putInt(key, value)
-            is Long -> putLong(key, value)
-            is Short -> putShort(key, value)
-
-            // Other
-            is CharSequence -> putCharSequence(key, value) // contains ( String )
-            is Bundle -> putBundle(key, value)
-            is Parcelable -> putParcelable(key, value)
-
-            // Primitives arrays
-            is BooleanArray -> putBooleanArray(key, value)
-            is ByteArray -> putByteArray(key, value)
-            is CharArray -> putCharArray(key, value)
-            is DoubleArray -> putDoubleArray(key, value)
-            is FloatArray -> putFloatArray(key, value)
-            is IntArray -> putIntArray(key, value)
-            is LongArray -> putLongArray(key, value)
-            is ShortArray -> putShortArray(key, value)
-
-            // Other arrays
-            is Array<*> -> {
-                val componentType = value::class.java.componentType
-
-                if (componentType == null) {
-                    putString(key, value.toJson(gson))
-
-                    return@forEachIndexed
-                }
-
-                @Suppress("UNCHECKED_CAST") // Checked by reflection.
-                when {
-                    Parcelable::class.java.isAssignableFrom(componentType) -> {
-                        // contains ( SparseArray )
-                        putParcelableArray(key, value as Array<Parcelable>)
-                    }
-                    String::class.java.isAssignableFrom(componentType) -> {
-                        putStringArray(key, value as Array<String>)
-                    }
-                    CharSequence::class.java.isAssignableFrom(componentType) -> {
-                        putCharSequenceArray(key, value as Array<CharSequence>)
-                    }
-                    Serializable::class.java.isAssignableFrom(componentType) -> {
-                        putSerializable(key, value)
-                    }
-                    else -> {
-                        putString(key, value.toJson(gson))
-
-                        return@forEachIndexed
-                    }
-                }
-            }
-
-            // Serializable contains ( Enum, All Arrays )
-            is Serializable -> putSerializable(key, value)
-
-            else -> {
-                @Suppress("UNCHECKED_CAST")
-                if (Build.VERSION.SDK_INT >= 18 && value is IBinder) {
-                    putBinder(key, value)
-                }else if (Build.VERSION.SDK_INT >= 21 && value is Size) {
-                    putSize(key, value)
-                }else if (Build.VERSION.SDK_INT >= 21 && value is SizeF) {
-                    putSizeF(key, value)
-                }else if (value is SparseArray<*> && value as? SparseArray<Parcelable> != null) {
-                    putSparseParcelableArray(key, value)
-                }else {
-                    putString(key, value.toJson(gson))
-
-                    return@forEachIndexed
-                }
-            }
+        if (forced) {
+            addValueGsonForced(key, value, gson)
+        }else {
+            addValueGson(key, value, gson)
         }
     }
 
     putInt(BUNDLE_KEY_OBJECTS_SIZE, values.size)
 }
+
+/**
+ * Exactly same as [buildBundleGson], but for a [Bundle] instance instead of creating a new one isa.
+ *
+ * @see addValueGson
+ */
+@JvmOverloads
+fun Bundle.addValuesGson(vararg values: Any?, gson: Gson? = null)
+    = privateAddValuesGson(values = *values, gson = gson, forced = false)
+
+/**
+ * Exactly same as [buildBundleGsonForced], but for a [Bundle] instance instead of creating a new one isa.
+ *
+ * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
+ */
+@JvmOverloads
+fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
+    = privateAddValuesGson(values = *values, gson = gson, forced = true)
 
 /**
  * Returns a new [Bundle] with the given [values] as elements, and keys are the indices
@@ -145,17 +135,45 @@ fun Bundle.addValuesGson(vararg values: Any?, gson: Gson? = null) {
  * String string = getterBundle.get();
  * ```
  *
- * **Notes**
+ * ### Notes
  * - It's same as androidx.core.os.bundleOf with 3 additional benefits isa.
  * 1. Supports [SparseArray]<[Parcelable]> like regular [Bundle] does, this is currently not in androidx.core.os.bundleOf.
  * 2. No need to create keys for insertion and retrieval of values, but must be in order when retrieving it isa.
  * 3. Supports any custom classes that can be serialized using [toJson] isa.
  *
- * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
+ * ### Limitations
+ * 1. If needs [GsonConverter] then it needs to be done manually so pass value as string
+ * generated from [GsonConverter.toJson], Note in retrieval this limitation does not exist isa.
+ *
+ * ### How it works
+ * 1. If forced to be converted by json via [forceUsingJsonInBundle] then it's string value is used
+ * 2. trying to use [Bundle.addValue] and in case of any error then [toJsonOrNull] is used instead.
+ *
+ * ### When
+ * It's obvious that this and [buildBundleGsonForced] are so similar but when to use each one
+ *
+ * 1. in case a lot of variables needs regular [buildBundle] and a fallback is to use [toJsonOrNull]
+ * use this fun, Note no [RuntimeException] will be thrown in any error since null will be put instead,
+ * Another VIP Note is there can be exception to go firstly with [toJsonOrNull] in this case
+ * by using [forceUsingJsonInBundle]
+ *
+ * 2. while [buildBundleGsonForced] is exactly the opposite if most of variables needs [toJsonOrNull]
+ * and fallback to it if null is returned from [toJsonOrNull] is [buildBundle], Note so
+ * [IllegalArgumentException] will be thrown due to [buildBundle] if an error occurred,
+ * CANNOT Use [forceUsingJsonInBundle] otherwise unexpected behaviours will occur without errors isa.
+ *
+ * @see addValueGson
  */
 @JvmOverloads
 fun buildBundleGson(vararg values: Any?, gson: Gson? = null): Bundle
     = Bundle().apply { addValuesGson(*values.map { it }.toTypedArray(), gson = gson) }
+
+/**
+ * Same as [buildBundleGson] but with several differences See **When** section in doc of [buildBundleGson]
+ */
+@JvmOverloads
+fun buildBundleGsonForced(vararg values: Any?, gson: Gson? = null): Bundle
+    = Bundle().apply { addValuesGsonForced(*values.map { it }.toTypedArray(), gson = gson) }
 
 class KGetterBundleGson internal constructor(@PublishedApi internal val bundle: Bundle) {
 

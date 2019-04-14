@@ -53,6 +53,12 @@ android {
     dataBinding {
         enabled = true
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -78,6 +84,8 @@ dependencies {
     implementation project(':recycler_view')
 
     implementation project(':reflection')
+
+    implementation 'com.google.android.material:material:1.0.0'
 
     // Anko todo delLater isa.
     //implementation "org.jetbrains.anko:anko-commons:$anko_version"

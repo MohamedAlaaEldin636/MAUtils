@@ -25,8 +25,26 @@ import java.util.*
  *
  * since the standard base time known as "the epoch", namely January 1, 1970, 00:00:00 GMT isa.
  *
+ * See [https://developer.android.com/reference/java/text/SimpleDateFormat.html](https://developer.android.com/reference/java/text/SimpleDateFormat.html)
+ *
  * @see SimpleDateFormat.format
  */
 @JvmOverloads
 fun Long.format(pattern: String, local: Locale = Locale.getDefault()): String
     = SimpleDateFormat(pattern, local).format(Date(this))
+
+/**
+ * this is better since above due to languages might change isa.
+ *
+ * @param pairs [Pair.second] == format -> means to format it (true) or ignore it (false) and put it as it is isa.
+ *
+todo docs val date = timeGameStarted.format("d MMM, yyyy $at : a")
+
+e3mel format kaza marra isa
+ */
+@JvmOverloads
+fun Long.format(vararg pairs: Pair<String, Boolean>, local: Locale = Locale.getDefault()): String {
+    return pairs.joinToString(separator = "") {
+        if (it.second) format(it.first, local) else it.first
+    }
+}

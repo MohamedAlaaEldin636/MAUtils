@@ -21,17 +21,32 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import kotlinx.android.synthetic.main.activity_material_design_main.*
 import mohamedalaa.mautils.core_android.setBackgroundTint
+import mohamedalaa.mautils.core_android.toast
+import mohamedalaa.mautils.material_design.BR
 import mohamedalaa.mautils.mautils.R
 import mohamedalaa.mautils.mautils.databinding.ActivityMaterialDesignMainBinding
 
 class MaterialDesignMainActivity : AppCompatActivity() {
 
+    //private lateinit var person: Person
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DataBindingUtil.setContentView<ActivityMaterialDesignMainBinding>(this, R.layout.activity_material_design_main)
+        val binding = DataBindingUtil.setContentView<ActivityMaterialDesignMainBinding>(this, R.layout.activity_material_design_main)
 
+        // -- custom obj
+        val person = Person("Mohamed Alaa", 21, true)
 
+        binding.lifecycleOwner = this
+        binding.person = person
 
-        //textView.setBackgroundTint(Color.BLUE)
+        button.setOnClickListener {
+            toast("isAdult -> ${person.isAdult}") // works el7
+
+            person.name += "-"
+
+            binding.person = person
+            //binding.notifyPropertyChanged(BR.person)
+        }
     }
 }

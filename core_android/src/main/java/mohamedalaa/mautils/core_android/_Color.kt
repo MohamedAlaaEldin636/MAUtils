@@ -18,8 +18,10 @@
 package mohamedalaa.mautils.core_android
 
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.annotation.ColorInt
 import androidx.core.graphics.alpha
+import androidx.databinding.BindingConversion
 
 /** alpha value of color between 0f full transparent to 1f full opaque */
 val Int.alphaAsFloat: Float
@@ -96,3 +98,13 @@ fun Int.isNearToBlack(): Boolean {
 
     return greyScale < 128
 }
+
+/**
+ * @return [ColorDrawable] with the `receiver` isa,
+ *
+ * Note it's annotated with [BindingConversion] which means you can use attributes
+ * that takes drawable to take int colors instead
+ * Ex. android:background="@{isBooleanTrue ? @color/colorAccent : @color/colorPrimary}"
+ */
+@BindingConversion
+fun Int.toDrawable() = ColorDrawable(this)

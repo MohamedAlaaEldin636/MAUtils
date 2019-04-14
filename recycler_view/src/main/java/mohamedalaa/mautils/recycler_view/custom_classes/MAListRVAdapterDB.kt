@@ -26,6 +26,7 @@ import mohamedalaa.mautils.recycler_view.custom_classes.internal.ListRVAdapterCo
 abstract class MAListRVAdapterDB<E, VDB : ViewDataBinding>(dataList: List<E>, @LayoutRes layoutRes: Int)
     : MARVAdapterDB<VDB>(layoutRes), ListRVAdapterCommonActions<E> {
 
+    // todo this and see kol el adapter this MUST be privite isa.
     final override val _dataList: MutableList<E> = dataList.toMutableList()
 
     val dataList: List<E>

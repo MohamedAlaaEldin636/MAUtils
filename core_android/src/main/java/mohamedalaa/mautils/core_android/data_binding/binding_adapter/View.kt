@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android.binding_adapter
+package mohamedalaa.mautils.core_android.data_binding.binding_adapter
 
 import android.graphics.PorterDuff
 import android.view.View

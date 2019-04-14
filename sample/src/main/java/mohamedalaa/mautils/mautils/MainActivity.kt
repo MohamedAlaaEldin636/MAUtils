@@ -31,6 +31,8 @@ import kotlin.reflect.full.primaryConstructor
 
 class MainActivity : AppCompatActivity() {
 
+    val int = 1000 * 1000
+
     /*var intVal: Int
     var stringVal: String
     var doubleVal: Double

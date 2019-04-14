@@ -31,6 +31,8 @@ import java.io.Serializable
  * 4- NavigationViewUtils -> movies tv isa.
  * 4- RetrofitCallbackUtils {new module isa.} -> movies tv isa.
  * 4- NetworkUtils { needs permission so better isa in another module (core_android_with_permissions) } -> movies tv isa.
+ *      or tell devs how to disable manifest permission, and dynamically check it in code isa.
+ *      there was an article about that so recheck isa.
  * 0- SharedPrefUtils -> movies tv isa
  *
  * OTHER Modules

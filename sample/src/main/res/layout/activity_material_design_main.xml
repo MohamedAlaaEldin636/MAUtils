@@ -14,22 +14,26 @@
   ~ See the License for the specific language governing permissions and limitations under the License.
   -->
 
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:context=".material_design.MaterialDesignMainActivity">
 
     <data>
         <import type="mohamedalaa.mautils.mautils.R"/>
         <import type="android.graphics.Color"/>
+        <import type="mohamedalaa.mautils.core_android.data_binding.DataBindingBoxingUtils" />
+
+        <variable
+            name="person"
+            type="mohamedalaa.mautils.mautils.material_design.Person"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        tools:context=".material_design.MaterialDesignMainActivity">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="0dp"
@@ -63,6 +67,74 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
+
+        <!--
+        android:background="@{true ? @color/colorAccent : @drawable/circle_transparent}"
+        -->
+        <View
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@{true ? @color/colorAccent : @color/colorPrimary}"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:backgroundTint="@color/colorPrimary"
+
+            android:text="Click to Increment"
+
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:text="@{person.name}"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+
+            android:gravity="center"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView"/>
+
+        <!--
+        app:thumbTint="@color/colorPrimary"
+        thumb -> drawable
+
+            app:track="@color/colorPrimary"
+        -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:minWidth="200dp"
+            android:minHeight="70dp"
+
+            android:text="isAdult"
+
+            android:textOff="off text"
+            android:textOn="on text"
+
+            app:switchTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:showText="true"
+            app:switchPadding="50dp"
+            app:thumbTextPadding="20dp"
+
+            android:checked="@={DataBindingBoxingUtils.safeUnbox(person.adult)}"
+
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
