@@ -59,7 +59,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Local Libraries
-    implementation project(':core_android')
+    implementation project (':core_android')
+    implementation 'androidx.core:core-ktx:1.0.1'
+
+    implementation project (':core_kotlin')
+
+    // Others
 
     implementation 'com.google.android.material:material:1.0.0'
 }

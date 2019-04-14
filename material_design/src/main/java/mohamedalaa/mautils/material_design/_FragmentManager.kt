@@ -15,20 +15,18 @@
 
 package mohamedalaa.mautils.material_design
 
-import android.app.Activity
-import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
-fun Fragment.hideKeyboard() {
-    val imm = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
+fun FragmentManager.transaction(commitNow: Boolean = false, allowStateLoss: Boolean = false, body: FragmentTransaction.() -> Unit) {
+    val transaction = beginTransaction().apply {
+        body()
+    }
 
-    val fragmentView = view ?: return
-
-    val rootView = fragmentView.rootView
-    imm.hideSoftInputFromWindow(rootView.windowToken, 0)
-}
-
-fun <F : Fragment> F.newInstanceWithArguments(bundle: Bundle?): F = apply {
-    arguments = bundle
+    when {
+        commitNow && allowStateLoss -> transaction.commitNowAllowingStateLoss()
+        commitNow -> transaction.commitNow()
+        allowStateLoss -> transaction.commitAllowingStateLoss()
+        else -> transaction.commit()
+    }
 }

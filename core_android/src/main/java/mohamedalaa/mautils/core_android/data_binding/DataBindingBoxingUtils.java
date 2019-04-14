@@ -31,4 +31,13 @@ public class DataBindingBoxingUtils {
         return b ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    @InverseMethod("safeBox")
+    public static int safeUnbox(Integer value) {
+        return value != null ? value : 0;
+    }
+
+    public static Integer safeBox(int value) {
+        return value;
+    }
+
 }

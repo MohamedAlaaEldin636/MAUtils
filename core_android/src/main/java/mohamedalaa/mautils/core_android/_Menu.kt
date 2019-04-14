@@ -53,3 +53,13 @@ fun Menu.setItemsIconTint(@ColorInt color: Int) = forEach {
 fun Menu.setItemsTitleColor(@ColorInt color: Int) = forEach {
     it.setTitleColor(color)
 }
+
+fun Menu.firstOrNull(predicate: (MenuItem) -> Boolean): MenuItem? {
+    forEach {
+        if (predicate(it)) {
+            return it
+        }
+    }
+
+    return null
+}

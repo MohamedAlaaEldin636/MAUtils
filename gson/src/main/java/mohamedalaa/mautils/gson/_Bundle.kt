@@ -162,6 +162,10 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
  * [IllegalArgumentException] will be thrown due to [buildBundle] if an error occurred,
  * CANNOT Use [forceUsingJsonInBundle] otherwise unexpected behaviours will occur without errors isa.
  *
+ * 3. It's recommended to use this fun with [forceUsingJsonInBundle] when needed
+ * since gson not able to serialize everything for example .toJson works with [Double] very good
+ * but with other number, deserialization will not be correct.
+ *
  * @see addValueGson
  */
 @JvmOverloads
@@ -184,11 +188,12 @@ class KGetterBundleGson internal constructor(@PublishedApi internal val bundle: 
         val key = counter.toString()
         counter++
 
-        val any = bundle.get(key)
-        return if (any is String && gsonConverter != null) {
-            gsonConverter.fromJsonOrNull(any)
-        }else {
-            (if (any is String) any.fromJsonOrNull<T>(gson) else null) ?: bundle.get(key) as? T
+        return when (val any = bundle.get(key)) {
+            is String -> when {
+                gsonConverter != null -> gsonConverter.fromJsonOrNull(any)
+                else -> any.fromJsonOrNull(gson) ?: any as? T
+            }
+            else -> any as? T
         }
     }
 
@@ -206,39 +211,23 @@ class JGetterBundleGson internal constructor(private val bundle: Bundle) {
 
     @Suppress("UNCHECKED_CAST")
     @JvmOverloads
-    fun <T> getOrNull(elementClass: Class<T>? = null, gson: Gson? = null): T? {
+    fun <T> getOrNull(elementClass: Class<T>? = null, gson: Gson? = null, gsonConverter: GsonConverter<T>? = null): T? {
         val key = counter.toString()
         counter++
 
-        val any = bundle.get(key)
-        return if (any is String && elementClass != null) {
-            // Custom object added by gson isa.
-            any.fromJsonOrNullJava(elementClass, gson)
-        }else {
-            bundle.get(key) as? T
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getOrNullWithConverter(gsonConverter: GsonConverter<T>): T? {
-        val key = counter.toString()
-        counter++
-
-        val any = bundle.get(key)
-        return if (any is String) {
-            // Custom object added by gson isa.
-            gsonConverter.fromJsonOrNull(any)
-        }else {
-            bundle.get(key) as? T
+        return when (val any = bundle.get(key)) {
+            is String -> when {
+                gsonConverter != null -> gsonConverter.fromJsonOrNull(any)
+                elementClass != null -> any.fromJsonOrNullJava(elementClass, gson)
+                else -> any as? T
+            }
+            else -> any as? T
         }
     }
 
     @JvmOverloads
     fun <T> get(elementClass: Class<T>? = null, gson: Gson? = null): T
         = getOrNull(elementClass, gson) ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
-
-    fun <T> getWithConverter(gsonConverter: GsonConverter<T>): T
-        = getOrNullWithConverter(gsonConverter) ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
 
 }
 

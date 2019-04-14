@@ -41,7 +41,7 @@
 
             android:background="?colorPrimary"
 
-            app:toolbar_menuRes="@{R.menu.visual_test_activity}"
+            android:toolbar_menuRes="@{R.menu.visual_test_activity}"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -55,7 +55,7 @@
 
             android:background="@drawable/circle_transparent"
 
-            app:view_setBackgroundTintColor="@{Color.BLUE}"
+            android:view_setBackgroundTintColor="@{Color.BLUE}"
 
             android:text="M"
             android:textColor="@android:color/black"

@@ -28,7 +28,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.databinding.BindingAdapter
 
 /**
  * @return [View.getX] for this and all of it's parent viewGroups as a summation isa.

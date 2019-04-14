@@ -16,18 +16,54 @@
 package mohamedalaa.mautils.material_design.binding_adapter
 
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
+import androidx.databinding.adapters.ListenerUtil
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
-/** app:tabLayout_ */
+/** android:tabLayout_ */
 object TabLayout {
 
 
     @JvmStatic
-    @BindingAdapter("app:tabLayout_viewPager")
+    @BindingAdapter("android:tabLayout_viewPager")
     fun setupWithViewPager(tabLayout: TabLayout, viewPager: ViewPager?) {
         viewPager?.apply { tabLayout.setupWithViewPager(this) }
     }
 
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "android:tabLayout_selectedTabPosition", event = "android:tabLayout_selectedTabPositionAttrChanged")
+    fun getTabLayoutSelectedTabPosition(tabLayout: TabLayout): Int {
+        return tabLayout.selectedTabPosition
+    }
+
+    @JvmStatic
+    @BindingAdapter("android:tabLayout_selectedTabPosition", "android:tabLayout_selectedTabPositionAttrChanged", requireAll = false)
+    fun setTabLayoutSelectedTabPosition(tabLayout: TabLayout, position: Int, inverseBindingListener: InverseBindingListener?) {
+        // Listener
+        val listener = object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                inverseBindingListener?.onChange()
+            }
+
+            override fun onTabReselected(p0: TabLayout.Tab?) {}
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+        }
+        val oldListener = ListenerUtil.trackListener(tabLayout, listener, tabLayout.id)
+        if (oldListener != null) {
+            tabLayout.removeOnTabSelectedListener(oldListener)
+        }
+        tabLayout.addOnTabSelectedListener(listener)
+
+        // Infinite loop check todo tb ma necall el static fun hna bta3et el inverse ashal wala balash laykon infinite loop isa ?!
+        if (tabLayout.selectedTabPosition == position) {
+            return
+        }
+
+        // Action
+        tabLayout.getTabAt(position)?.select()
+    }
 
 }

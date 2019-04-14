@@ -29,5 +29,5 @@ import androidx.lifecycle.ViewModelProviders
  *
  * @see [FragmentActivity.getViewModel]
  */
-inline fun <reified VM : ViewModel> Fragment.getViewModel()
-    = ViewModelProviders.of(this).get(VM::class.java)
+inline fun <reified VM : ViewModel> Fragment.getViewModel(factory: ViewModelProvider.Factory? = null)
+    = ViewModelProviders.of(this, factory).get(VM::class.java)

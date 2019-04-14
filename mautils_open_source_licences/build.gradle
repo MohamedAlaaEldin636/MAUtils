@@ -56,7 +56,11 @@ dependencies {
 
     // Local Libraries
     api project(':core_android')
+    implementation 'androidx.core:core-ktx:1.0.1'
+
     api project(':core_kotlin')
+
+    // Others
 
     api 'com.google.android.material:material:1.0.0'
 
