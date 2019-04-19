@@ -38,6 +38,8 @@ class IsCoreAndroidNeeded {
         }else {
             TestingLog.v("Succeeded -> $first")
         }
+
+        "hello".toJson()
     }
 
     @Test

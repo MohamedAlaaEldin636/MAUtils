@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android.data_binding;
+package mohamedalaa.mautils.core_android
 
-/**
- * <b>No included here </b> <br/>
- * 1. Int.toDrawable
- */
-public class DataBindingConversions {}
+import android.widget.ImageView
+import androidx.annotation.DrawableRes
+
+fun ImageView.setImageResOrRemove(@DrawableRes resId: Int?) {
+    if (resId != null) setImageResource(resId) else setImageDrawable(null)
+}

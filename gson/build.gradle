@@ -54,6 +54,6 @@ dependencies {
 
     implementation project (':core_android')
 
-    implementation 'com.google.code.gson:gson:2.8.5'
-    api project (':gson_annotation')
+    api 'com.google.code.gson:gson:2.8.5' // DO NOT Exclude
+    api project (':gson_annotation') // Can be excluded
 }

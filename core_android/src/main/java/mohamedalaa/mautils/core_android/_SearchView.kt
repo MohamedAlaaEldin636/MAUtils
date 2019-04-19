@@ -22,11 +22,7 @@ import androidx.annotation.ColorInt
 
 var SearchView.textColor: Int?
     get() {
-        firstNestedViewIsInstanceOrNull<EditText> {
-            return this.currentTextColor
-        }
-
-        return null
+        return firstNestedViewIsInstanceOrNull<EditText>()?.currentTextColor
     }
     set(value) {
         if (value == null) {
@@ -40,11 +36,7 @@ var SearchView.textColor: Int?
 
 var SearchView.hintTextColor: Int?
     get() {
-        firstNestedViewIsInstanceOrNull<EditText> {
-            return this.currentHintTextColor
-        }
-
-        return null
+        return firstNestedViewIsInstanceOrNull<EditText>()?.currentHintTextColor
     }
     set(value) {
         if (value == null) {
@@ -58,11 +50,7 @@ var SearchView.hintTextColor: Int?
 
 var SearchView.text: String?
     get() {
-        firstNestedViewIsInstanceOrNull<EditText> {
-            return this.text?.toString()
-        }
-
-        return null
+        return firstNestedViewIsInstanceOrNull<EditText>()?.text?.toString()
     }
     set(value) {
         if (value == null) {

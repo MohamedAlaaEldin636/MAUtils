@@ -17,6 +17,9 @@ package mohamedalaa.mautils.mautils.delLaterIsa
 
 import android.view.View
 import mohamedalaa.mautils.core_kotlin.mapOne
+import mohamedalaa.mautils.recycler_view.custom_classes.RVCommonAdapter
+import mohamedalaa.mautils.recycler_view.custom_classes.RVListCommonAdapter
+import kotlin.reflect.KMutableProperty
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/24/2019.
@@ -38,6 +41,40 @@ class UdacityKotlinClass {
         //list.
     }
 
+
+    lateinit var s: String
+
+    private fun v1() {
+        if (!::s.isInitialized) {
+
+        }
+    }
+
+}
+
+class SomeThing : RVCommonAdapter() {
+    override fun onBindViewHolder(itemView: View, position: Int) {
+
+    }
+
+    override fun getItemCount(): Int {
+        return 8
+    }
+}
+
+class Another : RVListCommonAdapter<Int>(null) {
+    override fun onBindViewHolder(itemView: View, position: Int) {
+
+    }
+}
+
+private fun consumer(s: SomeThing, a: Another, map: Map<String, Int>) {
+    map.size
+    s.insertItemAt(2) {
+
+    }
+
+    a.insertItemAt(5, 44)
 }
 
 /*open fun View.aa() {

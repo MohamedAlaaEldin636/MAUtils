@@ -26,7 +26,7 @@ object Bindinggg {
 
     @JvmStatic
     @BindingAdapter("app:setTranslateBgd")
-    fun translateBgd(view: View, integer: Int) {
+    fun translateBgd(view: View, integer: Int?) {
         view.post {
             view.translationY = 600f
         }

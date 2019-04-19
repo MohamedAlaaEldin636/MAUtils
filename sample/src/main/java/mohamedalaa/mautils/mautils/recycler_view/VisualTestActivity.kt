@@ -32,7 +32,7 @@ import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
 
-    private lateinit var rcAdapterFakeNames: RVAdapterFakeNames
+    private lateinit var rcAdapterFakeNames: ListFakeNamesAdapter
 
     private lateinit var maItemDecoration: MAItemDecoration
 
@@ -118,7 +118,7 @@ class VisualTestActivity : AppCompatActivity() {
                         }
                     }
                     getString(R.string.change_all_data) -> {
-                        val list = rcAdapterFakeNames.dataList.toMutableList().apply {
+                        val list = rcAdapterFakeNames.dataList?.toMutableList()?.apply {
                             clear()
                             add(0, "0")
                             add(1, "1")
@@ -127,7 +127,9 @@ class VisualTestActivity : AppCompatActivity() {
                             add("last")
                         }
 
-                        rcAdapterFakeNames.changeData(list)
+                        if (list != null) {
+                            rcAdapterFakeNames.changeData(list)
+                        }
 
                         maItemDecoration.dividerColor = Color.BLUE
                         recyclerView.invalidateItemDecorations()
@@ -169,7 +171,7 @@ class VisualTestActivity : AppCompatActivity() {
             RCDefaultItemAnimator(maItemDecoration)*/
 
         val namesList = List(60) { it.toString() }
-        rcAdapterFakeNames = RVAdapterFakeNames(namesList, linearLayoutManager)
+        rcAdapterFakeNames = ListFakeNamesAdapter(namesList, linearLayoutManager)
         recyclerView.adapter = rcAdapterFakeNames
     }
 

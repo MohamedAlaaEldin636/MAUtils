@@ -76,12 +76,14 @@ fun ViewGroup.firstNestedView(predicate: (view: View) -> Boolean): View
     = firstNestedViewOrNull(predicate) ?: throw RuntimeException("predicate fun is not satisfied for all nested views")
 
 /**
- * performs given [block] on first [View] in [ViewGroup.forEachNested] that is [T] type
- * then returns it isa.
+ * performs given [action] if not null on first [View] found by [ViewGroup.forEachNested]
+ * that is [T] type then returns it isa.
  */
-inline fun <reified T: View> ViewGroup.firstNestedViewIsInstanceOrNull(block: T.() -> Unit): T? {
+inline fun <reified T: View> ViewGroup.firstNestedViewIsInstanceOrNull(noinline action: (T.() -> Unit)? = null): T? {
     val view = firstNestedViewOrNull { it is T } as? T
-    view?.block()
+    if (action != null) {
+        view?.action()
+    }
 
     return view
 }
