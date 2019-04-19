@@ -33,7 +33,7 @@ Ensure having mautils_version defined in your Gradle **Top-level build file** as
 
 ``` groovy
 buildscript {
-    ext.mautils_version = '1.0.0-alpha'
+    ext.mautils_version = '1.0.0-alpha.3'
 }    
 ```
 
@@ -41,7 +41,7 @@ _**OR**_ in your gradle **app module** as below
 
 ``` groovy
 dependencies {
-    def mautils_version = '1.0.0-alpha'
+    def mautils_version = '1.0.0-alpha.3'
 }
 ```
 
@@ -160,10 +160,6 @@ List<Pair<Integer, Integer>> pairedList = IterableUtils.pairedIteration(list);
 ### For more info see [docs](TODO)
 
 ---
-
-# TODOs
-
-1- instrumental test for drawable just to see how it works isa.
 
 ## Core Android
 
@@ -307,15 +303,6 @@ View rootViewOfLayout = ContextUtils.inflateLayout(R.layout.layout/*, parent opt
 ### For more info see [docs](TODO)
 
 ---
-
-# TODOs
-
-1- see `_Bundle` todo and add it in highlights as well isa.
-
-2- test after upload to github
-if java only android project can use kotlin-kapt plugin and kapt in dependencies or annotationProcessor shall be used instead isa.
-
-3- add java highlight here isa.
 
 ## Gson
 
