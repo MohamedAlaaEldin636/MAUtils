@@ -85,7 +85,6 @@ dependencies {
     kapt project(':gson_processor')
 
     implementation project(':lifecycle_extensions')
-    implementation project(':recycler_view')
 
     implementation project(':reflection')
 
