@@ -16,10 +16,8 @@
 package mohamedalaa.mautils.mautils.delLaterIsa
 
 import android.view.View
-import mohamedalaa.mautils.core_kotlin.mapOne
-import mohamedalaa.mautils.recycler_view.custom_classes.RVCommonAdapter
-import mohamedalaa.mautils.recycler_view.custom_classes.RVListCommonAdapter
-import kotlin.reflect.KMutableProperty
+import mohamedalaa.mautils.material_design.custom_classes.RVCommonAdapter
+import mohamedalaa.mautils.material_design.custom_classes.RVListCommonAdapter
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/24/2019.

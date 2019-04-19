@@ -19,7 +19,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.my_rc_item.view.*
 import mohamedalaa.mautils.mautils.R
-import mohamedalaa.mautils.recycler_view.custom_classes.RVListCommonAdapter
+import mohamedalaa.mautils.material_design.custom_classes.RVListCommonAdapter
 
 class ListFakeNamesAdapter(dataList: List<String>, var layoutManager: LinearLayoutManager)
     : RVListCommonAdapter<String>(dataList.toMutableList()) {

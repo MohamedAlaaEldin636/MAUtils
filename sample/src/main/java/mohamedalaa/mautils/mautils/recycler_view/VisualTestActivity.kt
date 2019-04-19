@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.activity_visual_test.*
 import mohamedalaa.mautils.core_android.dpToPx
 import mohamedalaa.mautils.core_android.toast
 import mohamedalaa.mautils.mautils.R
-import mohamedalaa.mautils.recycler_view.custom_classes.MAItemDecoration
+import mohamedalaa.mautils.material_design.custom_classes.MAItemDecoration
 
 class VisualTestActivity : AppCompatActivity() {
 
