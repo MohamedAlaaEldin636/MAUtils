@@ -31,7 +31,7 @@ import mohamedalaa.mautils.material_design.R
 object DrawerLayout {
 
     @JvmStatic
-    @InverseBindingAdapter(attribute = "android:drawerLayout_openDrawer", event = "android:drawerLayout_openDrawerAttrChanged")
+    @InverseBindingAdapter(attribute = "app:drawerLayout_openDrawer", event = "app:drawerLayout_openDrawerAttrChanged")
     fun getDrawerLayoutDrawerWithGravity(drawerLayout: DrawerLayout): Boolean? {
         val gravity = drawerLayout.getTag(R.id.drawer_layout_drawer_gravity_tag_id) as? Int
 
@@ -39,7 +39,7 @@ object DrawerLayout {
     }
 
     @JvmStatic
-    @BindingAdapter("android:drawerLayout_openDrawer", "android:drawerLayout_drawerGravity", "android:drawerLayout_openDrawerAttrChanged", requireAll = false)
+    @BindingAdapter("app:drawerLayout_openDrawer", "app:drawerLayout_drawerGravity", "app:drawerLayout_openDrawerAttrChanged", requireAll = false)
     fun setDrawerLayoutDrawerWithGravity(drawerLayout: DrawerLayout, open: Boolean?, gravityCompatInt: Int?, inverseBindingListener: InverseBindingListener?) {
         val gravity = gravityCompatInt ?: GravityCompat.START
 

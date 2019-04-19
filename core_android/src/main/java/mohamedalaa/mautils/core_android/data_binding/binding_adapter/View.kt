@@ -28,13 +28,13 @@ import mohamedalaa.mautils.core_android.setBackgroundTint
 object View {
 
     @JvmStatic
-    @BindingAdapter("android:view_setBackgroundTintColor")
+    @BindingAdapter("app:view_setBackgroundTintColor")
     fun setBackgroundTintColor(view: View, @ColorInt color: Int?) {
         color?.apply { view.setBackgroundTint(color) }
     }
 
     @JvmStatic
-    @BindingAdapter("android:view_setBackgroundTintPorterDuffMode")
+    @BindingAdapter("app:view_setBackgroundTintPorterDuffMode")
     fun setBackgroundTintPorterDuffMode(view: View, porterDuffMode: PorterDuff.Mode?) {
         porterDuffMode?.apply { view.setBackgroundTint(porterDuffMode = porterDuffMode) }
     }

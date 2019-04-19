@@ -26,7 +26,7 @@ import com.google.android.material.bottomappbar.BottomAppBar
 object BottomAppBar {
 
     @JvmStatic
-    @BindingAdapter("android:bottomAppBar_menuRes")
+    @BindingAdapter("app:bottomAppBar_menuRes")
     fun inflateMenu(bottomAppBar: BottomAppBar, @MenuRes menuRes: Int?) {
         menuRes?.apply { bottomAppBar.inflateMenu(this) }
     }
