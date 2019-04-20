@@ -45,7 +45,7 @@ object NavigationView {
      * ="@{CollectionsKt.listOf(YourConstantClass.BR_viewModel, viewModel, YourConstantClass.BR_presenter, presenter)}"
      */
     @JvmStatic
-    @BindingAdapter("app:navigationView_setHeaderViewLayoutRes", "app:navigationView_setHeaderViewPairedVariables", requireAll = false)
+    @BindingAdapter("android:navigationView_setHeaderViewLayoutRes", "android:navigationView_setHeaderViewPairedVariables", requireAll = false)
     fun addHeaderViewAndVariables(
         navigationView: NavigationView,
         headerViewLayoutRes: Int?,
@@ -75,7 +75,7 @@ object NavigationView {
     }
 
     @JvmStatic
-    @BindingAdapter("app:navigationView_ItemSelectedListener")
+    @BindingAdapter("android:navigationView_ItemSelectedListener")
     fun setNavigationViewItemSelectedListener(navigationView: NavigationView, listener: NavigationView.OnNavigationItemSelectedListener?) {
         navigationView.setNavigationItemSelectedListener(listener)
     }

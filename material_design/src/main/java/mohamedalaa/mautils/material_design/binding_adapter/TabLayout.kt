@@ -27,19 +27,19 @@ object TabLayout {
 
 
     @JvmStatic
-    @BindingAdapter("app:tabLayout_viewPager")
+    @BindingAdapter("android:tabLayout_viewPager")
     fun setupWithViewPager(tabLayout: TabLayout, viewPager: ViewPager?) {
         viewPager?.apply { tabLayout.setupWithViewPager(this) }
     }
 
     @JvmStatic
-    @InverseBindingAdapter(attribute = "app:tabLayout_selectedTabPosition", event = "app:tabLayout_selectedTabPositionAttrChanged")
+    @InverseBindingAdapter(attribute = "android:tabLayout_selectedTabPosition", event = "android:tabLayout_selectedTabPositionAttrChanged")
     fun getTabLayoutSelectedTabPosition(tabLayout: TabLayout): Int {
         return tabLayout.selectedTabPosition
     }
 
     @JvmStatic
-    @BindingAdapter("app:tabLayout_selectedTabPosition", "app:tabLayout_selectedTabPositionAttrChanged", requireAll = false)
+    @BindingAdapter("android:tabLayout_selectedTabPosition", "android:tabLayout_selectedTabPositionAttrChanged", requireAll = false)
     fun setTabLayoutSelectedTabPosition(tabLayout: TabLayout, position: Int, inverseBindingListener: InverseBindingListener?) {
         // Listener
         val listener = object : TabLayout.OnTabSelectedListener {

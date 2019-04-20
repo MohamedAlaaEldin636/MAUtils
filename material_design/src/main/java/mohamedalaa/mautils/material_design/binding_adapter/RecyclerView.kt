@@ -42,10 +42,10 @@ object RecyclerView {
      */
     @JvmStatic
     @BindingAdapter(
-        "app:recyclerView_layoutManager_isStaggered",
-        "app:recyclerView_layoutManager_isHorizontal",
-        "app:recyclerView_layoutManager_spanCount",
-        "app:recyclerView_layoutManager_reverseLayout",
+        "android:recyclerView_layoutManager_isStaggered",
+        "android:recyclerView_layoutManager_isHorizontal",
+        "android:recyclerView_layoutManager_spanCount",
+        "android:recyclerView_layoutManager_reverseLayout",
         requireAll = false
     )
     fun setRecyclerViewLayoutManager(
@@ -74,11 +74,11 @@ object RecyclerView {
 
     @JvmStatic
     @BindingAdapter(
-        "app:recyclerView_maItemDecoration_dividerColor",
-        "app:recyclerView_maItemDecoration_dividerDimenInDp",
-        "app:recyclerView_maItemDecoration_IgnoreBorder",
-        "app:recyclerView_maItemDecoration_MergeOffsets",
-        "app:recyclerView_maItemDecoration_SingleItemDivider",
+        "android:recyclerView_maItemDecoration_dividerColor",
+        "android:recyclerView_maItemDecoration_dividerDimenInDp",
+        "android:recyclerView_maItemDecoration_IgnoreBorder",
+        "android:recyclerView_maItemDecoration_MergeOffsets",
+        "android:recyclerView_maItemDecoration_SingleItemDivider",
         requireAll = false
     )
     fun setRecyclerViewMAItemDecoration(
@@ -88,7 +88,6 @@ object RecyclerView {
         ignoreBorder: Boolean?,
         mergeOffsets: Boolean?,
         singleItemDivider: Boolean?
-
     ) {
         val itemDecoration = MAItemDecoration(
             dividerColor ?: Color.BLACK,

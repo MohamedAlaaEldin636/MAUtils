@@ -192,4 +192,18 @@ private fun f2() {
     ))
 }
 
+private class SomeAdapter<E, R : List<E>?>(val list : R)
+
+private open class AAAA<E>(abc: E)
+
+private class BBB : AAAA<String>("")
+
+private fun c11(someAdapter: SomeAdapter<Int, List<Int>>) {
+    someAdapter.list[0]
+
+
+    val aaaa = AAAA("")
+}
+
+
 

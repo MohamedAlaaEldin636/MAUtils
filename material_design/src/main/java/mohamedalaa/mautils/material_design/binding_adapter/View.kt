@@ -29,7 +29,7 @@ object View {
      * If true sets tooltip text as [View.getContentDescription] if false then clears it isa.
      */
     @JvmStatic
-    @BindingAdapter("app:view_enableTooltipText")
+    @BindingAdapter("android:view_enableTooltipText")
     fun tooltipTextAsContentDescription(view: View, enable: Boolean?) {
         view.setTooltipTextCompat(if (enable == true) view.contentDescription else null)
     }

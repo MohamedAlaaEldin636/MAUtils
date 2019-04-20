@@ -25,9 +25,9 @@ import mohamedalaa.mautils.material_design.setTooltipTextCompat
 object Toolbar {
 
     @JvmStatic
-    @BindingAdapter("app:toolbar_menuRes",
-        "app:toolbar_onMenuItemClickListener",
-        "app:toolbar_onNavigationIconClickListener",
+    @BindingAdapter("android:toolbar_menuRes",
+        "android:toolbar_onMenuItemClickListener",
+        "android:toolbar_onNavigationIconClickListener",
         requireAll = false)
     fun setupToolbar(
         toolbar: Toolbar,
@@ -43,7 +43,7 @@ object Toolbar {
     }
 
     @JvmStatic
-    @BindingAdapter("app:toolbar_enableNavIconTooltipText")
+    @BindingAdapter("android:toolbar_enableNavIconTooltipText")
     fun setToolbarNavIconTooltipText(toolbar: Toolbar, enable: Boolean?) {
         toolbar.findNavIconViewOrNull()?.apply {
             setTooltipTextCompat(if (enable == true) toolbar.navigationContentDescription else null)

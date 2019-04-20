@@ -19,6 +19,9 @@
     <!--<data>
         <import type="mohamedalaa.mautils.mautils.R"/>
     </data>-->
+    <data>
+        <import type="android.graphics.Color" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,6 +45,8 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+
+            android:view_setBackgroundTintColor="@{Color.RED}"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
