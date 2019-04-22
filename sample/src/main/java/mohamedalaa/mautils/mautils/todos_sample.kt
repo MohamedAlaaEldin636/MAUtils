@@ -15,10 +15,6 @@
 
 package mohamedalaa.mautils.mautils
 
-import android.graphics.Color
-import androidx.core.os.bundleOf
-import java.util.*
-
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/18/2019.
  *
@@ -31,34 +27,3 @@ import java.util.*
  * 1- put licence for your own code isa.
  * 2- put licences and notes in sample isa.
  */
-
-val a = 5
-
-private fun z1(any: Any, ss: String) {
-    //bundleOf()
-    val a1 = ss::length
-
-    //any::
-    val z1 = ::a
-    z1.name
-    z1.get()
-    val z = ::a.name
-
-    val strs = listOf("a", "bc", "def")
-    println(strs.map(String::length)) // [1,2,3]
-}
-
-private fun z1(iterable: Iterable<*>, queue: Queue<*>) {
-    iterable.count()
-
-    //queue.offer()
-    //queue.peek()
-    //queue.poll()
-
-    //listOf(3).indexof
-}
-
-private fun z2(color: Int) {
-    /*Color.luminance(Color.RED)
-    ColorContez*/
-}

@@ -32,7 +32,7 @@ import mohamedalaa.mautils.core_android.MAAnimatorAnimatorListener;
 import mohamedalaa.mautils.core_android.SpannableUtils;
 import mohamedalaa.mautils.core_kotlin.CalendarUtils;
 import mohamedalaa.mautils.core_kotlin.CollectionsUtils;
-import mohamedalaa.mautils.core_kotlin.GenericUtils;
+import mohamedalaa.mautils.core_kotlin.GeneralUtils;
 import mohamedalaa.mautils.core_kotlin.IterableUtils;
 import mohamedalaa.mautils.core_kotlin.ListUtils;
 
@@ -74,7 +74,7 @@ public class JavaQuickTrialIsa {
         int value = 9;
 
         // check if (int value) equals any of other int values
-        boolean isMatched = GenericUtils.equalAny(value, 1, 2, 3, 4);
+        boolean isMatched = GeneralUtils.equalAny(value, 1, 2, 3, 4);
 
         // Instead of
         isMatched = value == 1 || value == 2 || value == 3 || value == 4;
