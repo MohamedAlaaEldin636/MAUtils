@@ -28,7 +28,7 @@ import mohamedalaa.mautils.material_design.R
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/14/2019.
  *
  */
-object DrawerLayout {
+object BADrawerLayout {
 
     @JvmStatic
     @InverseBindingAdapter(attribute = "android:drawerLayout_openDrawer", event = "android:drawerLayout_openDrawerAttrChanged")

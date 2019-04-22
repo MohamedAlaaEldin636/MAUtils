@@ -43,14 +43,3 @@ class MASearchViewOnQueryTextListener(listener: SearchView_OnQueryTextListener_T
         = apply { _onQueryTextSubmit = action }
 
 }
-
-/**
- * Using [listener] for [SearchView.setOnQueryTextListener] instead of regular [SearchView.OnQueryTextListener],
- * for more concise & idiomatic coding isa.
- *
- * @see [MASearchViewOnQueryTextListener]
- */
-fun SearchView.setOnQueryTextListenerMA(listener: SearchView_OnQueryTextListener_Typealias?) {
-    val genListener = MASearchViewOnQueryTextListener(listener)
-    setOnQueryTextListener(genListener)
-}

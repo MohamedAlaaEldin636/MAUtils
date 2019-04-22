@@ -25,7 +25,7 @@ import mohamedalaa.mautils.core_android.setBackgroundTint
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
  *
  */
-object View {
+object BAView {
 
     @JvmStatic
     @BindingAdapter("android:view_setBackgroundTintColor")
@@ -37,25 +37,5 @@ object View {
     @BindingAdapter("android:view_setBackgroundTintPorterDuffMode")
     fun setBackgroundTintPorterDuffMode(view: View, porterDuffMode: PorterDuff.Mode?) {
         porterDuffMode?.apply { view.setBackgroundTint(porterDuffMode = porterDuffMode) }
-    }
-
-    // todo for some experiments isa.
-
-    @JvmStatic
-    @BindingAdapter("view_testOne")
-    fun setViewTestOne(view: View, boolean: Boolean?) {
-
-    }
-
-    @JvmStatic
-    @BindingAdapter("app:view_testTwo")
-    fun setViewTestTwo(view: View, boolean: Boolean?) {
-
-    }
-
-    @JvmStatic
-    @BindingAdapter("mautils:view_testThree")
-    fun setViewTestThree(view: View, boolean: Boolean?) {
-
     }
 }

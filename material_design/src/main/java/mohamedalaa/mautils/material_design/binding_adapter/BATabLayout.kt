@@ -23,7 +23,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 /** android:tabLayout_ */
-object TabLayout {
+object BATabLayout {
 
 
     @JvmStatic

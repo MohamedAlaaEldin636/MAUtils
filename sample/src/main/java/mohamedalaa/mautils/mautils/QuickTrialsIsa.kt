@@ -130,7 +130,7 @@ abstract class DataBindingRCAdapter<VDB: ViewDataBinding>(@LayoutRes private val
      */
     abstract fun onBindViewHolder(binding: VDB, position: Int)
 
-    // ----- View Holder
+    // ----- BAView Holder
 
     class ViewHolder<VDB: ViewDataBinding>(val binding: VDB): RecyclerView.ViewHolder(binding.root)
 
@@ -204,6 +204,27 @@ private fun c11(someAdapter: SomeAdapter<Int, List<Int>>) {
 
     val aaaa = AAAA("")
 }
+
+private open class Act1 {
+    open fun a1() {
+
+    }
+}
+
+interface NotAct1 {
+    open fun a1() {
+
+    }
+}
+
+private class B1 : Act1(), NotAct1 {
+
+    override fun a1() {
+        super<NotAct1>.a1()
+    }
+
+}
+
 
 
 

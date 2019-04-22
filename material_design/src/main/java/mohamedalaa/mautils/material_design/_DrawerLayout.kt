@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.material_design.binding_adapter
+@file:JvmName("DrawerLayoutUtils")
 
-import androidx.annotation.MenuRes
-import androidx.databinding.BindingAdapter
-import com.google.android.material.bottomappbar.BottomAppBar
+package mohamedalaa.mautils.material_design
+
+import androidx.drawerlayout.widget.DrawerLayout
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/30/2019.
+ * Using [listener] for [DrawerLayout.addDrawerListener] instead of regular [DrawerLayout.DrawerListener],
+ * for more concise & idiomatic coding isa.
  *
+ * @see [MADrawerLayoutDrawerListener]
  */
-object BottomAppBar {
-
-    @JvmStatic
-    @BindingAdapter("android:bottomAppBar_menuRes")
-    fun inflateMenu(bottomAppBar: BottomAppBar, @MenuRes menuRes: Int?) {
-        menuRes?.apply { bottomAppBar.inflateMenu(this) }
-    }
-
+fun DrawerLayout.addDrawerListenerMA(listener: DrawerLayout_DrawerListener_Typealias?) {
+    val genListener = MADrawerLayoutDrawerListener(listener)
+    addDrawerListener(genListener)
 }

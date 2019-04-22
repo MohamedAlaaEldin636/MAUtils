@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-@file:JvmName("ViewUtils")
-
-package mohamedalaa.mautils.material_design
+package mohamedalaa.mautils.material_design.binding_adapter
 
 import android.view.View
-import androidx.appcompat.widget.TooltipCompat
+import androidx.databinding.BindingAdapter
+import mohamedalaa.mautils.material_design.setTooltipTextCompat
 
 /**
- * Exactly as [TooltipCompat.setTooltipText] but ext fun
+ * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/14/2019.
+ *
  */
-@JvmSynthetic
-fun View.setTooltipTextCompat(text: CharSequence?)
-    = TooltipCompat.setTooltipText(this, text)
+object BAView {
+
+    /**
+     * If true sets tooltip text as [View.getContentDescription] if false then clears it isa.
+     */
+    @JvmStatic
+    @BindingAdapter("android:view_enableTooltipText")
+    fun tooltipTextAsContentDescription(view: View, enable: Boolean?) {
+        view.setTooltipTextCompat(if (enable == true) view.contentDescription else null)
+    }
+}

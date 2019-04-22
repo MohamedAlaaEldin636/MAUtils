@@ -25,11 +25,11 @@ import mohamedalaa.mautils.material_design.custom_classes.RVListCommonAdapter
  */
 class UdacityKotlinClass {
 
-    // maybe use View.snackbar instead of context.snackBar and get application for baseApplication
+    // maybe use BAView.snackbar instead of context.snackBar and get application for baseApplication
     // from view.context.baseApplication isa...
     /*val a = bundleOf()
 
-    private fun a1 (v: View) {
+    private fun a1 (v: BAView) {
         v.snackbar("")
     }*/
 
@@ -75,6 +75,6 @@ private fun consumer(s: SomeThing, a: Another, map: Map<String, Int>) {
     a.insertItemAt(5, 44)
 }
 
-/*open fun View.aa() {
+/*open fun BAView.aa() {
 
 }*/

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+@file:JvmName("SearchViewUtils")
+
 package mohamedalaa.mautils.material_design
 
 import android.widget.EditText
@@ -21,6 +23,17 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.widget.SearchView
 import mohamedalaa.mautils.core_android.allNestedViewsIsInstanceOrNull
 import mohamedalaa.mautils.core_android.firstNestedViewIsInstanceOrNull
+
+/**
+ * Using [listener] for [SearchView.setOnQueryTextListener] instead of regular [SearchView.OnQueryTextListener],
+ * for more concise & idiomatic coding isa.
+ *
+ * @see [MASearchViewOnQueryTextListener]
+ */
+fun SearchView.setOnQueryTextListenerMA(listener: SearchView_OnQueryTextListener_Typealias?) {
+    val genListener = MASearchViewOnQueryTextListener(listener)
+    setOnQueryTextListener(genListener)
+}
 
 var SearchView.textColor: Int?
     get() {

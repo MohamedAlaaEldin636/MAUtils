@@ -33,7 +33,7 @@ import kotlin.math.roundToInt
  * 1. Nullable params are meant to be like that since by this approach no boxing is mandatory.
  * 2. cannot have default param since defaults for data binding itself will override it.
  */
-object RecyclerView {
+object BARecyclerView {
 
     /**
      * - If [spanCount] == 0 or is null then it is [LinearLayoutManager], and [isStaggered] is ignored.

@@ -43,7 +43,7 @@ public class TrialActivity extends AppCompatActivity {
         SoftKeyboardUtils.showKeyboardFor(context, editText/*, false optional requestFocus param*/);
 
         // Quick inflation of a layout.xml
-        //View rootViewOfLayout = ContextUtils.inflateLayout(R.layout.layout/*, parent optional viewGroup, false optional attachToParent*/);
+        //BAView rootViewOfLayout = ContextUtils.inflateLayout(R.layout.layout/*, parent optional viewGroup, false optional attachToParent*/);
     }
 
     /*int intVal;

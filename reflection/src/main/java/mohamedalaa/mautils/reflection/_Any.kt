@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+@file:JvmName("AnyUtils")
+
 package mohamedalaa.mautils.reflection
 
 inline fun <reified T : Any> T.isObjectInstance(): Boolean

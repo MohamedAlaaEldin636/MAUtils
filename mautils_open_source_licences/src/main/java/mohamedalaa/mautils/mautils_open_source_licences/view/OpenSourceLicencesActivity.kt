@@ -249,7 +249,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         anyLetterChip.setOnCheckedChangeListener(checkedChangeListener)
         authorChip.setOnCheckedChangeListener(checkedChangeListener)
 
-        // Recycler View
+        // Recycler BAView
         val dividerColor = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_COLOR)
         val dimenInPx = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_DIMEN_IN_PX)
         val dividerDrawableRes = intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_DIVIDER_DRAWABLE_RES)
@@ -265,7 +265,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
             matchCaseChip.isChecked, anyLetterChip.isChecked, authorChip.isChecked)
         recyclerView.adapter = rcAdapter
 
-        // Search View
+        // Search BAView
         ViewCompat.setElevation(searchView, dpToPx(4))
         ViewCompat.setElevation(chipsView, dpToPx(4))
         ViewCompat.setElevation(matchCaseChip, dpToPx(4))
@@ -330,7 +330,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
             }
         }
 
-        // Recycler View Item Background
+        // Recycler BAView Item Background
         intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_BACKGROUND_COLOR)?.apply {
             recyclerView.backgroundCompat = ColorDrawable(this)
         } ?: intent.getExtraOrNull<Int>(INTENT_KEY_RC_ITEM_BACKGROUND_DRAWABLE_RES)?.apply {

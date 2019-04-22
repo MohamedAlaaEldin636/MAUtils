@@ -22,7 +22,7 @@ import androidx.databinding.BindingAdapter
 import mohamedalaa.mautils.material_design.findNavIconViewOrNull
 import mohamedalaa.mautils.material_design.setTooltipTextCompat
 
-object Toolbar {
+object BAToolbar {
 
     @JvmStatic
     @BindingAdapter("android:toolbar_menuRes",

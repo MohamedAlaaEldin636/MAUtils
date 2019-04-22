@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-@file:JvmName("GenericUtils")
+@file:JvmName("GeneralUtils")
 
 package mohamedalaa.mautils.core_kotlin
 

@@ -15,22 +15,20 @@
 
 package mohamedalaa.mautils.material_design.binding_adapter
 
-import android.view.View
+import androidx.annotation.MenuRes
 import androidx.databinding.BindingAdapter
-import mohamedalaa.mautils.material_design.setTooltipTextCompat
+import com.google.android.material.bottomappbar.BottomAppBar
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/14/2019.
+ * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/30/2019.
  *
  */
-object View {
+object BABottomAppBar {
 
-    /**
-     * If true sets tooltip text as [View.getContentDescription] if false then clears it isa.
-     */
     @JvmStatic
-    @BindingAdapter("android:view_enableTooltipText")
-    fun tooltipTextAsContentDescription(view: View, enable: Boolean?) {
-        view.setTooltipTextCompat(if (enable == true) view.contentDescription else null)
+    @BindingAdapter("android:bottomAppBar_menuRes")
+    fun inflateMenu(bottomAppBar: BottomAppBar, @MenuRes menuRes: Int?) {
+        menuRes?.apply { bottomAppBar.inflateMenu(this) }
     }
+
 }

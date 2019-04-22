@@ -60,14 +60,3 @@ class MADrawerLayoutDrawerListener(listener: DrawerLayout_DrawerListener_Typeali
         = apply { _onDrawerStateChanged = action }
 
 }
-
-/**
- * Using [listener] for [DrawerLayout.addDrawerListener] instead of regular [DrawerLayout.DrawerListener],
- * for more concise & idiomatic coding isa.
- *
- * @see [MADrawerLayoutDrawerListener]
- */
-fun DrawerLayout.addDrawerListenerMA(listener: DrawerLayout_DrawerListener_Typealias?) {
-    val genListener = MADrawerLayoutDrawerListener(listener)
-    addDrawerListener(genListener)
-}

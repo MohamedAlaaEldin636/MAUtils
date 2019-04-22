@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+@file:JvmName("ImageViewUtils")
+
 package mohamedalaa.mautils.core_android
 
 import android.widget.ImageView

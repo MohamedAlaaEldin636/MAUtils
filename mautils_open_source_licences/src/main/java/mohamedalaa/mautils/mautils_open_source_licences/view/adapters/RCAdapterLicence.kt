@@ -228,7 +228,7 @@ internal class RCAdapterLicence(private val context: Context,
         computeSearchedLicences(licences, this, matchCase, anyLetter, includeAuthor)
     }
 
-    // ----- Custom View Holder
+    // ----- Custom BAView Holder
 
     class CustomViewHolder(rootView: View): RecyclerView.ViewHolder(rootView)
 
