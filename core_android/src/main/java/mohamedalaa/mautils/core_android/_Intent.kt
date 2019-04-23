@@ -94,7 +94,7 @@ fun Context.launchWebLink(url: String, showToastOnFailure: Boolean = true, creat
 /**
  * Used by java devs only, for same functionality for kotlin devs see [Intent.getterBundle]
  *
- * Used to retrieve [Bundle] vales created by [Context.startActivityBundle] isa.
+ * Used to retrieve [Bundle] values created by [Context.startActivityBundle] isa.
  */
 @JvmName("getterBundle")
 fun Intent.javaGetterBundle() = JGetterBundle(extras ?: Bundle())

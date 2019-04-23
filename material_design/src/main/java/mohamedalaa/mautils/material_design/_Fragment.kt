@@ -21,6 +21,8 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import mohamedalaa.mautils.core_android.buildBundle
+import mohamedalaa.mautils.core_android.getterBundle
 
 fun Fragment.hideKeyboard() {
     val imm = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
@@ -31,6 +33,23 @@ fun Fragment.hideKeyboard() {
     imm.hideSoftInputFromWindow(rootView.windowToken, 0)
 }
 
-fun <F : Fragment> F.newInstanceWithArguments(bundle: Bundle?): F = apply {
-    arguments = bundle
+fun <F : Fragment> F.instanceWithArg(bundle: Bundle?): F
+    = apply { arguments = bundle }
+
+/**
+ * to retrieve values see below Ex. for clarification isa
+ * ```
+ * fragment.arguments?.apply {
+ *      val getterBundle = getterBundle()
+ *      // ...
+ * }
+ * ```
+ */
+fun <F : Fragment> F.instanceWithArgBundle(vararg values: Any?): F
+    = apply { arguments = buildBundle(*values) }
+
+private fun dewidjo(fragment: Fragment) {
+    fragment.arguments?.apply {
+        val getterBundle = getterBundle()
+    }
 }

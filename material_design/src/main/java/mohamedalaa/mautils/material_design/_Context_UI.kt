@@ -14,7 +14,6 @@
  */
 
 @file:JvmName("ContextUtils")
-@file:Suppress("UnusedImport")
 
 package mohamedalaa.mautils.material_design
 

@@ -15,6 +15,7 @@
 
 package mohamedalaa.mautils.mautils;
 
+import android.content.Context;
 import android.graphics.ColorSpace;
 
 import java.util.function.DoubleUnaryOperator;
@@ -22,20 +23,28 @@ import java.util.function.DoubleUnaryOperator;
 import mohamedalaa.mautils.core_android.BundleUtils;
 import mohamedalaa.mautils.core_android.ContextUtils;
 import mohamedalaa.mautils.gson.GsonBundleUtils;
+import mohamedalaa.mautils.gson.IntentUtils;
 import mohamedalaa.mautils.gson.java.GsonUtils;
+import mohamedalaa.mautils.mautils.material_design.BoatActivity;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
  */
 public class JavaQuickTrialIsa2 {
 
-    public void dew() {
+    public void dew(Context context) {
         //BundleUtils.getGetterBundle();
 
 
         //GsonBundleUtils
 
         //BundleUtils.
+
+        ContextUtils.startActivity(context, BoatActivity.class);
+        //mohamedalaa.mautils.gson.ContextUtils.startActivityBundleGsonForced();
+
+        //IntentUtils.
+        //IntentUtils.getterBundleGson()
     }
 
 }

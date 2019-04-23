@@ -41,21 +41,32 @@ import android.os.Bundle
  *
  * @see buildBundleWithKeys
  */
-inline fun <reified T : Activity> Context.startActivity(bundle: Bundle? = null) {
-    val intent = Intent(this, T::class.java).apply {
+inline fun <reified T : Activity> Context.startActivity(bundle: Bundle? = null)
+    = privateStartActivity(T::class.java, bundle)
+
+@JvmName("startActivity")
+@JvmOverloads
+fun <T : Activity> Context.javaStartActivity(jClass: Class<T>, bundle: Bundle? = null)
+    = privateStartActivity(jClass, bundle)
+
+/**
+ * Combination of [startActivity] && [buildBundle]
+ */
+inline fun <reified T : Activity> Context.startActivityBundle(vararg values: Any?)
+    = startActivity<T>(buildBundle(*values))
+
+@JvmName("startActivityBundle")
+fun <T : Activity> Context.javaStartActivityBundle(jClass: Class<T>, vararg values: Any?)
+    = javaStartActivity(jClass, buildBundle(*values))
+
+// ---- Internal && Private fun
+
+@PublishedApi
+internal fun Context.privateStartActivity(jClass : Class<*>, bundle: Bundle? = null) {
+    val intent = Intent(this, jClass).apply {
         if (bundle != null) {
             this.putExtras(bundle)
         }
     }
     startActivity(intent)
 }
-
-/**
- * Same idea as in [buildBundle], so read it's doc then come here
- *
- * After doing so then you know that retrieving it is required via special fun of bundle
- * so how to do so for [Intent] well it can be done via [Intent.getterBundle]
- * && [Intent.javaGetterBundle] according to if you are kotlin or java code consumer isa.
- */
-inline fun <reified T : Activity> Context.startActivityBundle(vararg values: Any?)
-    = startActivity<T>(buildBundle(*values))

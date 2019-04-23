@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android
+package mohamedalaa.mautils.gson
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
 /**
- * Used by kotlin devs only, for same functionality for java devs see [Intent.javaGetterBundle]
+ * Used by kotlin devs only, for same functionality for java devs see [Intent.javaGetterBundleGson]
  *
- * Used to retrieve [Bundle] values created by [Context.startActivityBundle] isa.
+ * Used to retrieve [Bundle] values created by [Context.startActivityBundleGson]
+ * OR [Context.startActivityBundleGsonForced] isa.
  */
 @JvmSynthetic
-fun Intent.getterBundle() = KGetterBundle(extras ?: Bundle())
+fun Intent.getterBundleGson() = KGetterBundleGson(extras ?: Bundle())
