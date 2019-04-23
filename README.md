@@ -1,13 +1,13 @@
 # MAUtils
 [![](https://jitpack.io/v/MohamedAlaaEldin636/MAUtils.svg)](https://jitpack.io/#MohamedAlaaEldin636/MAUtils)
-[![API](https://img.shields.io/badge/API-15%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=15)
+[![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=14)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 
 # Library is In Progress (alpha release)
 
 This library is about general utilities, everytime I run into
-a problem that can be a common use case i will add it in this library
+a problem that can be a common use case I will add it in this library
 so no need in future to re-invent the wheel OR re-build known boiler-plate code
 
 ---
@@ -33,7 +33,7 @@ Ensure having mautils_version defined in your Gradle **Top-level build file** as
 
 ``` groovy
 buildscript {
-    ext.mautils_version = '1.0.0-alpha.3'
+    ext.mautils_version = '1.0.0-alpha.6'
 }    
 ```
 
@@ -41,7 +41,7 @@ _**OR**_ in your gradle **app module** as below
 
 ``` groovy
 dependencies {
-    def mautils_version = '1.0.0-alpha.3'
+    def mautils_version = '1.0.0-alpha.6'
 }
 ```
 
