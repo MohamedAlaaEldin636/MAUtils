@@ -23,6 +23,25 @@ import androidx.appcompat.widget.TooltipCompat
 /**
  * Exactly as [TooltipCompat.setTooltipText] but ext fun
  */
-@JvmSynthetic
 fun View.setTooltipTextCompat(text: CharSequence?)
     = TooltipCompat.setTooltipText(this, text)
+
+/** set only 1 padding border instead of using [View.setPadding] */
+var View.paddingLeftCompat
+    get() = paddingLeft
+    set(value) = setPadding(value, paddingTop, paddingRight, paddingBottom)
+
+/** set only 1 padding border instead of using [View.setPadding] */
+var View.paddingRightCompat
+    get() = paddingRight
+    set(value) = setPadding(paddingLeft, paddingTop, value, paddingBottom)
+
+/** set only 1 padding border instead of using [View.setPadding] */
+var View.paddingTopCompat
+    get() = paddingTop
+    set(value) = setPadding(paddingLeft, value, paddingRight, paddingBottom)
+
+/** set only 1 padding border instead of using [View.setPadding] */
+var View.paddingBottomCompat
+    get() = paddingBottom
+    set(value) = setPadding(paddingLeft, paddingTop, paddingRight, value)

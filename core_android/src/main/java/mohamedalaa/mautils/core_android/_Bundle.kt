@@ -141,19 +141,36 @@ fun Bundle.addValues(vararg values: Any?) {
 }
 
 /**
+ * Increase Bundle with the given key/value pairs as elements, same as [bundleOf]
+ * but for existing instance for bundle instead of creating a new one isa,
+ *
+ * so when try to get values use keys you used in [pairedValues] not like in [addValues].
+ */
+fun Bundle.addValuesWithKeys(vararg pairedValues: Pair<String, Any?>)
+    = pairedValues.forEach { addValue(it.first, it.second) }
+
+/**
+ * Exactly same as [bundleOf] but with one benefit
+ *
+ * 1- Supports [SparseArray]<[Parcelable]> like regular [Bundle] does, this is currently not in [bundleOf].
+ */
+fun buildBundleWithKeys(vararg pairedValues: Pair<String, Any?>)
+    = Bundle().apply { addValuesWithKeys(*pairedValues) }
+
+/**
  * Returns a new [Bundle] with the given [values] as elements, and keys are the indices
  * so when retrieve it ensure same order of indices isa, to retrieve it use below code.
  * ```
  * // Kotlin Devs, check sample tests in library for more examples isa.
  *
- * val getterBundle = bundle.getKGetterBundle()
+ * val getterBundle = bundle.getterBundle()
  * // Note must be in same order they added in isa.
  * val retrievedInt = getterBundle.get<Int>()
  * val retrievedStringList = getterBundle.getOrNull<List<String>>()
  *
  * // Java Devs, check sample tests in library for more examples isa.
  *
- * JGetterBundle getterBundle = BundleUtils.getJGetterBundle(bundle);
+ * JGetterBundle getterBundle = BundleUtils.javaGetterBundle(bundle);
  * // Note must be in same order they added in isa.
  * int[] primitiveIntArray = getterBundle.getOrNull();
  * String string = getterBundle.get();
@@ -184,7 +201,7 @@ fun Bundle.addValues(vararg values: Any?) {
  * @see sizeInBytes
  */
 fun buildBundle(vararg values: Any?): Bundle
-    = Bundle().apply { addValues(*values.map { it }.toTypedArray()) }
+    = Bundle().apply { addValues(*values) }
 
 /** Returns the size of a [Bundle] in Bytes or null if cannot and error occurred while measuring isa. */
 fun Bundle.sizeInBytes() : Int? = kotlin.runCatching {
@@ -198,19 +215,11 @@ fun Bundle.sizeInBytes() : Int? = kotlin.runCatching {
 }.getOrNull()
 
 /**
- * Used by kotlin devs only, for same functionality for java devs see [KGetterBundle]
+ * Used by java devs only, for same functionality for kotlin devs see [Bundle.getKGetterBundle]
  *
  * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
  */
-@JvmSynthetic
-fun Bundle.getKGetterBundle() = KGetterBundle(this)
-
-/**
- * Used by java devs only, for same functionality for kotlin devs see [JGetterBundle]
- *
- * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
- */
-fun Bundle.getJGetterBundle() = JGetterBundle(this)
+fun Bundle.getJGetterBundle(): JGetterBundle = JGetterBundle(this)
 
 class JGetterBundle internal constructor(private val bundle: Bundle) {
 

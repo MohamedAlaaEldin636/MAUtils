@@ -15,25 +15,17 @@
 
 package mohamedalaa.mautils.mautils;
 
-import android.graphics.ColorSpace;
-
-import java.util.function.DoubleUnaryOperator;
+import android.os.Bundle;
 
 import mohamedalaa.mautils.core_android.BundleUtils;
-import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.gson.GsonBundleUtils;
-import mohamedalaa.mautils.gson.java.GsonUtils;
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
+ * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/22/2019.
  */
-public class JavaQuickTrialIsa2 {
+public class ZA {
 
-    public void dew() {
-        //BundleUtils.getGetterBundle();
-
-
-        //GsonBundleUtils
+    public void dwed(Bundle bundle) {
+        BundleUtils.getJGetterBundle(bundle);
     }
 
 }

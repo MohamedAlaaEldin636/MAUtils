@@ -15,25 +15,34 @@
 
 package mohamedalaa.mautils.mautils;
 
-import android.graphics.ColorSpace;
-
-import java.util.function.DoubleUnaryOperator;
-
 import mohamedalaa.mautils.core_android.BundleUtils;
 import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.gson.GsonBundleUtils;
-import mohamedalaa.mautils.gson.java.GsonUtils;
+import mohamedalaa.mautils.core_android.IntentUtils;
+import mohamedalaa.mautils.material_design.ViewUtils;
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
+ * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/23/2019.
  */
-public class JavaQuickTrialIsa2 {
+public class AAAAAAA {
 
-    public void dew() {
-        //BundleUtils.getGetterBundle();
+    private void dwed() {
+        //ContextUtils.dismissToast();
+        //BundleUtils.
+        //BundleUtils.javaGetterBundle();
 
+        //BundleUtils.
 
-        //GsonBundleUtils
+        //BundleUtils.
+        //BundleUtils.
+
+        //IntentUtils.
+
+        //IntentUtils.
+
+        // todo jvm name with jvm synthetic do not work out at all
+        //IntentUtils.
+
+        //ViewUtils.
     }
 
 }

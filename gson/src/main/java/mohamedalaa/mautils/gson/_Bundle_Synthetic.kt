@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-@file:JvmName("StringBuilderUtils")
+package mohamedalaa.mautils.gson
 
-package mohamedalaa.mautils.core_kotlin
+import android.os.Bundle
 
-/** Quick append to `this` isa, useless in java since there is no operator fun usage in it isa. */
 @JvmSynthetic
-operator fun StringBuilder.plusAssign(value: String) {
-    this.append(value)
-}
+fun Bundle.getKGetterBundleGson() = KGetterBundleGson(this)

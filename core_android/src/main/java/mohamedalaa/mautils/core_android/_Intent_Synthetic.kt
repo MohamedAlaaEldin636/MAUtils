@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.mautils;
+package mohamedalaa.mautils.core_android
 
-import android.graphics.ColorSpace;
-
-import java.util.function.DoubleUnaryOperator;
-
-import mohamedalaa.mautils.core_android.BundleUtils;
-import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.gson.GsonBundleUtils;
-import mohamedalaa.mautils.gson.java.GsonUtils;
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import mohamedalaa.mautils.core_android.data_binding.KGetterBundle
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
+ * Used by kotlin devs only, for same functionality for java devs see [Intent.javaGetterBundle]
+ *
+ * Used to retrieve [Bundle] vales created by [Context.startActivityBundle] isa.
  */
-public class JavaQuickTrialIsa2 {
-
-    public void dew() {
-        //BundleUtils.getGetterBundle();
-
-
-        //GsonBundleUtils
-    }
-
-}
+@JvmSynthetic
+fun Intent.getterBundle() = KGetterBundle(extras ?: Bundle())

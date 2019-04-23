@@ -13,27 +13,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.mautils;
+package mohamedalaa.mautils.core_kotlin
 
-import android.graphics.ColorSpace;
-
-import java.util.function.DoubleUnaryOperator;
-
-import mohamedalaa.mautils.core_android.BundleUtils;
-import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.gson.GsonBundleUtils;
-import mohamedalaa.mautils.gson.java.GsonUtils;
-
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
- */
-public class JavaQuickTrialIsa2 {
-
-    public void dew() {
-        //BundleUtils.getGetterBundle();
-
-
-        //GsonBundleUtils
-    }
-
+/** Quick append to `this` isa, useless in java since there is no operator fun usage in it isa. */
+@JvmSynthetic
+operator fun StringBuilder.plusAssign(value: String) {
+    this.append(value)
 }

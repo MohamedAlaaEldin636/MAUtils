@@ -22,6 +22,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import mohamedalaa.mautils.core_android.data_binding.JGetterBundle
+import mohamedalaa.mautils.core_android.data_binding.KGetterBundle
 
 /**
  * Exactly same as [Intent.getExtras].get([key]), but easier for nullability checks isa.
@@ -90,3 +92,11 @@ fun Context.launchWebLink(url: String, showToastOnFailure: Boolean = true, creat
 
     return canHandleIntent
 }
+
+/**
+ * Used by java devs only, for same functionality for kotlin devs see [Intent.getterBundle]
+ *
+ * Used to retrieve [Bundle] vales created by [Context.startActivityBundle] isa.
+ */
+@JvmName("getterBundle")
+fun Intent.javaGetterBundle() = JGetterBundle(extras ?: Bundle())

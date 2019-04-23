@@ -19,15 +19,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
-import mohamedalaa.mautils.core_android.addValues
-import mohamedalaa.mautils.core_android.getKGetterBundle
 import mohamedalaa.mautils.core_android.setMaxLength
 import mohamedalaa.mautils.mautils.material_design.BoatActivity
 import mohamedalaa.mautils.mautils.material_design.MaterialDesignMainActivity
-import mohamedalaa.mautils.mautils.recycler_view.VisualTestActivity
 import mohamedalaa.mautils.core_android.toast as toast1
 import mohamedalaa.mautils.mautils_open_source_licences.view.OpenSourceLicencesActivity
-import kotlin.reflect.full.primaryConstructor
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // ...
         savedInstanceState?.apply {
-            val getterBundle = getKGetterBundle()
+            val getterBundle = getterBundle()
 
             intVal = getterBundle.get()
             stringVal = getterBundle.getOrNull() ?: "fallback"

@@ -129,7 +129,7 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
  *
  * // Java Devs
  *
- * JGetterBundle getterBundle = BundleUtils.getJGetterBundle(bundle);
+ * JGetterBundle getterBundle = BundleUtils.javaGetterBundle(bundle);
  * // Note must be in same order they added in isa.
  * int[] primitiveIntArray = getterBundle.getOrNull();
  * String string = getterBundle.get();
@@ -201,9 +201,6 @@ class KGetterBundleGson internal constructor(@PublishedApi internal val bundle: 
         = getOrNull(gsonConverter, gson) ?: throw RuntimeException("Cannot get ${T::class} from key `${counter.dec()}`")
 
 }
-
-@JvmSynthetic
-fun Bundle.getKGetterBundleGson() = KGetterBundleGson(this)
 
 class JGetterBundleGson internal constructor(private val bundle: Bundle) {
 

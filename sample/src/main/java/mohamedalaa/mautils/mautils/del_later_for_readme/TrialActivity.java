@@ -70,7 +70,7 @@ public class TrialActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // ...
-        JGetterBundle getterBundle = BundleUtils.getJGetterBundle(savedInstanceState);
+        JGetterBundle getterBundle = BundleUtils.javaGetterBundle(savedInstanceState);
 
         intVal = getterBundle.get();
         stringVal = getterBundle.getOrNull();

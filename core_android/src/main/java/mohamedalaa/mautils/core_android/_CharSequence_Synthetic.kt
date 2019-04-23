@@ -13,27 +13,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.mautils;
-
-import android.graphics.ColorSpace;
-
-import java.util.function.DoubleUnaryOperator;
-
-import mohamedalaa.mautils.core_android.BundleUtils;
-import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.gson.GsonBundleUtils;
-import mohamedalaa.mautils.gson.java.GsonUtils;
+package mohamedalaa.mautils.core_android
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
+ * For kotlin devs this is better than [String.indexOf] due to nullability checks in the language isa.
+ *
+ * @return index of the first occurrence of [string] or `null` if none is found.
  */
-public class JavaQuickTrialIsa2 {
-
-    public void dew() {
-        //BundleUtils.getGetterBundle();
-
-
-        //GsonBundleUtils
-    }
-
+@JvmSynthetic
+fun CharSequence.indexOfOrNull(string: String, startIndex: Int = 0, ignoreCase: Boolean = false): Int? {
+    val index = indexOf(string, startIndex, ignoreCase)
+    return if (index == -1) null else index
 }

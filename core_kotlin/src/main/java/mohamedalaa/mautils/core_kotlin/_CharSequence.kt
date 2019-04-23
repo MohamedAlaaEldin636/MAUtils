@@ -36,14 +36,3 @@ operator fun CharSequence?.contains(other: CharSequence?, ignoreCase: Boolean = 
 operator fun CharSequence?.contains(char: Char?, ignoreCase: Boolean = false): Boolean {
     return this?.kotlinContains(char ?: return false, ignoreCase) ?: false
 }
-
-/**
- * For kotlin devs this is better than [String.indexOf] due to nullability checks in the language isa.
- *
- * @return index of the first occurrence of [string] or `null` if none is found.
- */
-@JvmSynthetic
-fun CharSequence.indexOfOrNull(string: String, startIndex: Int = 0, ignoreCase: Boolean = false): Int? {
-    val index = indexOf(string, startIndex, ignoreCase)
-    return if (index == -1) null else index
-}
