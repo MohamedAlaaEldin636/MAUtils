@@ -52,7 +52,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation project (':core_android')
+    // Own Libraries
+    api project (':core_android')
 
     api 'com.google.code.gson:gson:2.8.5' // DO NOT Exclude
     api project (':gson_annotation') // Can be excluded

@@ -22,7 +22,7 @@
 
     android:orientation="vertical"
 
-    tools:context=".MainActivity">
+    tools:context="mohamedalaa.mautils.sample.MainActivity">
 
     <EditText
         android:id="@+id/editText1"

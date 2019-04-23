@@ -79,8 +79,8 @@ private fun View.aaaa() {
 
 private fun ddd111(string: String, bundle: Bundle) {
     //menuItem.setIconTintList()
-    if (string is Serializable) {
+    /*if (string is Serializable) {
         //bundle.put
         bundleOf()
-    }
+    }*/
 }

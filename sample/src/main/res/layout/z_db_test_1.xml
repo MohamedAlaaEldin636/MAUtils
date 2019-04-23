@@ -20,7 +20,7 @@
         <import type="mohamedalaa.mautils.mautils.R"/>
         <variable
             name="v1"
-            type="mohamedalaa.mautils.mautils.SmallUser"/>
+            type="mohamedalaa.mautils.sample.SmallUser"/>
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

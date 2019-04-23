@@ -30,7 +30,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".trial_activity.ForDataBindingActivity">
+        tools:context="mohamedalaa.mautils.sample.trial_activity.ForDataBindingActivity">
 
         <!--
             app:setToolbarMenu_resId="@{R.menu.visual_test_activity}"

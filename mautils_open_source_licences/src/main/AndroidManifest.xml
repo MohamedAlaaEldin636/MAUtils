@@ -15,13 +15,13 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mohamedalaa.mautils.mautils_open_source_licences">
+    package="mohamedalaa.mautils.open_source_licences">
 
     <application>
-        <activity android:name=".view.LicenceDetailsActivity"
+        <activity android:name="mohamedalaa.mautils.open_source_licences.view.LicenceDetailsActivity"
             android:theme="@style/MAUtilsOpenSourceLicencesTheme" />
         <activity
-            android:name=".view.OpenSourceLicencesActivity"
+            android:name="mohamedalaa.mautils.open_source_licences.view.OpenSourceLicencesActivity"
             android:theme="@style/MAUtilsOpenSourceLicencesTheme"
 
             android:windowSoftInputMode="adjustResize"/>

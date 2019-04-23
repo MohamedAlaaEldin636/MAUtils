@@ -22,7 +22,9 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import mohamedalaa.mautils.core_android.buildBundle
-import mohamedalaa.mautils.core_android.getterBundle
+import mohamedalaa.mautils.gson.buildBundleGson
+import mohamedalaa.mautils.gson.buildBundleGsonForced
+import mohamedalaa.mautils.material_design.dependencies_runtime_checks.moduleGsonExists
 
 fun Fragment.hideKeyboard() {
     val imm = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
@@ -48,8 +50,24 @@ fun <F : Fragment> F.instanceWithArg(bundle: Bundle?): F
 fun <F : Fragment> F.instanceWithArgBundle(vararg values: Any?): F
     = apply { arguments = buildBundle(*values) }
 
-private fun dewidjo(fragment: Fragment) {
-    fragment.arguments?.apply {
-        val getterBundle = getterBundle()
+/**
+ * **Warning**
+ * Only works if you have implementation 'com.github.MohamedAlaaEldin636.MAUtils:gson:$mautils_version',
+ * otherwise nothing will be put in [Fragment.setArguments] isa.
+ */
+fun <F : Fragment> F.instanceWithArgBundleGson(vararg values: Any?): F = apply {
+    if (moduleGsonExists()) {
+        arguments = buildBundleGson(*values)
+    }
+}
+
+/**
+ * **Warning**
+ * Only works if you have implementation 'com.github.MohamedAlaaEldin636.MAUtils:gson:$mautils_version',
+ * otherwise nothing will be put in [Fragment.setArguments] isa.
+ */
+fun <F : Fragment> F.instanceWithArgBundleGsonForced(vararg values: Any?): F = apply {
+    if (moduleGsonExists()) {
+        arguments = buildBundleGsonForced(*values)
     }
 }
