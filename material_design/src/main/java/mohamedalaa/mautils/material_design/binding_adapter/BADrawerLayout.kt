@@ -24,10 +24,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import mohamedalaa.mautils.material_design.MADrawerLayoutDrawerListener
 import mohamedalaa.mautils.material_design.R
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/14/2019.
- *
- */
 object BADrawerLayout {
 
     @JvmStatic

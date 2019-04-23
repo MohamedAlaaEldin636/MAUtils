@@ -86,7 +86,7 @@ class IsCoreAndroidNeeded {
             v22, v23
         )
 
-        val getter = bundle.getKGetterBundleGson()
+        val getter = bundle.getterBundleGson()
 
         safeAssertEquals(v0, getter.getOrNull())
         safeAssertEquals(v1, getter.getOrNull())

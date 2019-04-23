@@ -16,7 +16,7 @@
 package mohamedalaa.mautils.mautils.module_mautils_gson
 
 import mohamedalaa.mautils.gson.buildBundleGson
-import mohamedalaa.mautils.gson.getKGetterBundleGson
+import mohamedalaa.mautils.gson.getterBundleGson
 import mohamedalaa.mautils.mautils.fake_data.CustomObject
 import mohamedalaa.mautils.mautils.fake_data.CustomWithTypeParam
 import mohamedalaa.mautils.mautils.module_mautils_gson.gson_converters_for_kotlin.CustomWithTypeParamOfNestedPairs
@@ -40,7 +40,7 @@ class GsonWithBundleTest {
     fun customObjects() {
         val bundle = buildBundleGson(customObject, listOfCustomObjects)
 
-        val getterBundleGson = bundle.getKGetterBundleGson()
+        val getterBundleGson = bundle.getterBundleGson()
         assertEquals(customObject, getterBundleGson.get())
         assertEquals(listOfCustomObjects, getterBundleGson.get())
     }
@@ -49,7 +49,7 @@ class GsonWithBundleTest {
     fun custom_withTypeParam() {
         val bundle = buildBundleGson(customWithTypeParam)
 
-        val getterBundleGson = bundle.getKGetterBundleGson()
+        val getterBundleGson = bundle.getterBundleGson()
         assertEquals(customWithTypeParam, getterBundleGson.get())
     }
 
@@ -59,7 +59,7 @@ class GsonWithBundleTest {
 
         // Note here we didn't use GsonConverter since nestedPair1 is Serializable so it is
         // added to bundle as serializable not as json string see next test for use of GsonConverter isa.
-        val getterBundleGson = bundle.getKGetterBundleGson()
+        val getterBundleGson = bundle.getterBundleGson()
         assertEquals(nestedPair1, getterBundleGson.get())
     }
 
@@ -67,7 +67,7 @@ class GsonWithBundleTest {
     fun custom_withNestedTypeParam_nonInvariance_2() {
         val bundle = buildBundleGson(nestedPair2)
 
-        val getterBundleGson = bundle.getKGetterBundleGson()
+        val getterBundleGson = bundle.getterBundleGson()
         assertEquals(nestedPair2, getterBundleGson.get(CustomWithTypeParamOfNestedPairs()))
     }
 

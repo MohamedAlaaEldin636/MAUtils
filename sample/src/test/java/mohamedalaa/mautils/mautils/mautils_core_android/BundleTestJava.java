@@ -74,7 +74,7 @@ public class BundleTestJava {
         BundleUtils.addValues(bundle, primitiveIntArray, longArray, stringList, sparseArray);
 
         // Retrieving values ( Note must be in same order isa. )
-        JGetterBundle getterBundle = BundleUtils.getJGetterBundle(bundle);
+        JGetterBundle getterBundle = BundleUtils.getterBundle(bundle);
         int[] primitiveIntArray = getterBundle.getOrNull();
         assertEquals(primitiveIntArray, primitiveIntArray);
         //noinspection deprecation
@@ -88,7 +88,7 @@ public class BundleTestJava {
     public void nullableElementsList() {
         Bundle bundle = BundleUtils.buildBundle(nullableElementsFloatList, allNullableElementsFloatList);
 
-        JGetterBundle getterBundle = BundleUtils.getJGetterBundle(bundle);
+        JGetterBundle getterBundle = BundleUtils.getterBundle(bundle);
         assertEquals(nullableElementsFloatList, getterBundle.get());
         assertEquals(allNullableElementsFloatList, getterBundle.get());
     }

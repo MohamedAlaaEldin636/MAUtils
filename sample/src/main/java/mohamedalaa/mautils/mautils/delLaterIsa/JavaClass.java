@@ -26,7 +26,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import mohamedalaa.mautils.core_android.ContextUtils;
 import mohamedalaa.mautils.core_kotlin.ListUtils;
-import mohamedalaa.mautils.core_kotlin.StringBuilderUtils;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 2/13/2019.

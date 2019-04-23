@@ -19,10 +19,6 @@ import android.view.View
 import androidx.databinding.BindingAdapter
 import mohamedalaa.mautils.material_design.setTooltipTextCompat
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/14/2019.
- *
- */
 object BAView {
 
     /**

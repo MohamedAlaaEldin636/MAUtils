@@ -25,7 +25,7 @@ import mohamedalaa.mautils.core_android.BundleUtils;
 public class ZA {
 
     public void dwed(Bundle bundle) {
-        BundleUtils.getJGetterBundle(bundle);
+        BundleUtils.getterBundle(bundle);
     }
 
 }

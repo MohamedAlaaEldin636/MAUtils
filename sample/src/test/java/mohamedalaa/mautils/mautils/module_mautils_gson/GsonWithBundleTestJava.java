@@ -60,7 +60,7 @@ public class GsonWithBundleTestJava {
     @Test
     public void custom_objects() {
         Bundle bundle = GsonBundleUtils.buildBundleGson(customObject);
-        JGetterBundleGson getterBundleGson = GsonBundleUtils.getJGetterBundleGson(bundle);
+        JGetterBundleGson getterBundleGson = GsonBundleUtils.getterBundleGson(bundle);
 
         CustomObject re = getterBundleGson.get(CustomObject.class);
 

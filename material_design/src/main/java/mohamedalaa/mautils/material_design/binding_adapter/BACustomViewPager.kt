@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android
+package mohamedalaa.mautils.material_design.binding_adapter
 
-import android.os.Bundle
+import androidx.databinding.BindingAdapter
+import mohamedalaa.mautils.material_design.custom_classes.CustomViewPager
 
-/**
- * Used by kotlin devs only, for same functionality for java devs see [Bundle.javaGetGetterBundle]
- *
- * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
- */
-@JvmSynthetic
-fun Bundle.getterBundle(): KGetterBundle = KGetterBundle(this)
+object BACustomViewPager {
+
+    @JvmStatic
+    @BindingAdapter("android:customViewPager_enableScrolling")
+    fun customViewPagerEnableScrolling(customViewPager: CustomViewPager, enableScrolling: Boolean?) {
+        customViewPager.isScrollingEnabled = enableScrolling ?: false
+    }
+
+}

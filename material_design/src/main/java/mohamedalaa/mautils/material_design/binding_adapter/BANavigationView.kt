@@ -23,10 +23,6 @@ import mohamedalaa.mautils.core_android.findBindingOrNull
 import mohamedalaa.mautils.core_android.layoutInflater
 import mohamedalaa.mautils.core_kotlin.pairedIteration
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/14/2019.
- *
- */
 object BANavigationView {
 
     /**

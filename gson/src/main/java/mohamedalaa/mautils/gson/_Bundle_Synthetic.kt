@@ -18,4 +18,4 @@ package mohamedalaa.mautils.gson
 import android.os.Bundle
 
 @JvmSynthetic
-fun Bundle.getKGetterBundleGson() = KGetterBundleGson(this)
+fun Bundle.getterBundleGson() = KGetterBundleGson(this)

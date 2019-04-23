@@ -22,9 +22,7 @@ import androidx.databinding.adapters.ListenerUtil
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
-/** android:tabLayout_ */
 object BATabLayout {
-
 
     @JvmStatic
     @BindingAdapter("android:tabLayout_viewPager")

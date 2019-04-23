@@ -22,7 +22,9 @@ import android.os.Parcelable
 import android.util.SparseArray
 import com.google.gson.Gson
 import mohamedalaa.mautils.core_android.addValue
+import mohamedalaa.mautils.core_android.addValuesWithKeys
 import mohamedalaa.mautils.core_android.buildBundle
+import mohamedalaa.mautils.core_android.buildBundleWithKeys
 import mohamedalaa.mautils.gson.java.GsonConverter
 import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
 
@@ -54,8 +56,8 @@ data class ForceUsingJsonInBundle @PublishedApi internal constructor (val jsonSt
  *
  * @see addValuesGson
  * @see buildBundleGson
- * @see getKGetterBundleGson
- * @see getJGetterBundleGson
+ * @see getterBundleGson
+ * @see javaGetGetterBundleGson
  */
 @JvmOverloads
 fun Bundle.addValueGson(key: String?, value: Any?, gson: Gson? = null) {
@@ -122,7 +124,7 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
  * ```
  * // Kotlin Devs
  *
- * val getterBundle = bundle.getKGetterBundleGson()
+ * val getterBundle = bundle.getterBundleGson()
  * // Note must be in same order they added in isa.
  * val retrievedCustomObject = getterBundleGson.get<CustomObject>()
  * val retrievedListOfCustomObject = getterBundleGson.get<List<CustomObject>>()
@@ -170,7 +172,7 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
  */
 @JvmOverloads
 fun buildBundleGson(vararg values: Any?, gson: Gson? = null): Bundle
-    = Bundle().apply { addValuesGson(*values.map { it }.toTypedArray(), gson = gson) }
+    = Bundle().apply { addValuesGson(*values, gson = gson) }
 
 /**
  * Same as [buildBundleGson] but with several differences See **When** section in doc of [buildBundleGson]
@@ -178,6 +180,50 @@ fun buildBundleGson(vararg values: Any?, gson: Gson? = null): Bundle
 @JvmOverloads
 fun buildBundleGsonForced(vararg values: Any?, gson: Gson? = null): Bundle
     = Bundle().apply { addValuesGsonForced(*values.map { it }.toTypedArray(), gson = gson) }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//      Bundle Gson With Keys
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+private fun Bundle.privateAddValuesGsonWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson?, forced: Boolean) {
+    pairedValues.forEach {
+        if (forced) {
+            addValueGsonForced(it.first, it.second, gson)
+        }else {
+            addValueGson(it.first, it.second, gson)
+        }
+    }
+}
+
+/**
+ * Combination of [addValuesGson] && [Bundle.addValuesWithKeys]
+ */
+@JvmOverloads
+fun Bundle.addValuesGsonWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null)
+    = privateAddValuesGsonWithKeys(pairedValues = *pairedValues, gson = gson, forced = false)
+
+/**
+ * Combination of [addValuesGsonForced] && [Bundle.addValuesWithKeys]
+ */
+@JvmOverloads
+fun Bundle.addValuesGsonForcedWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null)
+    = privateAddValuesGsonWithKeys(pairedValues = *pairedValues, gson = gson, forced = true)
+
+/**
+ * Combination of [buildBundleGson] && [buildBundleWithKeys]
+ */
+@JvmOverloads
+fun buildBundleGsonWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null): Bundle
+    = Bundle().apply { addValuesGsonWithKeys(*pairedValues, gson = gson) }
+
+/**
+ * Combination of [buildBundleGsonForced] && [buildBundleWithKeys]
+ */
+@JvmOverloads
+fun buildBundleGsonForcedWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null): Bundle
+    = Bundle().apply { addValuesGsonForcedWithKeys(*pairedValues, gson = gson) }
 
 class KGetterBundleGson internal constructor(@PublishedApi internal val bundle: Bundle) {
 
@@ -228,4 +274,5 @@ class JGetterBundleGson internal constructor(private val bundle: Bundle) {
 
 }
 
-fun Bundle.getJGetterBundleGson() = JGetterBundleGson(this)
+@JvmName("getterBundleGson")
+fun Bundle.javaGetGetterBundleGson() = JGetterBundleGson(this)

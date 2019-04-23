@@ -47,6 +47,8 @@ abstract class CheckTypeParam<E> {
         println(l)
         println(l as Class<*>)
         println(l.javaClass)
+
+        //Bundle().getterBundle()
     }
 
     fun a1() {

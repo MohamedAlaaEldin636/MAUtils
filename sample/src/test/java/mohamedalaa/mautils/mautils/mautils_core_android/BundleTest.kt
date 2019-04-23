@@ -46,16 +46,27 @@ class BundleTest {
     private val listOfCustomObjects = listOf(customObject, customObject.copy(age = 66), customObject.copy(name = "Strange Name"))
 
     @Test
+    fun check_for_bundleOf_support() {
+        val sparseArrayOfBundle = SparseArray<Bundle>().apply {
+            put(1, Bundle())
+            put(2, buildBundle(2))
+            put(3, buildBundle("44"))
+        }
+
+        //bundleOf("key_1" to sparseArrayOfBundle)
+
+        val bundleWithKeys = buildBundleWithKeys("key_1" to sparseArrayOfBundle)
+    }
+
+    @Test
     fun changedCore() {
         val bundle = buildBundle(4, "s", true)
 
-        val getter = bundle.getKGetterBundle()
+        val getter = bundle.getterBundle()
         //bundle.javaGetGetterBundle()
 
         println("${getter.get<Int>()}, ${getter.get<String>()}, ${getter.get<Boolean>()}")
     }
-
-
 
     private fun dweidjwo(context: Context) {
         context.startActivity<BoatActivity>()
@@ -69,7 +80,7 @@ class BundleTest {
         bundle.addValues(primitiveIntArray, longArray, stringList, sparseArray, myBundle, listOfBundles)
 
         // Retrieving values ( Note must be in same order isa. )
-        val getterBundle = bundle.getKGetterBundle()
+        val getterBundle = bundle.getterBundle()
         assertEquals(primitiveIntArray, getterBundle.get())
         assertEquals(longArray, getterBundle.get())
         val reStringList = getterBundle.getOrNull<List<String>>()
@@ -90,7 +101,7 @@ class BundleTest {
         val primitiveFloatArray = floatArrayOf(5f, 2.3f)
         val bundle = buildBundle(int, string, sparseArray, primitiveFloatArray)
 
-        val valuesGetterBundle = bundle.getKGetterBundle()
+        val valuesGetterBundle = bundle.getterBundle()
 
         // Checks ( Note must be in same order isa. )
         val retrievedInt = valuesGetterBundle.get<Int>()
@@ -104,7 +115,7 @@ class BundleTest {
     fun nullableElementsList() {
         val bundle = buildBundle(nullableElementsFloatList, allNullableElementsFloatList)
 
-        val getterBundle = bundle.getKGetterBundle()
+        val getterBundle = bundle.getterBundle()
         assertEquals(nullableElementsFloatList, getterBundle.get())
         assertEquals(allNullableElementsFloatList, getterBundle.get())
     }

@@ -18,7 +18,6 @@ package mohamedalaa.mautils.core_android
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import mohamedalaa.mautils.core_android.data_binding.KGetterBundle
 
 /**
  * Used by kotlin devs only, for same functionality for java devs see [Intent.javaGetterBundle]

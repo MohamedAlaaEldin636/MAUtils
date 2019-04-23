@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android
+package mohamedalaa.mautils.core_kotlin
 
 /**
  * For kotlin devs this is better than [String.indexOf] due to nullability checks in the language isa.

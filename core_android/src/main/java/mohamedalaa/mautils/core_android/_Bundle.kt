@@ -144,7 +144,7 @@ fun Bundle.addValues(vararg values: Any?) {
  * Increase Bundle with the given key/value pairs as elements, same as [bundleOf]
  * but for existing instance for bundle instead of creating a new one isa,
  *
- * so when try to get values use keys you used in [pairedValues] not like in [addValues].
+ * so when try to get values use keys you used in [pairedValues] not like in [addValues] Mechanism.
  */
 fun Bundle.addValuesWithKeys(vararg pairedValues: Pair<String, Any?>)
     = pairedValues.forEach { addValue(it.first, it.second) }
@@ -215,11 +215,12 @@ fun Bundle.sizeInBytes() : Int? = kotlin.runCatching {
 }.getOrNull()
 
 /**
- * Used by java devs only, for same functionality for kotlin devs see [Bundle.getKGetterBundle]
+ * Used by java devs only, for same functionality for kotlin devs see [Bundle.getterBundle]
  *
  * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
  */
-fun Bundle.getJGetterBundle(): JGetterBundle = JGetterBundle(this)
+@JvmName("getterBundle")
+fun Bundle.javaGetGetterBundle(): JGetterBundle = JGetterBundle(this)
 
 class JGetterBundle internal constructor(private val bundle: Bundle) {
 
