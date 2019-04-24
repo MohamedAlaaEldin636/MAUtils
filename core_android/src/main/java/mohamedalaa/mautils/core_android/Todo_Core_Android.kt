@@ -17,6 +17,7 @@
 
 package mohamedalaa.mautils.core_android
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.NavUtils
@@ -83,4 +84,6 @@ private fun ddd111(string: String, bundle: Bundle) {
         //bundle.put
         bundleOf()
     }*/
+
+    //SharedPreferences
 }
