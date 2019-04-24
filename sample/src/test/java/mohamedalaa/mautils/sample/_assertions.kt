@@ -16,7 +16,7 @@
 package mohamedalaa.mautils.sample
 
 import mohamedalaa.mautils.core_kotlin.zipSameSize
-import mohamedalaa.mautils.for_unit_testing.TestingLog
+import mohamedalaa.mautils.test_core.TestingLog
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberExtensionProperties
 import kotlin.reflect.full.memberProperties
@@ -64,7 +64,7 @@ fun <T : Any> assertEquality(expected: T, actual: T) {
         val itemActual = second.getter.call(actual)
 
         val msg = "$itemExpected\n$itemActual"
-        if (toggler) mohamedalaa.mautils.for_unit_testing.TestingLog.v(msg) else mohamedalaa.mautils.for_unit_testing.TestingLog.i(msg)
+        if (toggler) TestingLog.v(msg) else TestingLog.i(msg)
 
         if (itemExpected?.isObjectInstance() == true) {
             assertTrue { itemActual?.isObjectInstance() == true }
@@ -88,7 +88,7 @@ fun <T : Any> assertEquality(expected: T, actual: T) {
         val itemActual = second.getter.call(actual)
 
         val msg = "$itemExpected\n$itemActual"
-        if (toggler) mohamedalaa.mautils.for_unit_testing.TestingLog.v(msg) else mohamedalaa.mautils.for_unit_testing.TestingLog.i(msg)
+        if (toggler) TestingLog.v(msg) else TestingLog.i(msg)
 
         if (itemExpected?.isObjectInstance() == true) {
             assertTrue { itemActual?.isObjectInstance() == true }

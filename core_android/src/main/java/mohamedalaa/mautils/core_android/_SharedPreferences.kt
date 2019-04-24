@@ -53,12 +53,13 @@ fun <T> Context.javaSharedPrefGet(
     }
 
     val any: Any? = when (jClass) {
-        String::class.java, String::class.javaObjectType-> sharedPref.getString(key, null)
+        String::class.java -> sharedPref.getString(key, null)
         Int::class.java, Int::class.javaObjectType -> sharedPref.getInt(key, 0)
         Boolean::class.java, Boolean::class.javaObjectType -> sharedPref.getBoolean(key, false)
         Long::class.java, Long::class.javaObjectType -> sharedPref.getLong(key, 0L)
         Float::class.java, Float::class.javaObjectType -> sharedPref.getFloat(key, 0f)
-        else -> sharedPref.getStringSet(key, null)
+        Set::class.java -> sharedPref.getStringSet(key, null)
+        else -> throw RuntimeException("Unsupported type $jClass in shared pref")
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -77,15 +78,16 @@ fun <T> Context.javaSharedPrefSet(
     val sharedPrefEditor = applicationContext.getSharedPreferences(fileName, mode).edit()
 
     when (jClass) {
-        String::class.java, String::class.javaObjectType -> sharedPrefEditor.putString(key, value as String)
+        String::class.java -> sharedPrefEditor.putString(key, value as String)
         Int::class.java, Int::class.javaObjectType -> sharedPrefEditor.putInt(key, value as Int)
         Boolean::class.java, Boolean::class.javaObjectType -> sharedPrefEditor.putBoolean(key, value as Boolean)
         Long::class.java, Long::class.javaObjectType -> sharedPrefEditor.putLong(key, value as Long)
         Float::class.java, Float::class.javaObjectType -> sharedPrefEditor.putFloat(key, value as Float)
-        else -> {
+        Set::class.java -> {
             @Suppress("UNCHECKED_CAST")
             sharedPrefEditor.putStringSet(key, value as MutableSet<String>)
         }
+        else -> throw RuntimeException("Unsupported type $jClass in shared pref")
     }
 
     sharedPrefEditor.apply()

@@ -18,8 +18,6 @@ package mohamedalaa.mautils.sample.module_mautils_gson
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.sample.assertEquality
-import mohamedalaa.mautils.mautils.model_for_testing.*
-import mohamedalaa.mautils.model_for_testing.*
 import mohamedalaa.mautils.sample.model_for_testing.*
 import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test

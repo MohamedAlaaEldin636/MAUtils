@@ -17,7 +17,6 @@ package mohamedalaa.mautils.sample.module_mautils_gson
 
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
-import mohamedalaa.mautils.module_mautils_gson.*
 import mohamedalaa.mautils.sample.assertEquality
 import org.junit.Test
 import org.junit.runner.RunWith

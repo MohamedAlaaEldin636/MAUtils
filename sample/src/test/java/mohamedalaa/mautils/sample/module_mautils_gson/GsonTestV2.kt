@@ -18,8 +18,7 @@ package mohamedalaa.mautils.sample.module_mautils_gson
 import mohamedalaa.mautils.core_kotlin.zipSameSize
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
-import mohamedalaa.mautils.for_unit_testing.TestingLog
-import mohamedalaa.mautils.module_mautils_gson.*
+import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -133,7 +132,7 @@ class GsonTestV2 {
             val itemActual = second.getter.call(actual)
 
             val msg = "$itemExpected\n$itemActual"
-            if (toggler) mohamedalaa.mautils.for_unit_testing.TestingLog.v(msg) else mohamedalaa.mautils.for_unit_testing.TestingLog.i(msg)
+            if (toggler) TestingLog.v(msg) else TestingLog.i(msg)
 
             if (itemExpected?.isObjectInstance() == true) {
                 assertTrue { itemActual?.isObjectInstance() == true }
@@ -157,7 +156,7 @@ class GsonTestV2 {
             val itemActual = second.getter.call(actual)
 
             val msg = "$itemExpected\n$itemActual"
-            if (toggler) mohamedalaa.mautils.for_unit_testing.TestingLog.v(msg) else mohamedalaa.mautils.for_unit_testing.TestingLog.i(msg)
+            if (toggler) TestingLog.v(msg) else TestingLog.i(msg)
 
             if (itemExpected?.isObjectInstance() == true) {
                 assertTrue { itemActual?.isObjectInstance() == true }

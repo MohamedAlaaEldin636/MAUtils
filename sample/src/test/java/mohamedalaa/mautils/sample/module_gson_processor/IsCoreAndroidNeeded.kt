@@ -19,7 +19,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import mohamedalaa.mautils.core_android.buildBundle
 import mohamedalaa.mautils.gson.*
-import mohamedalaa.mautils.for_unit_testing.TestingLog
+import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -34,9 +34,9 @@ class IsCoreAndroidNeeded {
 
     private fun <T> safeAssertEquals(first: T?, second: T?) {
         if (first != second) {
-            mohamedalaa.mautils.for_unit_testing.TestingLog.e("FAILED ==> $first === $second")
+            TestingLog.e("FAILED ==> $first === $second")
         }else {
-            mohamedalaa.mautils.for_unit_testing.TestingLog.v("Succeeded -> $first")
+            TestingLog.v("Succeeded -> $first")
         }
 
         "hello".toJson()

@@ -75,7 +75,7 @@ dependencies {
     implementation project(':core_kotlin')
 
     implementation project(':core_android')
-    implementation 'androidx.core:core-ktx:1.0.1'
+    kapt project (':core_android_processor')
 
     implementation project(':material_design')
 

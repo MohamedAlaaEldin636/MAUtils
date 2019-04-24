@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/core_android" />
+            <option value="$PROJECT_DIR$/core_android_annotation" />
+            <option value="$PROJECT_DIR$/core_android_processor" />
             <option value="$PROJECT_DIR$/core_kotlin" />
             <option value="$PROJECT_DIR$/gson" />
             <option value="$PROJECT_DIR$/gson_annotation" />

@@ -13,7 +13,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core', ':core_android_annotation', ':core_android_processor'
+package mohamedalaa.mautils.core_android_annotation
 
-if (!System.env.JITPACK)
-    include ':sample'
+/**
+ * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/24/2019.
+ *
+ */
+object ProcessorConstants {
+
+    val generationPackage: String = MASharedPref::class.java.getPackage().name
+
+    const val generationClassNamePrefix = "SharedPref"
+
+}

@@ -210,12 +210,12 @@ class GsonTest {
 
         // Currently only way to return the exact result correctly isa.
         val retrievedAny =
-            mohamedalaa.mautils.module_mautils_gson.GsonTestGsonHelper.getCustomWithTypeParam(json)
+            GsonTestGsonHelper.getCustomWithTypeParam(json)
 
-        val anotherRetrieval = mohamedalaa.mautils.module_mautils_gson.GsonTestGsonHelper.GsonCustomWithTypeParam2()
+        val anotherRetrieval = GsonTestGsonHelper.GsonCustomWithTypeParam2()
             .fromJson(json)
 
-        val anotherWay = mohamedalaa.mautils.module_mautils_gson.GsonCustomWithTypeParam3().fromJson(json)
+        val anotherWay = GsonCustomWithTypeParam3().fromJson(json)
 
         assertEquals(any, retrievedAny) // Must be done by java isa.
         assertEquals(any, anotherRetrieval) // Must be done by java isa.

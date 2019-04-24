@@ -28,8 +28,8 @@ import mohamedalaa.mautils.gson.java.GsonConverter;
 import mohamedalaa.mautils.gson.java.GsonUtils;
 import mohamedalaa.mautils.sample.fake_data.CustomObject;
 import mohamedalaa.mautils.sample.fake_data.CustomWithTypeParam;
-import mohamedalaa.mautils.mautils.fake_data.JavaCustomObj;
-import mohamedalaa.mautils.mautils.fake_data.WithVarianceJavaObj;
+import mohamedalaa.mautils.sample.fake_data.JavaCustomObj;
+import mohamedalaa.mautils.sample.fake_data.WithVarianceJavaObj;
 
 import static org.junit.Assert.*;
 

@@ -15,18 +15,21 @@
 
 package mohamedalaa.mautils.sample
 
+import android.content.Context
+import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClass
+
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/30/2019.
  *
  */
 object Bindinggg {
 
-    fun p11() {
-
+    fun p11(context: Context) {
+        val s = SharedPrefSomeClass.getS2(context)
     }
 
 }
 
 private fun jdiwoedjw() {
-    Bindinggg.p11()
+    //Bindinggg.p11()
 }
