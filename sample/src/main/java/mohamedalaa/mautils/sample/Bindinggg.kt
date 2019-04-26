@@ -30,6 +30,7 @@ object Bindinggg {
 
 }
 
+//@Synchronized
 private fun jdiwoedjw() {
     //Bindinggg.p11()
 }

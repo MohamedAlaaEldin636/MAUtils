@@ -185,9 +185,11 @@ class ProcessorOfMASharedPref : AbstractProcessor() {
                 .build()
         )
         getterBuilder.addAnnotation(JvmOverloads::class)
+        getterBuilder.addAnnotation(Synchronized::class)
 
         setterBuilder.addParameter(contextParameterSpec)
         setterBuilder.addParameter("value", typeName)
+        setterBuilder.addAnnotation(Synchronized::class)
 
         // Value
         getterBuilder.addStatement(
