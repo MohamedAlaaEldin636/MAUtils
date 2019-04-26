@@ -47,6 +47,21 @@ class GsonTest {
 
     private val nullableElementsList = mutableListOf(null, 4, null, 9, null)
 
+    enum class MyEnum {
+        ONE, TWO, THREE
+    }
+
+    @Test
+    fun converting_enums_isa() {
+        val myEnum = MyEnum.THREE
+
+        val string = myEnum.toJson()
+
+        val r1 = string.fromJson<MyEnum>()
+
+        println(myEnum == r1)
+    }
+
     @Test
     fun customObjectConversion_toAndFromJson() {
         val jsonStringCustomObject = customObject.toJson()

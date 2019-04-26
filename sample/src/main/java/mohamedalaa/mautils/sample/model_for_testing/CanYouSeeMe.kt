@@ -16,10 +16,12 @@
 package mohamedalaa.mautils.sample.model_for_testing
 
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
+import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 4/4/2019.
  *
  */
 @MASealedAbstractOrInterface
+@MARoomGsonTypeConverter
 sealed class CanYouSeeMe

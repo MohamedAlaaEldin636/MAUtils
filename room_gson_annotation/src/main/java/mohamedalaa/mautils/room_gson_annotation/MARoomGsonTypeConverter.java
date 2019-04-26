@@ -13,7 +13,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core', ':core_android_annotation', ':core_android_processor', ':room_gson_annotation', ':room_gson_processor'
+package mohamedalaa.mautils.room_gson_annotation;
 
-if (!System.env.JITPACK)
-    include ':sample'
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Creates type converter to [String] and from [String]
+ * using [toJson] and [fromJson] in gson module isa.
+ * <br/>
+ * <b>Requirements</b> <br/>
+ * 1. implement gson, room and use kapt of room_gson_processor isa.
+ */
+@Retention(RetentionPolicy.CLASS)
+@Target(ElementType.TYPE)
+public @interface MARoomGsonTypeConverter {}

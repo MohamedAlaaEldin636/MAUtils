@@ -77,6 +77,10 @@ dependencies {
     implementation project(':core_android')
     kapt project (':core_android_processor')
 
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation project(':room_gson_annotation')
+    kapt project (':room_gson_processor')
+
     implementation project(':material_design')
 
     implementation 'com.google.code.gson:gson:2.8.5'

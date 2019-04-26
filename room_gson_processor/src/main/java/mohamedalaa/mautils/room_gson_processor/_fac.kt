@@ -13,7 +13,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core', ':core_android_annotation', ':core_android_processor', ':room_gson_annotation', ':room_gson_processor'
+package mohamedalaa.mautils.room_gson_processor
 
-if (!System.env.JITPACK)
-    include ':sample'
+import javax.annotation.processing.ProcessingEnvironment
+import javax.tools.Diagnostic
+
+fun ProcessingEnvironment.error(msg: String): Nothing {
+    messager.printMessage(
+        Diagnostic.Kind.ERROR,
+        msg
+    )
+
+    throw RuntimeException(msg)
+}
+
+fun ProcessingEnvironment.warning(msg: String) {
+    messager.printMessage(
+        Diagnostic.Kind.WARNING,
+        msg
+    )
+}

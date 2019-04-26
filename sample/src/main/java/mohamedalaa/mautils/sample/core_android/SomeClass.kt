@@ -53,3 +53,10 @@ private fun dwoiejdow(someClass: SomeClass, anotherSomeClass: AnotherSomeClass, 
 
     //sharedPreferences.edit().putString("key", null).apply()
 }
+
+/*@MASharedPref
+data class Mido(
+    val someInt: Int = 8,
+
+    val someStr: String? = null
+)*/

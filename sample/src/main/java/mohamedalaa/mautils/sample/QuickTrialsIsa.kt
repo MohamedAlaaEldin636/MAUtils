@@ -31,6 +31,10 @@ import mohamedalaa.mautils.core_android.addColorAlpha
 import mohamedalaa.mautils.core_android.addListenerMA
 import mohamedalaa.mautils.core_android.setOnQueryTextListenerMA
 import mohamedalaa.mautils.core_kotlin.*
+import mohamedalaa.mautils.gson.fromJson
+import mohamedalaa.mautils.gson.fromJsonOrNull
+import mohamedalaa.mautils.gson.toJsonOrNull
+import mohamedalaa.mautils.material_design.custom_classes.CustomViewPager
 import mohamedalaa.mautils.mautils.R
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
@@ -50,6 +54,12 @@ abstract class CheckTypeParam<E> {
         println(l.javaClass)
 
         //Bundle().getterBundle()
+    }
+
+    fun fromStr(string: String?, value: CustomViewPager?): CustomViewPager? {
+        val string1 = value.toJsonOrNull()
+
+        return string.fromJsonOrNull<CustomViewPager>()
     }
 
     fun a1() {
