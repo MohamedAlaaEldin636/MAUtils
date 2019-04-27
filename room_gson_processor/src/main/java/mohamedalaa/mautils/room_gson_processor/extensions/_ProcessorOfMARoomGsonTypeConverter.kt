@@ -148,7 +148,11 @@ private fun withBuildFunctions(classSimpleName: String, fullTypeName: String): L
 }
 
 private fun withFullTypeName(fullTypeName: String): TypeName {
-    var tempFullTypeName = fullTypeName
+    var tempFullTypeName = if (fullTypeName.contains(" ")) {
+        fullTypeName.substring(fullTypeName.lastIndexOf(" ").inc())
+    }else {
+        fullTypeName
+    }
 
     var tempTypeName: TypeName? = null
     while (tempFullTypeName.contains("<")) {
