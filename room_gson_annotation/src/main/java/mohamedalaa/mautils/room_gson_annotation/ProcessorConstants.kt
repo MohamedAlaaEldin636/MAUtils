@@ -25,4 +25,6 @@ object ProcessorConstants {
 
     const val generationClassNamePrefix = "TypeConverter"
 
+    const val generationClassSimpleName = "MAAutoTypeConverters"
+
 }

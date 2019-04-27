@@ -25,6 +25,30 @@ import mohamedalaa.mautils.room_gson_processor.utils.KotlinpoetUtils
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 
+fun functionsInWithTypeParamBuild(element: Element): List<FunSpec> {
+    // 1. Full & Simple Names
+    val fullTypeName = element.asType().toString()
+    val simpleName = withSimpleName(fullTypeName)
+
+    // 2. Build Functions
+    return withBuildFunctions(simpleName, fullTypeName)
+}
+
+fun functionsInNoTypeParamBuild(element: Element): List<FunSpec> {
+    // 1. Full & Simple Names
+    val (simpleName, qualifiedName) = if (element is TypeElement) {
+        element.simpleName.toString() to element.qualifiedName.toString()
+    }else {
+        val fullName = element.asType().toString()
+        val index = fullName.lastIndexOf(".").inc()
+
+        fullName.substring(index) to fullName
+    }
+
+    // 2. Build Functions
+    return buildFunctions(simpleName, qualifiedName)
+}
+
 fun noTypeParamBuild(element: Element): Pair<String, TypeSpec.Builder> {
     // 1. File Name ( Same as KClass name )
     val (simpleName, qualifiedName) = if (element is TypeElement) {

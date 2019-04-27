@@ -18,6 +18,8 @@ package mohamedalaa.mautils.room_gson_processor
 import com.squareup.kotlinpoet.*
 import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
 import mohamedalaa.mautils.room_gson_annotation.ProcessorConstants
+import mohamedalaa.mautils.room_gson_processor.extensions.functionsInNoTypeParamBuild
+import mohamedalaa.mautils.room_gson_processor.extensions.functionsInWithTypeParamBuild
 import mohamedalaa.mautils.room_gson_processor.extensions.noTypeParamBuild
 import mohamedalaa.mautils.room_gson_processor.extensions.withTypeParamBuild
 import java.io.IOException
@@ -35,15 +37,18 @@ import javax.lang.model.element.VariableElement
 class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
-        val mutableListOfKFiles = mutableListOf<FileSpec>()
+        //val mutableListOfKFiles = mutableListOf<FileSpec>()
 
+        val allFunctions = mutableListOf<FunSpec>()
         for (element in roundEnv.getElementsAnnotatedWith(MARoomGsonTypeConverter::class.java)) {
             if (element !is TypeElement && element !is VariableElement) {
                 processingEnv.error("full type -> ${element.asType()}")
             }
 
+            allFunctions += buildFunctions(element)
+
             // Build object class and functions isa.
-            val pair = fileAndObjectNameToObjectBuilder(element)
+            /*val pair = fileAndObjectNameToObjectBuilder(element)
 
             // 4. Create file of same object name isa.
             mutableListOfKFiles += FileSpec.builder(ProcessorConstants.generationPackage, pair.first)
@@ -53,19 +58,51 @@ class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
                     .addMember("\"PLATFORM_CLASS_MAPPED_TO_KOTLIN\"")
                     .build()
                 )
+                .build()*/
+        }
+
+        val kClass = TypeSpec.classBuilder(ProcessorConstants.generationClassSimpleName)
+            .addFunctions(allFunctions)
+            .build()
+
+        val kFile = FileSpec.builder(ProcessorConstants.generationPackage, ProcessorConstants.generationClassSimpleName)
+            .addImport("mohamedalaa.mautils.gson", "fromJsonOrNull", "toJsonOrNull")
+            .addType(kClass)
+            .addAnnotation(AnnotationSpec.builder(Suppress::class)
+                .addMember("\"PLATFORM_CLASS_MAPPED_TO_KOTLIN\"")
                 .build()
+            )
+            .build()
+
+        try {
+            kFile.writeTo(processingEnv.filer)
+        }catch (e: IOException) {
+            e.printStackTrace()
         }
 
         // Generate Code by Building each file isa.
-        for (kFile in mutableListOfKFiles) {
+        /*for (kFile in mutableListOfKFiles) {
             try {
                 kFile.writeTo(processingEnv.filer)
             }catch (e: IOException) {
                 e.printStackTrace()
             }
-        }
+        }*/
 
         return false
+    }
+
+    /**
+     * @return pair.first is kFileName, .second fully done object builder isa.
+     */
+    private fun buildFunctions(element: Element): List<FunSpec> {
+        val asTypeString = element.asType().toString()
+
+        return if (asTypeString.contains("<")) {
+            functionsInWithTypeParamBuild(element)
+        }else {
+            functionsInNoTypeParamBuild(element)
+        }
     }
 
     /**
