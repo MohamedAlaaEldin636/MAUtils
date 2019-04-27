@@ -24,4 +24,10 @@ import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
  */
 @MASealedAbstractOrInterface
 @MARoomGsonTypeConverter
-sealed class CanYouSeeMe
+sealed class CanYouSeeMe(
+
+    @MARoomGsonTypeConverter
+    val intStringMap: IntMap<String>
+)
+
+typealias IntMap<T> = Map<Int, T>

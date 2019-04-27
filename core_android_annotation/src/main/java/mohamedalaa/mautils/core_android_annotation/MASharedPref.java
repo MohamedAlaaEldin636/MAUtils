@@ -45,6 +45,7 @@ import java.lang.annotation.Target;
  * String, int, boolean, long, float, Set<String> <br/>
  * 4. You must implement core_android module for this to work <br/>
  * 5. in case of default value for Set<String> use SetOfStringsDefValue annotation isa.
+ * 6. the class must not have type params isa.
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)

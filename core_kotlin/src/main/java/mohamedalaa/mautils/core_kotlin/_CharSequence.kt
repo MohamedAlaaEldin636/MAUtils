@@ -36,3 +36,6 @@ operator fun CharSequence?.contains(other: CharSequence?, ignoreCase: Boolean = 
 operator fun CharSequence?.contains(char: Char?, ignoreCase: Boolean = false): Boolean {
     return this?.kotlinContains(char ?: return false, ignoreCase) ?: false
 }
+
+fun CharSequence?.containsAny(vararg charSequences: CharSequence): Boolean
+    = charSequences.any { this.contains(it) }

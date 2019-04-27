@@ -27,6 +27,10 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import mohamedalaa.mautils.core_android.addColorAlpha
 import mohamedalaa.mautils.core_android.addListenerMA
 import mohamedalaa.mautils.core_android.setOnQueryTextListenerMA
@@ -54,7 +58,41 @@ abstract class CheckTypeParam<E> {
         println(l.javaClass)
 
         //Bundle().getterBundle()
+
+
     }
+
+    // todo see arch comp project that was in android devs to see hal hna e3na in bg or not isa.
+
+    /*private abstract class AA : RoomDatabase()
+    private fun a1(context: Context, kClass: KClass<AA>, name: String) {
+        *//*val db: AA = *//*Room.databaseBuilder(context, AA::class.java, name).addMigrations(
+
+        )
+
+        context.getDatabasePath()
+
+        object : RoomDatabase.Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+
+                // old database path ->
+
+
+                db.query("SELECT * FROM kaza")
+            }
+
+            override fun onOpen(db: SupportSQLiteDatabase) {
+                super.onOpen(db)
+            }
+        }
+
+        object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL()
+            }
+        }
+    }*/
 
     fun fromStr(string: String?, value: CustomViewPager?): CustomViewPager? {
         val string1 = value.toJsonOrNull()

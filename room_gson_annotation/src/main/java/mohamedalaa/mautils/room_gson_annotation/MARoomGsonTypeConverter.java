@@ -28,5 +28,5 @@ import java.lang.annotation.Target;
  * 1. implement gson, room and use kapt of room_gson_processor isa.
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.FIELD}) // todo change as well el processor isa
 public @interface MARoomGsonTypeConverter {}

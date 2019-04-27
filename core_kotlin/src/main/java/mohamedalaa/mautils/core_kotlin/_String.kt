@@ -31,3 +31,13 @@ fun String.nearestIndexOf(vararg stringsArray: String, startIndex: Int = 0, igno
 
     return indices.min()
 }
+
+fun String.removeAll(vararg values: String): String {
+    var tempFullString = this
+
+    for (value in values) {
+        tempFullString = tempFullString.replace(value, "")
+    }
+
+    return tempFullString
+}

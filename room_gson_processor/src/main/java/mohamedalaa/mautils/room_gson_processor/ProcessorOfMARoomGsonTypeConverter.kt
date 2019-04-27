@@ -15,22 +15,21 @@
 
 package mohamedalaa.mautils.room_gson_processor
 
-import androidx.room.TypeConverter
 import com.squareup.kotlinpoet.*
 import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
 import mohamedalaa.mautils.room_gson_annotation.ProcessorConstants
+import mohamedalaa.mautils.room_gson_processor.extensions.noTypeParamBuild
+import mohamedalaa.mautils.room_gson_processor.extensions.withTypeParamBuild
 import java.io.IOException
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedAnnotationTypes
 import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
+import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 
-/**
- * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 4/26/2019.
- *
- */
 @SupportedAnnotationTypes(value = ["mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter"])
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
@@ -39,27 +38,21 @@ class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
         val mutableListOfKFiles = mutableListOf<FileSpec>()
 
         for (element in roundEnv.getElementsAnnotatedWith(MARoomGsonTypeConverter::class.java)) {
-            if (element !is TypeElement) {
-                continue
+            if (element !is TypeElement && element !is VariableElement) {
+                processingEnv.error("full type -> ${element.asType()}")
             }
 
-            // 1. File Name ( Same as KClass name )
-            val simpleName = element.simpleName.toString()
-            val fileAndKClassName = ProcessorConstants.generationClassNamePrefix + simpleName
-
-            // 2. Create object of that name isa.
-            val objectBuilder = TypeSpec.objectBuilder(fileAndKClassName)
-
-            // 3. Build functions
-            val functions = buildFunctions(simpleName, element.qualifiedName.toString())
-            functions.forEach {
-                objectBuilder.addFunction(it)
-            }
+            // Build object class and functions isa.
+            val pair = fileAndObjectNameToObjectBuilder(element)
 
             // 4. Create file of same object name isa.
-            mutableListOfKFiles += FileSpec.builder(ProcessorConstants.generationPackage, fileAndKClassName)
+            mutableListOfKFiles += FileSpec.builder(ProcessorConstants.generationPackage, pair.first)
                 .addImport("mohamedalaa.mautils.gson", "fromJsonOrNull", "toJsonOrNull")
-                .addType(objectBuilder.build())
+                .addType(pair.second.build())
+                .addAnnotation(AnnotationSpec.builder(Suppress::class)
+                    .addMember("\"PLATFORM_CLASS_MAPPED_TO_KOTLIN\"")
+                    .build()
+                )
                 .build()
         }
 
@@ -75,48 +68,17 @@ class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
         return false
     }
 
-    private fun buildFunctions(classSimpleName: String, classFullName: String): List<FunSpec> {
-        val mutableList = mutableListOf<FunSpec>()
+    /**
+     * @return pair.first is kFileName, .second fully done object builder isa.
+     */
+    private fun fileAndObjectNameToObjectBuilder(element: Element): Pair<String, TypeSpec.Builder> {
+        val asTypeString = element.asType().toString()
 
-        // Name of fun
-        val fromStringFunName = "${classSimpleName.decapitalize()}fromString"
-        val toStringFunName = "${classSimpleName.decapitalize()}toString"
-
-        // Builders
-        val fromStringFun = FunSpec.builder(fromStringFunName)
-        val toStringFun = FunSpec.builder(toStringFunName)
-
-        // Return Type
-        val typeNameString = String::class.asTypeName().copy(nullable = true)
-        val typeNameClass = ClassName.bestGuess(classFullName).copy(nullable = true)
-        fromStringFun.returns(typeNameClass)
-        toStringFun.returns(typeNameString)
-
-        // Annotations
-        fromStringFun.addAnnotation(TypeConverter::class)
-        toStringFun.addAnnotation(TypeConverter::class)
-
-        // Parameters
-        fromStringFun.addParameter("string", typeNameString)
-        toStringFun.addParameter("value", typeNameClass)
-
-        // Body
-        fromStringFun.addStatement(
-            "return string.fromJsonOrNull<$classSimpleName>()"
-        )
-        toStringFun.addStatement(
-            "return value.toJsonOrNull()"
-        )
-
-        mutableList += toStringFun.build()
-        mutableList += fromStringFun.build()
-        return mutableList
-    }
-
-    private fun FileSpec.Builder.addFullImport(fullImport: String) = apply {
-        val lastIndexOfDot = fullImport.lastIndexOf(".")
-
-        addImport(fullImport.substring(0, lastIndexOfDot), fullImport.substring(lastIndexOfDot.inc()))
+        return if (asTypeString.contains("<")) {
+            withTypeParamBuild(element)
+        }else {
+            noTypeParamBuild(element)
+        }
     }
 
 }

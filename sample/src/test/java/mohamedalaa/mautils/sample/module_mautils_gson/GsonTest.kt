@@ -52,6 +52,25 @@ class GsonTest {
     }
 
     @Test
+    fun base() {
+        /*val s = "java.util.Map<java.lang.Integer,java.lang.String>".removeAll("<", ">", ",")
+
+        println(s)*/
+
+        val a1 = "noComma"
+        val a2 = ",dewd"
+        val a3 = "dwe,"
+        val a4 = ","
+        val a5 = "a,cdcw"
+
+        println(a1.split(",").size)
+        println(a2.split(",").size)
+        println(a3.split(",").size)
+        println(a4.split(",").size)
+        println(a5.split(",").size)
+    }
+
+    @Test
     fun converting_enums_isa() {
         val myEnum = MyEnum.THREE
 

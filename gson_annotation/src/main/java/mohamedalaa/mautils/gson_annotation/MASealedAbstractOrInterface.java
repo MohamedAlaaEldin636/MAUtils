@@ -34,6 +34,9 @@ import java.lang.annotation.Target;
  * // now to serialize and deserialize `Holder` class you  need to annotated the abstract class
  * <br></br>
  * // otherwise it won't be deserialized correctly or throws an error isa.
+ * <br></br>
+ * <b>Note</b> <br/>
+ * - Currently does not support type params in the annotated class, since it does not make much sense.
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
