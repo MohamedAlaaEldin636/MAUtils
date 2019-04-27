@@ -147,12 +147,16 @@ private fun withBuildFunctions(classSimpleName: String, fullTypeName: String): L
     return mutableList
 }
 
-private fun withFullTypeName(fullTypeName: String): TypeName {
-    var tempFullTypeName = if (fullTypeName.contains(" ")) {
-        fullTypeName.substring(fullTypeName.lastIndexOf(" ").inc())
+private fun String.extractPureNameFromExtendName(): String {
+    return if (contains(" ")) {
+        substring(lastIndexOf(" ").inc())
     }else {
-        fullTypeName
+        this
     }
+}
+
+private fun withFullTypeName(fullTypeName: String): TypeName {
+    var tempFullTypeName = fullTypeName
 
     var tempTypeName: TypeName? = null
     while (tempFullTypeName.contains("<")) {
@@ -164,7 +168,7 @@ private fun withFullTypeName(fullTypeName: String): TypeName {
         val stringBetweenBrackets = tempFullTypeName.substring(lastOpenIndex.inc(), startCloseIndex)
         val classFullNameTypeParamChildren = stringBetweenBrackets.split(",").map {
             if (it.isNotEmpty()) {
-                ClassName.bestGuess(it).copy(nullable = true)
+                ClassName.bestGuess(it.extractPureNameFromExtendName()).copy(nullable = true)
             }else {
                 tempTypeName ?: throw RuntimeException("Empty string need type name but is null")
             }
