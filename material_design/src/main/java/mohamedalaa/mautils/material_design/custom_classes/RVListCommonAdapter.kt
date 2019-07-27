@@ -55,40 +55,43 @@ abstract class RVListCommonAdapter<E>(
     @LayoutRes layoutRes: Int? = null
 ) : RVInternalCommonAdapter(layoutRes) {
 
-    // Private properties
+    // ---- Private properties
 
-    private var _dataList: MutableList<E>? = dataList?.toMutableList()
+    private var _dataList: List<E>? = dataList
 
-    // Public properties
+    // ---- Public properties
 
     val dataList: List<E>?
         get() = _dataList
 
-    // Open overridden fun
+    // ---- Open overridden fun
 
     override fun getItemCount(): Int = _dataList?.size ?: 0
 
-    // Public fun
+    // ---- Public fun
 
-    /** Same as [RVCommonAdapter.changeData], but does the work in [RVListCommonAdapter.dataList] for you isa. */
-    fun changeData(dataList: List<E>?) = super.changeData {
-        if (dataList != null) {
-            _dataList?.clear()
-
-            _dataList?.addAll(dataList)
-        }else {
-            _dataList = null
+    /**
+     * Same as [RVCommonAdapter.changeData], but does the work in [RVListCommonAdapter.dataList] for you isa.
+     *
+     * @param checkEquality if true and the param [dataList] is equal to [RVListCommonAdapter.dataList]
+     * then no change will happen at all, and [notifyDataSetChanged] won't be called isa.
+     */
+    fun changeData(dataList: List<E>?, checkEquality: Boolean = false) = super.changeData superChangeData@ {
+        if (checkEquality && dataList == _dataList) {
+            return@superChangeData
         }
+
+        _dataList = dataList
     }
 
     /** Same as [RVCommonAdapter.removeItemAt] */
     fun removeItemAt(position: Int) = super.removeItemAt(position) {
-        _dataList?.removeAt(position)
+        _dataList = _dataList?.toMutableList()?.apply { removeAt(position) }?.toList()
     }
 
     /** Same as [RVCommonAdapter.insertItemAt] */
-    fun insertItemAt(position: Int, element: E) = super.insertItemAt(position) {
-        _dataList?.add(position, element)
+    fun insertItemAt(element: E, position: Int = itemCount) = super.insertItemAt(position) {
+        _dataList = _dataList?.toMutableList()?.apply { add(position, element) }?.toList()
     }
 
     /**
@@ -100,7 +103,7 @@ abstract class RVListCommonAdapter<E>(
         val element = dataList?.elementAt(fromPosition) ?: return
 
         removeItemAt(fromPosition)
-        insertItemAt(toPosition, element)
+        insertItemAt(element, toPosition)
     }
 
 }

@@ -68,6 +68,11 @@ fun Context.toast(msg: String, duration: Int = Toast.LENGTH_SHORT, modifications
     }
 }
 
+/** Same as [Context.toast], but with duration set to [Toast.LENGTH_LONG] isa. */
+@JvmOverloads
+fun Context.longToast(msg: String, modifications: ((Toast) -> Unit)? = null)
+    = toast(msg, duration = Toast.LENGTH_LONG, modifications = modifications)
+
 /**
  * Works only if Your [Application] extends [BaseApplication], used to dismiss the [Toast]
  * that's bounded to [BaseApplication] via [toast] isa.
