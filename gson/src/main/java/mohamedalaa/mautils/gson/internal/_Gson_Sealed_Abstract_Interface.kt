@@ -15,7 +15,6 @@
 
 package mohamedalaa.mautils.gson.internal
 
-import android.util.Log
 import com.google.gson.*
 import mohamedalaa.mautils.gson.allAnnotatedClasses
 import mohamedalaa.mautils.gson.java.fromJsonJava
@@ -54,7 +53,6 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
         var normalSerializationJsonString = runCatchingToNull { gson.toJson(src, src::class.java) } ?: return null
 
-        Log.e("DelLater", "Serializing isa -> ${src.toJson(doubleCheckGson)}, $normalSerializationJsonString")
         if (src.toJson(doubleCheckGson) != normalSerializationJsonString) {
             normalSerializationJsonString = src.toJson(doubleCheckGson)
         }
@@ -90,7 +88,6 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 
         var normalDeserialization = runCatchingToNull { gson.fromJson(normalSerializationJsonObject.toString(), jClass) }
 
-        Log.e("DelLater", "De-serializing isa -> ${normalSerializationJsonObject.toString().fromJsonJava(jClass, doubleCheckGson)}, $normalDeserialization")
         if (normalDeserialization != normalSerializationJsonObject.toString().fromJsonJava(jClass, doubleCheckGson)) {
             normalDeserialization = normalSerializationJsonObject.toString().fromJsonJava(jClass, doubleCheckGson)
         }
