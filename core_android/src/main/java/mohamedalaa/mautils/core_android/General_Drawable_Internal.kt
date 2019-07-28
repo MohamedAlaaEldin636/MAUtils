@@ -21,22 +21,20 @@ import android.graphics.Color
 import android.graphics.drawable.*
 import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
+import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-internal fun getRippleDrawable(baseDrawable: Drawable, anotherInstanceOfBaseDrawable: Drawable, rippleColor: Int, needsRippleMask: Boolean = false): Drawable {
+internal fun getRippleDrawable(baseDrawable: Drawable, anotherInstanceOfBaseDrawableWithFilledWhiteColor: Drawable, rippleColor: Int, needsRippleMask: Boolean = false): Drawable {
     return if (needsRippleMask || rippleColor.inOpaqueRange(0f..0.5f)) {
         // It means it is full or half transparent, so ripple won't be clear isa, so WHITE mask is better to be used isa.
         RippleDrawable(
             ColorStateList.valueOf(rippleColor),
             baseDrawable,
-            anotherInstanceOfBaseDrawable.apply {
-                tintCompat(Color.WHITE)
-                tintColorFilter(Color.WHITE)
-            }
+            anotherInstanceOfBaseDrawableWithFilledWhiteColor
         )
     }else {
         RippleDrawable(ColorStateList.valueOf(rippleColor), baseDrawable, null)
@@ -135,14 +133,14 @@ internal fun getDrawableWith(creationFunOfBaseDrawable: (Int) -> Drawable,
     return if (rippleColor == null) {
         baseDrawable
     }else {
-        getCompatRippleDrawable(baseDrawable, creationFunOfBaseDrawable(solidColor), rippleColor, creationFunOfBaseDrawable, forcePreLollipop, solidColor.inOpaqueRange(0f..0.5f))
+        getCompatRippleDrawable(baseDrawable, creationFunOfBaseDrawable(Color.WHITE), rippleColor, creationFunOfBaseDrawable, forcePreLollipop, solidColor.inOpaqueRange(0f..0.5f))
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 internal fun getDrawableWith(baseDrawable: Drawable,
-                             anotherInstanceOfBaseDrawable: Drawable,
+                             anotherInstanceOfBaseDrawableWithFilledWhiteColor: Drawable,
                              creationFunOfRippleDrawable: (Int) -> Drawable,
                              @ColorInt rippleColor: Int? = null,
                              forcePreLollipop: Boolean = false,
@@ -150,7 +148,7 @@ internal fun getDrawableWith(baseDrawable: Drawable,
     return if (rippleColor == null) {
         baseDrawable
     }else {
-        getCompatRippleDrawable(baseDrawable, anotherInstanceOfBaseDrawable, rippleColor, creationFunOfRippleDrawable, forcePreLollipop, needsRippleMask)
+        getCompatRippleDrawable(baseDrawable, anotherInstanceOfBaseDrawableWithFilledWhiteColor, rippleColor, creationFunOfRippleDrawable, forcePreLollipop, needsRippleMask)
     }
 }
 

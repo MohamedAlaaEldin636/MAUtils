@@ -17,8 +17,10 @@ package mohamedalaa.mautils.sample
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import mohamedalaa.mautils.core_android.getCircle
 import mohamedalaa.mautils.core_android.tintColorFilter
 
 private fun sas(d: Drawable) {
     d.tintColorFilter(Color.WHITE)
+    getCircle(2)
 }
