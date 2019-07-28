@@ -35,7 +35,7 @@ fun Menu.indexOf(menuItem: MenuItem): Int? {
 }
 
 /**
- * Changes icon tint by given [color] for all menu items in this `receiver` isa.
+ * Changes icon tintColorFilter by given [color] for all menu items in this `receiver` isa.
  *
  * @see MenuItem.setIconTint
  * @see setItemsTitleColor

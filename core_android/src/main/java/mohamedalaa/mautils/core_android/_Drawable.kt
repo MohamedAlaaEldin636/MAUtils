@@ -21,15 +21,19 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
+import androidx.core.graphics.drawable.DrawableCompat
 
 /**
- * Set tint for `receiver` drawable isa, and if `receiver` is null nothing will happen isa.
+ * Uses [Drawable.setColorFilter], while [tintCompat] Uses [DrawableCompat],
+ * so if the drawable has colorFilter use this one instead isa.
  *
  * @param porterDuffMode Tinting mode used, default is [PorterDuff.Mode.DST_ATOP]
  * @param mutate if you want to make drawable mutable before applying [Drawable.setColorFilter], default is false isa.
+ *
+ * @see [tintCompat]
  */
 @JvmOverloads
-fun Drawable?.tint(@ColorInt color: Int, porterDuffMode: PorterDuff.Mode = PorterDuff.Mode.DST_ATOP, mutate: Boolean = false) {
+fun Drawable?.tintColorFilter(@ColorInt color: Int, porterDuffMode: PorterDuff.Mode = PorterDuff.Mode.DST_IN, mutate: Boolean = false) {
     this?.apply {
         if (mutate) {
             this.mutate().colorFilter = PorterDuffColorFilter(color, porterDuffMode)
@@ -37,4 +41,16 @@ fun Drawable?.tint(@ColorInt color: Int, porterDuffMode: PorterDuff.Mode = Porte
             this.colorFilter = PorterDuffColorFilter(color, porterDuffMode)
         }
     }
+}
+
+/**
+ * Uses [DrawableCompat], while [tintColorFilter] Uses [Drawable.setColorFilter],
+ * so if the drawable has colorFilter use [tintColorFilter] instead isa.
+ *
+ * @see tintColorFilter
+ */
+fun Drawable?.tintCompat(@ColorInt color: Int, mode: PorterDuff.Mode? = null) {
+    if (this == null) return
+    mode?.apply { DrawableCompat.setTintMode(this@tintCompat, this) }
+    DrawableCompat.setTint(this, color)
 }

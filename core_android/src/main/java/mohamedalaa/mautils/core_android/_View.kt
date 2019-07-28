@@ -193,9 +193,9 @@ var View.backgroundCompat: Drawable?
     }
 
 /**
- * Sets background tint color according to given [color], if is `null` then nothing happens to tint color isa,
+ * Sets background tintColorFilter color according to given [color], if is `null` then nothing happens to tintColorFilter color isa,
  *
- * Sets background tint mode according to given [porterDuffMode], if is `null` then nothing happens to tint mode isa.
+ * Sets background tintColorFilter mode according to given [porterDuffMode], if is `null` then nothing happens to tintColorFilter mode isa.
  *
  * So this fun is useless if both params are `null`.
  *

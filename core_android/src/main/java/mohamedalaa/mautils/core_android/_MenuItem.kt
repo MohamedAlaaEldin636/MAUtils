@@ -23,7 +23,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
 import androidx.annotation.ColorInt
 
-/** Changes menu item's icon tint color according to given [color] isa. */
+/** Changes menu item's icon tintColorFilter color according to given [color] isa. */
 fun MenuItem.setIconTint(@ColorInt color: Int) {
     val tempIcon = icon
     tempIcon.setColorFilter(color, PorterDuff.Mode.SRC_IN)

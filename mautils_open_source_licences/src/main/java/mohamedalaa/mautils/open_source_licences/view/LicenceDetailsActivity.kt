@@ -75,7 +75,7 @@ internal class LicenceDetailsActivity : AppCompatActivity() {
         }
 
         intent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_TOOLBAR_ICONS_TINT)?.apply {
-            toolbar.navigationIcon.tint(this)
+            toolbar.navigationIcon.tintColorFilter(this)
         }
 
         // Change link button isa

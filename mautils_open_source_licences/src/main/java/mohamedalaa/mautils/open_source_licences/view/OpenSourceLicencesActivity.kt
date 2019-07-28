@@ -89,7 +89,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
          */
         const val INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR = "INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR"
         /**
-         * Change toolbar nav icon tint color, default is [INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR] isa.
+         * Change toolbar nav icon tintColorFilter color, default is [INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR] isa.
          *
          * @see INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR
          * @see INTENT_KEY_THEME_STYLE_RES
@@ -299,7 +299,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
     }
 
     private fun setupDevConfigurations() {
-        // Toolbar -> title & icon tint isa.
+        // Toolbar -> title & icon tintColorFilter isa.
         val toolbarTitleColor = intent.getExtraOrNull<Int>(INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR)
         val toolbarIconColor = intent.getExtraOrNull<Int>(INTENT_KEY_TOOLBAR_ICON_TINT)
         when {

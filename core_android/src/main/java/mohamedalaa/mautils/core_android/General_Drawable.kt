@@ -79,10 +79,12 @@ fun getRoundRect(@ColorInt colors: IntArray,
                  forcePreLollipop: Boolean = false): Drawable {
     val baseDrawable: Drawable = getGradientRoundRect(colors, radiusInPx, orientation)
         ?: throw RuntimeException("colors array for gradient drawable must have at least 2 colors")
+    val anotherInstanceOfBaseDrawable: Drawable = getGradientRoundRect(colors, radiusInPx, orientation)
+        ?: throw RuntimeException("colors array for gradient drawable must have at least 2 colors")
 
     val creationFunOfRippleDrawable: (Int) -> Drawable = { getSolidRoundRect(it, radiusInPx) }
 
-    return getDrawableWith(baseDrawable, creationFunOfRippleDrawable, rippleColor, forcePreLollipop)
+    return getDrawableWith(baseDrawable, anotherInstanceOfBaseDrawable, creationFunOfRippleDrawable, rippleColor, forcePreLollipop, colors.any { it.inOpaqueRange(0f..0.5f) })
 }
 
 /**
@@ -134,23 +136,30 @@ fun getCircle(@ColorInt colors: IntArray,
               forcePreLollipop: Boolean = false): Drawable {
     val baseDrawable: Drawable = getGradientCircle(colors, orientation)
         ?: throw RuntimeException("colors array for gradient drawable must have at least 2 colors")
+    val anotherInstanceOfBaseDrawable: Drawable = getGradientCircle(colors, orientation)
+        ?: throw RuntimeException("colors array for gradient drawable must have at least 2 colors")
 
     val creationFunOfRippleDrawable: (Int) -> Drawable = { getSolidCircle(it) }
 
-    return getDrawableWith(baseDrawable, creationFunOfRippleDrawable, rippleColor, forcePreLollipop)
+    return getDrawableWith(baseDrawable, anotherInstanceOfBaseDrawable, creationFunOfRippleDrawable, rippleColor, forcePreLollipop, colors.any { it.inOpaqueRange(0f..0.5f) })
 }
 
 /**
+ * @param anotherInstanceOfBaseDrawable ensure same drawable as [baseDrawable] isa,
+ * but not same instance otherwise an error will occur isa.
+ *
  * @return if API >= [Build.VERSION_CODES.LOLLIPOP] RippleDrawable is used,
  * otherwise a [StateListDrawable] with states is returned instead isa.
  */
 @JvmOverloads
 fun getCompatRippleDrawable(baseDrawable: Drawable,
+                            anotherInstanceOfBaseDrawable: Drawable,
                             @ColorInt rippleColor: Int,
                             creationFunOfBaseDrawable: (Int) -> Drawable,
-                            forcePreLollipop: Boolean = false): Drawable {
+                            forcePreLollipop: Boolean = false,
+                            needsRippleMask: Boolean = false): Drawable {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !forcePreLollipop) {
-        getRippleDrawable(baseDrawable, rippleColor)
+        getRippleDrawable(baseDrawable, anotherInstanceOfBaseDrawable, rippleColor, needsRippleMask)
     }else {
         getStateListDrawable(baseDrawable, rippleColor, creationFunOfBaseDrawable)
     }

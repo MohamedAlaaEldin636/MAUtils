@@ -38,7 +38,7 @@ fun TextInputLayout.setPasswordToggleClick(block: TextInputLayout.(view: View) -
 }
 
 /**
- * Sets drawable tint of [TextInputLayout.passwordToggleDrawable] isa.
+ * Sets drawable tintColorFilter of [TextInputLayout.passwordToggleDrawable] isa.
  *
  * @see setPasswordToggleClick
  */
