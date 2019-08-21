@@ -13,37 +13,26 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.gson
 
-import android.content.Intent
-import android.os.Bundle
-import android.os.Parcelable
-import android.util.SparseArray
-import androidx.core.os.bundleOf
-import mohamedalaa.mautils.core_android.addValues
-import mohamedalaa.mautils.core_android.buildBundle
-import mohamedalaa.mautils.core_android.getExtra
-import mohamedalaa.mautils.gson.fromJson
-import mohamedalaa.mautils.gson.toJson
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameEstimationFastRoundsSort
+/*import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameEstimationFastRoundsSort
 import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameEstimationRoundsConfiguration
 import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameEstimationType
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTrumpSuit
+import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTrumpSuit*/
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import kotlin.test.assertEquals
+import org.robolectric.annotation.Config
 
-/**
- * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 2/22/2019.
- *
- */
+@Config(manifest=Config.NONE)
 @RunWith(RobolectricTestRunner::class)
-class GeneralUseCases {
+class MainTest {
+/*
 
     @Test
     fun severalTests() {
-        /*val t2 = GameTrumpSuit.NoTrump
+        val t2 = GameTrumpSuit.NoTrump
         val j2 = t2.toJson<GameTrumpSuit>()
         val r2 = j2.fromJson<GameTrumpSuit>()
 
@@ -72,7 +61,7 @@ class GeneralUseCases {
         assertEquals(
             r31.gameEstimationRoundsConfiguration.fastRoundsStarter,
             GameTrumpSuit.NoTrump
-        )*/
+        )
 
         val t3 = GameEstimationType.CustomBola(0, "name", GameEstimationRoundsConfiguration(
             2,
@@ -83,49 +72,13 @@ class GeneralUseCases {
         val j3 = t3.toJson<GameEstimationType>()
         val r3 = j3.fromJson<GameEstimationType>()
 
-        //println(j3)
+        println(j3)
         assertEquals(r3, t3)
         assertEquals(
             r3.gameEstimationRoundsConfiguration.fastRoundsStarter,
             GameTrumpSuit.NoTrump
         )
     }
-
-    @Test
-    fun intent_copy() {
-        val baseIntent = Intent()
-        baseIntent.putExtra("1", 1)
-        baseIntent.putExtra("2", "2")
-
-        val newIntent = Intent()
-        newIntent.replaceExtras(baseIntent)
-
-        //val c = ApplicationProvider.getApplicationContext<Context>()
-
-        assertEquals(1, newIntent.getExtra("1"))
-    }
-
-    @Test
-    fun trial611() {
-        val sa = SparseArray<Parcelable>().apply {
-            put(1, bundleOf("Abc" to "abc"))
-        }
-        /*println(sa is SparseArray<*>)
-        println(sa as? SparseArray<*>)
-        println(sa as? SparseArray<Parcelable>)
-
-        println(arrayOf(sa).toList())*/
-
-        //bundleOf("key" to sa)
-
-        buildBundle(99, "h", sa)
-
-        Bundle().addValues(99, "h", sa)
-
-        // todo also for addAll inside apply not working maybe try reified or just generic instead of Any? isa.
-
-        // todo obtain them here and comment providing access to them and test lists as well isa.
-
-    }
+*/
 
 }

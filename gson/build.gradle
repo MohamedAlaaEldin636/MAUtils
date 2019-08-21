@@ -57,4 +57,15 @@ dependencies {
 
     api 'com.google.code.gson:gson:2.8.5' // DO NOT Exclude
     api project (':gson_annotation') // Can be excluded
+
+    // -- Unit Testing -- //
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+
+    // Optional -- Robolectric environment -> @RunWith(RobolectricTestRunner::class)
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'org.robolectric:robolectric:4.2'
+
+    testImplementation project(':test_core')
 }

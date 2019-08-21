@@ -28,11 +28,22 @@ private val gson = GsonBuilder()
     .enableComplexMapKeySerialization()
     .create()
 
-private val doubleCheckGson: Gson = gson.newBuilder().apply {
+private fun generateDoubleCheckGson(excludedClasses: List<Class<*>>): Gson {
+    val gsonBuilder = GsonBuilder()
+
     allAnnotatedClasses?.forEach {
-        registerTypeAdapter(it, JsonSerializerAndDeserializerForDoubleChecks())
+        if (it in excludedClasses) return@forEach
+
+        gsonBuilder.registerTypeAdapter(it, JsonSerializerForSealedClasses())
+        gsonBuilder.registerTypeAdapter(it, JsonDeserializerForSealedClasses())
     }
-}.create()
+
+    return gsonBuilder
+        .serializeNulls()
+        .setLenient()
+        .enableComplexMapKeySerialization()
+        .create()
+}
 
 private const val KEY_CLASS_FULL_NAME = "KEY_CLASS_FULL_NAME"
 private const val KEY_NORMAL_SERIALIZATION_JSON_STRING = "KEY_NORMAL_SERIALIZATION_JSON_STRING"
@@ -41,6 +52,14 @@ private inline fun <R> runCatchingToNull(block: () -> R): R?
     = runCatching { block() }.getOrNull()
 
 internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
+
+    private val excludedClasses = mutableListOf<Class<*>>()
+
+    private fun generateDoubleCheckGson(excludeClass: Class<*>): Gson {
+        excludedClasses += excludeClass
+
+        return generateDoubleCheckGson(excludedClasses)
+    }
 
     override fun serialize(
         src: Any?,
@@ -53,13 +72,14 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
         var normalSerializationJsonString = runCatchingToNull { gson.toJson(src, src::class.java) } ?: return null
 
+        val doubleCheckGson = generateDoubleCheckGson(src::class.java)
         if (src.toJson(doubleCheckGson) != normalSerializationJsonString) {
             normalSerializationJsonString = src.toJson(doubleCheckGson)
         }
 
         val jsonObject = JSONObject()
         jsonObject.put(KEY_CLASS_FULL_NAME, src.javaClass.name)
-        jsonObject.put(KEY_NORMAL_SERIALIZATION_JSON_STRING, kotlin.runCatching { JSONObject(normalSerializationJsonString) }.getOrElse { return null })
+        jsonObject.put(KEY_NORMAL_SERIALIZATION_JSON_STRING, runCatching { JSONObject(normalSerializationJsonString) }.getOrElse { return null })
 
         return kotlin.runCatching { JsonParser().parse(jsonObject.toString()) }.getOrNull()
     }
@@ -67,6 +87,14 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 }
 
 internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
+
+    private val excludedClasses = mutableListOf<Class<*>>()
+
+    private fun generateDoubleCheckGson(excludeClass: Class<*>): Gson {
+        excludedClasses += excludeClass
+
+        return generateDoubleCheckGson(excludedClasses)
+    }
 
     override fun deserialize(
         json: JsonElement?,
@@ -88,31 +116,12 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 
         var normalDeserialization = runCatchingToNull { gson.fromJson(normalSerializationJsonObject.toString(), jClass) }
 
+        val doubleCheckGson = generateDoubleCheckGson(jClass)
         if (normalDeserialization != normalSerializationJsonObject.toString().fromJsonJava(jClass, doubleCheckGson)) {
             normalDeserialization = normalSerializationJsonObject.toString().fromJsonJava(jClass, doubleCheckGson)
         }
 
         return normalDeserialization
-    }
-
-}
-
-private class JsonSerializerAndDeserializerForDoubleChecks : JsonSerializer<Any>, JsonDeserializer<Any> {
-
-    override fun serialize(
-        src: Any?,
-        typeOfSrc: Type?,
-        context: JsonSerializationContext?
-    ): JsonElement? {
-        return null
-    }
-
-    override fun deserialize(
-        json: JsonElement?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
-    ): Any? {
-        return null
     }
 
 }

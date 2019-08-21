@@ -102,7 +102,7 @@ class VisualTestActivity : AppCompatActivity() {
                         tempCounter++
                     }
                     getString(R.string.insert) -> {
-                        rcAdapterFakeNames.insertItemAt(index, "hello, there")
+                        //rcAdapterFakeNames.insertItemAt(index, "hello, there")
                     }
                     getString(R.string.remove) -> {
                         rcAdapterFakeNames.removeItemAt(index)
