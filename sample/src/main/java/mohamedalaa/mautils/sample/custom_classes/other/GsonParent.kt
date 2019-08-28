@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.sample.custom_classes.other
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import mohamedalaa.mautils.core_android.getCircle
-import mohamedalaa.mautils.core_android.tintColorFilter
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTarneebTypeTrumpSuit
+class GsonParent {
 
-private fun sas(d: Drawable) {
-    val a: GameTarneebTypeTrumpSuit
+    var varBoollean: Boolean = true
 
-    d.tintColorFilter(Color.WHITE)
-    getCircle(2)
+    var gsonChild1: GsonChild1 = GsonChild1.E1
+
+    var varInt: Int = 5
+
 }

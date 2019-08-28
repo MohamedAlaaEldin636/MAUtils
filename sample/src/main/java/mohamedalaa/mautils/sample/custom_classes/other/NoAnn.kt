@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.sample.custom_classes.other
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import mohamedalaa.mautils.core_android.getCircle
-import mohamedalaa.mautils.core_android.tintColorFilter
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTarneebTypeTrumpSuit
-
-private fun sas(d: Drawable) {
-    val a: GameTarneebTypeTrumpSuit
-
-    d.tintColorFilter(Color.WHITE)
-    getCircle(2)
+/**
+ * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 8/28/2019.
+ *
+ */
+open class NoAnn(
+    var ss: Int
+) {
+    object ABC : NoAnn(9)
 }

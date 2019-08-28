@@ -17,6 +17,7 @@ package mohamedalaa.mautils.sample.custom_classes.helper_classes
 
 import androidx.core.util.ObjectsCompat
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
+import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
 
 /**
  * Indicates [GameTrumpSuit] of the bid winner isa.
@@ -29,6 +30,7 @@ import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
  * 1. In case considering nullable [GameTrumpSuit] as Random, null always comes 1st in sorting so put that in mind isa.
  */
 @MASealedAbstractOrInterface
+@MARoomGsonTypeConverter
 open class GameTrumpSuit(val value: Int) : Comparable<GameTrumpSuit> {
 
     object NoTrump : GameTrumpSuit(1)
@@ -48,6 +50,17 @@ open class GameTrumpSuit(val value: Int) : Comparable<GameTrumpSuit> {
         return false
     }
 
+
+    companion object {
+        @JvmStatic
+        fun allAscending(): List<GameTrumpSuit> = listOf(
+            NoTrump,
+            Spades,
+            Hearts,
+            Diamonds,
+            Clubs
+        )
+    }
     override fun hashCode(): Int = ObjectsCompat.hashCode(value)
 
 }

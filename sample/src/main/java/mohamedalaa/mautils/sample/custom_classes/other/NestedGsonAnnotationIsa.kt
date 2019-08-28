@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.sample.custom_classes.other
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import mohamedalaa.mautils.core_android.getCircle
-import mohamedalaa.mautils.core_android.tintColorFilter
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTarneebTypeTrumpSuit
+import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 
-private fun sas(d: Drawable) {
-    val a: GameTarneebTypeTrumpSuit
 
-    d.tintColorFilter(Color.WHITE)
-    getCircle(2)
-}
+
+// todo try 2 nesting probs
+/*
+1. extender of this is open class himself with annotaion isa
+2. var in this has this annotaion and open class as well isa.
+ */
+
+
+
+
+
+
+

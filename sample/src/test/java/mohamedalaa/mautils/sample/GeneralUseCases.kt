@@ -25,10 +25,9 @@ import mohamedalaa.mautils.core_android.buildBundle
 import mohamedalaa.mautils.core_android.getExtra
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameEstimationFastRoundsSort
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameEstimationRoundsConfiguration
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameEstimationType
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTrumpSuit
+import mohamedalaa.mautils.sample.custom_classes.helper_classes.*
+import mohamedalaa.mautils.sample.custom_classes.other.*
+import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -40,6 +39,80 @@ import kotlin.test.assertEquals
  */
 @RunWith(RobolectricTestRunner::class)
 class GeneralUseCases {
+
+    @Test
+    fun a1() {
+        val o1 = GsonParentOfParent(
+            GsonParent()
+        )
+        val j1 = o1.toJson()
+        val r1 = j1.fromJson<GsonParentOfParent>()
+
+        assertEquals(true, r1.gsonParent?.gsonChild1 is GsonChild1.E1)
+        assertEquals(true, r1.gsonParent?.gsonChild1?.gsonChild2 is GsonChild2.E900)
+        assertEquals(true, r1.gsonParent?.gsonChild1?.gsonChild2?.gsonChild3 is GsonChild3.E2)
+        assertEquals(true, r1.gsonParent?.gsonChild1?.gsonChild2?.he is Hellooooo.JI1Class)
+        println("${o1.gsonParent?.gsonChild1?.gsonChild2?.noAnn} - ${r1.gsonParent?.gsonChild1?.gsonChild2?.noAnn}")
+        assertEquals(true, r1.gsonParent?.gsonChild1?.gsonChild2?.noAnn is NoAnn.ABC)
+    }
+
+    @Test
+    fun abc() {
+        val game = Game(
+            gameTarneeb = GameTarneeb()/*,
+            gameEstimation = null*/
+        )
+
+        assertEquals(true, game.gameTarneeb!!.gameTarneebType.finalWinCondition is GameTarneebFinalWinCondition.TeamScore)
+
+        val j1 = game.toJson()
+        val r1 = j1.fromJson<Game>()
+
+        val o2 = GameTarneebFinalWinCondition.TeamScore(5)
+        val j2 = o2.toJson<GameTarneebFinalWinCondition>()
+        val r2 = j2.fromJson<GameTarneebFinalWinCondition>()
+
+        assertEquals(true, o2 is GameTarneebFinalWinCondition.TeamScore)
+        assertEquals(true, r2 is GameTarneebFinalWinCondition.TeamScore)
+
+        /*println(j1)
+        println()
+        println()
+        println(game.gameTarneeb!!.gameTarneebType.finalWinCondition)
+        println(r1.gameTarneeb!!.gameTarneebType.finalWinCondition)
+        println("STAAAAAAAAAAART")
+        println("${Game::class.java.superclass}")
+        println("${Game::class.java.superclass?.superclass}")
+        println("${Any::class.java.superclass}")
+        println("${java.lang.Object::class.java.superclass}")*/
+
+        //GameTarneebTypeTrumpSuit.Fixed // todo 1 todo tb ma heya kda msh full bola asl
+        // lazmet el annotation enno kan asln open class isa ?!
+
+        /*TestingLog.e("${game.gameEstimation!!.gameEstimationType.gameEstimationRoundsConfiguration}")
+        TestingLog.e("${game.gameEstimation!!.gameEstimationType.gameEstimationRoundsConfiguration.fastRoundsStarter}")
+
+        TestingLog.e("${r1.gameEstimation!!.gameEstimationType.gameEstimationRoundsConfiguration.fastRoundsStarter}")
+        TestingLog.e("${r1.gameEstimation!!.gameEstimationType}")
+
+        assertEquals(true, (game.gameEstimation!!.gameEstimationType is GameEstimationType.FullBola))
+        assertEquals(true, (r1.gameEstimation!!.gameEstimationType is GameEstimationType.FullBola))*/
+
+        assertEquals(true, (game.gameEstimation!!.gameEstimationType.gameEstimationRoundsConfiguration.fastRoundsStarter
+            is GameTrumpSuit.NoTrump))
+        assertEquals(true, (r1.gameEstimation!!.gameEstimationType.gameEstimationRoundsConfiguration.fastRoundsStarter
+            is GameTrumpSuit.NoTrump))
+
+        assertEquals(true, (game.gameEstimation!!.gameEstimationType.gameEstimationRoundsConfiguration.gameFastRoundsSort
+            == GameEstimationFastRoundsSort.DESC))
+        assertEquals(true, (r1.gameEstimation!!.gameEstimationType.gameEstimationRoundsConfiguration.gameFastRoundsSort
+            == GameEstimationFastRoundsSort.DESC))
+
+        assertEquals(true, (r1.gameTarneeb!!.gameTarneebType.gameTarneebTypeTrumpSuit as GameTarneebTypeTrumpSuit.DeterminedByPlayer).withBid)
+        assertEquals(true, r1.gameTarneeb!!.gameTarneebType.finalWinCondition is GameTarneebFinalWinCondition.TeamScore)
+
+        assertEquals(true, r1.gameTarneeb!!.gameTarneebType.minBidForPlayer.minTotalBids == 7)
+    }
 
     @Test
     fun severalTests() {

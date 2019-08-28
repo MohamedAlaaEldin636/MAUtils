@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.sample.custom_classes.helper_classes
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import mohamedalaa.mautils.core_android.getCircle
-import mohamedalaa.mautils.core_android.tintColorFilter
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTarneebTypeTrumpSuit
+import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
 
-private fun sas(d: Drawable) {
-    val a: GameTarneebTypeTrumpSuit
+/**
+ * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 8/28/2019.
+ *
+ */
 
-    d.tintColorFilter(Color.WHITE)
-    getCircle(2)
+@MARoomGsonTypeConverter
+enum class GameMechanism {
+    FREE, ORGANIZED
 }

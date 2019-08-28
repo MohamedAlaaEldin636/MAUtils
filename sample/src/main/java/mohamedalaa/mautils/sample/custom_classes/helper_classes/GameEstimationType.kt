@@ -16,13 +16,21 @@
 package mohamedalaa.mautils.sample.custom_classes.helper_classes
 
 import androidx.core.util.ObjectsCompat
+import androidx.room.Embedded
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
+import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
 
 /** Indicates if the game is [MicroBola], [MiniBola], [FullBola], [CustomBola] isa. */
 @MASealedAbstractOrInterface
+@MARoomGsonTypeConverter
 open class GameEstimationType(
+    @Embedded(prefix = "roundsConfiguration_")
     var gameEstimationRoundsConfiguration: GameEstimationRoundsConfiguration
 ) {
+
+    override fun toString(): String {
+        return gameEstimationRoundsConfiguration.toString()
+    }
 
     /** 5 normal, 0 fast Rounds isa. */
     object MicroBola : GameEstimationType(

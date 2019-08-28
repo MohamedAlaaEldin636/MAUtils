@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.sample.custom_classes.other
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import mohamedalaa.mautils.core_android.getCircle
-import mohamedalaa.mautils.core_android.tintColorFilter
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTarneebTypeTrumpSuit
+import androidx.room.Embedded
+import androidx.room.Entity
 
-private fun sas(d: Drawable) {
-    val a: GameTarneebTypeTrumpSuit
-
-    d.tintColorFilter(Color.WHITE)
-    getCircle(2)
-}
+/**
+ * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 8/28/2019.
+ *
+ */
+@Entity(tableName = "a1")
+class GsonParentOfParent(
+    @Embedded(prefix = "gsonParent")
+    var gsonParent: GsonParent? = null
+)
