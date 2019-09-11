@@ -21,7 +21,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import mohamedalaa.mautils.core_android.buildBundle
+import mohamedalaa.mautils.core_android.extensions.buildBundle
 import mohamedalaa.mautils.gson.buildBundleGson
 import mohamedalaa.mautils.gson.buildBundleGsonForced
 import mohamedalaa.mautils.material_design.dependencies_runtime_checks.moduleGsonExists
@@ -34,21 +34,6 @@ fun Fragment.hideKeyboard() {
     val rootView = fragmentView.rootView
     imm.hideSoftInputFromWindow(rootView.windowToken, 0)
 }
-
-fun <F : Fragment> F.instanceWithArg(bundle: Bundle?): F
-    = apply { arguments = bundle }
-
-/**
- * to retrieve values see below Ex. for clarification isa
- * ```
- * fragment.arguments?.apply {
- *      val getterBundle = getterBundle()
- *      // ...
- * }
- * ```
- */
-fun <F : Fragment> F.instanceWithArgBundle(vararg values: Any?): F
-    = apply { arguments = buildBundle(*values) }
 
 /**
  * **Warning**

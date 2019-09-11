@@ -15,9 +15,6 @@
 
 package mohamedalaa.mautils.sample;
 
-import mohamedalaa.mautils.core_android.BundleUtils;
-import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.core_android.IntentUtils;
 import mohamedalaa.mautils.material_design.ViewUtils;
 
 /**

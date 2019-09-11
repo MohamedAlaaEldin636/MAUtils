@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import com.google.android.material.internal.CheckableImageButton
 import com.google.android.material.textfield.TextInputLayout
-import mohamedalaa.mautils.core_android.firstNestedViewOrNull
+import mohamedalaa.mautils.core_android.extensions.firstNestedViewOrNull
 
 /**
  * Sets on click listener for [TextInputLayout.passwordToggleView] isa.

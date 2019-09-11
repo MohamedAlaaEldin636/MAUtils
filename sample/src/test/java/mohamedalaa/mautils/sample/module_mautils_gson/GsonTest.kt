@@ -23,7 +23,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
-import mohamedalaa.mautils.core_kotlin.contains
+import mohamedalaa.mautils.core_kotlin.extensions.contains
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.fromJsonOrNull
 import mohamedalaa.mautils.gson.toJson

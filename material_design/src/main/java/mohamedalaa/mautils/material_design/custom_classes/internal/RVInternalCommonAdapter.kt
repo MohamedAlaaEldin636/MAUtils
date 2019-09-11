@@ -19,7 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.core_android.inflateLayout
+import mohamedalaa.mautils.core_android.extensions.inflateLayout
 import mohamedalaa.mautils.material_design.custom_classes.RVCommonAdapter
 import mohamedalaa.mautils.material_design.custom_classes.RVListCommonAdapter
 

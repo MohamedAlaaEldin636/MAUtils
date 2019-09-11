@@ -21,10 +21,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.SparseArray
 import com.google.gson.Gson
-import mohamedalaa.mautils.core_android.addValue
-import mohamedalaa.mautils.core_android.addValuesWithKeys
-import mohamedalaa.mautils.core_android.buildBundle
-import mohamedalaa.mautils.core_android.buildBundleWithKeys
+import mohamedalaa.mautils.core_android.extensions.addValue
+import mohamedalaa.mautils.core_android.extensions.buildBundle
+import mohamedalaa.mautils.core_android.extensions.buildBundleWithKeys
 import mohamedalaa.mautils.gson.java.GsonConverter
 import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
 

@@ -21,8 +21,7 @@ import android.app.Application
 import android.content.Context
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
-import mohamedalaa.mautils.core_android.backgroundCompat
-import mohamedalaa.mautils.core_android.dismissToast
+import mohamedalaa.mautils.core_android.extensions.dismissToast
 import mohamedalaa.mautils.material_design.custom_classes.BaseApplication
 
 /**

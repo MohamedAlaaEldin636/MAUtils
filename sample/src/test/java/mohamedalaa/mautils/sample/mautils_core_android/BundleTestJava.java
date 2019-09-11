@@ -27,8 +27,8 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import mohamedalaa.mautils.core_android.BundleUtils;
-import mohamedalaa.mautils.core_android.JGetterBundle;
+import mohamedalaa.mautils.core_android.extensions.BundleUtils;
+import mohamedalaa.mautils.core_android.extensions.JGetterBundle;
 
 import static org.junit.Assert.assertEquals;
 

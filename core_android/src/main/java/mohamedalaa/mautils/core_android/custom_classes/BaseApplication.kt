@@ -20,8 +20,7 @@ package mohamedalaa.mautils.core_android.custom_classes
 import android.app.Application
 import android.content.Context
 import android.widget.Toast
-import mohamedalaa.mautils.core_android.toast
-import mohamedalaa.mautils.core_android.dismissToast
+import mohamedalaa.mautils.core_android.extensions.dismissToast
 
 /**
  * ## Deprecation Under Condition

@@ -15,7 +15,7 @@
 
 package mohamedalaa.mautils.sample
 
-import mohamedalaa.mautils.core_kotlin.zipSameSize
+import mohamedalaa.mautils.core_kotlin.extensions.zipSameSize
 import mohamedalaa.mautils.test_core.TestingLog
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberExtensionProperties

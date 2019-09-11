@@ -19,4 +19,8 @@ package mohamedalaa.mautils.core_android.data_binding;
  * <b>No included here </b> <br/>
  * 1. Int.toDrawable
  */
-public class DataBindingConversions {}
+public class DataBindingConversions {
+
+
+
+}

@@ -25,7 +25,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.Set;
 
 import androidx.test.core.app.ApplicationProvider;
-import mohamedalaa.mautils.core_android.SharedPrefUtils;
+import mohamedalaa.mautils.core_android.extensions.SharedPrefUtils;
 import mohamedalaa.mautils.test_core.TestingLog;
 
 /**

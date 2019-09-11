@@ -20,14 +20,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.SparseArray
 import androidx.core.os.bundleOf
-import mohamedalaa.mautils.core_android.addValues
-import mohamedalaa.mautils.core_android.buildBundle
-import mohamedalaa.mautils.core_android.getExtra
+import mohamedalaa.mautils.core_android.extensions.addValues
+import mohamedalaa.mautils.core_android.extensions.buildBundle
+import mohamedalaa.mautils.core_android.extensions.getExtra
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.sample.custom_classes.helper_classes.*
 import mohamedalaa.mautils.sample.custom_classes.other.*
-import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="mohamedalaa.open_source_licences">
+
+    <application>
+        <activity android:name=".view.DetailedOpenSourceActivity"></activity>
+        <activity android:name=".view.OpenSourceLicencesActivity" />
+    </application>
+
+</manifest>

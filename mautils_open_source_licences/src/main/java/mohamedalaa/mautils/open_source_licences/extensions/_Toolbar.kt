@@ -20,17 +20,17 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.widget.Toolbar
 import androidx.core.text.toSpannable
 import androidx.core.view.forEach
-import mohamedalaa.mautils.core_android.plusAssign
-import mohamedalaa.mautils.core_android.tintColorFilter
+import mohamedalaa.mautils.core_android.extensions.plusAssign
+import mohamedalaa.mautils.core_android.extensions.tintCompat
 
 fun Toolbar.setIconsTint(@ColorInt color: Int, changeTitleTextColor: Boolean = false) {
     menu.forEach {
-        it.icon.tintColorFilter(color)
+        it.icon.tintCompat(color)
 
         if (changeTitleTextColor) {
             it.title = it.title.toSpannable().apply { this += ForegroundColorSpan(color) }
         }
     }
-    overflowIcon.tintColorFilter(color)
-    navigationIcon.tintColorFilter(color)
+    overflowIcon.tintCompat(color)
+    navigationIcon.tintCompat(color)
 }

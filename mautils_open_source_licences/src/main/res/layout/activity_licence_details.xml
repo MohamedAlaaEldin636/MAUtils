@@ -36,7 +36,7 @@
         app:subtitle="By: Mohamed Alaa"
         app:subtitleTextColor="@color/white_with_alpha_75"
 
-        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -110,7 +110,8 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an `AS IS` BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License." />
+limitations under the License."
+            android:typeface="monospace"/>
 
     </androidx.core.widget.NestedScrollView>
 

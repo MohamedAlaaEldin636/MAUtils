@@ -27,8 +27,8 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.toSpannable
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rc_adapter_licence.view.*
-import mohamedalaa.mautils.core_android.*
-import mohamedalaa.mautils.core_kotlin.applyIf
+import mohamedalaa.mautils.core_android.extensions.*
+import mohamedalaa.mautils.core_kotlin.extensions.applyIf
 import mohamedalaa.mautils.open_source_licences.R
 import mohamedalaa.mautils.open_source_licences.logic.computeSearchedLicences
 import mohamedalaa.mautils.open_source_licences.model.Licence

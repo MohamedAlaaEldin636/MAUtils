@@ -15,18 +15,23 @@
 
 package mohamedalaa.mautils.sample
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.commit
 import kotlinx.android.synthetic.main.activity_main.*
-import mohamedalaa.mautils.core_android.setMaxLength
-import mohamedalaa.mautils.sample.material_design.BoatActivity
-import mohamedalaa.mautils.sample.material_design.MaterialDesignMainActivity
+import mohamedalaa.mautils.core_android.extensions.setMaxLength
+import mohamedalaa.mautils.gson.fromJson
+import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.mautils.R
-import mohamedalaa.mautils.core_android.toast as toast1
-import mohamedalaa.mautils.open_source_licences.view.OpenSourceLicencesActivity
+import mohamedalaa.open_source_licences.custom_classes.Constants
+import mohamedalaa.open_source_licences.custom_classes.OpenSourceLicencesForActivityInterface
+import mohamedalaa.open_source_licences.extensions.startActivityForOpenSourceLicences
+import mohamedalaa.open_source_licences.model.LicenceModel
+import mohamedalaa.open_source_licences.model.OpenSourceLicencesModel
+import mohamedalaa.open_source_licences.view.fragments.OpenSourceLicencesFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OpenSourceLicencesFragment.Listener {
 
     val int = 1000 * 1000
 
@@ -71,14 +76,24 @@ class MainActivity : AppCompatActivity() {
         editText1.setMaxLength(4)
         editText2.setMaxLength(4, true)
 
+        val o1 = OpenSourceLicencesModel(this).apply {
+            assetsFolderPath = "mido"
+        }
+
+        val j1 = o1.toJson()
+
+        val r1 = j1.fromJson<OpenSourceLicencesModel>()
+
+        require(o1.assetsFolderPath == r1.assetsFolderPath)
+
         button.setOnClickListener {
-            val intent = Intent(this, OpenSourceLicencesActivity::class.java).apply {
+            /*val intent = Intent(this, OpenSourceLicencesActivity::class.java).apply {
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_ASSETS_FOLDER_PATH, "licences")
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_THEME_STYLE_RES,
                     R.style.MyOwnOpenSourceLicencesTheme
                 )
 
-                /*putExtra(OpenSourceLicencesActivity.INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR, Color.BLACK)
+                *//*putExtra(OpenSourceLicencesActivity.INTENT_KEY_TOOLBAR_TITLE_TEXT_COLOR, Color.BLACK)
 
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_BACKGROUND_COLOR, Color.LTGRAY)
 
@@ -97,15 +112,59 @@ class MainActivity : AppCompatActivity() {
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LINK_BUTTON_TINT, Color.BLUE)
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_TEXT_COLOR, Color.GREEN)
                 putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_ENABLE_CUSTOM_FONT, false)
-                putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_BACKGROUND_COLOR, Color.CYAN)*/
-            }
+                putExtra(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LICENCE_CONTENT_BACKGROUND_COLOR, Color.CYAN)*//*
+            }*/
 
-            startActivity(intent)
+            //startActivity(intent)
+            startActivityForOpenSourceLicences(listOf(
+                LicenceModel(
+                    "Gson",
+                    "Google Inc.",
+                    "https://github.com/google/gson",
+                    Constants.APACHE_2_0_LICENCE_NAME,
+                    listOf("Copyright 2008 Google Inc.")
+                )
+            )) {
+                //styleRes = R.style.AppTheme
+                toolbarNavIconDrawableRes = R.drawable.ic_arrow_back_white_24dp
+
+                //searchHighlightColor = getColorFromAttrRes(R.attr.colorAccent)
+
+                openSourceLicencesForActivityInterfaceTreatNavIconAsOnBackPressed = true
+                openSourceLicencesForActivityInterfaceClassFullName = OnOpenSourceActivityNavIconClick::class.java.name
+            }
         }
 
         // For Quick Starts isa.
         //startActivity(Intent(this, VisualTestActivity::class.java))
-        startActivity(Intent(this, BoatActivity::class.java))
-        startActivity(Intent(this, MaterialDesignMainActivity::class.java))
+        //startActivity(Intent(this, BoatActivity::class.java))
+        //startActivity(Intent(this, MaterialDesignMainActivity::class.java))
+        supportFragmentManager.commit {
+            replace(R.id.containerFrameLayout, OpenSourceLicencesFragment(
+                listOf(
+                    LicenceModel(
+                        "Gson",
+                        "Google Inc.",
+                        "https://github.com/google/gson",
+                        Constants.APACHE_2_0_LICENCE_NAME,
+                        listOf("Copyright 2008 Google Inc.")
+                    )
+                ),
+                OpenSourceLicencesModel(this@MainActivity).apply {
+                    toolbarNavIconDrawableRes = R.drawable.ic_filter_list_black_24dp
+                }
+            ))
+        }
+    }
+
+    class OnOpenSourceActivityNavIconClick : OpenSourceLicencesForActivityInterface {
+        override fun onNavIconClick(activity: AppCompatActivity) {
+            Log.e("HII", ".......")
+            activity.onBackPressed()
+        }
+    }
+
+    override fun onNavIconClick() {
+        onBackPressed()
     }
 }

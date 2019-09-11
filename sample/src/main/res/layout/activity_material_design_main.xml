@@ -21,10 +21,11 @@
 
     tools:context="mohamedalaa.mautils.sample.material_design.MaterialDesignMainActivity">
 
+    <!--
+        <import type="mohamedalaa.mautils.core_android.data_binding.DataBindingBoxingUtils" />-->
     <data>
         <import type="mohamedalaa.mautils.mautils.R"/>
         <import type="android.graphics.Color"/>
-        <import type="mohamedalaa.mautils.core_android.data_binding.DataBindingBoxingUtils" />
 
         <variable
             name="person"
@@ -40,8 +41,6 @@
             android:layout_height="wrap_content"
 
             android:background="?colorPrimary"
-
-            android:toolbar_menuRes="@{R.menu.visual_test_activity}"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -129,7 +128,6 @@
             app:switchPadding="50dp"
             app:thumbTextPadding="20dp"
 
-            android:checked="@={DataBindingBoxingUtils.safeUnbox(person.adult)}"
 
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@id/button"/>

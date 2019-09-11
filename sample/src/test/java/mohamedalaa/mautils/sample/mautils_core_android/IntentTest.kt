@@ -16,8 +16,8 @@
 package mohamedalaa.mautils.sample.mautils_core_android
 
 import android.content.Intent
-import mohamedalaa.mautils.core_android.buildBundle
-import mohamedalaa.mautils.core_android.getterBundle
+import mohamedalaa.mautils.core_android.extensions.buildBundle
+import mohamedalaa.mautils.core_android.extensions.getterBundle
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -31,7 +31,13 @@ class IntentTest {
 
     @Test
     fun using_buildBundle() {
-        val intent = Intent().apply { putExtras(buildBundle(3, "ss", true)) }
+        val intent = Intent().apply { putExtras(
+            buildBundle(
+                3,
+                "ss",
+                true
+            )
+        ) }
 
         val getterBundle = intent.getterBundle()
         println("${getterBundle.get<Int>()}, ${getterBundle.get<String>()}, ${getterBundle.get<Boolean>()}")

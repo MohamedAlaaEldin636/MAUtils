@@ -236,7 +236,7 @@ END OF TERMS AND CONDITIONS
             val asyncTask = ReadFromAssetsAsyncTask(context, pathInAssets, listener)
 
             if (parallelExecution) {
-                asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                asyncTask.executeOnExecutor(THREAD_POOL_EXECUTOR)
             }else {
                 asyncTask.execute()
             }

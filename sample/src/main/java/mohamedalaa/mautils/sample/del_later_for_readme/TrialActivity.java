@@ -16,16 +16,10 @@
 package mohamedalaa.mautils.sample.del_later_for_readme;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import mohamedalaa.mautils.core_android.BundleUtils;
-import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.core_android.JGetterBundle;
-import mohamedalaa.mautils.core_android.SoftKeyboardUtils;
-import mohamedalaa.mautils.mautils.R;
+import mohamedalaa.mautils.core_android.extensions.SoftKeyboardUtils;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/20/2019.

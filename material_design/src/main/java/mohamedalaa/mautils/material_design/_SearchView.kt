@@ -21,8 +21,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.SearchView
-import mohamedalaa.mautils.core_android.allNestedViewsIsInstanceOrNull
-import mohamedalaa.mautils.core_android.firstNestedViewIsInstanceOrNull
+import mohamedalaa.mautils.core_android.extensions.allNestedViewsIsInstanceOrNull
+import mohamedalaa.mautils.core_android.extensions.firstNestedViewIsInstanceOrNull
 
 /**
  * Using [listener] for [SearchView.setOnQueryTextListener] instead of regular [SearchView.OnQueryTextListener],

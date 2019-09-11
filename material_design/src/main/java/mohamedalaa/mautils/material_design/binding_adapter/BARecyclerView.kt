@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import mohamedalaa.mautils.core_android.dpToPx
+import mohamedalaa.mautils.core_android.extensions.dpToPx
 import mohamedalaa.mautils.material_design.custom_classes.MAItemDecoration
 import mohamedalaa.mautils.material_design.forEachItemDecorations
 import kotlin.math.roundToInt

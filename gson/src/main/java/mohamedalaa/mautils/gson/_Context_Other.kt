@@ -19,8 +19,8 @@ package mohamedalaa.mautils.gson
 
 import android.app.Activity
 import android.content.Context
-import mohamedalaa.mautils.core_android.javaStartActivity
-import mohamedalaa.mautils.core_android.startActivity
+import mohamedalaa.mautils.core_android.extensions.javaStartActivity
+import mohamedalaa.mautils.core_android.extensions.startActivity
 
 /**
  * Combination of [startActivity] && [buildBundleGson]

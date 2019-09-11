@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.SparseArray
 import androidx.core.os.bundleOf
-import mohamedalaa.mautils.core_android.*
+import mohamedalaa.mautils.core_android.extensions.*
 import mohamedalaa.mautils.sample.fake_data.CustomObject
 import mohamedalaa.mautils.sample.material_design.BoatActivity
 import org.junit.Test
@@ -55,7 +55,8 @@ class BundleTest {
 
         //bundleOf("key_1" to sparseArrayOfBundle)
 
-        val bundleWithKeys = buildBundleWithKeys("key_1" to sparseArrayOfBundle)
+        val bundleWithKeys =
+            buildBundleWithKeys("key_1" to sparseArrayOfBundle)
     }
 
     @Test
@@ -99,7 +100,12 @@ class BundleTest {
             put(1, buildBundle("abc"))
         }
         val primitiveFloatArray = floatArrayOf(5f, 2.3f)
-        val bundle = buildBundle(int, string, sparseArray, primitiveFloatArray)
+        val bundle = buildBundle(
+            int,
+            string,
+            sparseArray,
+            primitiveFloatArray
+        )
 
         val valuesGetterBundle = bundle.getterBundle()
 
@@ -113,7 +119,10 @@ class BundleTest {
 
     @Test
     fun nullableElementsList() {
-        val bundle = buildBundle(nullableElementsFloatList, allNullableElementsFloatList)
+        val bundle = buildBundle(
+            nullableElementsFloatList,
+            allNullableElementsFloatList
+        )
 
         val getterBundle = bundle.getterBundle()
         assertEquals(nullableElementsFloatList, getterBundle.get())

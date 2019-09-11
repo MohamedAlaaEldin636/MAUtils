@@ -70,8 +70,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // Local Libraries
-    implementation project(':mautils_open_source_licences')
-    
+    //implementation project(':mautils_open_source_licences')
+    implementation project(':open_source_licences')
+
     implementation project(':core_kotlin')
 
     implementation project(':core_android')

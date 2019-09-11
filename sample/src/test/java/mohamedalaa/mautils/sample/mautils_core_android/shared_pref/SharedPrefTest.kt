@@ -17,9 +17,8 @@ package mohamedalaa.mautils.sample.mautils_core_android.shared_pref
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import mohamedalaa.mautils.core_android.sharedPrefGet
-import mohamedalaa.mautils.core_android.sharedPrefSet
-import mohamedalaa.mautils.sample.mautils_core_android.BundleTest
+import mohamedalaa.mautils.core_android.extensions.sharedPrefGet
+import mohamedalaa.mautils.core_android.extensions.sharedPrefSet
 import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 import org.junit.runner.RunWith

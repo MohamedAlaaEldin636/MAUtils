@@ -23,24 +23,24 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.widget.Toolbar
 import androidx.core.text.toSpannable
 import androidx.core.view.forEach
-import mohamedalaa.mautils.core_android.firstNestedViewOrNull
-import mohamedalaa.mautils.core_android.plusAssign
-import mohamedalaa.mautils.core_android.tintColorFilter
+import mohamedalaa.mautils.core_android.extensions.firstNestedViewOrNull
+import mohamedalaa.mautils.core_android.extensions.plusAssign
+import mohamedalaa.mautils.core_android.extensions.tintCompat
 
 /**
- * Sets tintColorFilter on all icons [Toolbar.getNavigationIcon] && [Toolbar.getOverflowIcon] &&
- * all icons in [Toolbar.getMenu]
+ * tint [Toolbar.getNavigationIcon] && [Toolbar.getOverflowIcon] && all icons in [Toolbar.getMenu] isa.
  */
+@JvmOverloads
 fun Toolbar.setIconsTint(@ColorInt color: Int, changeTitleTextColor: Boolean = false) {
     menu.forEach {
-        it.icon.tintColorFilter(color)
+        it.icon.tintCompat(color)
 
         if (changeTitleTextColor) {
             it.title = it.title.toSpannable().apply { this += ForegroundColorSpan(color) }
         }
     }
-    overflowIcon.tintColorFilter(color)
-    navigationIcon.tintColorFilter(color)
+    overflowIcon.tintCompat(color)
+    navigationIcon.tintCompat(color)
 }
 
 /**

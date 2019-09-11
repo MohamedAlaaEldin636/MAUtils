@@ -25,8 +25,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_visual_test.*
-import mohamedalaa.mautils.core_android.dpToPx
-import mohamedalaa.mautils.core_android.toast
+import mohamedalaa.mautils.core_android.extensions.dpToPx
+import mohamedalaa.mautils.core_android.extensions.toast
 import mohamedalaa.mautils.mautils.R
 import mohamedalaa.mautils.material_design.custom_classes.MAItemDecoration
 

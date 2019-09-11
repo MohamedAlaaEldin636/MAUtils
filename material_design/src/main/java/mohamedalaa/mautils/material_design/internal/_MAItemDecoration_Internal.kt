@@ -19,8 +19,8 @@ import android.graphics.Rect
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.core_kotlin.divRound
-import mohamedalaa.mautils.core_kotlin.pairedIteration
+import mohamedalaa.mautils.core_kotlin.extensions.divRound
+import mohamedalaa.mautils.core_kotlin.extensions.pairedIteration
 import mohamedalaa.mautils.material_design.custom_classes.MAItemDecoration
 import mohamedalaa.mautils.material_design.isBorderBottom
 import mohamedalaa.mautils.material_design.isBorderLeft

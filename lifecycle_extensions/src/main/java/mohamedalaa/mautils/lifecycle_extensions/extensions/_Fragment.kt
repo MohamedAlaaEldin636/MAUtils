@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import mohamedalaa.mautils.lifecycle_extensions.custom_classes.internal.ViewModelFactory
 
 /**
  * Same as [ViewModelProviders.of] `receiver` then [ViewModelProvider.get]<[VM]>
@@ -31,3 +32,17 @@ import androidx.lifecycle.ViewModelProviders
  */
 inline fun <reified VM : ViewModel> Fragment.getViewModel(factory: ViewModelProvider.Factory? = null)
     = ViewModelProviders.of(this, factory).get(VM::class.java)
+
+inline fun <reified F : Fragment, reified VM : ViewModel> F.getAndroidViewModelWithFactory(vararg args: Any?): VM {
+    val application = activity?.application!!
+    val list = listOf(application) + args.toList()
+
+    return getViewModel(ViewModelFactory(true, list))
+}
+
+inline fun <reified F : Fragment, reified VM : ViewModel> F.getViewModelWithFactory(vararg args: Any?): VM {
+    val application = activity?.application!!
+    val list = listOf(application) + args.toList()
+
+    return getViewModel(ViewModelFactory(false, list))
+}

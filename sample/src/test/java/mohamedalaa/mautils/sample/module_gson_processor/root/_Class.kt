@@ -15,7 +15,7 @@
 
 package mohamedalaa.mautils.sample.module_gson_processor.root
 
-import mohamedalaa.mautils.core_kotlin.addIfNotNull
+import mohamedalaa.mautils.core_kotlin.extensions.addIfNotNull
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.reflect.full.declaredMemberProperties

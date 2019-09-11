@@ -17,7 +17,7 @@ package mohamedalaa.mautils.sample;
 
 import android.content.Context;
 
-import mohamedalaa.mautils.core_android.ContextUtils;
+import mohamedalaa.mautils.core_android.extensions.ContextUtils;
 import mohamedalaa.mautils.sample.material_design.BoatActivity;
 
 /**

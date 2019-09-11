@@ -32,7 +32,7 @@ import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_open_source_licences.*
 import kotlinx.android.synthetic.main.activity_open_source_licences.view.*
-import mohamedalaa.mautils.core_android.*
+import mohamedalaa.mautils.core_android.extensions.*
 import mohamedalaa.mautils.open_source_licences.R
 import mohamedalaa.mautils.open_source_licences.async_tasks.ReadFromAssetsAsyncTask
 import mohamedalaa.mautils.open_source_licences.custom_classes.CustomDividerItemDecoration
@@ -150,7 +150,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         super.onPause()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         val keyWithBundle = licences?.mapIndexed { index, licence ->
             val bundle = Bundle()
 

@@ -19,9 +19,9 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.navigation.NavigationView
-import mohamedalaa.mautils.core_android.findBindingOrNull
-import mohamedalaa.mautils.core_android.layoutInflater
-import mohamedalaa.mautils.core_kotlin.pairedIteration
+import mohamedalaa.mautils.core_android.extensions.findBindingOrNull
+import mohamedalaa.mautils.core_android.extensions.layoutInflater
+import mohamedalaa.mautils.core_kotlin.extensions.pairedIteration
 
 object BANavigationView {
 

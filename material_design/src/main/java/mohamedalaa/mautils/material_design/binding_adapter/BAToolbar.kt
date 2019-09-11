@@ -16,26 +16,52 @@
 package mohamedalaa.mautils.material_design.binding_adapter
 
 import android.view.View
+import androidx.annotation.ColorInt
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
+import mohamedalaa.mautils.core_android.extensions.postWithReceiver
 import mohamedalaa.mautils.material_design.findNavIconViewOrNull
+import mohamedalaa.mautils.material_design.setIconsTint
 import mohamedalaa.mautils.material_design.setTooltipTextCompat
 
+/**
+ * ## List of Other bindingAdapters in extension functions isa.
+ *
+ * 1. Currently none isa.
+ */
 object BAToolbar {
 
+    /** @param useViewPost if true then I will use [postWithReceiver] before [setIconsTint] isa. */
     @JvmStatic
-    @BindingAdapter("android:toolbar_menuRes",
-        "android:toolbar_onMenuItemClickListener",
-        "android:toolbar_onNavigationIconClickListener",
+    @BindingAdapter(
+        "mautils:toolbar_setIconsTint",
+        "mautils:toolbar_setIconsTint_changeTitleTextColor",
+        "mautils:toolbar_setIconsTint_useViewPost",
+        requireAll = false
+    )
+    fun setIconsTint(toolbar: Toolbar, @ColorInt color: Int, changeTitleTextColor: Boolean? = null, useViewPost: Boolean? = null) {
+        if (useViewPost == true) {
+            toolbar.postWithReceiver {
+                toolbar.setIconsTint(color, changeTitleTextColor ?: false)
+            }
+        }else {
+            toolbar.setIconsTint(color, changeTitleTextColor ?: false)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("mautils:toolbar_menuRes",
+        "mautils:toolbar_onMenuItemClickListener",
+        "mautils:toolbar_onNavigationIconClickListener",
         requireAll = false)
-    fun setupToolbar(
+    fun setupMenuAndIconsClicks(
         toolbar: Toolbar,
         @MenuRes menuRes: Int?,
         onMenuItemClickListener: Toolbar.OnMenuItemClickListener?,
         onNavigationIconClickListener: View.OnClickListener?
     ) {
-        menuRes?.apply { toolbar.inflateMenu(this) }
+        menuRes?.apply { toolbar.menu.clear();  toolbar.inflateMenu(this) }
 
         onMenuItemClickListener?.apply { toolbar.setOnMenuItemClickListener(this) }
 
@@ -43,10 +69,11 @@ object BAToolbar {
     }
 
     @JvmStatic
-    @BindingAdapter("android:toolbar_enableNavIconTooltipText")
-    fun setToolbarNavIconTooltipText(toolbar: Toolbar, enable: Boolean?) {
+    @BindingAdapter("mautils:toolbar_setNavIconContentDescriptionAndTooltipText")
+    fun setNavIconContentDescriptionAndTooltipText(toolbar: Toolbar, contentDescription: String?) {
         toolbar.findNavIconViewOrNull()?.apply {
-            setTooltipTextCompat(if (enable == true) toolbar.navigationContentDescription else null)
+            toolbar.navigationContentDescription = contentDescription
+            setTooltipTextCompat(contentDescription)
         }
     }
 

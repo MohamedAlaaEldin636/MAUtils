@@ -15,8 +15,8 @@
 
 package mohamedalaa.mautils.material_design.internal
 
-import mohamedalaa.mautils.core_kotlin.nearestIndexOf
-import mohamedalaa.mautils.core_kotlin.sumByFloat
+import mohamedalaa.mautils.core_kotlin.extensions.nearestIndexOf
+import mohamedalaa.mautils.core_kotlin.extensions.sumByFloat
 import kotlin.math.absoluteValue
 
 /**

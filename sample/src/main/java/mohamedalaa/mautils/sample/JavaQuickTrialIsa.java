@@ -17,24 +17,18 @@ package mohamedalaa.mautils.sample;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.view.animation.Animation;
 
 import java.util.Calendar;
 import java.util.List;
 
 import kotlin.Pair;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
-import kotlin.jvm.functions.Function1;
-import mohamedalaa.mautils.core_android.AnimatorSetUtils;
-import mohamedalaa.mautils.core_android.ColorUtils;
-import mohamedalaa.mautils.core_android.MAAnimatorAnimatorListener;
-import mohamedalaa.mautils.core_android.SpannableUtils;
-import mohamedalaa.mautils.core_kotlin.CalendarUtils;
-import mohamedalaa.mautils.core_kotlin.CollectionsUtils;
-import mohamedalaa.mautils.core_kotlin.GeneralUtils;
-import mohamedalaa.mautils.core_kotlin.IterableUtils;
-import mohamedalaa.mautils.core_kotlin.ListUtils;
+import mohamedalaa.mautils.core_android.extensions.AnimatorSetUtils;
+import mohamedalaa.mautils.core_android.extensions.ColorUtils;
+import mohamedalaa.mautils.core_kotlin.extensions.CalendarUtils;
+import mohamedalaa.mautils.core_kotlin.extensions.CollectionsUtils;
+import mohamedalaa.mautils.core_kotlin.extensions.GeneralUtils;
+import mohamedalaa.mautils.core_kotlin.extensions.IterableUtils;
+import mohamedalaa.mautils.core_kotlin.extensions.ListUtils;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/19/2019.

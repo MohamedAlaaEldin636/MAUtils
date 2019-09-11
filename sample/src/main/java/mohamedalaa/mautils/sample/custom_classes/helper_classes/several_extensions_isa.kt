@@ -15,7 +15,7 @@
 
 package mohamedalaa.mautils.sample.custom_classes.helper_classes
 
-import mohamedalaa.mautils.core_kotlin.buildMap
+import mohamedalaa.mautils.core_kotlin.extensions.buildMap
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 8/28/2019.

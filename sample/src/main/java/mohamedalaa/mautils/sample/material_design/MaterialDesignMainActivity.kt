@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import kotlinx.android.synthetic.main.activity_material_design_main.*
-import mohamedalaa.mautils.core_android.toast
+import mohamedalaa.mautils.core_android.extensions.toast
 import mohamedalaa.mautils.mautils.R
 import mohamedalaa.mautils.mautils.databinding.ActivityMaterialDesignMainBinding
 

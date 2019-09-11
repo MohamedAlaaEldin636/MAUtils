@@ -17,7 +17,7 @@ package mohamedalaa.mautils.sample.module_gson_processor
 
 import android.os.Bundle
 import android.os.Parcelable
-import mohamedalaa.mautils.core_android.buildBundle
+import mohamedalaa.mautils.core_android.extensions.buildBundle
 import mohamedalaa.mautils.gson.*
 import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test

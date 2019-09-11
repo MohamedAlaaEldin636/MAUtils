@@ -19,7 +19,7 @@ import android.graphics.PorterDuff
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
-import mohamedalaa.mautils.core_android.setBackgroundTint
+import mohamedalaa.mautils.core_android.extensions.setBackgroundTint
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.

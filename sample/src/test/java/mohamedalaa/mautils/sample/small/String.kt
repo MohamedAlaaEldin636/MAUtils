@@ -15,7 +15,7 @@
 
 package mohamedalaa.mautils.sample.small
 
-import mohamedalaa.mautils.core_kotlin.toStringOrNull
+import mohamedalaa.mautils.core_kotlin.extensions.toStringOrNull
 import org.junit.Test
 
 /**

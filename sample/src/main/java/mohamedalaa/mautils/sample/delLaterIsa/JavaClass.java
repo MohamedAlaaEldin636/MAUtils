@@ -18,14 +18,9 @@ package mohamedalaa.mautils.sample.delLaterIsa;
 import android.content.Context;
 import android.widget.Toast;
 
-import org.w3c.dom.TypeInfo;
-
-import java.util.ArrayList;
-
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
-import mohamedalaa.mautils.core_android.ContextUtils;
-import mohamedalaa.mautils.core_kotlin.ListUtils;
+import mohamedalaa.mautils.core_android.extensions.ContextUtils;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 2/13/2019.

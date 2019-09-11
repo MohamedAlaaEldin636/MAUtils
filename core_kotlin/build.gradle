@@ -23,7 +23,9 @@ group='com.github.MohamedAlaaEldin636'
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8

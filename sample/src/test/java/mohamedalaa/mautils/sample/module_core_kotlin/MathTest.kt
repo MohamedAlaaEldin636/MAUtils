@@ -15,7 +15,7 @@
 
 package mohamedalaa.mautils.sample.module_core_kotlin
 
-import mohamedalaa.mautils.core_kotlin.round
+import mohamedalaa.mautils.core_kotlin.extensions.round
 import org.junit.Test
 
 /**

@@ -17,9 +17,9 @@ package mohamedalaa.mautils.room_gson_processor.extensions
 
 import androidx.room.TypeConverter
 import com.squareup.kotlinpoet.*
-import mohamedalaa.mautils.core_kotlin.containsAny
-import mohamedalaa.mautils.core_kotlin.nearestIndexOf
-import mohamedalaa.mautils.core_kotlin.removeAll
+import mohamedalaa.mautils.core_kotlin.extensions.containsAny
+import mohamedalaa.mautils.core_kotlin.extensions.nearestIndexOf
+import mohamedalaa.mautils.core_kotlin.extensions.removeAll
 import mohamedalaa.mautils.room_gson_annotation.ProcessorConstants
 import mohamedalaa.mautils.room_gson_processor.utils.KotlinpoetUtils
 import javax.lang.model.element.Element

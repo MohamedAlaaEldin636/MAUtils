@@ -15,7 +15,7 @@
 
 package mohamedalaa.mautils.sample.module_mautils_gson
 
-import mohamedalaa.mautils.core_kotlin.zipSameSize
+import mohamedalaa.mautils.core_kotlin.extensions.zipSameSize
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.test_core.TestingLog

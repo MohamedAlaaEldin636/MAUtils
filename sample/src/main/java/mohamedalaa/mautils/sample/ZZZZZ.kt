@@ -17,8 +17,8 @@ package mohamedalaa.mautils.sample
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import mohamedalaa.mautils.core_android.getCircle
-import mohamedalaa.mautils.core_android.tintColorFilter
+import mohamedalaa.mautils.core_android.extensions.getCircle
+import mohamedalaa.mautils.core_android.extensions.tintColorFilter
 import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTarneebTypeTrumpSuit
 
 private fun sas(d: Drawable) {

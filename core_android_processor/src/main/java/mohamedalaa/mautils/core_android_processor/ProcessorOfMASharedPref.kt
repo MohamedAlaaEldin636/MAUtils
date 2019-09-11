@@ -63,7 +63,7 @@ class ProcessorOfMASharedPref : AbstractProcessor() {
 
             // 4. Create file of same object name isa.
             mutableListOfKFiles += FileSpec.builder(ProcessorConstants.generationPackage, fileAndKClassName)
-                .addImport("mohamedalaa.mautils.core_android", "sharedPrefGet", "sharedPrefSet")
+                .addImport("mohamedalaa.mautils.core_android.extensions", "sharedPrefGet", "sharedPrefSet")
                 .addImport("android.content", "Context")
                 .addType(objectBuilder.build())
                 .build()

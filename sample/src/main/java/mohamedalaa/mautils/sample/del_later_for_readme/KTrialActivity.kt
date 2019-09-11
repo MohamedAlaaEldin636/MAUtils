@@ -18,11 +18,9 @@ package mohamedalaa.mautils.sample.del_later_for_readme
 import android.animation.AnimatorSet
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import mohamedalaa.mautils.core_android.addListenerMA
-import mohamedalaa.mautils.core_android.hideKeyboardFrom
-import mohamedalaa.mautils.core_android.inflateLayout
-import mohamedalaa.mautils.core_android.showKeyboardFor
-import mohamedalaa.mautils.mautils.R
+import mohamedalaa.mautils.core_android.extensions.addListenerMA
+import mohamedalaa.mautils.core_android.extensions.hideKeyboardFrom
+import mohamedalaa.mautils.core_android.extensions.showKeyboardFor
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 3/20/2019.

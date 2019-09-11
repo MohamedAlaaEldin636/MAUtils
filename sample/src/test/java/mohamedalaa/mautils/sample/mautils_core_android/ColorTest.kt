@@ -16,9 +16,9 @@
 package mohamedalaa.mautils.sample.mautils_core_android
 
 import android.graphics.Color
-import mohamedalaa.mautils.core_android.addColorAlpha
-import mohamedalaa.mautils.core_android.alphaAsFloat
-import mohamedalaa.mautils.core_android.isNearToBlack
+import mohamedalaa.mautils.core_android.extensions.addColorAlpha
+import mohamedalaa.mautils.core_android.extensions.alphaAsFloat
+import mohamedalaa.mautils.core_android.extensions.isNearToBlack
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

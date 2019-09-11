@@ -17,7 +17,7 @@ package mohamedalaa.mautils.sample;
 
 import android.os.Bundle;
 
-import mohamedalaa.mautils.core_android.BundleUtils;
+import mohamedalaa.mautils.core_android.extensions.BundleUtils;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/22/2019.

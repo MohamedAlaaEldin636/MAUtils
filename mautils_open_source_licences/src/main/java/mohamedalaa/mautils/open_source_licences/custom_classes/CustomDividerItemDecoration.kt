@@ -26,7 +26,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import mohamedalaa.mautils.core_android.dpToPx
+import mohamedalaa.mautils.core_android.extensions.dpToPx
 
 /**
  * Same as [DividerItemDecoration], but without divider after last index isa.

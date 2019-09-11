@@ -20,7 +20,7 @@ package mohamedalaa.mautils.material_design
 import android.view.MenuItem
 import androidx.core.view.forEachIndexed
 import com.google.android.material.navigation.NavigationView
-import mohamedalaa.mautils.core_android.indexOf
+import mohamedalaa.mautils.core_android.extensions.indexOf
 
 fun NavigationView.indexOfMenuItem(menuItem: MenuItem)
     = menu.indexOf(menuItem)

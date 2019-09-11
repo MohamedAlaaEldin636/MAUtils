@@ -15,7 +15,7 @@
 
 package mohamedalaa.mautils.material_design.internal
 
-import mohamedalaa.mautils.core_kotlin.isNegative
+import mohamedalaa.mautils.core_kotlin.extensions.isNegative
 
 /* ==> LIMITATION
 1- side of equation cannot have ++, +-, --

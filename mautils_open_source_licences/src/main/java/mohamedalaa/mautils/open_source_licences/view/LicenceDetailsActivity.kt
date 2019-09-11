@@ -22,7 +22,7 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import kotlinx.android.synthetic.main.activity_licence_details.*
-import mohamedalaa.mautils.core_android.*
+import mohamedalaa.mautils.core_android.extensions.*
 import mohamedalaa.mautils.open_source_licences.R
 import mohamedalaa.mautils.open_source_licences.model.Licence
 import mohamedalaa.mautils.open_source_licences.model.isAuthorExists
