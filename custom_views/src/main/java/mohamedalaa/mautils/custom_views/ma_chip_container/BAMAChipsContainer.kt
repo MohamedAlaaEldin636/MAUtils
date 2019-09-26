@@ -22,8 +22,6 @@ import androidx.databinding.InverseBindingListener
 import mohamedalaa.mautils.core_kotlin.extensions.throwRuntimeException
 import mohamedalaa.mautils.core_kotlin.extensions.toStringOrEmpty
 
-// todo after checking that all below works good make BA for other attrs isa.
-
 /**
  * - Sets a listener that will be invoked when any of the chips changes it's checked state,
  * **Also note** it will be invoked once in case of Choice change of selection and won't be invoked

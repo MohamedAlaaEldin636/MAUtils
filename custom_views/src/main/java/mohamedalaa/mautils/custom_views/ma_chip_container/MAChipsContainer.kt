@@ -43,6 +43,10 @@ import kotlin.math.roundToInt
  * 1. Add ability to change via BA chips per row OR change names not checked ones only isa, with or without anim to support Entry style
  * since in Entry we should be able to delete chips isa.
  * 2. other features of regular chips and grouped one isa.
+ * 3. ellipsize - make char sequence instead of string for title and subtitle isa.
+ * 4. ability to have auto size but if not specified we will use normal not uniform isa.
+ * 5. chip color state list and color isa, in case dark theme isa, and expose default color after searching what it is isa
+ * of default non checked and checke isa.
  *
  * ## Notes
  * 1. cannot have subtitle without a title
@@ -123,7 +127,7 @@ class MAChipsContainer @JvmOverloads constructor (
     @AttrRes defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    val title: String?
+    var title: CharSequence?
     @Dimension val titleTextSize: Float
     @ColorInt val titleTextColor: Int
     val titleMinLines: Int
@@ -131,7 +135,7 @@ class MAChipsContainer @JvmOverloads constructor (
     val titleLines: Int
     @Dimension val betweenTitleOrSubtitleAndChipsMargin: Int
 
-    val subtitle: String?
+    var subtitle: CharSequence?
     @Dimension val subtitleTextSize: Float
     @ColorInt val subtitleTextColor: Int
     val subtitleMinLines: Int
@@ -172,7 +176,7 @@ class MAChipsContainer @JvmOverloads constructor (
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MAChipsContainer)
 
-        title = typedArray.getString(R.styleable.MAChipsContainer_title)
+        title = typedArray.getText(R.styleable.MAChipsContainer_title)
         titleTextSize = typedArray.getDimension(R.styleable.MAChipsContainer_titleTextSize, sp22ToPx)
         titleTextColor = typedArray.getColor(R.styleable.MAChipsContainer_titleTextColor, Color.BLACK)
         titleMinLines = typedArray.getInteger(R.styleable.MAChipsContainer_titleMinLines, 1)
@@ -180,7 +184,7 @@ class MAChipsContainer @JvmOverloads constructor (
         titleLines = typedArray.getInteger(R.styleable.MAChipsContainer_titleLines, 0)
         betweenTitleOrSubtitleAndChipsMargin = typedArray.getDimensionPixelOffset(R.styleable.MAChipsContainer_betweenTitleOrSubtitleAndChipsMargin, dp8ToPx)
 
-        subtitle = typedArray.getString(R.styleable.MAChipsContainer_subtitle)
+        subtitle = typedArray.getText(R.styleable.MAChipsContainer_subtitle)
         subtitleTextSize = typedArray.getDimension(R.styleable.MAChipsContainer_subtitleTextSize, sp18ToPx)
         subtitleTextColor = typedArray.getColor(R.styleable.MAChipsContainer_subtitleTextColor, Color.BLACK.addColorAlpha(0.75f))
         subtitleMinLines = typedArray.getInteger(R.styleable.MAChipsContainer_subtitleMinLines, 1)
@@ -261,7 +265,10 @@ class MAChipsContainer @JvmOverloads constructor (
             super.onSaveInstanceState(),
             lastCheckedChipsNames.forceUsingJsonInBundle(),
             betweenCurrentAndLastCheckedChipsNames.forceUsingJsonInBundle(),
-            getCurrentCheckedChipsNames().forceUsingJsonInBundle()
+            getCurrentCheckedChipsNames().forceUsingJsonInBundle(),
+
+            title,
+            subtitle
         )
     }
 
@@ -284,6 +291,9 @@ class MAChipsContainer @JvmOverloads constructor (
                 getterBundleGson.getOrNull() ?: emptyList()
             )
             forceNotInvokeCheckedChangeListener = false
+
+            setTitle(getterBundleGson.getOrNull())
+            setSubtitle(getterBundleGson.getOrNull())
         }else {
             super.onRestoreInstanceState(state)
         }

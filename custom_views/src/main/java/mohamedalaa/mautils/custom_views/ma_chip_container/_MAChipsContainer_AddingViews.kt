@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.buildSpannedString
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
 import mohamedalaa.mautils.core_android.extensions.getDrawableFromRes
 import mohamedalaa.mautils.core_android.extensions.inflateLayout
@@ -40,13 +41,11 @@ import mohamedalaa.mautils.custom_views.R
 internal fun MAChipsContainer.addTitleIfPossibleAndGetIdOrNull(): Int? {
     // -- Title -- //
 
-    // Checks for title text
-    if (title == null) return null
-
     // View
     val titleTextView = context.inflateLayout(R.layout.mautils_include_text_view, this) as TextView
-    val titleId = ViewCompat.generateViewId()
-    titleTextView.id = titleId
+    titleTextView.id = R.id.ma_chips_container_title
+
+    titleTextView.isVisible = title != null
 
     titleTextView.text = title
     titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize)
@@ -77,13 +76,11 @@ internal fun MAChipsContainer.addTitleIfPossibleAndGetIdOrNull(): Int? {
 
     addView(titleTextView, titleLayoutParams)
 
-    // Checks for subtitle text isa.
-    if (subtitle == null) return titleId
-
     // Subtitle
     val subTitleTextView = context.inflateLayout(R.layout.mautils_include_text_view, this) as TextView
-    val subtitleId = ViewCompat.generateViewId()
-    subTitleTextView.id = subtitleId
+    subTitleTextView.id = R.id.ma_chips_container_subtitle
+
+    subTitleTextView.isVisible = subtitle != null
 
     subTitleTextView.text = subtitle
     subTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, subtitleTextSize)
@@ -98,8 +95,8 @@ internal fun MAChipsContainer.addTitleIfPossibleAndGetIdOrNull(): Int? {
     if (subTitleTempLines != null) {
         subTitleTextView.setLines(subTitleTempLines)
     }else {
-        subTitleTextView.minLines = titleMinLines
-        subTitleTextView.maxLines = titleMaxLines
+        subTitleTextView.minLines = subtitleMinLines
+        subTitleTextView.maxLines = subtitleMaxLines
     }
 
     // Layout Params
@@ -107,16 +104,16 @@ internal fun MAChipsContainer.addTitleIfPossibleAndGetIdOrNull(): Int? {
         ConstraintLayout.LayoutParams.WRAP_CONTENT,
         ConstraintLayout.LayoutParams.WRAP_CONTENT
     ).apply {
-        topToBottom = titleId
-        leftToLeft = titleId
-        rightToRight = titleId
+        topToBottom = R.id.ma_chips_container_title
+        leftToLeft = R.id.ma_chips_container_title
+        rightToRight = R.id.ma_chips_container_title
 
         topMargin = betweenTitleAndSubtitleMargin
     }
 
     addView(subTitleTextView, subtitleLayoutParams)
 
-    return subtitleId
+    return R.id.ma_chips_container_subtitle
 }
 
 internal fun MAChipsContainer.addChips(titleViewId: Int?) {
