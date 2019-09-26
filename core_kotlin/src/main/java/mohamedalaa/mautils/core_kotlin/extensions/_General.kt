@@ -77,3 +77,5 @@ fun <T> T?.throwIfNull(msg: String = "Expected not null value"): T
  */
 val <T> T.exhaustive: T
     get() = this
+
+fun throwRuntimeException(msg: String = "runtime exception thrown isa."): Nothing = throw RuntimeException(msg)

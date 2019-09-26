@@ -21,9 +21,11 @@ import android.util.Log
 import androidx.fragment.app.commit
 import kotlinx.android.synthetic.main.activity_main.*
 import mohamedalaa.mautils.core_android.extensions.setMaxLength
+import mohamedalaa.mautils.core_android.extensions.startActivity
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.mautils.R
+import mohamedalaa.mautils.sample.custom_views.CustomViewsMainActivity
 import mohamedalaa.open_source_licences.custom_classes.Constants
 import mohamedalaa.open_source_licences.custom_classes.OpenSourceLicencesForActivityInterface
 import mohamedalaa.open_source_licences.extensions.startActivityForOpenSourceLicences
@@ -69,9 +71,19 @@ class MainActivity : AppCompatActivity(), OpenSourceLicencesFragment.Listener {
         }
     }*/
 
+    private fun launchOtherActivitiesIsa() {
+        startActivity<CustomViewsMainActivity>()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        @Suppress("ConstantConditionIf")
+        if (true) {
+            launchOtherActivitiesIsa()
+            return
+        }
 
         editText1.setMaxLength(4)
         editText2.setMaxLength(4, true)

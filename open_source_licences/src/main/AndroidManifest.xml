@@ -3,7 +3,7 @@
     package="mohamedalaa.open_source_licences">
 
     <application>
-        <activity android:name=".view.DetailedOpenSourceActivity"></activity>
+        <activity android:name=".view.DetailedOpenSourceActivity"/>
         <activity android:name=".view.OpenSourceLicencesActivity" />
     </application>
 

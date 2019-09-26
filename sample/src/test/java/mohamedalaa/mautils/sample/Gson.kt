@@ -19,7 +19,6 @@ import androidx.test.core.app.ApplicationProvider
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.open_source_licences.model.OpenSourceLicencesModel
-import mohamedalaa.open_source_licences.view.OpenSourceLicencesActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric

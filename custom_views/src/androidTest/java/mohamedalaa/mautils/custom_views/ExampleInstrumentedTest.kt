@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.open_source_licences
+package mohamedalaa.mautils.custom_views
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
@@ -34,6 +34,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("mohamedalaa.open_source_licences.test", appContext.packageName)
+        assertEquals("mohamedalaa.mautils.custom_views.test", appContext.packageName)
     }
 }

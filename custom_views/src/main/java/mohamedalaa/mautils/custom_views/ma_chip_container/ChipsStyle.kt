@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core', ':core_android_annotation', ':core_android_processor', ':room_gson_annotation', ':room_gson_processor', ':open_source_licences', ':custom_views'
+package mohamedalaa.mautils.custom_views.ma_chip_container
 
-if (!System.env.JITPACK)
-    include ':sample'
+internal enum class ChipsStyle {
+    ACTION, Choice, Entry, Filter
+}

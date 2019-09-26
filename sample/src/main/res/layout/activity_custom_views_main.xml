@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Mohamed Alaa
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:context="mohamedalaa.mautils.sample.custom_views.CustomViewsMainActivity">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="mohamedalaa.mautils.sample.custom_views.view_model.CustomViewsMainActivityViewModel" />
+        <variable
+            name="presenter"
+            type="mohamedalaa.mautils.sample.custom_views.presenter.CustomViewsMainActivityPresenter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Tested successfully el7 with -> Filter -->
+        <mohamedalaa.mautils.custom_views.ma_chip_container.MAChipsContainer
+            android:id="@+id/maChipsContainer"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="8dp"
+            app:betweenTitleAndChipsMargin="8dp"
+            app:chipsMargin="8dp"
+
+            app:title="Title"
+            app:titleTextSize="22sp"
+            app:minLines="1"
+            app:maxLines="1"
+            app:lines="1"
+
+            app:chipsNames="@array/MAChipsContainer_AllChipsNames"
+            app:chipsPerRow="2"
+
+            app:rowsExcluded="@array/MAChipsContainer_rowsExcluded"
+            app:chipsExcludedPerRowsExcluded="@array/MAChipsContainer_chipsExcludedPerRowsExcluded"
+
+            tools:checkedChipsNames="@array/MAChipsContainer_CheckedChipsNamesForChoice"
+            app:checkedChipsNames="@={viewModel.mutableLiveDataCheckedChipsNames}"
+            app:maChipsContainer_setOnChipCheckedChangeListener="@{presenter.onChipsContainerChipCheckedChangeListener(context)}"
+
+            app:isChipWidthMatchParent="true"
+
+            app:chipsStyle="Entry"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

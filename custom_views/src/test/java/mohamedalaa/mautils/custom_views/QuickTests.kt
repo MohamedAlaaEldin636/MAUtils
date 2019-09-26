@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core', ':core_android_annotation', ':core_android_processor', ':room_gson_annotation', ':room_gson_processor', ':open_source_licences', ':custom_views'
+package mohamedalaa.mautils.custom_views
 
-if (!System.env.JITPACK)
-    include ':sample'
+import android.text.TextUtils
+import android.widget.TextView
+import com.google.android.material.chip.ChipDrawable
+
+private fun a1(textView: TextView) {
+    textView.ellipsize = TextUtils.TruncateAt.END
+
+    //ChipDrawable.createFromAttributes()
+}

@@ -13,7 +13,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core', ':core_android_annotation', ':core_android_processor', ':room_gson_annotation', ':room_gson_processor', ':open_source_licences', ':custom_views'
+package mohamedalaa.mautils.sample.custom_views.view_model
 
-if (!System.env.JITPACK)
-    include ':sample'
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import mohamedalaa.mautils.core_android.extensions.getString
+import mohamedalaa.mautils.lifecycle_extensions.custom_classes.QuickMutableLiveData
+import mohamedalaa.mautils.mautils.R
+
+class CustomViewsMainActivityViewModel(
+    application: Application,
+    checkedNames: List<String>
+) : AndroidViewModel(application) {
+
+    val mutableLiveDataCheckedChipsNames = QuickMutableLiveData(checkedNames)
+
+}

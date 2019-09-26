@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Mohamed Alaa
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<resources>
+    <!-- Attributes for MAChipsContainer isa. -->
+    <declare-styleable name="MAChipsContainer">
+        <!-- Title of chips container isa. -->
+        <attr name="title" format="string"/>
+        <!-- Defaults to 18 sp isa. -->
+        <attr name="titleTextSize" format="dimension"/>
+        <!-- Defaults to black. -->
+        <attr name="titleTextColor" format="color"/>
+        <attr name="betweenTitleAndChipsMargin" format="dimension"/>
+
+        <attr name="minLines" format="integer"/>
+        <attr name="maxLines" format="integer"/>
+        <attr name="lines" format="integer"/>
+
+        <!-- Defaults to 1 chip in a row -->
+        <attr name="chipsPerRow" format="integer"/>
+        <!--
+        Works with chipsExcludedPerRowsExcluded in same order, to exclude no. of chips in
+        a row specified in chipsPerRow
+        -->
+        <attr name="rowsExcluded" format="reference"/>
+        <!-- See <rowsExcluded/> -->
+        <attr name="chipsExcludedPerRowsExcluded" format="reference"/>
+
+        <attr name="chipsNames" format="reference"/>
+        <attr name="chipsMargin" format="dimension"/>
+
+        <attr name="isChipWidthMatchParent" format="boolean"/>
+        <attr name="chipsStyle" format="enum">
+            <enum name="Action" value="0"/>
+            <enum name="Choice" value="1"/>
+            <enum name="Entry" value="2"/>
+            <enum name="Filter" value="3"/>
+        </attr>
+        <!--
+        Throw error if more than 1 chip is checked in case of Choice selection style
+        if no selection then select 1st one isa,
+        Also ignore this if style is not Filter since Action and Entry (Input) don't depend on selection isa.
+        -->
+        <attr name="checkedChipsNames" format="reference" />
+    </declare-styleable>
+</resources>

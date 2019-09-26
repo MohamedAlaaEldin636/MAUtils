@@ -15,6 +15,8 @@
 
 package mohamedalaa.mautils.core_android.extensions
 
+import android.app.Application
+import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -52,3 +54,10 @@ fun <R> AndroidViewModel.beforeAndAfterDismissInLoadingDialog(
         after(result)
     }
 }
+
+val AndroidViewModel.application: Application
+    get() = getApplication()
+
+fun AndroidViewModel.getString(@StringRes res: Int): String = application.getString(res)
+
+fun AndroidViewModel.getString(@StringRes res: Int, vararg args: Any): String = application.getString(res, *args)

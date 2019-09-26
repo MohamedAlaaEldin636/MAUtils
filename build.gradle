@@ -18,8 +18,8 @@
 buildscript {
     ext.kotlin_version = '1.3.50'
 
-    ext.COMPILE_SDK_VERSION = 28
-    ext.TARGET_SDK_VERSION = 28
+    ext.COMPILE_SDK_VERSION = 29
+    ext.TARGET_SDK_VERSION = 29
     ext.MIN_SDK_VERSION = 14
 
     ext.room_version = '2.1.0'

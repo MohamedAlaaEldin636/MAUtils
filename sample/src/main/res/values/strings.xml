@@ -25,4 +25,13 @@
     <string name="track_change">Track Change</string>
     <string name="screen_rotation">Screen Rotation</string>
     <string name="toggle_single_item">Toggle Single Item</string>
+
+    <string name="chip_1">Chip 1</string>
+    <string name="chip_2">Chip 2</string>
+    <string name="chip_3">Chip 3</string>
+    <string name="chip_4">Chip 4</string>
+    <string name="chip_5">Chip 5</string>
+    <string name="chip_6">Chip 6</string>
+    <string name="chip_7">Chip 7</string>
+    <string name="chip_8">Chip 8</string>
 </resources>
