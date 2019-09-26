@@ -44,6 +44,12 @@ import kotlin.math.roundToInt
  * since in Entry we should be able to delete chips isa.
  * 2. other features of regular chips and grouped one isa.
  *
+ * ## Notes
+ * 1. cannot have subtitle without a title
+ * 2. any of title or subtitle is gone in visibility if it is null not empty.
+ * 3. custom attr checkedChipsNames can be array res or string res (to indicate 1 string in a list)
+ * but the corresponding binding adapter only get a param of a list isa.
+ *
  * ## **Full XMl Attributes**
  * ```
  * <mohamedalaa.mautils.custom_views.ma_chip_container.MAChipsContainer
@@ -51,14 +57,23 @@ import kotlin.math.roundToInt
  *      android:layout_height="wrap_content"
  *
  *      android:layout_margin="8dp"
- *      app:betweenTitleAndChipsMargin="8dp"
  *      app:chipsMargin="8dp"
+ *      app:betweenTitleOrSubtitleAndChipsMargin="8dp"
+ *      app:betweenTitleAndSubtitleMargin="0dp"
  *
  *      app:title="Title"
  *      app:titleTextSize="22sp"
- *      app:minLines="1"
- *      app:maxLines="1"
- *      app:lines="1"
+ *      app:titleTextColor="@android:color/black"
+ *      app:titleMinLines="1"
+ *      app:titleMaxLines="1"
+ *      app:titleLines="1"
+ *
+ *      app:subtitle="Subtitle"
+ *      app:subtitleTextSize="18sp"
+ *      app:subtitleTextColor="#BF000000"
+ *      app:subtitleMinLines="1"
+ *      app:subtitleMaxLines="1"
+ *      app:subtitleLines="1"
  *
  *      app:chipsNames="@array/MAChipsContainer_AllChipsNames"
  *      app:chipsPerRow="2"
@@ -66,7 +81,7 @@ import kotlin.math.roundToInt
  *      app:rowsExcluded="@array/MAChipsContainer_rowsExcluded"
  *      app:chipsExcludedPerRowsExcluded="@array/MAChipsContainer_chipsExcludedPerRowsExcluded"
  *
- *      tools:checkedChipsNames="@array/MAChipsContainer_AllChipsNames"
+ *      tools:checkedChipsNames="@string/chip_2"
  *      app:checkedChipsNames="@={viewModel.mutableLiveDataCheckedChipsNames}"
  *      app:maChipsContainer_setOnChipCheckedChangeListener="@{presenter.onChipsContainerChipCheckedChangeListener(context)}"
  *
@@ -111,10 +126,18 @@ class MAChipsContainer @JvmOverloads constructor (
     val title: String?
     @Dimension val titleTextSize: Float
     @ColorInt val titleTextColor: Int
-    val minLines: Int
-    val maxLines: Int
-    val lines: Int
-    @Dimension val betweenTitleAndChipsMargin: Int
+    val titleMinLines: Int
+    val titleMaxLines: Int
+    val titleLines: Int
+    @Dimension val betweenTitleOrSubtitleAndChipsMargin: Int
+
+    val subtitle: String?
+    @Dimension val subtitleTextSize: Float
+    @ColorInt val subtitleTextColor: Int
+    val subtitleMinLines: Int
+    val subtitleMaxLines: Int
+    val subtitleLines: Int
+    @Dimension val betweenTitleAndSubtitleMargin: Int
 
     val chipsPerRow: Int
     val rowsExcluded: List<Int>?
@@ -144,17 +167,26 @@ class MAChipsContainer @JvmOverloads constructor (
     init {
         // Custom Attributes
         val dp8ToPx = context.dpToPx(8).roundToInt()
+        val sp22ToPx = context.spToPx(22)
         val sp18ToPx = context.spToPx(18)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MAChipsContainer)
 
         title = typedArray.getString(R.styleable.MAChipsContainer_title)
-        titleTextSize = typedArray.getDimension(R.styleable.MAChipsContainer_titleTextSize, sp18ToPx)
+        titleTextSize = typedArray.getDimension(R.styleable.MAChipsContainer_titleTextSize, sp22ToPx)
         titleTextColor = typedArray.getColor(R.styleable.MAChipsContainer_titleTextColor, Color.BLACK)
-        minLines = typedArray.getInteger(R.styleable.MAChipsContainer_minLines, 1)
-        maxLines = typedArray.getInteger(R.styleable.MAChipsContainer_maxLines, 1)
-        lines = typedArray.getInteger(R.styleable.MAChipsContainer_lines, 0)
-        betweenTitleAndChipsMargin = typedArray.getDimensionPixelOffset(R.styleable.MAChipsContainer_betweenTitleAndChipsMargin, dp8ToPx)
+        titleMinLines = typedArray.getInteger(R.styleable.MAChipsContainer_titleMinLines, 1)
+        titleMaxLines = typedArray.getInteger(R.styleable.MAChipsContainer_titleMaxLines, 1)
+        titleLines = typedArray.getInteger(R.styleable.MAChipsContainer_titleLines, 0)
+        betweenTitleOrSubtitleAndChipsMargin = typedArray.getDimensionPixelOffset(R.styleable.MAChipsContainer_betweenTitleOrSubtitleAndChipsMargin, dp8ToPx)
+
+        subtitle = typedArray.getString(R.styleable.MAChipsContainer_subtitle)
+        subtitleTextSize = typedArray.getDimension(R.styleable.MAChipsContainer_subtitleTextSize, sp18ToPx)
+        subtitleTextColor = typedArray.getColor(R.styleable.MAChipsContainer_subtitleTextColor, Color.BLACK.addColorAlpha(0.75f))
+        subtitleMinLines = typedArray.getInteger(R.styleable.MAChipsContainer_subtitleMinLines, 1)
+        subtitleMaxLines = typedArray.getInteger(R.styleable.MAChipsContainer_subtitleMaxLines, 1)
+        subtitleLines = typedArray.getInteger(R.styleable.MAChipsContainer_subtitleLines, 0)
+        betweenTitleAndSubtitleMargin = typedArray.getDimensionPixelOffset(R.styleable.MAChipsContainer_betweenTitleAndSubtitleMargin, 0)
 
         chipsPerRow = typedArray.getInteger(R.styleable.MAChipsContainer_chipsPerRow, 1).apply {
             if (this < 1) throw RuntimeException("app:chipsPerRow cannot be < 1 isa.")
@@ -178,8 +210,12 @@ class MAChipsContainer @JvmOverloads constructor (
         isChipWidthMatchParent = typedArray.getBoolean(R.styleable.MAChipsContainer_isChipWidthMatchParent, false)
         chipsStyle = ChipsStyle.values()[typedArray.getInt(R.styleable.MAChipsContainer_chipsStyle, ChipsStyle.Filter.ordinal)]
         checkedChipsNames = typedArray.getResourceId(R.styleable.MAChipsContainer_checkedChipsNames, 0).run {
-            if (this == 0) arrayOf() else resources.getStringArray(this)
-        }.toList()
+            if (this == 0) emptyList() else when (resources.getResourceTypeName(this)) {
+                "array" -> (if (this == 0) arrayOf() else resources.getStringArray(this)).toList()
+                "string" -> listOf(resources.getString(this))
+                else -> emptyList()
+            }
+        }
 
         typedArray.recycle()
 

@@ -42,14 +42,23 @@
             android:layout_height="wrap_content"
 
             android:layout_margin="8dp"
-            app:betweenTitleAndChipsMargin="8dp"
             app:chipsMargin="8dp"
+            app:betweenTitleOrSubtitleAndChipsMargin="8dp"
+            app:betweenTitleAndSubtitleMargin="0dp"
 
             app:title="Title"
             app:titleTextSize="22sp"
-            app:minLines="1"
-            app:maxLines="1"
-            app:lines="1"
+            app:titleTextColor="@android:color/black"
+            app:titleMinLines="1"
+            app:titleMaxLines="1"
+            app:titleLines="1"
+
+            app:subtitle="Subtitle"
+            app:subtitleTextSize="18sp"
+            app:subtitleTextColor="#BF000000"
+            app:subtitleMinLines="1"
+            app:subtitleMaxLines="1"
+            app:subtitleLines="1"
 
             app:chipsNames="@array/MAChipsContainer_AllChipsNames"
             app:chipsPerRow="2"
@@ -57,13 +66,13 @@
             app:rowsExcluded="@array/MAChipsContainer_rowsExcluded"
             app:chipsExcludedPerRowsExcluded="@array/MAChipsContainer_chipsExcludedPerRowsExcluded"
 
-            tools:checkedChipsNames="@array/MAChipsContainer_CheckedChipsNamesForChoice"
+            tools:checkedChipsNames="@string/chip_2"
             app:checkedChipsNames="@={viewModel.mutableLiveDataCheckedChipsNames}"
             app:maChipsContainer_setOnChipCheckedChangeListener="@{presenter.onChipsContainerChipCheckedChangeListener(context)}"
 
             app:isChipWidthMatchParent="true"
 
-            app:chipsStyle="Entry"
+            app:chipsStyle="Filter"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

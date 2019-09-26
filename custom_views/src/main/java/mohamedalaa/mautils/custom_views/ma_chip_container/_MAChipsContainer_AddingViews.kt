@@ -38,33 +38,35 @@ import mohamedalaa.mautils.custom_views.R
  * @return if of the added title or null if not added isa.
  */
 internal fun MAChipsContainer.addTitleIfPossibleAndGetIdOrNull(): Int? {
+    // -- Title -- //
+
     // Checks for title text
-    if (title.isNullOrEmpty()) return null
+    if (title == null) return null
 
     // View
-    val textView = context.inflateLayout(R.layout.mautils_include_text_view, this) as TextView
-    val id = ViewCompat.generateViewId()
-    textView.id = id
+    val titleTextView = context.inflateLayout(R.layout.mautils_include_text_view, this) as TextView
+    val titleId = ViewCompat.generateViewId()
+    titleTextView.id = titleId
 
-    textView.text = title
-    textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize)
-    textView.setTextColor(titleTextColor)
+    titleTextView.text = title
+    titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize)
+    titleTextView.setTextColor(titleTextColor)
 
-    if (maxLines < minLines) throw RuntimeException("maxLines cannot be < min lines isa.")
-    val tempLines = when {
-        lines > 0 -> lines
-        minLines == maxLines -> minLines
+    if (titleMaxLines < titleMinLines) throw RuntimeException("title's maxLines cannot be < min lines isa.")
+    val titleTempLines = when {
+        titleLines > 0 -> titleLines
+        titleMinLines == titleMaxLines -> titleMinLines
         else -> null
     }
-    if (tempLines != null) {
-        textView.setLines(tempLines)
+    if (titleTempLines != null) {
+        titleTextView.setLines(titleTempLines)
     }else {
-        textView.minLines = minLines
-        textView.maxLines = maxLines
+        titleTextView.minLines = titleMinLines
+        titleTextView.maxLines = titleMaxLines
     }
 
     // Layout Params
-    val titleViewLayoutParams = ConstraintLayout.LayoutParams(
+    val titleLayoutParams = ConstraintLayout.LayoutParams(
         ConstraintLayout.LayoutParams.WRAP_CONTENT,
         ConstraintLayout.LayoutParams.WRAP_CONTENT
     ).apply {
@@ -73,9 +75,48 @@ internal fun MAChipsContainer.addTitleIfPossibleAndGetIdOrNull(): Int? {
         rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
     }
 
-    addView(textView, titleViewLayoutParams)
+    addView(titleTextView, titleLayoutParams)
 
-    return id
+    // Checks for subtitle text isa.
+    if (subtitle == null) return titleId
+
+    // Subtitle
+    val subTitleTextView = context.inflateLayout(R.layout.mautils_include_text_view, this) as TextView
+    val subtitleId = ViewCompat.generateViewId()
+    subTitleTextView.id = subtitleId
+
+    subTitleTextView.text = subtitle
+    subTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, subtitleTextSize)
+    subTitleTextView.setTextColor(subtitleTextColor)
+
+    if (subtitleMaxLines < subtitleMinLines) throw RuntimeException("subtitle's maxLines cannot be < min lines isa.")
+    val subTitleTempLines = when {
+        subtitleLines > 0 -> subtitleLines
+        subtitleMinLines == subtitleMaxLines -> subtitleMinLines
+        else -> null
+    }
+    if (subTitleTempLines != null) {
+        subTitleTextView.setLines(subTitleTempLines)
+    }else {
+        subTitleTextView.minLines = titleMinLines
+        subTitleTextView.maxLines = titleMaxLines
+    }
+
+    // Layout Params
+    val subtitleLayoutParams = ConstraintLayout.LayoutParams(
+        ConstraintLayout.LayoutParams.WRAP_CONTENT,
+        ConstraintLayout.LayoutParams.WRAP_CONTENT
+    ).apply {
+        topToBottom = titleId
+        leftToLeft = titleId
+        rightToRight = titleId
+
+        topMargin = betweenTitleAndSubtitleMargin
+    }
+
+    addView(subTitleTextView, subtitleLayoutParams)
+
+    return subtitleId
 }
 
 internal fun MAChipsContainer.addChips(titleViewId: Int?) {
@@ -86,7 +127,7 @@ internal fun MAChipsContainer.addChips(titleViewId: Int?) {
     var previousAboveId: Int? = null
     for (row in rows) {
         val marginTop = if (previousAboveId == null) {
-            if (titleViewId == null) 0 else betweenTitleAndChipsMargin
+            if (titleViewId == null) 0 else betweenTitleOrSubtitleAndChipsMargin
         }else {
             chipsMargin
         }

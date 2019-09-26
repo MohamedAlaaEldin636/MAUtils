@@ -23,11 +23,18 @@
         <attr name="titleTextSize" format="dimension"/>
         <!-- Defaults to black. -->
         <attr name="titleTextColor" format="color"/>
-        <attr name="betweenTitleAndChipsMargin" format="dimension"/>
+        <attr name="betweenTitleOrSubtitleAndChipsMargin" format="dimension"/>
+        <attr name="titleMinLines" format="integer"/>
+        <attr name="titleMaxLines" format="integer"/>
+        <attr name="titleLines" format="integer"/>
 
-        <attr name="minLines" format="integer"/>
-        <attr name="maxLines" format="integer"/>
-        <attr name="lines" format="integer"/>
+        <attr name="subtitle" format="string" />
+        <attr name="subtitleTextSize" format="dimension" />
+        <attr name="subtitleTextColor" format="color" />
+        <attr name="betweenTitleAndSubtitleMargin" format="dimension"/>
+        <attr name="subtitleMinLines" format="integer"/>
+        <attr name="subtitleMaxLines" format="integer"/>
+        <attr name="subtitleLines" format="integer"/>
 
         <!-- Defaults to 1 chip in a row -->
         <attr name="chipsPerRow" format="integer"/>
