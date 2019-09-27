@@ -85,7 +85,7 @@ fun <T> Context.javaSharedPrefSet(
         Float::class.java, Float::class.javaObjectType -> sharedPrefEditor.putFloat(key, value as Float)
         Set::class.java -> {
             @Suppress("UNCHECKED_CAST")
-            sharedPrefEditor.putStringSet(key, value as MutableSet<String>)
+            sharedPrefEditor.putStringSet(key, value as Set<String>)
         }
         else -> throw RuntimeException("Unsupported type $jClass in shared pref")
     }
