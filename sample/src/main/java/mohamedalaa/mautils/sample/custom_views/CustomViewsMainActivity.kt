@@ -15,11 +15,17 @@
 
 package mohamedalaa.mautils.sample.custom_views
 
+import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import mohamedalaa.mautils.core_android.extensions.logError
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams
+import mohamedalaa.mautils.core_android.extensions.*
+import mohamedalaa.mautils.core_kotlin.extensions.throwRuntimeException
 import mohamedalaa.mautils.gson.addValuesGsonForced
 import mohamedalaa.mautils.gson.getterBundleGson
 import mohamedalaa.mautils.lifecycle_extensions.extensions.getAndroidViewModelWithFactory
@@ -62,6 +68,20 @@ class CustomViewsMainActivity : AppCompatActivity() {
             logError("VIEWMODEL old checked names -> ${binding.maChipsContainer.getLastCheckedChipsNames()}," +
                 "\nnew checked names isa -> $it")
         })
+
+        /*viewModel.viewModelScope.launch {
+            val set1 = setOf("hi", "sss", "", "bye")
+            sharedPrefSet("fileName", "key", set1)
+
+            logError("set1 -> ${set1.toList()}")
+            delay(5_000)
+
+            val abc: Set<String> = sharedPrefGet("fileName", "key", setOf())
+
+            logError("set1 -> ${set1.toList()}" +
+                "\nabc -> ${abc.toList()}")
+        }*/
+        sharedPrefChecks()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -70,5 +90,101 @@ class CustomViewsMainActivity : AppCompatActivity() {
         )
 
         super.onSaveInstanceState(outState)
+    }
+
+    private fun sharedPrefChecks() {
+        runCatching {
+            val pair = 5 to "mido"
+            val setOfInts = setOf(2, 33)
+            val anotherPair: Pair<Float, String?> = 7776f to ""
+
+            application.sharedPrefSetComplex(
+                "fileName", "key_1", pair,
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.INT,
+                    SharedPrefSupportedTypesParams.STRING
+                )
+            )
+            application.sharedPrefSetComplex(
+                "fileName", "key_2", setOfInts,
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.INT
+                )
+            )
+            application.sharedPrefSetComplex(
+                "fileName", "key_3", anotherPair,
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.FLOAT,
+                    SharedPrefSupportedTypesParams.STRING
+                )
+            )
+
+            application.sharedPrefGetComplex(
+                "fileName", "key_1", 11 to "ewew",
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.INT,
+                    SharedPrefSupportedTypesParams.STRING
+                )
+            ).run {
+                assertEquals(pair, this)
+            }
+            application.sharedPrefGetComplex(
+                "fileName", "key_2", setOf<Int>(),
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.INT
+                )
+            ).run {
+                setOfInts.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
+            }
+            application.sharedPrefGetComplex(
+                "fileName", "key_3", 3f to "dddddd",
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.FLOAT,
+                    SharedPrefSupportedTypesParams.STRING
+                )
+            ).run {
+                assertEquals(anotherPair, this)
+            }
+
+            // null DO NOT change anything isa.
+            application.sharedPrefSetComplex(
+                "fileName", "key_3", anotherPair.first to null,
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.FLOAT,
+                    SharedPrefSupportedTypesParams.STRING
+                )
+            )
+            application.sharedPrefGetComplex(
+                "fileName", "key_3", 3f to "dddddd",
+                sharedPrefSupportedTypesParamsArray = *arrayOf(
+                    SharedPrefSupportedTypesParams.FLOAT,
+                    SharedPrefSupportedTypesParams.STRING
+                )
+            ).run {
+                assertEquals(anotherPair, 7776.0f to "" /* null do NOT change anything isa. */)
+            }
+        }.getOrElse {
+            logError("Error isa is ${it.message}")
+        }
+        logError("Finished el7")
+    }
+
+    private fun <T> Set<T>.assertAllItemsInSetIsInsideAnotherIgnoreOrder(other: Set<T>) {
+        forEach {
+            assertSpecial(it in other)
+        }
+    }
+
+    private fun <T> assertEquals(expected: T, actual: T) {
+        if (expected != actual) {
+            logError("Expected $expected\nActual $actual")
+        }
+        assertSpecial(expected == actual)
+    }
+
+    private fun <T> T.assertSpecial(boolean: Boolean) {
+        if (boolean.not()) {
+            throwRuntimeException("assert error isa.")
+        }
     }
 }

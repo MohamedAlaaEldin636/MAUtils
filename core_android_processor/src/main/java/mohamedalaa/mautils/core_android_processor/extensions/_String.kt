@@ -13,24 +13,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.core_android_processor.extensions
 
-import android.content.Context
-//import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClass
+import java.util.*
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/30/2019.
- *
- */
-object Bindinggg {
-
-    fun p11(context: Context) {
-        //val s = SharedPrefSomeClass.getS2(context)
+fun String?.toUpperCaseFirstLetter(): String? {
+    return if (this == null || isEmpty()) this else {
+        substring(0, 1).toUpperCase(Locale.getDefault()) + substring(1)
     }
-
-}
-
-//@Synchronized
-private fun jdiwoedjw() {
-    //Bindinggg.p11()
 }

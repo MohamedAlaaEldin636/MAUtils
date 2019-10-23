@@ -15,10 +15,6 @@
 
 package mohamedalaa.mautils.core_android_annotation
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/24/2019.
- *
- */
 object ProcessorConstants {
 
     val generationPackage: String = MASharedPref::class.java.getPackage().name

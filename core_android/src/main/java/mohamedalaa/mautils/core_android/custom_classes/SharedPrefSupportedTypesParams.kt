@@ -13,24 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.core_android.custom_classes
 
-import android.content.Context
-//import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClass
-
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/30/2019.
- *
- */
-object Bindinggg {
-
-    fun p11(context: Context) {
-        //val s = SharedPrefSomeClass.getS2(context)
-    }
-
-}
-
-//@Synchronized
-private fun jdiwoedjw() {
-    //Bindinggg.p11()
+enum class SharedPrefSupportedTypesParams {
+    STRING, INT, BOOLEAN, LONG, FLOAT
 }

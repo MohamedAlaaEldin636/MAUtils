@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.sample.core_android.shared_pref
 
-import android.content.Context
-//import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClass
+import org.junit.Test
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/30/2019.
- *
- */
-object Bindinggg {
+class GeneratedFunIsa {
 
-    fun p11(context: Context) {
-        //val s = SharedPrefSomeClass.getS2(context)
+    @Test
+    fun a_1() {
+        val a = """string
+        string string isa."""
+
+        println(a)
+
+
     }
 
-}
-
-//@Synchronized
-private fun jdiwoedjw() {
-    //Bindinggg.p11()
 }

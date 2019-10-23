@@ -15,25 +15,16 @@
 
 package mohamedalaa.mautils.core_android_processor.extensions;
 
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
 import com.squareup.kotlinpoet.ClassName;
-import com.squareup.kotlinpoet.ClassNames;
 import com.squareup.kotlinpoet.ParameterizedTypeName;
 import com.squareup.kotlinpoet.TypeName;
 import com.squareup.kotlinpoet.TypeNames;
 
-import java.lang.reflect.Type;
-
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVisitor;
 
 import kotlin.reflect.KClass;
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/3/2019.
- */
+@SuppressWarnings("unused")
 public class KotlinpoetUtils {
 
     public static TypeName typeName(String fullName) {
@@ -50,6 +41,10 @@ public class KotlinpoetUtils {
 
     public static TypeName parameterizedTypeName(ClassName receiver, ClassName... typeParams) {
         return ParameterizedTypeName.get(receiver, typeParams);
+    }
+
+    public static TypeName parameterizedTypeName(TypeName receiver, TypeName... typeParams) {
+        return ParameterizedTypeName.get((ClassName) receiver, typeParams);
     }
 
     public static TypeName typeName(KClass kClass) {

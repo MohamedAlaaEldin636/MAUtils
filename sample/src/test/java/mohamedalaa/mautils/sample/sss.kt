@@ -17,16 +17,32 @@ package mohamedalaa.mautils.sample
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClass
+import com.google.gson.reflect.TypeToken
+import mohamedalaa.mautils.core_android_annotation.*
+import mohamedalaa.mautils.gson.toJsonOrNull
+import org.bouncycastle.pqc.math.linearalgebra.IntegerFunctions
+import java.lang.reflect.Type
 
 private fun SharedPreferences.a() {
-    SharedPrefSomeClass
     edit {
         //ReplaceWith
         5.rem(4)
         //putse
         //put
     }
+    object : TypeToken<IntegerFunctions>(){}.type
+}
+
+private inline fun <reified E> a(e: E){
+    /*
+    Type superclass = subclass.getGenericSuperclass();
+    if (superclass instanceof Class) {
+      throw new RuntimeException("Missing type parameter.");
+    }
+    ParameterizedType parameterized = (ParameterizedType) superclass;
+    return $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
+     */
+    val type: Type? = E::class.java.genericSuperclass
 }
 
 object Settings {
@@ -82,4 +98,20 @@ fun Context.sharedPrefSettings_setAds(adsEnum: AdsEnum) {
     isConstant = false
 )
  */
+
+// prevent _first for pair isa. in processor isa.
+/*@MASharedPrefComplex(
+    // todo can i retrieve this isa. ?!
+    MAComplexClassIdentification(
+        MANonNestedParameterizedClass(Int::class)
+    )
+)*/
+private fun SharedPreferences.Editor.sssss() {
+    //putFloat()
+
+    "".toJsonOrNull()
+}
+
+// ----
+
 object SomeClassForSharedPref

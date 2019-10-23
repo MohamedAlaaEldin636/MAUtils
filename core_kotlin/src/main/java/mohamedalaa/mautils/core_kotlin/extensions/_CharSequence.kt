@@ -39,3 +39,17 @@ operator fun CharSequence?.contains(char: Char?, ignoreCase: Boolean = false): B
 
 fun CharSequence?.containsAny(vararg charSequences: CharSequence): Boolean
     = charSequences.any { this.contains(it) }
+
+fun CharSequence.allIndicesOf(string: String): List<Int> {
+    var startIndex = 0
+    val indices = mutableListOf<Int>()
+    while (startIndex < length) {
+        indexOfOrNull(string, startIndex = startIndex)?.apply {
+            indices += this
+
+            startIndex = inc()
+        } ?: break
+    }
+
+    return indices
+}

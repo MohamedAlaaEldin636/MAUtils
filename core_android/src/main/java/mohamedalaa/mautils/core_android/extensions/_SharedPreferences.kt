@@ -13,12 +13,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+@file:JvmMultifileClass
 @file:JvmName("SharedPrefUtils")
 
 package mohamedalaa.mautils.core_android.extensions
 
 import android.content.Context
 
+@Deprecated(
+    "Use sharedPrefGetComplex instead",
+    ReplaceWith(
+        "sharedPrefGetComplex(fileName, key, defValue, mode, SharedPrefSupportedTypesParams.STRING)",
+        "mohamedalaa.mautils.core_android.extensions.sharedPrefGetComplex",
+        "mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams"
+    ),
+    DeprecationLevel.WARNING
+)
 inline fun <reified T> Context.sharedPrefGet(
     fileName: String,
     key: String,
@@ -28,6 +38,15 @@ inline fun <reified T> Context.sharedPrefGet(
     return javaSharedPrefGet(fileName, key, defValue, T::class.java, mode)
 }
 
+@Deprecated(
+    "Use sharedPrefSetComplex instead",
+    ReplaceWith(
+        "sharedPrefSetComplex(fileName, key, value, mode, false, SharedPrefSupportedTypesParams.STRING)",
+        "mohamedalaa.mautils.core_android.extensions.sharedPrefSetComplex",
+        "mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams"
+    ),
+    DeprecationLevel.WARNING
+)
 inline fun <reified T> Context.sharedPrefSet(
     fileName: String,
     key: String,
@@ -85,7 +104,7 @@ fun <T> Context.javaSharedPrefSet(
         Float::class.java, Float::class.javaObjectType -> sharedPrefEditor.putFloat(key, value as Float)
         Set::class.java -> {
             @Suppress("UNCHECKED_CAST")
-            sharedPrefEditor.putStringSet(key, value as Set<String>)
+            sharedPrefEditor.putStringSet(key, value as Set<String?>)
         }
         else -> throw RuntimeException("Unsupported type $jClass in shared pref")
     }

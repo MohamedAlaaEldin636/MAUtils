@@ -13,24 +13,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.sample
+package mohamedalaa.mautils.core_android_annotation
 
-import android.content.Context
-//import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClass
+import kotlin.reflect.KClass
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 3/30/2019.
- *
+ * 1. Can be used for classes without type params isa like -> String::class
+ * 2. Can be used for classes with non-nested type params isa like -> List::class, String::class
  */
-object Bindinggg {
-
-    fun p11(context: Context) {
-        //val s = SharedPrefSomeClass.getS2(context)
-    }
-
-}
-
-//@Synchronized
-private fun jdiwoedjw() {
-    //Bindinggg.p11()
-}
+annotation class MANonNestedParameterizedClass(
+    vararg val value: KClass<*>
+)
