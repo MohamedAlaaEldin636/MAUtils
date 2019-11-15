@@ -11,7 +11,7 @@ in alpha release meaning so many changes might occur in the final release.
 
 ---
 
-# [License]
+# [License](#mautils)
 
 ### MAUtils is released under the [Apache 2.0 license](http://www.apache.org/licenses/).
 
