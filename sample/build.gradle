@@ -76,7 +76,6 @@ dependencies {
     implementation project(':core_kotlin')
 
     implementation project(':core_android')
-    kapt project(':core_android_processor')
 
     implementation project(':shared_pref_core')
     implementation project(':shared_pref_annotation')
