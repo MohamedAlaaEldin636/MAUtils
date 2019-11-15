@@ -36,12 +36,9 @@ public class OtherOfSharedPrefJava {
         Context context = ApplicationProvider.getApplicationContext();
 
         // has key && remove key
-        SharedPrefUtils.sharedPrefSetComplexJava(context, fileName, "k1", "s", String.class);
+        SharedPrefUtils.set(context, fileName, "k1", "s", String.class);
         Assert.assertTrue(
             SharedPrefUtils.hasKey(context, fileName, "k1")
-        );
-        Assert.assertTrue(
-            SharedPrefUtils.hasKey(context.getSharedPreferences(fileName, Context.MODE_PRIVATE), "k1")
         );
 
         SharedPrefUtils.removeKey(context, fileName, "k1");
@@ -50,8 +47,8 @@ public class OtherOfSharedPrefJava {
         );
 
         // clear all
-        SharedPrefUtils.sharedPrefSetComplexJava(context, fileName, "k1", "s 111", String.class);
-        SharedPrefUtils.sharedPrefSetComplexJava(context, fileName, "k2", "s 222", String.class);
+        SharedPrefUtils.set(context, fileName, "k1", "s 111", String.class);
+        SharedPrefUtils.set(context, fileName, "k2", "s 222", String.class);
         Assert.assertEquals(
             2,
             context.getSharedPreferences(fileName, Context.MODE_PRIVATE).getAll().size()

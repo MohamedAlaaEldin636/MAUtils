@@ -45,13 +45,13 @@ public class JavaSharedPrefTest {
         tempStringSet.add("2");
         tempStringSet.add("4");
 
-        String string = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_1", "defValue_1", String.class);
-        int integer = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_2", 5, int.class);
-        boolean bool = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_3", true, boolean.class);
-        long longg = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_4", 5L, long.class);
-        float floatt = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_5", 5f, float.class);
+        String string = SharedPrefUtils.get(context, "fileName_1", "key_1", "defValue_1", String.class);
+        int integer = SharedPrefUtils.get(context, "fileName_1", "key_2", 5, int.class);
+        boolean bool = SharedPrefUtils.get(context, "fileName_1", "key_3", true, boolean.class);
+        long longg = SharedPrefUtils.get(context, "fileName_1", "key_4", 5L, long.class);
+        float floatt = SharedPrefUtils.get(context, "fileName_1", "key_5", 5f, float.class);
         @SuppressWarnings("unchecked")
-        Set<String> stringSet = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_6", tempStringSet, Set.class);
+        Set<String> stringSet = SharedPrefUtils.get(context, "fileName_1", "key_6", tempStringSet, Set.class);
         println(string + " - " + integer + " - " + bool + " - " + longg + " - " + floatt + " - " + stringSet);
 
         // Setting a value
@@ -59,21 +59,21 @@ public class JavaSharedPrefTest {
         tempStringSet.add("some new def");
         tempStringSet.add("val");
 
-        SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_1", "newValue_1", String.class);
-        SharedPrefUtils.sharedPrefSetComplexJava(context, "fileName_1", "key_2", 6, Integer.class);
-        SharedPrefUtils.sharedPrefSetComplexJava(context, "fileName_1", "key_3", false, Boolean.class);
-        SharedPrefUtils.sharedPrefSetComplexJava(context, "fileName_1", "key_4", 6L, long.class);
-        SharedPrefUtils.sharedPrefSetComplexJava(context, "fileName_1", "key_5", 6f, Float.class);
-        SharedPrefUtils.sharedPrefSetComplexJava(context, "fileName_1", "key_6", tempStringSet, Set.class);
+        SharedPrefUtils.get(context, "fileName_1", "key_1", "newValue_1", String.class);
+        SharedPrefUtils.set(context, "fileName_1", "key_2", 6, Integer.class);
+        SharedPrefUtils.set(context, "fileName_1", "key_3", false, Boolean.class);
+        SharedPrefUtils.set(context, "fileName_1", "key_4", 6L, long.class);
+        SharedPrefUtils.set(context, "fileName_1", "key_5", 6f, Float.class);
+        SharedPrefUtils.set(context, "fileName_1", "key_6", tempStringSet, Set.class);
         TestingLog.i("Set successfully isa");
 
         // Getting previously set value isa
-        string = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_1", "defValue_1", String.class);
-        integer = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_2", 5, int.class);
-        bool = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_3", true, boolean.class);
-        longg = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_4", 5L, long.class);
-        floatt = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_5", 5f, float.class);
-        stringSet = SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName_1", "key_6", tempStringSet, (Class<Set<String>>)((Class<?>)Set.class));
+        string = SharedPrefUtils.get(context, "fileName_1", "key_1", "defValue_1", String.class);
+        integer = SharedPrefUtils.get(context, "fileName_1", "key_2", 5, int.class);
+        bool = SharedPrefUtils.get(context, "fileName_1", "key_3", true, boolean.class);
+        longg = SharedPrefUtils.get(context, "fileName_1", "key_4", 5L, long.class);
+        floatt = SharedPrefUtils.get(context, "fileName_1", "key_5", 5f, float.class);
+        stringSet = SharedPrefUtils.get(context, "fileName_1", "key_6", tempStringSet, (Class<Set<String>>)((Class<?>)Set.class));
         println(string + " - " + integer + " - " + bool + " - " + longg + " - " + floatt + " - " + stringSet);
     }
 

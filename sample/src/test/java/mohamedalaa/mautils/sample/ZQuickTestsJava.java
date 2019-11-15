@@ -15,6 +15,35 @@
 
 package mohamedalaa.mautils.sample;
 
+import android.content.Context;
+
+import mohamedalaa.mautils.shared_pref_core.SharedPrefUtils;
+
+public class ZQuickTestsJava {
+    public static void m1(
+        Context context,
+        int someInt
+    ) {
+        /*// No need for specific type name like putString
+        String string = "string";
+        SharedPrefUtils.sharedPrefSetComplexJava(context, "fileName", "key", string, String.class);
+        string == SharedPrefUtils.sharedPrefGetComplexJava(context, "fileName", "k1", "", String.class); // true
+
+        // since Shared preference donot save null types then fallback
+        // to delete the key if is null
+        int someInt = *//*some code which might be null*//*
+        SharedPrefUtils.sharedPrefSetComplexJava(
+            context, "fileName", "key", someInt, int.class, true *//* removeKeyIfValueIsNull *//*
+        );*/
+        SharedPrefUtils.set(
+            context, "fileName", "key", someInt, Integer.class, true /* removeKeyIfValueIsNull */
+        );
+        Integer s = SharedPrefUtils.get(
+            context, "fileName", "key", null, Integer.class
+        );
+    }
+}
+
 /*
 class ZQuickTestsJava {
 

@@ -35,7 +35,7 @@ import javax.lang.model.element.AnnotationMirror
  * @Synchronized
  * fun Context.sharedPref_SomeClassName_GetName(
  *      defValue: DefValueType = defaultOrByUserDefValue
- * ): DefValueType = sharedPrefGetComplex<DefValueType>(
+ * ): DefValueType = sharedPrefGet<DefValueType>(
  *      privateFileName,
  *
  *      "name",
@@ -59,7 +59,7 @@ internal fun Context.sharedPref_SomeClassName_GetName2(
 ): DefValueType {
     val convertedValueAnyToString = defValue.run { toJson()/*dev code*/ }
 
-    return sharedPrefGetComplex<String>(
+    return sharedPrefGet<String>(
         privateFileName,
         "name2",
         convertedValueAnyToString,
@@ -175,7 +175,7 @@ fun ProcessingEnvironment.buildGetComplexFun(
                 "val $VAR_NAME_CONVERTED_VALUE_ANY_TO_STRING = $VAR_NAME_DEF_VALUE.run { ${maSharedPrefKeyValuePair.convertAnyToString} }"
             )
             addStatement(
-                "return sharedPrefGetComplex<%T>(" +
+                "return sharedPrefGet<%T>(" +
                     "$VAR_NAME_PRIVATE_FILE_NAME, " +
 
                     "\"${maSharedPrefKeyValuePair.name}\", " +
@@ -190,7 +190,7 @@ fun ProcessingEnvironment.buildGetComplexFun(
         }else {
             val gsonConverter = gsonConverterSimpleName?.run { "$this()" }
             addStatement(
-                "return sharedPrefGetComplex<%T>(" +
+                "return sharedPrefGet<%T>(" +
                     "$VAR_NAME_PRIVATE_FILE_NAME, " +
 
                     "\"${maSharedPrefKeyValuePair.name}\", " +

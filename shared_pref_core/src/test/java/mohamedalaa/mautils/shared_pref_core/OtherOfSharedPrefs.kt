@@ -35,14 +35,10 @@ class OtherOfSharedPrefs {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
         // has key && remove key
-        context.sharedPrefSetComplex(fileName, "k1", "s")
+        context.sharedPrefSet(fileName, "k1", "s")
         assertEquals(
             true,
             context.sharedPrefHasKey(fileName, "k1")
-        )
-        assertEquals(
-            true,
-            context.getSharedPreferences(fileName, Context.MODE_PRIVATE).hasKey("k1")
         )
 
         context.sharedPrefRemoveKey(fileName, "k1")
@@ -52,8 +48,8 @@ class OtherOfSharedPrefs {
         )
 
         // clear all
-        context.sharedPrefSetComplex(fileName, "k1", "s 111")
-        context.sharedPrefSetComplex(fileName, "k2", "s 222")
+        context.sharedPrefSet(fileName, "k1", "s 111")
+        context.sharedPrefSet(fileName, "k2", "s 222")
         assertEquals(
             2,
             context.getSharedPreferences(fileName, Context.MODE_PRIVATE).all.size

@@ -17,10 +17,6 @@
 
 package mohamedalaa.mautils.sample.core_android.annotation_processing_isa
 
-import android.content.Context
-import mohamedalaa.mautils.shared_pref_core.sharedPrefGetComplex
-import java.util.ArrayList
-
 internal fun abc() {
 
 }
@@ -32,7 +28,7 @@ private lateinit var a: java.util.List<Pair<Pair<Int, Float>,
 private fun Context.sharedPref_SomeClassName_GetNeedGsonConverterIsa(defValue: java.util.List<Pair<Pair<Int, Float>,
     java.lang.String>> = a
 ): java.util.List<Pair<Pair<Int, Float>,
-    java.lang.String>> = sharedPrefGetComplex<java.util.List<Pair<Pair<Int, Float>,
+    java.lang.String>> = sharedPrefGet<java.util.List<Pair<Pair<Int, Float>,
     java.lang.String>>>(
     privateFileName,
     "needGsonConverterIsa",

@@ -47,8 +47,8 @@ class Quick {
         val a = application.sharedPref_SomeClassName_GetString1("")
         //application.sharedPref_SomeClassName_GetSetInts1()
 
-        application.sharedPrefSetComplex("fileName", "key", "value")
-        application.sharedPrefSetComplex("fileName", "key", "value")
+        application.sharedPrefSet("fileName", "key", "value")
+        application.sharedPrefSet("fileName", "key", "value")
 
         SharedPrefSomeClassName.fileName()
 

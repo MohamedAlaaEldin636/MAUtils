@@ -40,29 +40,29 @@ class NewComplexFun {
 
         val application = ApplicationProvider.getApplicationContext<Application>()
 
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_1", boolean
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_2", string
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_3", float
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_4", stringSet
         )
 
-        application.sharedPrefGetComplex("fileName", "key_1", false).run {
+        application.sharedPrefGet("fileName", "key_1", false).run {
             assertEquals(boolean, this)
         }
-        application.sharedPrefGetComplex<String?>("fileName", "key_2", null).run {
+        application.sharedPrefGet<String?>("fileName", "key_2", null).run {
             assertEquals(string, this)
         }
-        application.sharedPrefGetComplex("fileName", "key_3", 212121212f).run {
+        application.sharedPrefGet("fileName", "key_3", 212121212f).run {
             assertEquals(float, this)
         }
-        application.sharedPrefGetComplex("fileName", "key_4", setOf(""), acceptNullableItemInSet = true).run {
+        application.sharedPrefGet("fileName", "key_4", setOf(""), acceptNullableItemInSet = true).run {
             stringSet.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
         }
     }
@@ -75,26 +75,26 @@ class NewComplexFun {
         val setNoNullableItemInt = setOf(55, 4)
         val setWithNullableItemBoolean = setOf(null, true, false)
 
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_1", setWithNullableItemFloat,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.FLOAT
             )
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_2", setNoNullableItemInt,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.INT
             )
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_3", setWithNullableItemBoolean,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.BOOLEAN
             )
         )
 
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_1", setOf<Float?>(), acceptNullableItemInSet = true,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.FLOAT
@@ -102,7 +102,7 @@ class NewComplexFun {
         ).run {
             setWithNullableItemFloat.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
         }
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_2", setOf<Int>(), acceptNullableItemInSet = false/*default value isa.*/,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.INT
@@ -110,7 +110,7 @@ class NewComplexFun {
         ).run {
             setNoNullableItemInt.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
         }
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_3", setOf<Boolean?>(true), acceptNullableItemInSet = true,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.BOOLEAN
@@ -137,20 +137,20 @@ class NewComplexFun {
 
         val application = ApplicationProvider.getApplicationContext<Application>()
 
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_1", pair,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.INT,
                 SharedPrefSupportedTypesParams.STRING
             )
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_2", setOfInts,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.INT
             )
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_3", anotherPair,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.FLOAT,
@@ -158,7 +158,7 @@ class NewComplexFun {
             )
         )
 
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_1", 11 to "ewew",
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.INT,
@@ -167,7 +167,7 @@ class NewComplexFun {
         ).run {
             assertEquals(pair, this)
         }
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_2", setOf<Int>(),
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.INT
@@ -175,7 +175,7 @@ class NewComplexFun {
         ).run {
             setOfInts.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
         }
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_3", 3f to "dddddd",
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.FLOAT,
@@ -186,14 +186,14 @@ class NewComplexFun {
         }
 
         // null is not allowed isa.
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_3", anotherPair.first to ""/*null makes error isa.*/,
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.FLOAT,
                 SharedPrefSupportedTypesParams.STRING
             )
         )
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_3", 3f to "dddddd",
             sharedPrefSupportedTypesParamsArray = *arrayOf(
                 SharedPrefSupportedTypesParams.FLOAT,
@@ -210,40 +210,40 @@ class NewComplexFun {
         val set7 = setOf("f", "S")
         val stringNull: String? = null
 
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_strange", stringNull/*since null then it will remove that key isa*/,
             removeIfValueParamIsNullOtherwiseThrowException = true
         )
         application.sharedPrefRemoveKey(
             "fileName", "key_4"
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_5", set5
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_6", set6
         )
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_7", set7
         )
 
         val diffDefSet = setOf("DEFAULT SET ISA")
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_4", diffDefSet
         ).run {
             diffDefSet.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
         }
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_5", diffDefSet, acceptNullableItemInSet = true
         ).run {
             set5.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
         }
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_6", diffDefSet, acceptNullableItemInSet = true
         ).run {
             set6.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
         }
-        application.sharedPrefGetComplex(
+        application.sharedPrefGet(
             "fileName", "key_7", diffDefSet
         ).run {
             set7.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
@@ -264,7 +264,7 @@ class NewComplexFun {
         )
 
         var stringNull: String? = "Some string isa."
-        application.sharedPrefSetComplex(
+        application.sharedPrefSet(
             "fileName", "key_strange", stringNull
         )
 
@@ -275,13 +275,13 @@ class NewComplexFun {
 
         stringNull = null
         try {
-            application.sharedPrefSetComplex<String?>(
+            application.sharedPrefSet<String?>(
                 "fileName", "key_strange", stringNull
             )
         }catch (throwable: Throwable) {
             assert(throwable is Exception)
         }
-        application.sharedPrefSetComplex<String?>(
+        application.sharedPrefSet<String?>(
             "fileName", "key_strange", stringNull,
             removeIfValueParamIsNullOtherwiseThrowException = true
         )

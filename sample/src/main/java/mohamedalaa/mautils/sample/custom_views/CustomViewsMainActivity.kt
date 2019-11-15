@@ -93,20 +93,20 @@ class CustomViewsMainActivity : AppCompatActivity() {
             val setOfInts = setOf(2, 33)
             val anotherPair: Pair<Float, String?> = 7776f to ""
 /*
-            application.sharedPrefSetComplex(
+            application.sharedPrefSet(
                 "fileName", "key_1", pair,
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.INT,
                     SharedPrefSupportedTypesParams.STRING
                 )
             )
-            application.sharedPrefSetComplex(
+            application.sharedPrefSet(
                 "fileName", "key_2", setOfInts,
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.INT
                 )
             )
-            application.sharedPrefSetComplex(
+            application.sharedPrefSet(
                 "fileName", "key_3", anotherPair,
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.FLOAT,
@@ -114,7 +114,7 @@ class CustomViewsMainActivity : AppCompatActivity() {
                 )
             )
 
-            application.sharedPrefGetComplex(
+            application.sharedPrefGet(
                 "fileName", "key_1", 11 to "ewew",
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.INT,
@@ -123,7 +123,7 @@ class CustomViewsMainActivity : AppCompatActivity() {
             ).run {
                 assertEquals(pair, this)
             }
-            application.sharedPrefGetComplex(
+            application.sharedPrefGet(
                 "fileName", "key_2", setOf<Int>(),
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.INT
@@ -131,7 +131,7 @@ class CustomViewsMainActivity : AppCompatActivity() {
             ).run {
                 setOfInts.assertAllItemsInSetIsInsideAnotherIgnoreOrder(this)
             }
-            application.sharedPrefGetComplex(
+            application.sharedPrefGet(
                 "fileName", "key_3", 3f to "dddddd",
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.FLOAT,
@@ -142,14 +142,14 @@ class CustomViewsMainActivity : AppCompatActivity() {
             }
 
             // null DO NOT change anything isa.
-            application.sharedPrefSetComplex(
+            application.sharedPrefSet(
                 "fileName", "key_3", anotherPair.first to null,
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.FLOAT,
                     SharedPrefSupportedTypesParams.STRING
                 )
             )
-            application.sharedPrefGetComplex(
+            application.sharedPrefGet(
                 "fileName", "key_3", 3f to "dddddd",
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
                     SharedPrefSupportedTypesParams.FLOAT,

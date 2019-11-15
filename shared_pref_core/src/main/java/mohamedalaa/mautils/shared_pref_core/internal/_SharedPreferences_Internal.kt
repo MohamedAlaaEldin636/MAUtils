@@ -22,15 +22,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import mohamedalaa.mautils.core_kotlin.extensions.throwRuntimeException
 import mohamedalaa.mautils.shared_pref_core.hasKey
-import mohamedalaa.mautils.shared_pref_core.sharedPrefGetComplex
-import mohamedalaa.mautils.shared_pref_core.sharedPrefSetComplex
+import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
+import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
 
 /**
  * @param convertToString is used if [value] is not one of the supported types by [SharedPreferences] isa.
  *
- * @see [sharedPrefSetComplex]
+ * @see [sharedPrefSet]
  */
 @SuppressLint("ApplySharedPref")
+@Synchronized
 @PublishedApi
 internal fun <T> Context.internal_sharedPrefSetComplex(
     fileName: String,
@@ -103,9 +104,10 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
 /**
  * @param convertFromString is used if [jClass] don't refer to any of the supported types by [SharedPreferences] isa.
  *
- * @see [sharedPrefGetComplex]
+ * @see [sharedPrefGet]
  */
 @Suppress("UNCHECKED_CAST")
+@Synchronized
 @PublishedApi
 internal fun <T> Context.internal_sharedPrefGetComplex(
     fileName: String,

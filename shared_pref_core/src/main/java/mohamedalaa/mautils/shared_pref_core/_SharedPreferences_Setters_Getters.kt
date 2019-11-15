@@ -51,7 +51,7 @@ import mohamedalaa.mautils.shared_pref_core.internal.internal_sharedPrefSetCompl
  * of custom type returns null && [removeKeyIfValueIsNull] is false isa.
  */
 @SuppressLint("ApplySharedPref")
-inline fun <reified T> Context.sharedPrefSetComplex(
+inline fun <reified T> Context.sharedPrefSet(
     fileName: String,
 
     key: String,
@@ -77,11 +77,11 @@ inline fun <reified T> Context.sharedPrefSetComplex(
         convertToString
     )
 }
-/** @see [sharedPrefSetComplex] */
+/** @see [sharedPrefSet] */
 @SuppressLint("ApplySharedPref")
-@JvmName("sharedPrefSetComplexJava")
+@JvmName("set")
 @JvmOverloads
-fun <T> Context.javaSharedPrefSetComplex(
+fun <T> Context.javaSharedPrefSet(
     fileName: String,
 
     key: String,
@@ -113,9 +113,9 @@ fun <T> Context.javaSharedPrefSetComplex(
  * Acc. to [T]'s class we get the value directly if one of the supported values of [SharedPreferences]
  * otherwise if [gsonConverter] is not null then [GsonConverter.fromJson] is used else [fromJson] is used isa.
  *
- * @see [sharedPrefSetComplex]
+ * @see [sharedPrefSet]
  */
-inline fun <reified T> Context.sharedPrefGetComplex(
+inline fun <reified T> Context.sharedPrefGet(
     fileName: String,
 
     key: String,
@@ -139,12 +139,12 @@ inline fun <reified T> Context.sharedPrefGetComplex(
     )
 }
 /**
- * @see sharedPrefGetComplex
+ * @see sharedPrefGet
  */
 @Suppress("UNCHECKED_CAST")
-@JvmName("sharedPrefGetComplexJava")
+@JvmName("get")
 @JvmOverloads
-fun <T> Context.javaSharedPrefGetComplex(
+fun <T> Context.javaSharedPrefGet(
     fileName: String,
 
     key: String,

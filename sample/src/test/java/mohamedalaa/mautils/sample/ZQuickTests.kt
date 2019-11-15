@@ -17,19 +17,40 @@ package mohamedalaa.mautils.sample
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.annotation.InspectableProperty
-import mohamedalaa.mautils.gson.fromJson
-import mohamedalaa.mautils.gson.java.GsonConverter
-import mohamedalaa.mautils.gson.toJson
-import mohamedalaa.mautils.sample.custom_classes.helper_classes.toStringOrEmpty
 import mohamedalaa.mautils.sample.shared_pref_.mautils_sharedPref.SharedPref_SomeClassName_NoContext
 import mohamedalaa.mautils.sample.shared_pref_.mautils_sharedPref.sharedPref_SomeClassName_clearAll
 import mohamedalaa.mautils.sample.shared_pref_.mautils_sharedPref.sharedPref_SomeClassName_registerSharedPrefChangeListener
-import mohamedalaa.mautils.shared_pref_annotation.*
-import mohamedalaa.mautils.shared_pref_core.sharedPrefClearAll
-import mohamedalaa.mautils.shared_pref_core.sharedPrefGetComplex
-import mohamedalaa.mautils.shared_pref_core.sharedPrefSetComplex
-import kotlin.reflect.KClass
+import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
+import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
+import kotlin.test.assertEquals
+
+private fun Context.a1(
+    context: Context,
+    int: Int?
+) {
+    sharedPrefSet("fileName", "key", int, removeKeyIfValueIsNull = true)
+    assertEquals(
+        int,
+        sharedPrefGet<Int?>("fileName", "key", null)
+    )
+    val b = sharedPrefGet<Int?>("fileName", "key", null)
+
+    // Custom Type
+    data class Address(val fullDetails: String, val abbreviation: String)
+    data class Person(val name: String, val age: Int, val address: Address)
+    val listOfPerson = emptyList<Person>()// listOf(person1, person2)
+    context.sharedPrefSet(
+        "fileName",
+        "key",
+        listOfPerson,
+        commit = true /* default to false meaning using .apply() to make the change */,
+        mode = Context.MODE_PRIVATE /* default value */
+    )
+    assertEquals(
+        listOfPerson,
+        context.sharedPrefGet("fileName", "key", emptyList())
+    ) // true
+}
 
 abstract class AAAAA : SharedPreferences.OnSharedPreferenceChangeListener {
     private fun Context.h1() {
@@ -64,7 +85,7 @@ fun Context.sharedPref_SomeClassName_SetName(
 ): Boolean? {
     val convertedValueAnyToString = value.run { toString()*//*dev code*//* }
 
-    return sharedPrefSetComplex<String*//*? might be nullable isa.*//*>(
+    return sharedPrefSet<String*//*? might be nullable isa.*//*>(
         privateFileName,
 
         "name",
@@ -88,7 +109,7 @@ fun Context.sharedPref_SomeClassName_GetName(
 ): Boolean? {
     val convertedValueAnyToString = value.run { toString()*//*dev code*//* }
 
-    return sharedPrefSetComplex<String*//*? might be nullable isa.*//*>(
+    return sharedPrefSet<String*//*? might be nullable isa.*//*>(
         privateFileName,
 
         "name",
@@ -113,7 +134,7 @@ internal fun Context.sharedPref_SomeClassName_GetName2(
 ): DefValueType {
     val convertedValueAnyToString = defValue.run { toJson()*//*dev code*//* }
 
-    return sharedPrefGetComplex<String>(
+    return sharedPrefGet<String>(
         privateFileName,
         "name2",
         convertedValueAnyToString,
@@ -132,7 +153,7 @@ internal fun Context.sharedPref_SomeClassName_GetName2(
 fun Context.sharedPref_SomeClassName_SetName1(
     value: ValueType,
     commit: Boolean = false
-): Boolean? = sharedPrefSetComplex<ValueType>(
+): Boolean? = sharedPrefSet<ValueType>(
     privateFileName,
 
     "name1",
@@ -151,7 +172,7 @@ fun Context.sharedPref_SomeClassName_SetName1(
 @Synchronized
 internal fun Context.sharedPref_SomeClassName_GetName(
     defValue: DefValueType = defaultOrByUserDefValue
-): DefValueType = sharedPrefGetComplex<DefValueType>(
+): DefValueType = sharedPrefGet<DefValueType>(
     privateFileName,
     "name",
     defValue,
@@ -168,7 +189,7 @@ internal fun Context.sharedPref_SomeClassName_GetName(
 internal fun Context.sharedPref_SomeClassName_SetBoolean1(
     value: Boolean,
     commit: Boolean = false
-): Boolean? = sharedPrefSetComplex(
+): Boolean? = sharedPrefSet(
     privateFileName,
     "boolean1",
     value,
@@ -188,7 +209,7 @@ private class GsonConverterClassName : GsonConverter<Boolean>()
  * @Synchronized
  * fun Context.sharedPref_SomeClassName_SetBoolean1(
  *      value: Boolean, commit: Boolean = false
- * ): Boolean? = sharedPrefSetComplex<kotlin.Boolean>(
+ * ): Boolean? = sharedPrefSet<kotlin.Boolean>(
  *      privateFileName,
  *      "boolean1",
  *      value,
@@ -203,7 +224,7 @@ private class GsonConverterClassName : GsonConverter<Boolean>()
 *//*
 @Synchronized
 fun Context.sharedPref__TempValues_GetForKitkatOrAboveBeforeFolderSelectionCurrentTimeMillis(defValue: Long
-        = 0L): Long = sharedPrefGetComplex<Long>(privateFileName,
+        = 0L): Long = sharedPrefGet<Long>(privateFileName,
         "forKitkatOrAboveBeforeFolderSelectionCurrentTimeMillis", defValue, Context.MODE_PRIVATE,
         false, *arrayOf())
  *//*
@@ -213,7 +234,7 @@ fun Context.sharedPref__TempValues_GetForKitkatOrAboveBeforeFolderSelectionCurre
 internal fun Context.sharedPref_SomeClassName_GetName(
     defValue: Long = 0L*//*or acc to that type isa.*//*
 ): Long*//*same as defValue isa.*//* {
-    return sharedPrefGetComplex<Long>(
+    return sharedPrefGet<Long>(
         privateFileName,
         "name",
         defValue,
@@ -230,9 +251,9 @@ internal fun Context.sharedPref_SomeClassName_GetCustomClass(
 
     val v1: Pair<Pair<Int?, Float?>?, String?> = GsonConverterNum1().fromJson("")
 
-    sharedPrefSetComplex("", "", "")
+    sharedPrefSet("", "", "")
 
-    return sharedPrefGetComplex<CustomClass?>( // same as return & defValue type isa.
+    return sharedPrefGet<CustomClass?>( // same as return & defValue type isa.
         privateFileName,
         "customClass",
         defValue,
@@ -253,7 +274,7 @@ private fun <T> array1(maSharedPrefKeyValuePair: MASharedPrefKeyValuePair, conte
     array.javaClass.componentType
 
 
-    context.sharedPrefSetComplex("fileName", "k1", "v1")
+    context.sharedPrefSet("fileName", "k1", "v1")
 
     context.sharedPrefClearAll("fileName")
 }
@@ -304,7 +325,7 @@ private fun Context.fff1() {
     zert__ZX_Yu()
     zert__uu_kl()
 
-    sharedPrefSetComplex("", "", 9)
+    sharedPrefSet("", "", 9)
 
     //MAOnSharedPrefChangeListener
 }
@@ -361,8 +382,8 @@ private abstract class A1 : SharedPreferences.OnSharedPreferenceChangeListener {
     private fun ddd(context: Context, sharedPref: SharedPreferences) {
         sharedPref.registerOnSharedPreferenceChangeListener(this)
 
-        val aa = context.sharedPrefSetComplex("", "", 5)
-        val i = context.sharedPrefGetComplex<Int>("", "", 5)
+        val aa = context.sharedPrefSet("", "", 5)
+        val i = context.sharedPrefGet<Int>("", "", 5)
     }
 
     // sharedPref, fileName, key, bs 34an tb2a general afdal khaleha sharedPref msh el specific da isa.

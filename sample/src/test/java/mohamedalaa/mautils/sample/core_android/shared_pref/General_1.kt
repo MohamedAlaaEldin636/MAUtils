@@ -61,7 +61,7 @@ class General_1 {
         defValue: T = false as T,
         acceptNullableItemInSet: Boolean = false
     ): T {
-        /*= sharedPrefGetComplex<kotlin.Boolean>(
+        /*= sharedPrefGet<kotlin.Boolean>(
         "SomeClassName",
         "boolean1",
         defValue as? Boolean,

@@ -39,19 +39,19 @@ class SettersAndGettersOfSharedPrefs {
 
         // non-null String
         var string: String? = "string"
-        context.sharedPrefSetComplex(fileName, "k1", string)
+        context.sharedPrefSet(fileName, "k1", string)
         assertEquals(
             string,
-            context.sharedPrefGetComplex<String?>(fileName, "k1", null)
+            context.sharedPrefGet<String?>(fileName, "k1", null)
         )
 
         // null string -> 2 cases if permitted and if not isa.
         string = null
         try {
-            context.sharedPrefSetComplex<String?>(fileName, "k1", string, removeKeyIfValueIsNull = false)
+            context.sharedPrefSet<String?>(fileName, "k1", string, removeKeyIfValueIsNull = false)
             throw Throwable("should never reach here isa.")
         }catch (runtimeException: RuntimeException) {
-            context.sharedPrefSetComplex<String?>(fileName, "k1", string, removeKeyIfValueIsNull = true)
+            context.sharedPrefSet<String?>(fileName, "k1", string, removeKeyIfValueIsNull = true)
         }
         assertEquals(
             context.sharedPrefHasKey(fileName, "k1"),
@@ -65,17 +65,17 @@ class SettersAndGettersOfSharedPrefs {
 
         // without GsonConverter
         val customClass = CustomClass()
-        context.sharedPrefSetComplex(fileName, "k1", customClass)
+        context.sharedPrefSet(fileName, "k1", customClass)
         assertEquals(
             customClass,
-            context.sharedPrefGetComplex<CustomClass?>(fileName, "k1", null)
+            context.sharedPrefGet<CustomClass?>(fileName, "k1", null)
         )
 
         val myEnum = MyEnum.THREE
-        context.sharedPrefSetComplex(fileName, "k2", myEnum)
+        context.sharedPrefSet(fileName, "k2", myEnum)
         assertEquals(
             myEnum,
-            context.sharedPrefGetComplex(fileName, "k2", MyEnum.UNKNOWN)
+            context.sharedPrefGet(fileName, "k2", MyEnum.UNKNOWN)
         )
 
         // with GsonConverter<Pair<Boolean, List<Pair<Integer, Pair<Float, Double>>>>>
@@ -86,7 +86,7 @@ class SettersAndGettersOfSharedPrefs {
             51 to (6.32f to 545.6),
             951 to (656.32f to 545.0)
         )
-        context.sharedPrefSetComplex(
+        context.sharedPrefSet(
             fileName,
             "k3",
             value,
@@ -94,7 +94,7 @@ class SettersAndGettersOfSharedPrefs {
         )
         assertEquals(
             value,
-            context.sharedPrefGetComplex(
+            context.sharedPrefGet(
                 fileName,
                 "k3",
                 diffValue,

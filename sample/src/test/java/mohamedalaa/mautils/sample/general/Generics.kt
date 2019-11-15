@@ -19,8 +19,8 @@ import android.app.Application
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.gson.reflect.TypeToken
-import mohamedalaa.mautils.shared_pref_core.sharedPrefGetComplex
-import mohamedalaa.mautils.shared_pref_core.sharedPrefSetComplex
+import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
+import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -38,11 +38,11 @@ class Generics {
     fun fff() {
         val application = ApplicationProvider.getApplicationContext<Application>()
 
-        application.sharedPrefSetComplex("f", "k", 3)
-        application.sharedPrefGetComplex("f", "k", 0).apply(::println)
+        application.sharedPrefSet("f", "k", 3)
+        application.sharedPrefGet("f", "k", 0).apply(::println)
 
-        application.sharedPrefSetComplex("f", "k", 33f)
-        application.sharedPrefGetComplex("f", "k", 3f).apply(::println)
+        application.sharedPrefSet("f", "k", 33f)
+        application.sharedPrefGet("f", "k", 3f).apply(::println)
     }
 
     @Test

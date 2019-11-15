@@ -79,7 +79,7 @@ fun Context.sharedPrefRemoveKey(
 }
 
 /** @return true if [key] exists in `receiver`, otherwise false is returned isa. */
-fun SharedPreferences.hasKey(key: String) = key in all?.keys
+internal fun SharedPreferences.hasKey(key: String) = key in all?.keys
 
 /** @return true if [key] exists in this [fileName] with the specified [mode], otherwise false is returned isa. */
 @JvmName("hasKey")

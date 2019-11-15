@@ -117,8 +117,8 @@ fun RoundEnvironment.process(processingEnv: ProcessingEnvironment) = processingE
             // Import annotated class so that no lint check will warn about it's not used isa.
             fullImportStringsList += listOf(
                 element.qualifiedName.toString(),
-                "mohamedalaa.mautils.shared_pref_core.sharedPrefSetComplex",
-                "mohamedalaa.mautils.shared_pref_core.sharedPrefGetComplex",
+                "mohamedalaa.mautils.shared_pref_core.sharedPrefSet",
+                "mohamedalaa.mautils.shared_pref_core.sharedPrefGet",
                 "android.content.Context"
             )
             fullImportStringsList += annMASharedPrefFileConfigs.imports.toList()

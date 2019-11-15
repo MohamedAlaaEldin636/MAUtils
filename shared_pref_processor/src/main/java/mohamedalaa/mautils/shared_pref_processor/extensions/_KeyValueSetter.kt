@@ -32,7 +32,7 @@ import javax.annotation.processing.ProcessingEnvironment
  * fun Context.sharedPref_SomeClassName_SetName(
  *      value: ValueType,
  *      commit: Boolean = false
- * ): Boolean? = sharedPrefSetComplex<ValueType>(
+ * ): Boolean? = sharedPrefSet<ValueType>(
  *      privateFileName,
  *
  *      "name",
@@ -56,7 +56,7 @@ fun Context.sharedPref_SomeClassName_SetName(
 ): Boolean? {
     val convertedValueAnyToString = value.run { toString()/*dev code*/ }
 
-    return sharedPrefSetComplex<String/*? might be nullable isa.*/>(
+    return sharedPrefSet<String/*? might be nullable isa.*/>(
         privateFileName,
 
         "name",
@@ -126,7 +126,7 @@ fun ProcessingEnvironment.buildSetComplexFun(
                 "val $VAR_NAME_CONVERTED_VALUE_ANY_TO_STRING = ${VAR_NAME_VALUE}.run { ${maSharedPrefKeyValuePair.convertAnyToString} }"
             )
             addStatement(
-                "return sharedPrefSetComplex<%T>(" +
+                "return sharedPrefSet<%T>(" +
                     "$VAR_NAME_PRIVATE_FILE_NAME, " +
 
                     "\"${maSharedPrefKeyValuePair.name}\", " +
@@ -143,7 +143,7 @@ fun ProcessingEnvironment.buildSetComplexFun(
         }else {
             val gsonConverter = gsonConverterSimpleName?.run { "$this()" }
             addStatement(
-                "return sharedPrefSetComplex<%T>(" +
+                "return sharedPrefSet<%T>(" +
                     "$VAR_NAME_PRIVATE_FILE_NAME, " +
 
                     "\"${maSharedPrefKeyValuePair.name}\", " +
