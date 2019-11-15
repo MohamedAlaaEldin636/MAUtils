@@ -39,10 +39,10 @@ import java.lang.reflect.Type
  */
 @JvmOverloads
 @JvmName("toJsonOrNull")
-fun <E> E?.toJsonOrNullJava(gson: Gson? = null): String? = this?.run {
+fun <E> E?.toJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): String? = this?.run {
     val usedGson = gson ?: generateGson()
 
-    try { usedGson.toJson(this) } catch (e: Exception) { null }
+    try { usedGson.toJson(this, elementClass) } catch (e: Exception) { null }
 }
 
 /**
@@ -63,7 +63,7 @@ fun <E> E?.toJsonOrNullJava(gson: Gson? = null): String? = this?.run {
  */
 @JvmOverloads
 @JvmName("toJson")
-fun <E> E?.toJsonJava(gson: Gson? = null): String = toJsonOrNullJava(gson)
+fun <E> E?.toJsonJava(elementClass: Class<E>, gson: Gson? = null): String = toJsonOrNullJava(elementClass, gson)
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
 /**
@@ -122,12 +122,28 @@ fun <E> String?.fromJsonJava(elementClass: Class<E>, gson: Gson? = null): E = fr
  *
  * See [mohamedalaa.mautils.gson.fromJsonOrNull] for more clarification isa.
  * ## How to use
+ * - Must be in Java language or in kotlin but with additional 1 line of code in java isa.
  * ```
+ * // Java consumer used one time (if needed more check below so that you don't repeat same code)
  * CustomWithTypeParam<CustomObject, Integer> customWithTypeParam = new CustomWithTypeParam<>();
  * String jsonString = new GsonConverter<CustomWithTypeParam<CustomObject, Integer>>(){}.toJsonOrNullJava(customWithTypeParam);
  * CustomWithTypeParam<CustomObject, Integer> fromJsonObject
  *      = new GsonConverter<CustomWithTypeParam<CustomObject, Integer>>(){}.fromJsonOrNullJava(jsonString);
  * // by now -> customWithTypeParam == fromJsonObject isa.
+ *
+ * // OR in case the GsonConverter needed in KOTLIN code will be used in several places
+ * // make one class then re-use it isa.
+ *
+ * // In GsonConverterCustomWithTypeParamCustomObjectInteger.java file
+ * class GsonConverterCustomWithTypeParamCustomObjectInteger
+ *     extends GsonConverter<CustomWithTypeParam<CustomObject, Integer>> {}
+ *
+ * // then to use it, you can do it from KOTLIN or JAVA
+ * // kotlin
+ * val fromJsonObject = GsonConverterCustomWithTypeParamCustomObjectInteger().fromJsonOrNullJava(jsonString)
+ * // java
+ * CustomWithTypeParam<CustomObject, Integer> fromJsonObject
+ *      = new GsonConverterCustomWithTypeParamCustomObjectInteger().fromJsonOrNullJava(jsonString);
  * ```
  *
  * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.

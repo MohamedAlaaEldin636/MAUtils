@@ -18,7 +18,6 @@ package mohamedalaa.mautils.sample
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.gson.reflect.TypeToken
-import mohamedalaa.mautils.core_android_annotation.*
 import mohamedalaa.mautils.gson.toJsonOrNull
 import org.bouncycastle.pqc.math.linearalgebra.IntegerFunctions
 import java.lang.reflect.Type
@@ -103,7 +102,7 @@ fun Context.sharedPrefSettings_setAds(adsEnum: AdsEnum) {
 /*@MASharedPrefComplex(
     // todo can i retrieve this isa. ?!
     MAComplexClassIdentification(
-        MANonNestedParameterizedClass(Int::class)
+        MAParameterizedKClass(Int::class)
     )
 )*/
 private fun SharedPreferences.Editor.sssss() {

@@ -19,8 +19,8 @@ import android.app.Application
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.gson.reflect.TypeToken
-import mohamedalaa.mautils.core_android.extensions.sharedPrefGetComplex
-import mohamedalaa.mautils.core_android.extensions.sharedPrefSetComplex
+import mohamedalaa.mautils.shared_pref_core.sharedPrefGetComplex
+import mohamedalaa.mautils.shared_pref_core.sharedPrefSetComplex
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

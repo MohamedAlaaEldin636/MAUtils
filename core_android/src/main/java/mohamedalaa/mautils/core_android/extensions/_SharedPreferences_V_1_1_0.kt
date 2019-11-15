@@ -21,17 +21,21 @@ package mohamedalaa.mautils.core_android.extensions
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.NonNull
 import mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams
 import mohamedalaa.mautils.core_kotlin.custom_classes.MutablePair
 import mohamedalaa.mautils.core_kotlin.extensions.contains
+/*
 
+*/
 /**
  * - **NOTE** All removals are done first isa.
  * - Calls [SharedPreferences.Editor.clear] isa.
  * @return value of [SharedPreferences.Editor.commit] or null if Used [SharedPreferences.Editor.apply] isa.
  *
  * @see sharedPrefRemoveKey
- */
+ *//*
+
 @SuppressLint("ApplySharedPref")
 fun Context.sharedPrefClearAll(
     fileName: String,
@@ -50,13 +54,15 @@ fun Context.sharedPrefClearAll(
     }
 }
 
+*/
 /**
  * - **NOTE** All removals are done first isa.
  * @return value of [SharedPreferences.Editor.commit] or null if Used [SharedPreferences.Editor.apply] isa.
  *
  * @see sharedPrefClearAll
  * @see sharedPrefHasKey
- */
+ *//*
+
 @SuppressLint("ApplySharedPref")
 fun Context.sharedPrefRemoveKey(
     fileName: String,
@@ -76,7 +82,9 @@ fun Context.sharedPrefRemoveKey(
     }
 }
 
-/** @return true if [key] exists in this [fileName] with the specified [mode], otherwise false is returned isa. */
+*/
+/** @return true if [key] exists in this [fileName] with the specified [mode], otherwise false is returned isa. *//*
+
 fun Context.sharedPrefHasKey(
     fileName: String,
     key: String,
@@ -87,6 +95,8 @@ fun Context.sharedPrefHasKey(
     return key in sharedPref.all?.keys
 }
 
+// todo del below isa
+*/
 /**
  * - [value] can **Only** be `null` if [removeIfValueParamIsNullOtherwiseThrowException] is true
  * which in this case [sharedPrefRemoveKey] will be used with the given [key] isa,
@@ -117,9 +127,10 @@ fun Context.sharedPrefHasKey(
  * @throws RuntimeException if [value] is null && [removeIfValueParamIsNullOtherwiseThrowException] is false,
  * in case you want to delete the [key] if [value] is null pass true to [removeIfValueParamIsNullOtherwiseThrowException] isa.
  * @throws RuntimeException if [value] is Unsupported type.
- */
+ *//*
+
 @SuppressLint("ApplySharedPref")
-inline fun <reified T> Context.sharedPrefSetComplex(
+inline fun <reified T> Context.sharedPrefSetComplexOld(
     fileName: String,
     key: String,
     value: T,
@@ -128,18 +139,28 @@ inline fun <reified T> Context.sharedPrefSetComplex(
     removeIfValueParamIsNullOtherwiseThrowException: Boolean = false,
     vararg sharedPrefSupportedTypesParamsArray: SharedPrefSupportedTypesParams = arrayOf(SharedPrefSupportedTypesParams.STRING)
 ): Boolean? {
-    return internal_sharedPrefSetComplex(
+    return true
+    */
+/*return internal_sharedPrefSetComplex(
         removeIfValueParamIsNullOtherwiseThrowException,
         fileName,
         key,
         value,
         T::class.java,
         mode,
-        commit,
-        *sharedPrefSupportedTypesParamsArray
-    )
+        commit*//*
+*/
+/*,
+        *sharedPrefSupportedTypesParamsArray*//*
+*/
+/*
+    )*//*
+
 }
 
+
+
+*/
 /**
  * [defValue] can be null since we check if the [key] exists before getting the value isa.
  *
@@ -147,7 +168,8 @@ inline fun <reified T> Context.sharedPrefSetComplex(
  * an exception will be thrown isa.
  *
  * @see sharedPrefSetComplex
- */
+ *//*
+
 inline fun <reified T> Context.sharedPrefGetComplex(
     fileName: String,
     key: String,
@@ -173,3 +195,4 @@ fun <T> Context.javaSharedPrefGetComplex(
 ): T {
     return internal_javaSharedPrefGetComplex(fileName, key, defValue, jClass, mode, acceptNullableItemInSet, *sharedPrefSupportedTypesParamsArray)
 }
+*/

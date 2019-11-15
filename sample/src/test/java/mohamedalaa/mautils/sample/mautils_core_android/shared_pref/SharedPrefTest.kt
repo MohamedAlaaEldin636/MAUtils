@@ -17,8 +17,6 @@ package mohamedalaa.mautils.sample.mautils_core_android.shared_pref
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import mohamedalaa.mautils.core_android.extensions.sharedPrefGet
-import mohamedalaa.mautils.core_android.extensions.sharedPrefSet
 import mohamedalaa.mautils.test_core.TestingLog
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +28,7 @@ import kotlin.reflect.jvm.jvmName
  *
  */
 @RunWith(RobolectricTestRunner::class)
-class SharedPrefTest {
+class SharedPrefTest /*{
 
     private fun abc(context: Context): String
         = context.sharedPrefGet("fileName_1", "key_1", "defValue_1")
@@ -72,4 +70,4 @@ class SharedPrefTest {
         println("${String::class} ==== ${String::class.jvmName} ==== ${String::class.qualifiedName}")
     }
 
-}
+}*/

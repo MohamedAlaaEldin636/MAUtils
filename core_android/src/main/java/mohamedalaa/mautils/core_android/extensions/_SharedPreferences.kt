@@ -18,96 +18,83 @@
 
 package mohamedalaa.mautils.core_android.extensions
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 
-@Deprecated(
-    "Use sharedPrefGetComplex instead",
-    ReplaceWith(
-        "sharedPrefGetComplex(fileName, key, defValue, mode, SharedPrefSupportedTypesParams.STRING)",
-        "mohamedalaa.mautils.core_android.extensions.sharedPrefGetComplex",
-        "mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams"
-    ),
-    DeprecationLevel.WARNING
-)
-inline fun <reified T> Context.sharedPrefGet(
+/**
+ * ### VIP Notes
+ *
+ * - [value] can **Only** be `null` if [removeIfValueParamIsNullOtherwiseThrowException] is true
+ * which in this case [sharedPrefRemoveKey] will be used with the given [key] isa,
+ * otherwise a [RuntimeException] will be thrown since actually in shared preferences no null values
+ * are saved but a null value removes the key from the shared pref instead.
+ *
+ * ### Supported types
+ *
+ * 1. All Supported types by [SharedPreferences].
+ *
+ * 2. Additionally we support [Set] of any of the supported types by [SharedPreferences] except
+ * nested [Set] which can be supported in a custom way see number **3.**, so we not only support
+ * [Set]<[String]> but as well [Set]<[Int]> and others and also if they contain nullable item
+ * so for ex. we support [Set]<[Boolean]?> isa, **BUT NOTE THAT** if the provided [Set] is not
+ * [Set]<[String]> you have to provide value to [maParameterizedKClass] for How to use it check
+ * doc of [MAParameterizedKClass] isa.
+ *
+ * 3. Any Other Type -> **But** to do that you have to choose between 2 things either leave this library
+ * to automatically convert for you from/to [String] to save it inside [SharedPreferences] or you
+ * can provide that manually via [convertToString] param isa, and whichever option you choose you have
+ * to fill [maParameterizedKClass] param with that class type, **So Which option do I choose** I will
+ * explain how the auto way works and how the manual way works and you choose based on what
+ * is the best option for you
+ *      - **Auto Way** leave [convertToString] `null` and requires you to use the `gson` module in this library and that's all
+ *      so you add `implementation 'com.github.MohamedAlaaEldin636.MAUtils:gson:$mautils_version'` in gradle
+ *      and we will take care of the rest also as you know if you used `gson` module in case of
+ *      nested type params for the `gson` you Have to use `GsonConverter` so add it in [gsonConverter]
+ *      param isa, Also note toJsonOrNull() will always be used isa.
+ *      - **Manual Way** just use [convertToString] param for the conversion and for the getter
+ *      fun keep in mind that conversion to reverse it to get your custom object isa.
+ *
+ * ### CAUTION
+ *
+ * - the additional supported types and the easier and more concise way of declaring and accessing
+ * [SharedPreferences] only made for a quicker development since time is so valuable but that doesn't
+ * mean at all to replace [SharedPreferences] purpose with database or files, read the differences
+ * between them and choose the most suitable option for you isa.
+ *
+ * @param maParameterizedKClass for ex. if your custom type is []
+ *
+ * @return value of [SharedPreferences.Editor.commit] or null if Used [SharedPreferences.Editor.apply] isa.
+ *
+ * @throws RuntimeException if [value] is null && [removeIfValueParamIsNullOtherwiseThrowException] is false,
+ * in case you want to delete the [key] if [value] is null pass true to [removeIfValueParamIsNullOtherwiseThrowException] isa.
+ * @throws RuntimeException if adding 2 values to [MAParameterizedKClass] params since only 1 is needed isa.
+ *
+ * @throws ClassCastException if [value] is expected to be [Set]<[String]> but found to be otherwise isa.
+ */
+/*@SuppressLint("ApplySharedPref")
+inline fun <reified T> Context.sharedPrefSetComplex(
     fileName: String,
-    key: String,
-    defValue: T,
-    mode: Int = Context.MODE_PRIVATE
-): T {
-    return javaSharedPrefGet(fileName, key, defValue, T::class.java, mode)
-}
 
-@Deprecated(
-    "Use sharedPrefSetComplex instead",
-    ReplaceWith(
-        "sharedPrefSetComplex(fileName, key, value, mode, false, SharedPrefSupportedTypesParams.STRING)",
-        "mohamedalaa.mautils.core_android.extensions.sharedPrefSetComplex",
-        "mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams"
-    ),
-    DeprecationLevel.WARNING
-)
-inline fun <reified T> Context.sharedPrefSet(
-    fileName: String,
-    key: String,
-    value: T,
-    mode: Int = Context.MODE_PRIVATE
-) {
-    javaSharedPrefSet(fileName, key, value, T::class.java, mode)
-}
-
-@JvmName("sharedPrefGet")
-@JvmOverloads
-fun <T> Context.javaSharedPrefGet(
-    fileName: String,
-    key: String,
-    defValue: T,
-    jClass: Class<T>,
-    mode: Int = Context.MODE_PRIVATE
-): T {
-    val sharedPref = applicationContext.getSharedPreferences(fileName, mode)
-
-    if (sharedPref.contains(key).not()) {
-        return defValue
-    }
-
-    val any: Any? = when (jClass) {
-        String::class.java -> sharedPref.getString(key, null)
-        Int::class.java, Int::class.javaObjectType -> sharedPref.getInt(key, 0)
-        Boolean::class.java, Boolean::class.javaObjectType -> sharedPref.getBoolean(key, false)
-        Long::class.java, Long::class.javaObjectType -> sharedPref.getLong(key, 0L)
-        Float::class.java, Float::class.javaObjectType -> sharedPref.getFloat(key, 0f)
-        Set::class.java -> sharedPref.getStringSet(key, null)
-        else -> throw RuntimeException("Unsupported type $jClass in shared pref")
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    return any as? T ?: defValue
-}
-
-@JvmName("sharedPrefSet")
-@JvmOverloads
-fun <T> Context.javaSharedPrefSet(
-    fileName: String,
     key: String,
     value: T,
-    jClass: Class<T>,
-    mode: Int = Context.MODE_PRIVATE
-) {
-    val sharedPrefEditor = applicationContext.getSharedPreferences(fileName, mode).edit()
+    removeKeyIfValueIsNull: Boolean = false,
 
-    when (jClass) {
-        String::class.java -> sharedPrefEditor.putString(key, value as String)
-        Int::class.java, Int::class.javaObjectType -> sharedPrefEditor.putInt(key, value as Int)
-        Boolean::class.java, Boolean::class.javaObjectType -> sharedPrefEditor.putBoolean(key, value as Boolean)
-        Long::class.java, Long::class.javaObjectType -> sharedPrefEditor.putLong(key, value as Long)
-        Float::class.java, Float::class.javaObjectType -> sharedPrefEditor.putFloat(key, value as Float)
-        Set::class.java -> {
-            @Suppress("UNCHECKED_CAST")
-            sharedPrefEditor.putStringSet(key, value as Set<String?>)
-        }
-        else -> throw RuntimeException("Unsupported type $jClass in shared pref")
+    mode: Int = Context.MODE_PRIVATE,
+    commit: Boolean = false
+): Boolean? {
+    val convertToString: (T) -> String = {
+        //"".toJs
+        "" // todo to make that compileOnly I guess we need another module shared_pref isa.
     }
 
-    sharedPrefEditor.apply()
-}
+    return internal_sharedPrefSetComplex(
+        fileName,
+        key,
+        value,
+        removeKeyIfValueIsNull,
+        mode,
+        commit,
+        convertToString
+    )
+}*/

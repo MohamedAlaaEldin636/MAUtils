@@ -18,8 +18,6 @@ package mohamedalaa.mautils.sample.core_android.shared_pref;
 import android.app.Application;
 
 import androidx.test.core.app.ApplicationProvider;
-import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClassName;
-import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClassNameNoContext;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 10/22/2019.
@@ -37,11 +35,6 @@ public class QuickJava {
 
         Application application = ApplicationProvider.getApplicationContext();
 
-        SharedPrefSomeClassNameNoContext.fileName();
-
-        SharedPrefSomeClassNameNoContext.fileName();
-        SharedPrefSomeClassName.clearAll(application);
-        SharedPrefSomeClassName.clearAll(application, true);
     }
 
 }

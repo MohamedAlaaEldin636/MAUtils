@@ -18,8 +18,8 @@ package mohamedalaa.mautils.sample.core_android.shared_pref
 import android.app.Application
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
-import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClassNameNoContext
-import mohamedalaa.mautils.core_android_annotation.sharedPref_SomeClassName_clearAll
+/*import mohamedalaa.mautils.core_android_annotation.SharedPrefSomeClassNameNoContext
+import mohamedalaa.mautils.core_android_annotation.sharedPref_SomeClassName_clearAll*/
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -28,7 +28,7 @@ import org.robolectric.annotation.Config
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class Quick {
-
+/*
     @Test
     fun consumer() {
         val application = ApplicationProvider.getApplicationContext<Application>()
@@ -36,7 +36,7 @@ class Quick {
         application.sharedPref_SomeClassName_clearAll()
 
         SharedPrefSomeClassNameNoContext.fileName()
-    }
+    }*/
 
     /*@Test
     fun consumer() {
@@ -52,7 +52,7 @@ class Quick {
 
         SharedPrefSomeClassName.fileName()
 
-        //MASharedPrefField.Container
+        //MASharedPrefKeyValuePair.Container
         //@Nullable
         val vall = 4.33f
 

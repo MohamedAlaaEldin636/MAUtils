@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/core_android_processor" />
             <option value="$PROJECT_DIR$/core_kotlin" />
             <option value="$PROJECT_DIR$/custom_views" />
+            <option value="$PROJECT_DIR$/dependencies_runtime_checks" />
             <option value="$PROJECT_DIR$/gson" />
             <option value="$PROJECT_DIR$/gson_annotation" />
             <option value="$PROJECT_DIR$/gson_processor" />
@@ -24,6 +25,9 @@
             <option value="$PROJECT_DIR$/room_gson_annotation" />
             <option value="$PROJECT_DIR$/room_gson_processor" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/shared_pref_annotation" />
+            <option value="$PROJECT_DIR$/shared_pref_core" />
+            <option value="$PROJECT_DIR$/shared_pref_processor" />
             <option value="$PROJECT_DIR$/test_core" />
           </set>
         </option>

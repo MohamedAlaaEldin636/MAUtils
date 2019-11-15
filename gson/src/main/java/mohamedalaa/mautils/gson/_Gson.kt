@@ -40,7 +40,7 @@ import mohamedalaa.mautils.gson.java.GsonConverter
  *
  * Using any nested type parameters is valid and will be converted safely, however that's safe
  *
- * only if nested type parameters of object are invariant, So if they are variance annotated as (in) OR (out)
+ * only if nested type parameters of object are invariant or so deep in nesting, So if they are variance annotated as (in) OR (out)
  *
  * then using a java workaround is a must or conversion will make unexpected results,
  *

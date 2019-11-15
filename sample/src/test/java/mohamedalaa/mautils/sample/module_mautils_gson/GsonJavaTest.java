@@ -15,10 +15,15 @@
 
 package mohamedalaa.mautils.sample.module_mautils_gson;
 
+import android.os.Build;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,16 +41,18 @@ import static org.junit.Assert.*;
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 2/20/2019.
  */
+@Config(manifest = Config.NONE, sdk = {Build.VERSION_CODES.P})
+@RunWith(RobolectricTestRunner.class)
 public class GsonJavaTest {
 
     @Test
     public void regularObjects() {
         int num = 4;
-        String jsonString = GsonUtils.toJson(num);
+        String jsonString = GsonUtils.toJson(num, int.class);
         int retrievedNum = GsonUtils.fromJson(jsonString, int.class);
 
         Integer wrappedIntNum = 5;
-        String wrappedJsonString = GsonUtils.toJson(wrappedIntNum);
+        String wrappedJsonString = GsonUtils.toJson(wrappedIntNum, Integer.class);
         Integer retrievedWrapped = GsonUtils.fromJson(wrappedJsonString, Integer.class);
 
         assertEquals(num, retrievedNum);
@@ -99,7 +106,8 @@ public class GsonJavaTest {
         any.setElement1(new CustomObject());
         any.setElement2(new Pair<>(list, new CustomWithTypeParam<>(new Pair<>(3.0f, 6), false, "n1", "an1")));
 
-        String json = GsonUtils.toJson(any);
+        // todo does this work now isa. ?!
+        String json = GsonUtils.toJson(any, CustomWithTypeParam.class);
 
         CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> retrievedAny
                 = new GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){}.fromJson(json);
@@ -114,7 +122,7 @@ public class GsonJavaTest {
         WithVarianceJavaObj<JavaCustomObj, WithVarianceJavaObj<JavaCustomObj, Integer>> withVarianceJavaObjParent
                 = new WithVarianceJavaObj<>(prepare1, withVarianceJavaObj);
 
-        String json = GsonUtils.toJson(withVarianceJavaObjParent);
+        String json = GsonUtils.toJson(withVarianceJavaObjParent, WithVarianceJavaObj.class);
 
         WithVarianceJavaObj<JavaCustomObj, WithVarianceJavaObj<JavaCustomObj, Integer>> re
                 = new GsonConverter<WithVarianceJavaObj<JavaCustomObj, WithVarianceJavaObj<JavaCustomObj, Integer>>>(){}.fromJson(json);

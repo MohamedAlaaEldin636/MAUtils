@@ -78,6 +78,10 @@ dependencies {
     implementation project(':core_android')
     kapt project(':core_android_processor')
 
+    implementation project(':shared_pref_core')
+    implementation project(':shared_pref_annotation')
+    kapt project(':shared_pref_processor')
+
     implementation "androidx.room:room-runtime:$room_version"
     implementation project(':room_gson_annotation')
     kapt project(':room_gson_processor')

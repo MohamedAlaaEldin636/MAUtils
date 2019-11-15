@@ -21,9 +21,19 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.MohamedAlaaEldin636'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // Own Libraries
+    api project (':core_kotlin')
+
+    // -- Testing -- //
+
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
+    // Optional -- Robolectric environment -> @RunWith(RobolectricTestRunner::class)
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'org.robolectric:robolectric:4.2.1'
+    testImplementation project(':test_core')
+
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8

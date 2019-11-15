@@ -15,15 +15,10 @@
 
 package mohamedalaa.mautils.sample.custom_views
 
-import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams
 import mohamedalaa.mautils.core_android.extensions.*
 import mohamedalaa.mautils.core_kotlin.extensions.throwRuntimeException
 import mohamedalaa.mautils.gson.addValuesGsonForced
@@ -97,7 +92,7 @@ class CustomViewsMainActivity : AppCompatActivity() {
             val pair = 5 to "mido"
             val setOfInts = setOf(2, 33)
             val anotherPair: Pair<Float, String?> = 7776f to ""
-
+/*
             application.sharedPrefSetComplex(
                 "fileName", "key_1", pair,
                 sharedPrefSupportedTypesParamsArray = *arrayOf(
@@ -161,8 +156,8 @@ class CustomViewsMainActivity : AppCompatActivity() {
                     SharedPrefSupportedTypesParams.STRING
                 )
             ).run {
-                assertEquals(anotherPair, 7776.0f to "" /* null do NOT change anything isa. */)
-            }
+                assertEquals(anotherPair, 7776.0f to "" *//* null do NOT change anything isa. *//*)
+            }*/
         }.getOrElse {
             logError("Error isa is ${it.message}")
         }

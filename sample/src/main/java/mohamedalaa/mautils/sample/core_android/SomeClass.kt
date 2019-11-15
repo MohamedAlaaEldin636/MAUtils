@@ -17,14 +17,14 @@ package mohamedalaa.mautils.sample.core_android
 
 import android.content.Context
 import android.content.SharedPreferences
-import mohamedalaa.mautils.core_android_annotation.MASharedPref
+//import mohamedalaa.mautils.core_android_annotation.MASharedPref
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 4/24/2019.
  *
  * annotation test isa.
  */
-@MASharedPref
+//@MASharedPref
 class SomeClass {
 
     val bye: String? = "Bye"
@@ -41,7 +41,7 @@ class SomeClass {
 
     val secondString: String = "def string val"
 
-    @MASharedPref.SetOfStringsDefValue(stringSetValue = ["", "sa"])
+    //@MASharedPref.SetOfStringsDefValue(stringSetValue = ["", "sa"])
     val thirdStringSet: MutableSet<String> = mutableSetOf("1", "320")
 
 }

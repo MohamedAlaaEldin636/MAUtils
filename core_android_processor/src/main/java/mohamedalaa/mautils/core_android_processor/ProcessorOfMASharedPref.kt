@@ -26,16 +26,16 @@ import javax.lang.model.element.*
 
 @SupportedAnnotationTypes(
     value = [
-        "mohamedalaa.mautils.core_android_annotation.MASharedPrefField",
-        "mohamedalaa.mautils.core_android_annotation.MASharedPrefField_Configs",
-        "mohamedalaa.mautils.core_android_annotation.MASharedPrefField.Container"
+        "mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair",
+        "mohamedalaa.mautils.shared_pref_annotation.MASharedPrefFileConfigs",
+        "mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair.Container"
     ]
 )
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 class ProcessorOfMASharedPref : AbstractProcessor() {
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
-        roundEnv.process(processingEnv)
+        //roundEnv.process(processingEnv)
 
         return false
     }

@@ -17,7 +17,6 @@ package mohamedalaa.mautils.sample.core_android.shared_pref
 
 import android.content.Context
 import android.os.Build
-import mohamedalaa.mautils.core_android.extensions.sharedPrefGetComplex
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

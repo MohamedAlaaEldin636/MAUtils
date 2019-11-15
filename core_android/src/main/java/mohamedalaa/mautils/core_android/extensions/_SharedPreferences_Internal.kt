@@ -16,31 +16,39 @@
 @file:Suppress("FunctionName")
 
 package mohamedalaa.mautils.core_android.extensions
+/*
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import mohamedalaa.mautils.core_android.custom_classes.SharedPrefSupportedTypesParams
+import mohamedalaa.mautils.core_kotlin.custom_classes.kclass_identifier.MAParameterizedKClass
 import mohamedalaa.mautils.core_kotlin.custom_classes.MutablePair
 import mohamedalaa.mautils.core_kotlin.extensions.*
 
-/** since pair will be saved as string below are keys for it isa, and escape any values like them with / isa. */
+*/
+/** since pair will be saved as string below are keys for it isa, and escape any values like them with / isa. *//*
+
 private const val PAIR_KEY_FOR_FIRST = "PAIR_KEY_FOR_FIRST="
 private const val PAIR_KEY_FOR_SECOND = "PAIR_KEY_FOR_SECOND="
 private const val PAIR_KEY_ESCAPE_VALUE = "/"
 
-/** @see [sharedPrefSetComplex] */
+*/
+/** @see [sharedPrefSetComplex] *//*
+
 @SuppressLint("ApplySharedPref")
 @PublishedApi
 internal fun <T> Context.internal_sharedPrefSetComplex(
-    removeFileIfNull: Boolean,
     fileName: String,
+
     key: String,
     value: T,
-    jClass: Class<T>,
-    mode: Int = Context.MODE_PRIVATE,
-    commit: Boolean = false,
-    vararg sharedPrefSupportedTypesParamsArray: SharedPrefSupportedTypesParams = arrayOf(SharedPrefSupportedTypesParams.STRING)
+    removeKeyIfValueIsNull: Boolean,
+
+    mode: Int,
+    commit: Boolean,
+
+    convertToString: (T) -> String
 ): Boolean? {
     val editor = applicationContext.getSharedPreferences(fileName, mode).edit()
 
@@ -51,58 +59,24 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
         is Long -> editor.putLong(key, value)
         is Float -> editor.putFloat(key, value)
         is Set<*> -> {
-            if (sharedPrefSupportedTypesParamsArray.size != 1) {
-                throwRuntimeException("incompatible value with sharedPrefSupportedTypesParamsArray")
-            }
-
-            val setOfStrings = sharedPrefSupportedTypesParamsArray[0].convertSetOfSupportedTypeParamsToSetOfStrings(value)
-            editor.putStringSet(key, setOfStrings)
-        }
-        is Pair<*, *>, is MutablePair<*, *> -> {
-            if (sharedPrefSupportedTypesParamsArray.size != 2) {
-                throwRuntimeException("incompatible value with sharedPrefSupportedTypesParamsArray")
-            }
-
-            val (first, second) = when (value) {
-                is Pair<*, *> -> value.first to value.second
-                is MutablePair<*, *> -> value.first to value.second
-                else -> throwRuntimeException("Impossible error code 355 isa.")
-            }
-
-            // Check null values isa.
-            if (first == null || second == null) {
-                if (removeFileIfNull) {
-                    editor.remove(key)
-                }else {
-                    val className = if (jClass == Pair::class.java) Pair::class.java.name else MutablePair::class.java.name
-                    val whoIsNullString = when {
-                        first == null && second != null -> "null first AND null second values"
-                        first != null -> "null first value"
-                        else -> "null second value"
-                    }
-                    throwRuntimeException("$className Cannot have $whoIsNullString, However if you want to delete a key use Context.sharedPrefRemoveKey fun isa, " +
-                        "OR in case you want deletion to be a fallback if value was null check Context.sharedPrefSetComplexOrRemoveIfNull isa.")
-                }
-            }else {
-                val firstAsString = sharedPrefSupportedTypesParamsArray[0].convertValueToString(first)
-                val secondAsString = sharedPrefSupportedTypesParamsArray[1].convertValueToString(second)
-
-                editor.putString(
-                    key,
-                    encodePairSharedPrefStringValueForSet(firstAsString, secondAsString)
-                )
+            try {
+                @Suppress("UNCHECKED_CAST")
+                editor.putStringSet(key, value as Set<String?>)
+            }catch (throwable: ClassCastException) {
+                editor.putString(key, convertToString(value))
             }
         }
         else -> {
             if (value == null) {
-                if (removeFileIfNull) {
+                if (removeKeyIfValueIsNull) {
                     editor.remove(key)
                 }else {
-                    throwRuntimeException("null for sharedPref is Unsupported if you want to delete a key use Context.sharedPrefRemoveKey fun isa, " +
-                        "OR in case you want deletion to be a fallback if value was null check Context.sharedPrefSetComplexOrRemoveIfNull isa.")
+                    throwRuntimeException(
+                        "passed null value while removeKeyIfValueIsNull is false isa"
+                    )
                 }
             }else {
-                throwRuntimeException("Unsupported type or file doesn't exist error in shared pref isa")
+                editor.putString(key, convertToString(value))
             }
         }
     }
@@ -114,6 +88,50 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
 
         null
     }
+}
+
+private fun <T> private_sharedPrefSetComplex_customType(
+    removeFileIfNull: Boolean,
+
+    fileName: String,
+
+    key: String,
+    value: T,
+    jClass: Class<T>,
+
+    mode: Int = Context.MODE_PRIVATE,
+    commit: Boolean = false,
+
+    maParameterizedKClass: MAParameterizedKClass,
+    gsonConverter: Any? = null,
+    convertToString: ((T) -> String)? = null
+) {
+    val nonNullIsNotEmpty = maParameterizedKClass.nonNullKClasses.isNotEmpty()
+    val maKClassIsNotEmpty = maParameterizedKClass.maKClass.isNotEmpty()
+    val allJClassesAndNullable = when {
+        nonNullIsNotEmpty && maKClassIsNotEmpty -> throwRuntimeException(
+            "only one param in ${MAParameterizedKClass::class} has to be used not two isa."
+        )
+        nonNullIsNotEmpty || maKClassIsNotEmpty -> {
+            if (nonNullIsNotEmpty) {
+                maParameterizedKClass.nonNullKClasses.map { it.java to false }
+            }else {
+                maParameterizedKClass.maKClass.map { it.kClass.java to it.nullable }
+            }
+        }
+        else -> throwRuntimeException(
+            "${MAParameterizedKClass::class} one param is needed found none isa."
+        )
+    }
+
+    // Check class before type params isa.
+    if (jClass != allJClassesAndNullable[0].first) throwRuntimeException(
+        "Provided value is of a different class [${jClass}] than the identified via ${MAParameterizedKClass::class} " +
+            "where it's list allJClassesAndNullable is $allJClassesAndNullable isa."
+    )
+
+    // todo t2reban msh htnfa3 gher f el generated code isa.
+    //
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -182,9 +200,11 @@ internal fun <T> Context.internal_javaSharedPrefGetComplex(
     }
 }
 
+*/
 /**
  * Opposite of [convertSetOfSupportedTypeParamsToSetOfStrings] isa.
- */
+ *//*
+
 @Suppress("UNCHECKED_CAST")
 @PublishedApi
 internal fun <T> SharedPrefSupportedTypesParams.convertSetOfStringsToSetOfSupportedTypeParams(
@@ -223,10 +243,12 @@ private fun <T> Set<T>.checkNullableItemInSet(acceptNullableItemInSet: Boolean):
 private fun throwNullableItemException(): Nothing
     = throwRuntimeException("nullable item inside Set while you didn't request a nullable item in Set for sharedPref isa.")
 
+*/
 /**
  * Convert [value] which is [Set] but of [String], [Int], [Boolean], [Long] or [Float]
  * to be [Set]<[String]> isa.
- */
+ *//*
+
 @Suppress("UNCHECKED_CAST")
 private fun <T> SharedPrefSupportedTypesParams.convertSetOfSupportedTypeParamsToSetOfStrings(value: T): Set<String?> {
     return when (this) {
@@ -288,9 +310,11 @@ private fun SharedPrefSupportedTypesParams.convertStringToValue(string: String):
     }
 }
 
+*/
 /**
  * Since first key has always index of 0 no need to back it up isa, but on the other hand second key need all the possible back up isa.
- */
+ *//*
+
 private fun encodePairSharedPrefStringValueForSet(firstAsString: String, secondAsString: String): String {
     val getModifiedStringFun = fun(originalString: String): String {
         var startIndex = 0
@@ -352,3 +376,4 @@ private fun decodePairSharedPrefStringValueForGet(fullSharedPrefStringValue: Str
 }
 
 private fun SharedPreferences.hasKey(key: String) = key in all?.keys
+*/

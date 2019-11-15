@@ -17,12 +17,10 @@ package mohamedalaa.mautils.sample.core_android;
 
 import java.util.Set;
 
-import mohamedalaa.mautils.core_android_annotation.MASharedPref;
-
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/24/2019.
  */
-@MASharedPref //maybe it is a must for it to be final msln isa ?!
+//maybe it is a must for it to be final msln isa ?!
 public class AnotherSomeClass {
 
     final String javaStr = "hello";
@@ -37,12 +35,12 @@ public class AnotherSomeClass {
 
     String javaStrNull;
 
-    @MASharedPref.SetOfStringsDefValue(stringSetValue = {"", "sa"})
+    //@MASharedPref.SetOfStringsDefValue(stringSetValue = {"", "sa"})
     Set<String> set;
 
     Set<String> set2;
 
-    @MASharedPref.SetOfStringsDefValue(stringSetValue = {})
+    //@MASharedPref.SetOfStringsDefValue(stringSetValue = {})
     Set<String> set3;
 
 }
