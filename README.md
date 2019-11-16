@@ -65,9 +65,9 @@ dependencies {
 
 ### How to use ( shared_pref_core ) [▴](#shared_pref_core-module-)
 
-- [Simple Use Cases](#simple-use-cases--shared_pref_core-)
-- [Complex Use Cases](#complex-use-cases--shared_pref_core-)
-- [All Cases](#all-cases--shared_pref_core-)
+- [Simple Use Cases](#simple-use-cases--shared_pref_core--)
+- [Complex Use Cases](#complex-use-cases--shared_pref_core--)
+- [All Cases](#all-cases--shared_pref_core--)
 
 #### Simple Use Cases ( shared_pref_core ) [▴](#how-to-use--shared_pref_core--)
 
@@ -191,9 +191,9 @@ dependencies {
 
 ### How to use ( shared_pref_annotation & shared_pref_processor ) [▴](#shared_pref_annotation--shared_pref_processor-modules-)
 
-- [Simple Use Cases](#simple-use-cases--shared_pref_annotation--shared_pref_processor-)
-- [Complex Use Cases](#complex-use-cases--shared_pref_annotation--shared_pref_processor-)
-- [All Cases](#all-cases--shared_pref_annotation--shared_pref_processor-)
+- [Simple Use Cases](#simple-use-cases--shared_pref_annotation--shared_pref_processor--)
+- [Complex Use Cases](#complex-use-cases--shared_pref_annotation--shared_pref_processor--)
+- [All Cases](#all-cases--shared_pref_annotation--shared_pref_processor--)
 
 #### Simple Use Cases ( shared_pref_annotation & shared_pref_processor ) [▴](#how-to-use--shared_pref_annotation--shared_pref_processor--)
 
