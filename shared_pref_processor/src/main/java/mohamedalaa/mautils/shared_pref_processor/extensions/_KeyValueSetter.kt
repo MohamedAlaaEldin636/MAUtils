@@ -111,8 +111,13 @@ fun ProcessingEnvironment.buildSetComplexFun(
         val valueCanBeNullable = maSharedPrefKeyValuePair.classIsNullable()
             || maSharedPrefKeyValuePair.supportSetterAndGetterNullValues
             || maSharedPrefKeyValuePair.supportSetterNullValue
+        val toBeUsedValueTypeName = if (valueTypeName.isNullable) {
+            valueTypeName
+        }else {
+            valueTypeName.copy(nullable = valueCanBeNullable)
+        }
 
-        addParameter(VAR_NAME_VALUE, valueTypeName)
+        addParameter(VAR_NAME_VALUE, toBeUsedValueTypeName)
         addParameter(
             ParameterSpec.builder(VAR_NAME_COMMIT, Boolean::class.asTypeName())
                 .defaultValue("false")
@@ -155,7 +160,7 @@ fun ProcessingEnvironment.buildSetComplexFun(
 
                     "$gsonConverter" +
                     ")",
-                valueTypeName
+                toBeUsedValueTypeName
             )
         }
     }.build()

@@ -43,9 +43,31 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
     addSharedPrefInstanceFun = true,
     supportJavaConsumerOnlyForFunctionsCreatedByThisAnnotation = true
 )
+
+// Check manipulation with nullability isa.
+@MASharedPrefKeyValuePair(
+    name = "booleanWithNullableGetterOnly",
+    defaultValue = "null", // since default for boolean is false
+    // & I wanna check that it is not null anymore.
+    type = MAParameterizedKClass(
+        nonNullKClasses = [
+            Boolean::class
+        ]
+    ),
+    supportGetterNullValue = true
+    // no need to make type has nullable it will be done auto for you.
+)
 @MASharedPrefKeyValuePair(
     name = "booleanWithNullableSetterOnly",
-    defaultValue = "true",
+    type = MAParameterizedKClass(
+        nonNullKClasses = [
+            Boolean::class
+        ]
+    ),
+    supportSetterNullValue = true
+)
+@MASharedPrefKeyValuePair(
+    name = "booleanWithNullableSetterAndGetter",
     type = MAParameterizedKClass(
         nonNullKClasses = [
             Boolean::class
@@ -53,6 +75,8 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
     ),
     supportSetterAndGetterNullValues = true
 )
+
+
 @MASharedPrefKeyValuePair(
     name = "nestedTypeParamWithGsonConverterConversion",
     defaultValue = "emptyList()",

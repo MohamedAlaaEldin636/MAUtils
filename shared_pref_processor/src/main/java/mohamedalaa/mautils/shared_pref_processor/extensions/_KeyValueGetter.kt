@@ -108,12 +108,17 @@ fun ProcessingEnvironment.buildGetComplexFun(
         val valueCanBeNullable = maSharedPrefKeyValuePair.classIsNullable()
             || maSharedPrefKeyValuePair.supportSetterAndGetterNullValues
             || maSharedPrefKeyValuePair.supportGetterNullValue
+        val toBeUsedValueTypeName = if (valueTypeName.isNullable) {
+            valueTypeName
+        }else {
+            valueTypeName.copy(nullable = valueCanBeNullable)
+        }
 
         receiver(contextClassName)
-        returns(valueTypeName)
+        returns(toBeUsedValueTypeName)
 
         // Params isa.
-        val paramSpecDefValue = ParameterSpec.builder(VAR_NAME_DEF_VALUE, valueTypeName)
+        val paramSpecDefValue = ParameterSpec.builder(VAR_NAME_DEF_VALUE, toBeUsedValueTypeName)
             .apply {
                 val defValueIsDeclaredByUser = annotationMirrorOfGivenMASharedPrefKeyValuePair?.run {
                     this.elementValues.any {
@@ -129,7 +134,7 @@ fun ProcessingEnvironment.buildGetComplexFun(
                                 "${MASharedPrefKeyValuePair::name}.${MASharedPrefKeyValuePair::supportSetterAndGetterNullValues.name} to true isa."
                         )
                     }else {
-                        val defValue = valueTypeName.getDefaultValueAsKotlinCodeExpression()
+                        val defValue = toBeUsedValueTypeName.getDefaultValueAsKotlinCodeExpression()
 
                         if (defValue == "null") {
                             error(
@@ -146,10 +151,10 @@ fun ProcessingEnvironment.buildGetComplexFun(
                     maSharedPrefKeyValuePair.defaultValue
                 }
 
-                val isString = valueTypeName == String::class.asTypeName()
-                    || valueTypeName == String::class.java.asTypeName()
-                    || valueTypeName == String::class.java.asTypeName().copy(nullable = true)
-                    || valueTypeName == String::class.asTypeName().copy(nullable = true)
+                val isString = toBeUsedValueTypeName == String::class.asTypeName()
+                    || toBeUsedValueTypeName == String::class.java.asTypeName()
+                    || toBeUsedValueTypeName == String::class.java.asTypeName().copy(nullable = true)
+                    || toBeUsedValueTypeName == String::class.asTypeName().copy(nullable = true)
                 val isStringAndNotAnExpression = isString && defValue.run {
                     startsWith("\"") && endsWith("\"")
                 }
@@ -200,7 +205,7 @@ fun ProcessingEnvironment.buildGetComplexFun(
 
                     "$gsonConverter" +
                     ")",
-                valueTypeName
+                toBeUsedValueTypeName
             )
         }
     }.build()

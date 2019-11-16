@@ -25,10 +25,15 @@ import mohamedalaa.mautils.sample.shared_pref_.SharedPref_SomeClassName_NoContex
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_asSharedPreferences
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_clearAll
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_registerSharedPrefChangeListener
+import mohamedalaa.mautils.shared_pref_annotation.MAParameterizedKClass
+import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
 import mohamedalaa.mautils.shared_pref_core.*
 import kotlin.test.assertEquals
 
 private const val privateFileName = ""
+private class P4 {
+
+}
 private class P3 {
     @Synchronized
     fun Context.sharedPref_SomeClassName_SetPersonManualConversion(
