@@ -11,7 +11,7 @@ in alpha release meaning so many changes might occur in the final release.
 
 ---
 
-# [License]
+# [License & l](#mautils)
 
 ### MAUtils is released under the [Apache 2.0 license](http://www.apache.org/licenses/).
 
@@ -37,3 +37,18 @@ See the License for the specific language governing permissions and limitations 
 | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Distribution           | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/disable_use_icon.png" height="15" width="15"/> Warranty      |    - |
 | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Patent use             | -         |   - |
 | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Private use            | -                 |  - |
+
+// just some tests on readme
+# [License & l](#mautils)
+# [License & l](#mautils)
+# [License & l()](#mautils)
+[which](#License--l)
+[which](#License--l2)
+[which](#License--l3)
+[which](#License--l1)
+
+#### How to use
+
+##### Complex Use Cases ( shared_pref_annotation & \_processor )
+
+##### Complex Use Cases ( shared_pref_annotation & shared_pref_processor )
