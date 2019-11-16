@@ -6,7 +6,7 @@
 
 # Library is in Progress (Alpha Development Stage)
 
-- There are some modules which are stable (via stable releases of this library) so they have been tested and won't change but those are the ones only documented in README.md otherwise the rest are experimental (alpha release), so don't get confused when you see releases without the extension `-alpha.#` this yes means stable but ffor some modules not the whole library.  
+- There are some modules which are stable (via stable releases of this library) so they have been tested and won't change but those are the ones only documented in README.md otherwise the rest are experimental (alpha release), so don't get confused when you see releases without the extension `-alpha.#` this yes means stable but for some modules not the whole library.  
 - for a temp. in production use, Ex. Google Play publish you can use the stable modules but surely this might mean implementing other non-stable modules, So **MAKE THAT AS A LAST RESORT** until the whole library is stable.
 
 # Contents [▴](#mautils)
