@@ -9,7 +9,7 @@
 - There are some modules which are stable (via stable releases of this library) so they have been tested and won't change but those are the ones only documented in README.md otherwise the rest are experimental (alpha release), so don't get confused when you see releases without the extension `-alpha.#` this yes means stable but ffor some modules not the whole library.  
 - for a temp. in production use, Ex. Google Play publish you can use the stable modules but surely this might mean implementing other non-stable modules, So **MAKE THAT AS A LAST RESORT** until the whole library is stable.
 
-# Currently stable modules [▲](#mautils)
+# Currently stable modules [▴](#mautils)
 
 - [shared_pref_core module](#shared_pref_core-module)
 - [shared_pref_annotation & shared_pref_processor modules](#shared_pref_annotation--shared_pref_processor-modules)
