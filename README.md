@@ -31,8 +31,8 @@
 
 # Currently stable modules [▴](#contents-)
 
-- [shared_pref_core module](#shared_pref_core-module)
-- [shared_pref_annotation & shared_pref_processor modules](#shared_pref_annotation--shared_pref_processor-modules)
+- [shared_pref_core module](#shared_pref_core-module-)
+- [shared_pref_annotation & shared_pref_processor modules](#shared_pref_annotation--shared_pref_processor-modules-)
 
 ## shared_pref_core module [▴](#currently-stable-modules-)
 
