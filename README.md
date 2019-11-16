@@ -7,43 +7,13 @@
 # Library is in Progress (Alpha Development Stage)
 
 - There are some modules which are stable (via stable releases of this library) so they have been tested and won't change but those are the ones only documented in README.md otherwise the rest are experimental (alpha release), so don't get confused when you see releases without the extension `-alpha.#` this yes means stable but for some modules not the whole library.  
-- for a temp. in production use, Ex. Google Play publish you can use the stable modules but surely this might mean implementing other non-stable modules, So **MAKE THAT AS A LAST RESORT** until the whole library is stable.
-
-## Library Setup
-
-### Jitpack Environment
-
-in your Gradle **Top-level build file** add below code
-
-``` groovy
-allprojects {
-    repositories {
-    	// ...
-    	maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-### Library Version
-
-Ensure having mautils_version defined in your Gradle **Top-level build file** as below
-
-``` groovy
-buildscript {
-    ext.mautils_version = '1.1.0'
-}    
-```
-
-_**OR**_ in your gradle **app module** as below
-
-``` groovy
-dependencies {
-    def mautils_version = '1.1.0'
-}
-```
+- for a temp. in production use, Ex. Google Play publish you can use the stable modules but sometimes this might mean implementing other non-stable modules, So **Make That as a last resort** until the whole library is stable.
 
 # Contents [▴](#mautils)
 
+- [Library Setup](#library-setup-) ( Needed for any module in this library )
+    - [Jitpack Environment](#jitpack-environment-)
+    - [Library Version](#library-version-)
 - [Currently stable modules](#currently-stable-modules-)
     - [shared_pref_core module](#shared_pref_core-module-)
         - [Features](#features--shared_pref_core--)
@@ -61,6 +31,42 @@ dependencies {
             - [Complex Use Cases](#complex-use-cases--shared_pref_annotation--shared_pref_processor--)
             - [All Cases](#all-cases--shared_pref_annotation--shared_pref_processor--)         
 - [License](#license-)
+
+# Library Setup [▴](#contents-)
+
+- [Jitpack Environment](#jitpack-environment-)
+- [Library Version](#library-version-)
+
+## Jitpack Environment [▴](#library-setup-)
+
+in your Gradle **Top-level build file** add below code
+
+``` groovy
+allprojects {
+    repositories {
+    	// ...
+    	maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+## Library Version [▴](#library-setup-)
+
+Ensure having mautils_version defined in your Gradle **Top-level build file** as below
+
+``` groovy
+buildscript {
+    ext.mautils_version = '1.1.0'
+}    
+```
+
+_**OR**_ in your gradle **app module** as below
+
+``` groovy
+dependencies {
+    def mautils_version = '1.1.0'
+}
+```
 
 # Currently stable modules [▴](#contents-)
 
