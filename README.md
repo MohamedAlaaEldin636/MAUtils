@@ -11,33 +11,32 @@
 
 # Contents [▴](#mautils)
 
-- [Currently stable modules](#currently-stable-modules)
-      - [shared_pref_core module](#shared_pref_core-module)
-            - [Features](#features--shared_pref_core-)
-            - [VIP Notes](#vip-notes--shared_pref_core-)
-            - [Download](#download--shared_pref_core-)
-            - [How to use](#how-to-use--shared_pref_core-)
-                  - [Simple Use Cases](#simple-use-cases--shared_pref_core-)
-                  - [Complex Use Cases](#complex-use-cases--shared_pref_core-)
-                  - [All Cases](#all-cases--shared_pref_core-)
-      - [shared_pref_annotation & shared_pref_processor modules](#shared_pref_annotation--shared_pref_processor-modules)
-            - [Features](#features--shared_pref_annotation--shared_pref_processor-modules)
-            - [VIP Notes](#vip-notes--shared_pref_annotation--shared_pref_processor-modules)
-            - [Download](#download--shared_pref_annotation--shared_pref_processor-modules)
-            - [How to use](#how-to-use--shared_pref_annotation--shared_pref_processor-modules)
-                  - [Simple Use Cases](#simple-use-cases--shared_pref_annotation--shared_pref_processor-)
-                  - [Complex Use Cases](#complex-use-cases--shared_pref_annotation--shared_pref_processor-)
-                  - [All Cases](#all-cases--shared_pref_annotation--shared_pref_processor-)
-- [License](#license)
+- [Currently stable modules](#currently-stable-modules-)
+    - [shared_pref_core module](#shared_pref_core-module-)
+        - [Features](#features--shared_pref_core--)
+        - [VIP Notes](#vip-notes--shared_pref_core--)
+        - [Download](#download--shared_pref_core--)
+        - [How to use](#how-to-use--shared_pref_core--)
+            - [Simple Use Cases](#simple-use-cases--shared_pref_core--)
+            - [Complex Use Cases](#complex-use-cases--shared_pref_core--)
+            - [All Cases](#all-cases--shared_pref_core--)
+    - [shared_pref_annotation & shared_pref_processor modules](#shared_pref_annotation--shared_pref_processor-modules-)
+        - [Features](#features--shared_pref_annotation--shared_pref_processor--)
+        - [Download](#download--shared_pref_annotation--shared_pref_processor--)
+        - [How to use](#how-to-use--shared_pref_annotation--shared_pref_processor--) 
+            - [Simple Use Cases](#simple-use-cases--shared_pref_annotation--shared_pref_processor--)
+            - [Complex Use Cases](#complex-use-cases--shared_pref_annotation--shared_pref_processor--)
+            - [All Cases](#all-cases--shared_pref_annotation--shared_pref_processor--)         
+- [License](#license-)
 
-# Currently stable modules [▴](#contents)
+# Currently stable modules [▴](#contents-)
 
 - [shared_pref_core module](#shared_pref_core-module)
 - [shared_pref_annotation & shared_pref_processor modules](#shared_pref_annotation--shared_pref_processor-modules)
 
-## shared_pref_core module [▴](#currently-stable-modules)
+## shared_pref_core module [▴](#currently-stable-modules-)
 
-### Features ( shared_pref_core ) [▴](#shared_pref_core-module)
+### Features ( shared_pref_core ) [▴](#shared_pref_core-module-)
 
 1. for quicker coding it would be better instead of putString putInt to have one function name here is why `Context.sharedPrefSet` exists use it for all types, Also quicked than getting the `SharedPreferences` instance than edit then commit or apply changes all of that in one function with default parameter for common use cases so actually you only provide 3 things fileName, key and value. <br/>
 `/*for Java*/ SharedPrefUtils.set`
@@ -47,7 +46,7 @@ Remember that's only in case the custom type is suitable for `SharedPreferences`
 
 3. additonal functions are added for quick access instead of getting instance to `SharedPreferences` then performing edits for ex. clearing all keys removing secific key in the file or checking if a key exists you just provide the file's name and we do the rest but also all other parameters are optional for customizability so No trade-offs for the concise code. 
 
-### VIP Notes ( shared_pref_core ) [▴](#shared_pref_core-module)
+### VIP Notes ( shared_pref_core ) [▴](#shared_pref_core-module-)
 
 - this modules better be used with `shared_pref_annotation` & `shared_pref_processor`
 since these will enable you to generate with annotation and eliminate all the constant
@@ -55,7 +54,7 @@ strings for the shared pref file names and keys, it's highly recommended to use 
 but this module is public instead of being internal in case of old projects which
 don't need to migrate to annotations [Take a look](#shared_pref_annotation--shared_pref_processor-modules).
 
-### Download ( shared_pref_core ) [▴](#shared_pref_core-module)
+### Download ( shared_pref_core ) [▴](#shared_pref_core-module-)
 
 - add below in module level gradle
 ``` groovy
@@ -64,13 +63,13 @@ dependencies {
 }
 ```
 
-### How to use ( shared_pref_core ) [▴](#shared_pref_core-module)
+### How to use ( shared_pref_core ) [▴](#shared_pref_core-module-)
 
 - [Simple Use Cases](#simple-use-cases--shared_pref_core-)
 - [Complex Use Cases](#complex-use-cases--shared_pref_core-)
 - [All Cases](#all-cases--shared_pref_core-)
 
-#### Simple Use Cases ( shared_pref_core ) [▴](#how-to-use--shared_pref_core-)
+#### Simple Use Cases ( shared_pref_core ) [▴](#how-to-use--shared_pref_core--)
 
 ``` kotlin
 // No need for specific type name like putString
@@ -113,7 +112,7 @@ someInt == newSomeInt // true
 </p>
 </details>
 
-#### Complex Use Cases ( shared_pref_core ) [▴](#how-to-use--shared_pref_core-)
+#### Complex Use Cases ( shared_pref_core ) [▴](#how-to-use--shared_pref_core--)
 
 ``` kotlin
 // Custom Type
@@ -146,7 +145,7 @@ context.sharedPrefSet(
 )
 ```
 
-#### All Cases ( shared_pref_core ) [▴](#how-to-use--shared_pref_core-)
+#### All Cases ( shared_pref_core ) [▴](#how-to-use--shared_pref_core--)
 
 ``` kotlin
 // clear all keys in a file
@@ -159,9 +158,9 @@ context.sharedPrefRemoveKey("fileName", "key")
 context.sharedPrefHasKey("fileName", "key")
 ```
 
-## shared_pref_annotation & shared_pref_processor modules [▴](#currently-stable-modules)
+## shared_pref_annotation & shared_pref_processor modules [▴](#currently-stable-modules-)
 
-### Features ( shared_pref_annotation & shared_pref_processor ) [▴](#shared_pref_annotation--shared_pref_processor-modules)
+### Features ( shared_pref_annotation & shared_pref_processor ) [▴](#shared_pref_annotation--shared_pref_processor-modules-)
 
 1. eliminates the need of a lot of constants in your codebase to define your `SharedPreferences` files names and their keys now by an annotation a specific functions made accoding to that specific key so more concise code in generating and calling the `SharedPreferences` key/value pairs.
 
@@ -173,7 +172,7 @@ context.sharedPrefHasKey("fileName", "key")
 
 5. supports java consumer code but with a very little limitation, it will work ok but to use the full potential of the module you will need to know some kotlin code.
 
-### Download ( shared_pref_annotation & shared_pref_processor ) [▴](#shared_pref_annotation--shared_pref_processor-modules)
+### Download ( shared_pref_annotation & shared_pref_processor ) [▴](#shared_pref_annotation--shared_pref_processor-modules-)
 
 - add below in module level gradle
 ``` groovy
@@ -190,13 +189,13 @@ dependencies {
 }
 ```
 
-### How to use ( shared_pref_annotation & shared_pref_processor ) [▴](#shared_pref_annotation--shared_pref_processor-modules)
+### How to use ( shared_pref_annotation & shared_pref_processor ) [▴](#shared_pref_annotation--shared_pref_processor-modules-)
 
 - [Simple Use Cases](#simple-use-cases--shared_pref_annotation--shared_pref_processor-)
 - [Complex Use Cases](#complex-use-cases--shared_pref_annotation--shared_pref_processor-)
 - [All Cases](#all-cases--shared_pref_annotation--shared_pref_processor-)
 
-#### Simple Use Cases ( shared_pref_annotation & shared_pref_processor ) [▴](#how-to-use--shared_pref_annotation--shared_pref_processor-modules)
+#### Simple Use Cases ( shared_pref_annotation & shared_pref_processor ) [▴](#how-to-use--shared_pref_annotation--shared_pref_processor--)
 
 ``` kotlin
 // have a key/value pair of type Boolean? ( auto default value false )
@@ -336,7 +335,7 @@ fun Context.sharedPref_SomeClassName_GetPersonWithDefaultValue(
 )
 ```
 
-#### Complex Use Cases ( shared_pref_annotation & shared_pref_processor ) [▴](#how-to-use--shared_pref_annotation--shared_pref_processor-modules)
+#### Complex Use Cases ( shared_pref_annotation & shared_pref_processor ) [▴](#how-to-use--shared_pref_annotation--shared_pref_processor--)
 
 - In case you don't know `SharedPreferences` doesn't save `null` for string value
 it removes the key if it is a `null` value so to eliminate confusion and to benefit from the kotlin nullability features we by default have the setters accept non-null values and getters return non-null values but the annotation have parameters and conditions(in case type is null) to enable this behavior of remove the key if it is a nullable value and that is not like `SharedPreferences` for String & Set only but for any type.
@@ -431,7 +430,7 @@ fun Context.sharedPref_SomeClassName_GetNestedTypeParamWithGsonConverterConversi
 )
 ```
 
-#### All Cases ( shared_pref_annotation & shared_pref_processor ) [▴](#how-to-use--shared_pref_annotation--shared_pref_processor-modules)
+#### All Cases ( shared_pref_annotation & shared_pref_processor ) [▴](#how-to-use--shared_pref_annotation--shared_pref_processor--)
 
 ``` kotlin
 
@@ -554,7 +553,7 @@ fun Context.sharedPref_SomeClassName_GetBooleanWithNullableSetterAndGetter(
 
 ---
 
-# [License](https://github.com/MohamedAlaaEldin636/MAUtils/blob/master/LICENSE.MD) [▴](#contents)
+# [License](https://github.com/MohamedAlaaEldin636/MAUtils/blob/master/LICENSE.MD) [▴](#contents-)
 
 ## MAUtils is released under the [Apache 2.0 license](http://www.apache.org/licenses/).
 
