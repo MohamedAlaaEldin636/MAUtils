@@ -95,7 +95,7 @@ fun RoundEnvironment.process(processingEnv: ProcessingEnvironment) = processingE
         val annotatedClassName = element.simpleName.toStringOrNull() ?: continue
         val fullImportStringsList = mutableListOf<String>()
         val kFileBuilder = FileSpec.builder(
-            element.asClassName().packageName + Constants.GENERATED_FILE_PACKAGE_SUFFIX_WITH_DOT,
+            element.asClassName().packageName,
             Constants.getKotlinFileName(annotatedClassName)
         ).apply {
             // @file:JvmName("SharedPref$annotatedClassName") only if java is needed to be supported isa.

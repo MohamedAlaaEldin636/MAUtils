@@ -47,5 +47,5 @@ import kotlin.reflect.KClass
  */
 annotation class MAParameterizedKClass(
     val nonNullKClasses: Array<KClass<*>> = [],
-    vararg val maKClass: MAKClass
+    vararg val maKClass: MAKClass = []
 )

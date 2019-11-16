@@ -23,6 +23,8 @@
             <option value="$PROJECT_DIR$/room_gson_annotation" />
             <option value="$PROJECT_DIR$/room_gson_processor" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/sample_java_only" />
+            <option value="$PROJECT_DIR$/sample_java_only_3" />
             <option value="$PROJECT_DIR$/shared_pref_annotation" />
             <option value="$PROJECT_DIR$/shared_pref_core" />
             <option value="$PROJECT_DIR$/shared_pref_processor" />

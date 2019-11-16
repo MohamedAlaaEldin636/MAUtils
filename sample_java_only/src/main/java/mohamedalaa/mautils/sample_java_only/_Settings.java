@@ -13,7 +13,21 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-include ':core_kotlin', ':core_android', ':material_design', ':mautils_open_source_licences', ':lifecycle_extensions', ':gson_annotation', ':gson_processor', ':gson', ':reflection', ':test_core', ':room_gson_annotation', ':room_gson_processor', ':open_source_licences', ':custom_views', ':shared_pref_core', ':dependencies_runtime_checks', ':shared_pref_annotation', ':shared_pref_processor', ':sample_java_only', ':sample_java_only_3'
+package mohamedalaa.mautils.sample_java_only;
 
-if (!System.env.JITPACK)
-    include ':sample'
+import mohamedalaa.mautils.shared_pref_annotation.MAParameterizedKClass;
+import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefFileConfigs;
+import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair;
+
+@MASharedPrefFileConfigs(
+    supportJavaConsumerCode = true
+)
+@MASharedPrefKeyValuePair(
+    name = "keepScreenOn",
+    type = @MAParameterizedKClass(
+        nonNullKClasses = {
+            Boolean.class
+        }
+    )
+)
+public class _Settings {}

@@ -17,17 +17,171 @@ package mohamedalaa.mautils.sample
 
 import android.content.Context
 import android.content.SharedPreferences
-import mohamedalaa.mautils.sample.shared_pref_.mautils_sharedPref.SharedPref_SomeClassName_NoContext
-import mohamedalaa.mautils.sample.shared_pref_.mautils_sharedPref.sharedPref_SomeClassName_clearAll
-import mohamedalaa.mautils.sample.shared_pref_.mautils_sharedPref.sharedPref_SomeClassName_registerSharedPrefChangeListener
-import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
-import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
+import mohamedalaa.mautils.gson.fromJsonOrNull
+import mohamedalaa.mautils.gson.toJsonOrNull
+import mohamedalaa.mautils.sample.general_custom_classes.GsonConverterPairOfPairOfIntAndSetOfFloatAndString
+import mohamedalaa.mautils.sample.general_custom_classes.Person
+import mohamedalaa.mautils.sample.shared_pref_.SharedPref_SomeClassName_NoContext
+import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_asSharedPreferences
+import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_clearAll
+import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_registerSharedPrefChangeListener
+import mohamedalaa.mautils.shared_pref_core.*
 import kotlin.test.assertEquals
+
+private const val privateFileName = ""
+private class P3 {
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetPersonManualConversion(
+        value: Person?, commit: Boolean = false
+    ): Boolean? {
+        val convertedValueAnyToString = value.run { toJsonOrNull() }
+        return sharedPrefSet<String?>(
+            privateFileName,
+            "personManualConversion",
+            convertedValueAnyToString,
+            true,
+            Context.MODE_PRIVATE,
+            commit,
+            null
+        )
+    }
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetPersonManualConversion(
+        defValue: Person? = null
+    ): Person? {
+        val convertedValueAnyToString = defValue.run { toJsonOrNull() }
+        return sharedPrefGet<String?>(
+            privateFileName,
+            "personManualConversion",
+            convertedValueAnyToString,
+            Context.MODE_PRIVATE,
+            null
+        ).run {
+            fromJsonOrNull()
+        }
+    }
+
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetNestedTypeParamWithGsonConverterConversion(
+        value: List<Pair<Pair<Int, Set<Float>>, String>>, commit: Boolean = false
+    ): Boolean? = sharedPrefSet<List<Pair<Pair<Int, Set<Float>>, String>>>(
+        privateFileName,
+        "nestedTypeParamWithGsonConverterConversion",
+        value,
+        false,
+        Context.MODE_PRIVATE,
+        commit,
+        GsonConverterPairOfPairOfIntAndSetOfFloatAndString()
+    )
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetNestedTypeParamWithGsonConverterConversion(
+        defValue: List<Pair<Pair<Int, Set<Float>>, String>> = emptyList()
+    ): List<Pair<Pair<Int, Set<Float>>, String>> = sharedPrefGet<List<Pair<Pair<Int, Set<Float>>, String>>>(
+        privateFileName,
+        "nestedTypeParamWithGsonConverterConversion",
+        defValue,
+        Context.MODE_PRIVATE,
+        GsonConverterPairOfPairOfIntAndSetOfFloatAndString()
+    )
+}
+private class P2 {
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_clearAll(commit: Boolean = false): Boolean? =
+        sharedPrefClearAll(privateFileName, Context.MODE_PRIVATE, commit)
+
+    fun Context.sharedPref_SomeClassName_registerSharedPrefChangeListener(
+        listener: SharedPreferences.OnSharedPreferenceChangeListener
+    ): Unit = sharedPref_SomeClassName_asSharedPreferences().registerOnSharedPreferenceChangeListener(listener)
+    fun Context.sharedPref_SomeClassName_unregisterSharedPrefChangeListener(
+        listener: SharedPreferences.OnSharedPreferenceChangeListener
+    ): Unit = sharedPref_SomeClassName_asSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener)
+
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetPersonWithDefaultValue(
+        value: Person, commit: Boolean = false
+    ): Boolean? = sharedPrefSet<Person>(
+        privateFileName,
+        "personWithDefaultValue",
+        value,
+        false,
+        Context.MODE_PRIVATE,
+        commit,
+        null
+    )
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetPersonWithDefaultValue(
+        defValue: Person = Person()
+    ): Person = sharedPrefGet<Person>(
+        privateFileName,
+        "personWithDefaultValue",
+        defValue,
+        Context.MODE_PRIVATE,
+        null
+    )
+}
+private class PrivateClass {
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetKeepScreenOn(
+        value: Boolean, commit: Boolean = false
+    ): Boolean? = sharedPrefSet<Boolean>(
+        privateFileName,
+        "keepScreenOn",
+        value,
+        false,
+        Context.MODE_PRIVATE,
+        commit,
+        null
+    )
+
+    @JvmName("getKeepScreenOn")
+    @JvmOverloads
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetKeepScreenOn(
+        defValue: Boolean = false
+    ): Boolean = sharedPrefGet<Boolean>(
+        privateFileName,
+        "keepScreenOn",
+        defValue,
+        Context.MODE_PRIVATE,
+        null
+    )
+
+    @JvmName("setMySetOfStrings")
+    @JvmOverloads
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetMySetOfStrings(
+        value: Set<String?>, commit: Boolean = false
+    ): Boolean? = sharedPrefSet<Set<String?>>(
+        privateFileName,
+        "mySetOfStrings",
+        value,
+        false,
+        Context.MODE_PRIVATE,
+        commit,
+        null
+    )
+    @JvmName("getMySetOfStrings")
+    @JvmOverloads
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetMySetOfStrings(
+        defValue: Set<String?> = setOf()
+    ): Set<String?> = sharedPrefGet<Set<String?>>(
+        privateFileName,
+        "mySetOfStrings",
+        defValue,
+        Context.MODE_PRIVATE,
+        null
+    )
+}
 
 private fun Context.a1(
     context: Context,
     int: Int?
 ) {
+    context.sharedPrefClearAll("fileName")
+    context.sharedPrefRemoveKey("fileName", "key")
+    context.sharedPrefHasKey("fileName", "key")
+
     sharedPrefSet("fileName", "key", int, removeKeyIfValueIsNull = true)
     assertEquals(
         int,

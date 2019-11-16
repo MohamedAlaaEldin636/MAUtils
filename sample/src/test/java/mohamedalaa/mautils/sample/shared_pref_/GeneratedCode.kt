@@ -20,7 +20,6 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import mohamedalaa.mautils.core_kotlin.extensions.performIfNotNull
 import mohamedalaa.mautils.sample.general_custom_classes.Person
-import mohamedalaa.mautils.sample.shared_pref_.mautils_sharedPref.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

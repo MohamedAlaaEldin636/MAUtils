@@ -44,6 +44,16 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
     supportJavaConsumerOnlyForFunctionsCreatedByThisAnnotation = true
 )
 @MASharedPrefKeyValuePair(
+    name = "booleanWithNullableSetterOnly",
+    defaultValue = "true",
+    type = MAParameterizedKClass(
+        nonNullKClasses = [
+            Boolean::class
+        ]
+    ),
+    supportSetterAndGetterNullValues = true
+)
+@MASharedPrefKeyValuePair(
     name = "nestedTypeParamWithGsonConverterConversion",
     defaultValue = "emptyList()",
     type = MAParameterizedKClass(
@@ -139,5 +149,24 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
             MAKClass(String::class, true)
         ]
     )
+)
+@MASharedPrefKeyValuePair(
+    name = "keepScreenOn",
+    type = MAParameterizedKClass(
+        nonNullKClasses = [
+            Boolean::class
+        ]
+    )
+)
+@MASharedPrefKeyValuePair(
+    name = "mySetOfStrings",
+    defaultValue = "setOf()",
+    type = MAParameterizedKClass(
+        maKClass = [
+            MAKClass(Set::class),
+            MAKClass(String::class, true)
+        ]
+    ),
+    supportJavaConsumerCode = MASharedPrefKeyValuePair.JavaConsumerCode.SUPPORT
 )
 class _SomeClassName
