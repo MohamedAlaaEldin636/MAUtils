@@ -91,7 +91,7 @@ Remember that's only in case the custom type is suitable for `SharedPreferences`
 since these will enable you to generate with annotation and eliminate all the constant
 strings for the shared pref file names and keys, it's highly recommended to use annotations
 but this module is public instead of being internal in case of old projects which
-don't need to migrate to annotations [Take a look](#shared_pref_annotation--shared_pref_processor-modules).
+don't need to migrate to annotations [Take a look](#shared_pref_annotation--shared_pref_processor-modules-).
 
 ### Download ( shared_pref_core ) [▴](#shared_pref_core-module-)
 
