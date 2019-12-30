@@ -101,6 +101,7 @@ inline fun <reified E> String?.fromJson(gson: Gson? = null): E = fromJsonOrNull(
  * @see fromJsonOrNull
  */
 inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
+    // todo even using gson add converters as well isa. -> usedGson.newBuilder()
     val usedGson = gson ?: generateGson()
     val collectionType = generateCollectionType<E>()
 
@@ -156,6 +157,23 @@ internal fun generateGson(): Gson {
     }
 
     return gsonBuilder
+        .serializeNulls()
+        .setLenient()
+        .enableComplexMapKeySerialization()
+        .create()
+}
+
+// todo instead of re-invoking generateGson() on each to/from why not have one var as a cache
+// and use it always unless is null or by using lazy isa.
+private val gg: Gson by lazy {
+    val gsonBuilder = GsonBuilder()
+
+    allAnnotatedClasses?.forEach {
+        gsonBuilder.registerTypeAdapter(it, JsonSerializerForSealedClasses())
+        gsonBuilder.registerTypeAdapter(it, JsonDeserializerForSealedClasses())
+    }
+
+    gsonBuilder
         .serializeNulls()
         .setLenient()
         .enableComplexMapKeySerialization()

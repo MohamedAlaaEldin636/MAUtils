@@ -21,10 +21,10 @@ import mohamedalaa.mautils.gson.fromJsonOrNull
 import mohamedalaa.mautils.gson.toJsonOrNull
 import mohamedalaa.mautils.sample.general_custom_classes.GsonConverterPairOfPairOfIntAndSetOfFloatAndString
 import mohamedalaa.mautils.sample.general_custom_classes.Person
-import mohamedalaa.mautils.sample.shared_pref_.SharedPref_SomeClassName_NoContext
+/*import mohamedalaa.mautils.sample.shared_pref_.SharedPref_SomeClassName_NoContext
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_asSharedPreferences
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_clearAll
-import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_registerSharedPrefChangeListener
+import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_registerSharedPrefChangeListener*/
 import mohamedalaa.mautils.shared_pref_annotation.MAParameterizedKClass
 import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
 import mohamedalaa.mautils.shared_pref_core.*
@@ -32,7 +32,68 @@ import kotlin.test.assertEquals
 
 private const val privateFileName = ""
 private class P4 {
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetBooleanWithNullableGetterOnly(
+        value: Boolean, commit: Boolean = false
+    ): Boolean? = sharedPrefSet<Boolean>(
+        privateFileName,
+        "booleanWithNullableGetterOnly",
+        value,
+        false,
+        Context.MODE_PRIVATE,
+        commit,
+        null
+    )
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetBooleanWithNullableGetterOnly(defValue: Boolean? = null):
+        Boolean? = sharedPrefGet<Boolean?>(privateFileName, "booleanWithNullableGetterOnly",
+        defValue, Context.MODE_PRIVATE, null)
 
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetBooleanWithNullableSetterOnly(
+        value: Boolean?, commit: Boolean = false
+    ): Boolean? = sharedPrefSet<Boolean?>(
+        privateFileName,
+        "booleanWithNullableSetterOnly",
+        value,
+        true,
+        Context.MODE_PRIVATE,
+        commit,
+        null
+    )
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetBooleanWithNullableSetterOnly(
+        defValue: Boolean = false
+    ): Boolean = sharedPrefGet<Boolean>(
+        privateFileName,
+        "booleanWithNullableSetterOnly",
+        defValue,
+        Context.MODE_PRIVATE,
+        null
+    )
+
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_SetBooleanWithNullableSetterAndGetter(
+        value: Boolean?, commit: Boolean = false
+    ): Boolean? = sharedPrefSet<Boolean?>(
+        privateFileName,
+        "booleanWithNullableSetterAndGetter",
+        value,
+        true,
+        Context.MODE_PRIVATE,
+        commit,
+        null
+    )
+    @Synchronized
+    fun Context.sharedPref_SomeClassName_GetBooleanWithNullableSetterAndGetter(
+        defValue: Boolean? = null
+    ): Boolean? = sharedPrefGet<Boolean?>(
+        privateFileName,
+        "booleanWithNullableSetterAndGetter",
+        defValue,
+        Context.MODE_PRIVATE,
+        null
+    )
 }
 private class P3 {
     @Synchronized
@@ -89,7 +150,7 @@ private class P3 {
         GsonConverterPairOfPairOfIntAndSetOfFloatAndString()
     )
 }
-private class P2 {
+/*private class P2 {
     @Synchronized
     fun Context.sharedPref_SomeClassName_clearAll(commit: Boolean = false): Boolean? =
         sharedPrefClearAll(privateFileName, Context.MODE_PRIVATE, commit)
@@ -123,7 +184,7 @@ private class P2 {
         Context.MODE_PRIVATE,
         null
     )
-}
+}*/
 private class PrivateClass {
     @Synchronized
     fun Context.sharedPref_SomeClassName_SetKeepScreenOn(
@@ -211,7 +272,7 @@ private fun Context.a1(
     ) // true
 }
 
-abstract class AAAAA : SharedPreferences.OnSharedPreferenceChangeListener {
+/*abstract class AAAAA : SharedPreferences.OnSharedPreferenceChangeListener {
     private fun Context.h1() {
         // this.sharedPref_SomeClassName_as()
         SharedPref_SomeClassName_NoContext.fileName()
@@ -222,7 +283,7 @@ abstract class AAAAA : SharedPreferences.OnSharedPreferenceChangeListener {
         //sharedPref_SomeClassName_SetPerson(null)
         //sharedPref_SomeClassName_GetPerson()
     }
-}
+}*/
 /*
 internal typealias DefValueType = Map<Int, Pair<String, Boolean>>
 internal typealias ValueType = Map<Int, Pair<String, Boolean>>

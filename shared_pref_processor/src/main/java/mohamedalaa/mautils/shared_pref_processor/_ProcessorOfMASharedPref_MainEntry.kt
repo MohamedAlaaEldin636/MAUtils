@@ -58,6 +58,12 @@ fun RoundEnvironment.process(processingEnv: ProcessingEnvironment) = processingE
     for (element in maSharedPrefAllElements.distinct()) {
         // -- Construct kotlin file isa. -- //
 
+        /*val ann = element.getAnnotation(MASharedPrefKeyValuePair::class.java)
+        val abc = runCatching {
+            ann.type.nonNullKClasses.first()
+        }.getOrElse { error("abce throwable $it") }
+        if (true) error("abce $abc")*/
+
         // Fetch file configs or default file configs AND all key/value annotations isa.
         val annMASharedPrefFileConfigs = element.getAnnotationsByType(MASharedPrefFileConfigs::class.java)
             .getOrNull(0) ?: MASharedPrefField_ConfigsUtils.getDefaultInstanceOfAnnotation()!!
