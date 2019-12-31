@@ -189,11 +189,34 @@ class TestObject {
 
         // ==> Data class having third nest of instance of sealed class isa.
 
-    }
+        val reminderOrAction1 = ReminderOrAction(
+            "",
+            33,
+            abstractWindowDate1,
+            daysOfMonth1,
+            true,
+            32323.4232,
+            32.3f
+        )
+        val reminderOrAction2 = ReminderOrAction(
+            "",
+            33,
+            abstractWindowDate2,
+            daysOfMonth2,
+            true,
+            32323.4232,
+            32.3f
+        )
+        assertEquals(reminderOrAction1, reminderOrAction2)
 
-    // todo what's not tested isa. VIP isa.
-    /*
-    data class -> who has instance of sealed class -> who one of it's extenders has instance of another sealed class isa.
-     */
+        val j11 = reminderOrAction1.toJson()
+        val j22 = reminderOrAction2.toJson()
+        assertEquals(j11, j22)
+
+        val r11 = j11.fromJson<ReminderOrAction>()
+        val r22 = j22.fromJson<ReminderOrAction>()
+        assertEquals(r11, reminderOrAction1)
+        assertEquals(r22, reminderOrAction2)
+    }
 
 }

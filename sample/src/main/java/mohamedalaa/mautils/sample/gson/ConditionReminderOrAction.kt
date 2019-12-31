@@ -19,19 +19,30 @@ package mohamedalaa.mautils.sample.gson
 
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 
+open class OpenClassA(
+    var abc: Boolean,
+    var def: String
+)
+
+data class ImplOfOpenClassA(
+    var a: String,
+    var b: Long?
+) : OpenClassA(true, "")
+
 /**
  * Used as complex class to test using gson isa,
- * note the sealed class property inside this class [condition]
+ * note the sealed class property inside this class [condition1]
  * and even it exists it can be serialized/deserialized isa.
  */
 data class ReminderOrAction(
     var dwede: String,
     var id: Int,
-    var condition: ConditionReminderOrAction,
+    var condition1: ConditionReminderOrAction,
+    var condition2: ConditionReminderOrAction,
     var sasas: Boolean,
     var a: Double,
     val fl: Float
-)
+) : OpenClassA(true, "")
 
 @MASealedAbstractOrInterface
 sealed class ConditionReminderOrAction {
