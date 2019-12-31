@@ -55,7 +55,10 @@ dependencies {
     // Own Libraries
     api project (':core_android')
 
+    // Other Libraries
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     api 'com.google.code.gson:gson:2.8.5'
+
     api project (':gson_annotation') // Can be excluded
 
     // -- Unit Testing -- //

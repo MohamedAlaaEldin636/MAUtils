@@ -17,6 +17,7 @@ package mohamedalaa.mautils.gson
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import mohamedalaa.mautils.core_kotlin.extensions.toStringOrEmpty
 import mohamedalaa.mautils.gson_annotation.GsonAnnotationConstants
 import mohamedalaa.mautils.gson.internal.JsonDeserializerForSealedClasses
 import mohamedalaa.mautils.gson.internal.JsonSerializerForSealedClasses
@@ -60,7 +61,7 @@ import mohamedalaa.mautils.gson.java.GsonConverter
  * ```
  * Also note that using a nested type parameters containing a non-nesting non-invariant type parameters is completely valid and safe isa.
  *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @return object of type <E> from given JSON String or null if any problem occurs isa.
  *
@@ -68,7 +69,11 @@ import mohamedalaa.mautils.gson.java.GsonConverter
  * @see toJsonOrNull
  */
 inline fun <reified E> String?.fromJsonOrNull(gson: Gson? = null): E? = this?.run {
-    val usedGson = gson ?: generateGson()
+    E::class.objectInstance?.apply {
+        return@run this
+    }
+
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
     val collectionType = generateCollectionType<E>()
 
     try { usedGson.fromJson(this, collectionType) } catch (e: Exception) { null }
@@ -78,7 +83,7 @@ inline fun <reified E> String?.fromJsonOrNull(gson: Gson? = null): E? = this?.ru
  * Exactly same as [fromJsonOrNull], the only difference that instead of returning null
  * a [RuntimeException] is thrown instead, so returned type is guaranteed to be not null isa.
  *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @return object of type <E> from given JSON String OR throws exception if any problem occurs isa.
  *
@@ -93,7 +98,7 @@ inline fun <reified E> String?.fromJson(gson: Gson? = null): E = fromJsonOrNull(
 /**
  * Converts `receiver` object to a JSON String OR null in case of any error isa.
  *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @return `receiver` object as JSON String OR null if any problem occurs isa.
  *
@@ -101,8 +106,7 @@ inline fun <reified E> String?.fromJson(gson: Gson? = null): E = fromJsonOrNull(
  * @see fromJsonOrNull
  */
 inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
-    // todo even using gson add converters as well isa. -> usedGson.newBuilder()
-    val usedGson = gson ?: generateGson()
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
     val collectionType = generateCollectionType<E>()
 
     try { usedGson.toJson(this, collectionType) } catch (e: Exception) { null }
@@ -112,7 +116,7 @@ inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run 
  * Exactly same as [toJsonOrNull], the only difference that instead of returning null
  * a [RuntimeException] is thrown instead, so returned type is guaranteed to be not null isa.
  *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @return `receiver` object as JSON String OR throws exception if any problem occurs isa.
  *
@@ -124,21 +128,29 @@ inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run 
 inline fun <reified E> E?.toJson(gson: Gson? = null): String = toJsonOrNull(gson)
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
+// ---- Internal fun isa.
+
 @Suppress("UNCHECKED_CAST")
-internal val allAnnotatedClasses: List<Class<*>>? = runCatching {
-    val jClass = Class.forName(GsonAnnotationConstants.generatedMASealedAbstractOrInterfaceFullName)
+internal val allAnnotatedClasses: List<Class<*>>? by lazy {
+    runCatching {
+        val jClass = Class.forName(GsonAnnotationConstants.generatedMASealedAbstractOrInterfaceFullName)
 
-    val method = jClass.declaredMethods[0]
+        val method = jClass.declaredMethods[0]
 
-    val listOfClassesFullNames = method.invoke(null) as List<String>
+        val listOfClassesFullNames = method.invoke(null) as List<String>
 
-    listOfClassesFullNames.mapNotNull {
-        runCatching { Class.forName(it) }.getOrNull()
-    }
-}.getOrNull()
+        listOfClassesFullNames.mapNotNull {
+            runCatching { Class.forName(it) }.getOrNull()
+        }
+    }.getOrNull()
+}
+
+internal val allAnnotatedClassesAsString: List<String> by lazy {
+    allAnnotatedClasses.orEmpty().map { it.toStringOrEmpty() }
+}
 
 /**
- * @return Default [Gson] object used for serialization/deserialization, the generated object is created by below code isa.
+ * - Default [Gson] object used for serialization/deserialization, the generated object is created by below code isa.
  * ```
  * GsonBuilder()
  *      .serializeNulls()
@@ -146,32 +158,13 @@ internal val allAnnotatedClasses: List<Class<*>>? = runCatching {
  *      .enableComplexMapKeySerialization()
  *      .create()
  * ```
+ * - Used lazy property instead of a fun so that computation is only done once isa.
  */
 @PublishedApi
-internal fun generateGson(): Gson {
+internal val privateGeneratedGson: Gson by lazy {
     val gsonBuilder = GsonBuilder()
 
-    allAnnotatedClasses?.forEach {
-        gsonBuilder.registerTypeAdapter(it, JsonSerializerForSealedClasses())
-        gsonBuilder.registerTypeAdapter(it, JsonDeserializerForSealedClasses())
-    }
-
-    return gsonBuilder
-        .serializeNulls()
-        .setLenient()
-        .enableComplexMapKeySerialization()
-        .create()
-}
-
-// todo instead of re-invoking generateGson() on each to/from why not have one var as a cache
-// and use it always unless is null or by using lazy isa.
-private val gg: Gson by lazy {
-    val gsonBuilder = GsonBuilder()
-
-    allAnnotatedClasses?.forEach {
-        gsonBuilder.registerTypeAdapter(it, JsonSerializerForSealedClasses())
-        gsonBuilder.registerTypeAdapter(it, JsonDeserializerForSealedClasses())
-    }
+    gsonBuilder.addTypeAdapters()
 
     gsonBuilder
         .serializeNulls()
@@ -183,3 +176,19 @@ private val gg: Gson by lazy {
 @PublishedApi
 internal inline fun <reified E> generateCollectionType(): Type
     = object : TypeToken<E>(){}.type
+
+@PublishedApi
+internal fun Gson.addTypeAdapters(): Gson {
+    return newBuilder().apply {
+        addTypeAdapters()
+    }.create()
+}
+
+// ---- Private fun isa.
+
+private fun GsonBuilder.addTypeAdapters() {
+    allAnnotatedClasses?.forEach {
+        registerTypeAdapter(it, JsonSerializerForSealedClasses())
+        registerTypeAdapter(it, JsonDeserializerForSealedClasses())
+    }
+}

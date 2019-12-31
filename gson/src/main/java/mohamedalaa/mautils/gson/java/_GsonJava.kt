@@ -19,7 +19,8 @@ package mohamedalaa.mautils.gson.java
 
 import com.google.gson.Gson
 import com.google.gson.internal.`$Gson$Types`
-import mohamedalaa.mautils.gson.generateGson
+import mohamedalaa.mautils.gson.addTypeAdapters
+import mohamedalaa.mautils.gson.privateGeneratedGson
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -30,7 +31,7 @@ import java.lang.reflect.Type
  *
  * If `receiver` has type parameters, then you have to use [GsonConverter.toJsonOrNullJava] isa.
  *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @return JSON String OR null if any problem occurs isa.
  *
@@ -40,7 +41,7 @@ import java.lang.reflect.Type
 @JvmOverloads
 @JvmName("toJsonOrNull")
 fun <E> E?.toJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): String? = this?.run {
-    val usedGson = gson ?: generateGson()
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
 
     try { usedGson.toJson(this, elementClass) } catch (e: Exception) { null }
 }
@@ -52,7 +53,7 @@ fun <E> E?.toJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): String?
  *
  * If `receiver` has type parameters, then you have to use [GsonConverter.toJsonJava] isa.
  *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @throws RuntimeException in case if any problem occurred while converting isa.
  *
@@ -67,14 +68,15 @@ fun <E> E?.toJsonJava(elementClass: Class<E>, gson: Gson? = null): String = toJs
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
 /**
- * Converts `this JSON String` to object of type [elementClass], OR null in case of any error occurs isa.
+ * ### Usage
+ * - Converts `this JSON String` to object of type [elementClass], OR null in case of any error occurs isa.
  *
- * **Warning**
+ * ### Warning
  *
- * If `receiver` has type parameters, then you have to use [GsonConverter.fromJsonOrNull] isa.
+ * - If `receiver` has type parameters, then you have to use [GsonConverter.fromJsonOrNull] isa.
  *
  * @param elementClass class of the `receiver` to be used isa.
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @return object of type <E> from given JSON String OR null if any problem occurs isa.
  *
@@ -84,7 +86,12 @@ fun <E> E?.toJsonJava(elementClass: Class<E>, gson: Gson? = null): String = toJs
 @JvmOverloads
 @JvmName("fromJsonOrNull")
 fun <E> String?.fromJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): E? = this?.run {
-    val usedGson = gson ?: generateGson()
+    (elementClass as? Class<*>)?.kotlin?.objectInstance?.apply {
+        @Suppress("UNCHECKED_CAST")
+        return@run this as E?
+    }
+
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
 
     try { usedGson.fromJson(this, elementClass) } catch (e: Exception) { null }
 }
@@ -97,7 +104,7 @@ fun <E> String?.fromJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): 
  * If `receiver` has type parameters, then you have to use [GsonConverter.fromJson] isa.
  *
  * @param elementClass class of the `receiver` to be used isa.
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
  * @return object of type <[E]> from given JSON String OR throws exception if any problem occurs isa.
  *
@@ -146,7 +153,7 @@ fun <E> String?.fromJsonJava(elementClass: Class<E>, gson: Gson? = null): E = fr
  *      = new GsonConverterCustomWithTypeParamCustomObjectInteger().fromJsonOrNullJava(jsonString);
  * ```
  *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [generateGson] isa.
+ * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  */
 abstract class GsonConverter<E>(private val gson: Gson? = null) {
 
@@ -229,13 +236,13 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
 }
 
 private fun <E> E?.toJsonOrNullJavaPrivate(type: Type, gson: Gson?): String? = this?.run {
-    val usedGson = gson ?: generateGson()
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
 
     try { usedGson.toJson(this, type) } catch (e: Exception) { null }
 }
 
 private fun <E> String?.fromJsonOrNullJavaPrivate(type: Type, gson: Gson?): E? = this?.run {
-    val usedGson = gson ?: generateGson()
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
 
     try { usedGson.fromJson(this, type) } catch (e: Exception) { null }
 }
