@@ -45,7 +45,7 @@ data class ReminderOrAction(
 ) : OpenClassA(true, "")
 
 @MASealedAbstractOrInterface
-sealed class ConditionReminderOrAction {
+sealed class ConditionReminderOrAction(var mido: String = "mido") {
 
     /**
      * ### Properties
@@ -60,7 +60,7 @@ sealed class ConditionReminderOrAction {
      * - this approach is used instead of another nested sealed class since it will lead
      * to error converting to/from json isa.
      */
-    sealed class Timing : ConditionReminderOrAction() {
+    sealed class Timing(var int: Int = 21) : ConditionReminderOrAction("fwewfwe") {
 
         data class ExactTime(
             var hourFormat12: Int,
@@ -73,7 +73,7 @@ sealed class ConditionReminderOrAction {
             var toInclusive: ExactTime
         ) : Timing()
 
-        sealed class AbstractExactDate : Timing() {
+        sealed class AbstractExactDate(var aa: String = "aaaaaaaaaaaaaaaaaaaaaaaaaaa") : Timing() {
 
             data class DaysOfWeek(var days: List<Int>) : AbstractExactDate()
 

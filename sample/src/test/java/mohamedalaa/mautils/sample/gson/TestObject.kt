@@ -16,6 +16,9 @@
 package mohamedalaa.mautils.sample.gson
 
 import android.os.Build
+import mohamedalaa.mautils.core_kotlin.errorPrintLn
+import mohamedalaa.mautils.core_kotlin.infoPrintLn
+import mohamedalaa.mautils.core_kotlin.purplePrintLn
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.fromJsonOrNull
 import mohamedalaa.mautils.gson.java.fromJsonJava
@@ -29,6 +32,7 @@ import kotlin.test.assertEquals
 import mohamedalaa.mautils.sample.gson.ConditionReminderOrAction.*
 import mohamedalaa.mautils.sample.gson.ConditionReminderOrAction.Timing.*
 import mohamedalaa.mautils.sample.gson.ConditionReminderOrAction.Timing.AbstractExactDate.*
+import kotlin.test.assertNotEquals
 
 @Config(manifest = Config.NONE, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
@@ -114,18 +118,24 @@ class TestObject {
 
     @Test
     fun reminderChecks() {
-        println("mohamedalaa.mautils.sample.gson.ConditionReminderOrAction\$Timing\$AbstractWindowDate")
+        //println("mohamedalaa.mautils.sample.gson.ConditionReminderOrAction\$Timing\$AbstractWindowDate")
 
         // ==> Second nest of sealed class
 
         val windowTime1 = WindowTime(
-            ExactTime(3, 42, true),
+            ExactTime(3, 42, true).apply { mido = "428093820"; int = 428093820 },
             ExactTime(11, 19, false)
-        )
+        ).apply {
+            mido = " kefwoiejf"
+            int = 5648
+        }
         val windowTime2 = WindowTime(
-            ExactTime(3, 42, true),
+            ExactTime(3, 42, true).apply { mido = "428093820"; int = 428093820 },
             ExactTime(11, 19, false)
-        )
+        ).apply {
+            mido = " kefwoiejf"
+            int = 5648
+        }
 
         assertEquals(windowTime1, windowTime2)
 
@@ -139,6 +149,17 @@ class TestObject {
 
         assertEquals(r1, windowTime1)
         assertEquals(r2, windowTime2)
+        assertEquals(windowTime1.fromInclusive.int, 428093820)
+        assertEquals((r1 as WindowTime).fromInclusive.int, 428093820)
+        assertEquals(windowTime1.fromInclusive.mido, r1.fromInclusive.mido)
+        assertNotEquals(windowTime1.fromInclusive.mido, r1.toInclusive.mido) // Note NOT isa.
+        /*
+        Then
+        ExactTime inside windowTime has it's changes from super class but windowTime don't isa ?!
+         */
+        assertEquals(windowTime1.int, r1.int) // ERROR here
+        assertEquals(windowTime1.mido, r1.mido)
+        assertEquals(5648, r1.int)
 
         // ==> third nest of sealed class
 
@@ -155,24 +176,27 @@ class TestObject {
         val rr1 = jj1.fromJson<ConditionReminderOrAction>()
         val rr2 = jj2.fromJson<ConditionReminderOrAction>()
 
-        println()
-        println()
-        println("jj1 $jj1")
         assertEquals(rr1, daysOfMonth1)
         assertEquals(rr2, daysOfMonth2)
 
         // ==> additional check second sealed class but has inside it var of third sealed and first sealed isa.
 
         val abstractWindowDate1: ConditionReminderOrAction = AbstractWindowDate(
-            daysOfMonth1 as DaysOfMonth,
-            daysOfMonth2 as DaysOfMonth,
+            (daysOfMonth1 as DaysOfMonth).apply { aa = "mido"; int = 3232 },
+            (daysOfMonth2 as DaysOfMonth).apply { aa = "mido"; int = 3232 },
             SomeObjectAsWellIsa
-        )
+        ).apply {
+            mido = "dewdwedwedewd"
+            int = 300000
+        }
         val abstractWindowDate2: ConditionReminderOrAction = AbstractWindowDate(
-            daysOfMonth1,
-            daysOfMonth2,
+            daysOfMonth1.apply { aa = "mido"; int = 3232 },
+            daysOfMonth2.apply { aa = "mido"; int = 3232 },
             SomeObjectAsWellIsa
-        )
+        ).apply {
+            mido = "dewdwedwedewd"
+            int = 300000
+        }
 
         assertEquals(abstractWindowDate1, abstractWindowDate2)
 
@@ -186,6 +210,13 @@ class TestObject {
 
         assertEquals(ar1, abstractWindowDate1)
         assertEquals(ar2, abstractWindowDate2)
+        purplePrintLn("aj1 $aj1")
+        assertEquals(abstractWindowDate1.mido, ar1.mido) // todo ERROR here isa. -------------------------------------------------------------
+        assertEquals((abstractWindowDate1 as AbstractWindowDate).int, (ar1 as AbstractWindowDate).int)
+        assertEquals(abstractWindowDate1.int, 300000) // and here isa ?!?
+        assertEquals(abstractWindowDate1.fromInclusive.aa, ar1.fromInclusive.aa) // Error here isa.
+        assertEquals(abstractWindowDate1.fromInclusive.mido, ar1.fromInclusive.mido)
+        assertEquals(abstractWindowDate1.fromInclusive.int, ar1.fromInclusive.int)
 
         // ==> Data class having third nest of instance of sealed class isa.
 
@@ -217,6 +248,17 @@ class TestObject {
         val r22 = j22.fromJson<ReminderOrAction>()
         assertEquals(r11, reminderOrAction1)
         assertEquals(r22, reminderOrAction2)
+
+        purplePrintLn(j11)
+
+        assertEquals(
+            (r11.condition1 as AbstractWindowDate).fromInclusive.int,
+            (reminderOrAction1.condition1 as AbstractWindowDate).fromInclusive.int
+        )
+        assertEquals(
+            (r11.condition1 as AbstractWindowDate).fromInclusive.int,
+            (abstractWindowDate1 as AbstractWindowDate).fromInclusive.int
+        )
     }
 
 }
