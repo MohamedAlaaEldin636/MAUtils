@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.gson.internal
+package mohamedalaa.mautils.sample.gson;
 
-import com.google.gson.InstanceCreator
-import java.lang.reflect.Type
+import com.google.gson.reflect.TypeToken;
 
-internal class JsonInstanceCreator : InstanceCreator<Any> {
-
-    override fun createInstance(type: Type?): Any? {
-        return if (type is Class<*>) type.kotlin.objectInstance else null
-    }
-
-}
+public class TestTypeToken2 extends TypeToken<SeveralTypeParams<
+    SeveralTypeParams<
+        SeveralTypeParams<
+            ReminderOrAction,
+            Float,
+            String
+            >,
+        Double,
+        ConditionReminderOrAction
+        >,
+    Integer,
+    Boolean
+>> {}

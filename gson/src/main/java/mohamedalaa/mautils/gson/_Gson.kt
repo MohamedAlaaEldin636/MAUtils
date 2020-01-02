@@ -16,50 +16,38 @@
 package mohamedalaa.mautils.gson
 
 import com.google.gson.*
-import com.google.gson.reflect.TypeToken
 import mohamedalaa.mautils.core_kotlin.extensions.toStringOrEmpty
 import mohamedalaa.mautils.gson_annotation.GsonAnnotationConstants
 import mohamedalaa.mautils.gson.internal.JsonDeserializerForSealedClasses
 import mohamedalaa.mautils.gson.internal.JsonSerializerForSealedClasses
-import java.lang.reflect.Type
 import kotlin.Exception
 import mohamedalaa.mautils.gson.java.GsonConverter
 
 /**
  * Converts `this JSON String` to object of type [E], or null in case of any error occurs isa.
  *
- * **First Warning** (Compile time checks, Note below example)
+ * ### Warning
+ * **(Compile time checks, Note below example)**
  * ```
- * val jsonString = listOf(6, null, 53) // Nullable elements list (Nullable type parameter)
- * // below code makes no error will occur however listOfInts is currently actually List<Int?>?
- * val listOfInts: List<Int>? = jsonString.fromJsonOrNullJava()
- * // so to workaround it, either be sure 100% type parameter is not null or BETTER use nullable type parameters isa.
- * val listOfInts: List<Int?>? = jsonString.fromJsonOrNullJava()
- * ```
- *
- * **Second Warning** (Nested Type Parameters)
- *
- * Using any nested type parameters is valid and will be converted safely, however that's safe
- *
- * only if nested type parameters of object are invariant or so deep in nesting, So if they are variance annotated as (in) OR (out)
- *
- * then using a java workaround is a must or conversion will make unexpected results,
- *
- * The workaround is to create a Java class (Must be in Java class) and use [GsonConverter] isa.
- * ```
- * // Inside HelperJavaClass.java
- * public class HelperJavaClass {
- *      public static CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> getCustomWithTypeParam(
- *              String jsonString) {
- *          return new GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>>(){}.fromJsonJava(jsonString);
+ * val list = listOf(6, null, 53) // Nullable elements list (Nullable type parameter)
+ * val jsonString = list.toJson()
+ * // below code makes no error will occur however rList is currently actually List<Int?>?
+ * val rList: List<Int> = jsonString.fromJson()
+ * // can't even loop through the list without throwing NullPointerException isa.
+ * assertTrue {
+ *      runCatching {
+ *          @Suppress("SENSELESS_COMPARISON")
+ *          rList.any { it == null }
+ *          // Not reached code isa.
+ *          false
+ *      }.getOrElse {
+ *          it is NullPointerException
  *      }
  * }
- *
- * // Then use it easily in your kotlin code as below
- * // KotlinClass.kt
- * val retrievedAny = HelperJavaClass.getCustomWithTypeParam(jsonString)
+ * // so to workaround it, either be sure 100% type parameter is not null
+ * or BETTER use nullable type parameters isa.
+ * val listOfInts: List<Int?>? = jsonString.fromJsonOrNullJava()
  * ```
- * Also note that using a nested type parameters containing a non-nesting non-invariant type parameters is completely valid and safe isa.
  *
  * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
@@ -74,12 +62,8 @@ inline fun <reified E> String?.fromJsonOrNull(gson: Gson? = null): E? = this?.ru
     }
 
     val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
-    //val collectionType = generateCollectionType<E>()
-
-    //try { usedGson.fromJson(this, collectionType) } catch (e: Exception) { null }
 
     try { object : GsonConverter<E>(usedGson){}.fromJsonOrNull(this) } catch (e: Exception) { null }
-    //     try { object : GsonConverter<E>(usedGson){}.toJsonOrNull(this) } catch (e: Exception) { null }
 }
 
 /**
@@ -110,22 +94,9 @@ inline fun <reified E> String?.fromJson(gson: Gson? = null): E = fromJsonOrNull(
  */
 inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
     val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
-    //val collectionType = generateCollectionType<E>()
 
-    //try { usedGson.toJson(this, collectionType) } catch (e: Exception) { null }
-
-    // todo use below but after checking that it won't work in nested type variences isa.
-    // or to be more exact any nested of type that is either interface or t2reban open/sealed/abstract isa.
     try { object : GsonConverter<E>(usedGson){}.toJsonOrNull(this) } catch (e: Exception) { null }
 }
-/*inline fun <reified E> E?.toJsonOrNull2(gson: Gson? = null): String? = this?.run {
-    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
-    val collectionType = generateCollectionType<E>()
-
-    object : GsonConverter<E>(){}.toJsonOrNull(this)
-
-    try { usedGson.toJson(this, collectionType) } catch (e: Exception) { null }
-}*/
 
 /**
  * Exactly same as [toJsonOrNull], the only difference that instead of returning null
@@ -187,10 +158,6 @@ internal val privateGeneratedGson: Gson by lazy {
         .enableComplexMapKeySerialization()
         .create()
 }
-
-@PublishedApi
-internal inline fun <reified E> generateCollectionType(): Type
-    = object : TypeToken<E>(){}.type
 
 @PublishedApi
 internal fun Gson.addTypeAdapters(): Gson {

@@ -19,16 +19,11 @@ package mohamedalaa.mautils.gson.java
 
 import com.google.gson.Gson
 import com.google.gson.internal.`$Gson$Types`
-import mohamedalaa.mautils.core_kotlin.*
-import mohamedalaa.mautils.core_kotlin.extensions.performIfNotNull
 import mohamedalaa.mautils.gson.addTypeAdapters
-import mohamedalaa.mautils.gson.del_later.canonicalize
-import mohamedalaa.mautils.gson.del_later.canonicalizeOrNull
-import mohamedalaa.mautils.gson.del_later.convertToTypeOrNullIsa
+import mohamedalaa.mautils.gson.internal.canonicalizeOrNull
 import mohamedalaa.mautils.gson.privateGeneratedGson
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
-import java.lang.reflect.WildcardType
 
 /**
  * Converts `receiver` object to a JSON String OR null in case of any error isa.
@@ -234,74 +229,14 @@ abstract class GsonConverter<E>(private val gson: Gson? = null) {
     private fun getSuperclassTypeParameter(subclass: Class<*>): Type {
         val superclass = subclass.genericSuperclass
 
-        //superclass.zTest1()
-
-        //if (true) return superclass as ParameterizedType
-
         if (superclass is Class<*>) {
             throw RuntimeException("Missing type parameter isa.")
         }
 
         val parameterizedType = superclass as ParameterizedType
-
-        /*
-        this.typeArguments = typeArguments.clone();
-          for (int t = 0, length = this.typeArguments.length; t < length; t++) {
-            checkNotNull(this.typeArguments[t]);
-            checkNotPrimitive(this.typeArguments[t]);
-            this.typeArguments[t] = canonicalize(this.typeArguments[t]);
-          }
-         */
-        //val v = parameterizedType.actualTypeArguments.clone()
-        //cann(parameterizedType.actualTypeArguments[0])
-
         return GsonConverter.canonicalizeOrNull(
             parameterizedType.actualTypeArguments[0]
         ) ?: `$Gson$Types`.canonicalize(parameterizedType.actualTypeArguments[0])
-    }
-
-    private fun cann(type: Type) {
-        if (true) {
-            cyanPrintLn("Before canonicalize isa -> $type")
-            val newType = GsonConverter.canonicalize(type)
-            infoPrintLn("After canonicalize isa -> $newType")
-
-            return
-        }
-
-        val parameterizedType = type as? ParameterizedType ?: return
-
-        errorPrintLn("parameterizedType $parameterizedType")
-
-        val n: Type = parameterizedType.actualTypeArguments[1]
-        warnPrintLn("hello $parameterizedType")
-        infoPrintLn("hello $n")
-        errorPrintLn(n is WildcardType)
-
-        if (n is WildcardType) {
-            n.convertToTypeOrNullIsa().apply {
-                this as ParameterizedType
-                cyanPrintLn(ownerType)
-                cyanPrintLn(rawType)
-                cyanPrintLn(actualTypeArguments.toList())
-            }
-            /*cyanPrintLn(n.lowerBounds.toList())
-            purplePrintLn(n.upperBounds.toList())
-
-            runCatching {
-                val listAsPT = n.upperBounds[0] as ParameterizedType
-                println(listAsPT.rawType)
-                println(listAsPT.ownerType)
-                println(listAsPT.actualTypeArguments.toList())
-            }*/
-
-            //println(n.typeName)
-        }
-        /*
-        ParameterizedType p = (ParameterizedType) type;
-      return new ParameterizedTypeImpl(p.getOwnerType(),
-          p.getRawType(), p.getActualTypeArguments());
-         */
     }
 
 }
@@ -317,13 +252,3 @@ private fun <E> String?.fromJsonOrNullJavaPrivate(type: Type, gson: Gson?): E? =
 
     try { usedGson.fromJson(this, type) } catch (e: Exception) { null }
 }
-
-private fun Type?.zTest1() = performIfNotNull {
-    infoPrintLn(this)
-
-    val parameterizedType = runCatching {
-        this as ParameterizedType
-    }.getOrNull()
-    errorPrintLn(parameterizedType)
-}
-

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.gson.del_later
+package mohamedalaa.mautils.gson.internal
 
 import com.google.gson.internal.`$Gson$Preconditions`
 import com.google.gson.internal.`$Gson$Types`
@@ -22,12 +22,16 @@ import java.io.Serializable
 import java.lang.reflect.*
 
 /**
- * - Eliminates any wildcard to it's first bound isa.
+ * - Eliminates any wildcard to it's first upper or lower bound isa.
  */
 internal fun GsonConverter.Companion.canonicalize(type: Type): Type {
     return when (type) {
         is Class<*> -> if (type.isArray) {
-            GenericArrayTypeImpl(canonicalize(type.componentType as Type))
+            GenericArrayTypeImpl(
+                canonicalize(
+                    type.componentType as Type
+                )
+            )
         }else {
             type
         }
@@ -36,7 +40,9 @@ internal fun GsonConverter.Companion.canonicalize(type: Type): Type {
             type.rawType,
             type.actualTypeArguments.toList()
         )
-        is GenericArrayType -> GenericArrayTypeImpl(type.genericComponentType)
+        is GenericArrayType -> GenericArrayTypeImpl(
+            type.genericComponentType
+        )
         is WildcardType -> type.convertToTypeOrNull()!!/*WildcardTypeImpl(type.upperBounds, type.lowerBounds)*/
         else -> type
     }
@@ -82,7 +88,11 @@ fun WildcardType.convertToTypeOrNull(): Type? {
         if (it is WildcardType) it.convertToTypeOrNull() else GsonConverter.canonicalize(it)
     }
 
-    return ParameterizedTypeImpl(ownerType, rawType, typeArguments)
+    return ParameterizedTypeImpl(
+        ownerType,
+        rawType,
+        typeArguments
+    )
 }
 
 private class ParameterizedTypeImpl(
@@ -100,7 +110,7 @@ private class ParameterizedTypeImpl(
     }
 
     init {
-        // require an owner type if the raw type needs it
+        // require an owner type if the raw type needs it isa.
         if (rawType is Class<*>) {
             val isStaticOrTopLevelClass = Modifier.isStatic(rawType.modifiers)
                 || rawType.enclosingClass == null
@@ -156,68 +166,3 @@ private class ParameterizedTypeImpl(
     }
 
 }
-
-
-/**
- * - Supports first bound (upper checked firstly) only isa.
- *
- * - The WildcardType interface supports multiple upper bounds and multiple
- * lower bounds. We only support what the Java 6 language needs - at most one
- * bound. If a lower bound is set, the upper bound must be Object.class.
- */
-/*private class WildcardTypeImpl(
-    upperBounds: Array<Type>,
-    lowerBounds: Array<Type?>
-) : WildcardType, Serializable {
-
-    private var upperBound: Type? = null
-    private var lowerBound: Type? = null
-    override fun getUpperBounds(): Array<Type> {
-        return arrayOf(upperBound!!)
-    }
-
-    override fun getLowerBounds(): Array<Type> {
-        return lowerBound?.let { arrayOf(it) } ?: `$Gson$Types`.EMPTY_TYPE_ARRAY
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return (other is WildcardType
-            && `$Gson$Types`.equals(this, other as WildcardType?))
-    }
-
-    override fun hashCode(): Int { // this equals Arrays.hashCode(getLowerBounds()) ^ Arrays.hashCode(getUpperBounds());
-        return ((if (lowerBound != null) 31 + lowerBound.hashCode() else 1)
-            xor 31 + upperBound.hashCode())
-    }
-
-    override fun toString(): String {
-        return if (lowerBound != null) {
-            "? super " + `$Gson$Types`.typeToString(lowerBound)
-        } else if (upperBound === Any::class.java) {
-            "?"
-        } else {
-            "? extends " + `$Gson$Types`.typeToString(upperBound)
-        }
-    }
-
-    companion object {
-        private const val serialVersionUID: Long = 0
-    }
-
-    init {
-        `$Gson$Preconditions`.checkArgument(lowerBounds.size <= 1)
-        `$Gson$Preconditions`.checkArgument(upperBounds.size == 1)
-        if (lowerBounds.size == 1) {
-            `$Gson$Preconditions`.checkNotNull(lowerBounds[0])
-            `$Gson$Types`.checkNotPrimitive(lowerBounds[0])
-            `$Gson$Preconditions`.checkArgument(upperBounds[0] === Any::class.java)
-            lowerBound = `$Gson$Types`.canonicalize(lowerBounds[0])
-            upperBound = Any::class.java
-        } else {
-            `$Gson$Preconditions`.checkNotNull(upperBounds[0])
-            `$Gson$Types`.checkNotPrimitive(upperBounds[0])
-            lowerBound = null
-            upperBound = `$Gson$Types`.canonicalize(upperBounds[0])
-        }
-    }
-}*/

@@ -16,7 +16,6 @@
 package mohamedalaa.mautils.sample.gson
 
 import android.os.Build
-import mohamedalaa.mautils.core_kotlin.infoPrintLn
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.fromJsonOrNull
 import mohamedalaa.mautils.gson.java.fromJsonJava
@@ -32,6 +31,9 @@ import mohamedalaa.mautils.sample.gson.ConditionReminderOrAction.Timing.*
 import mohamedalaa.mautils.sample.gson.ConditionReminderOrAction.Timing.AbstractExactDate.*
 import kotlin.test.assertNotEquals
 
+/**
+ * @see [TestSuperClasses]
+ */
 @Config(manifest = Config.NONE, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class TestObject {
@@ -109,9 +111,6 @@ class TestObject {
 
         assertEquals(rr1, testDataClassA1)
         assertEquals(rr2, testDataClassA2)
-
-        println()
-        println(jj1)
     }
 
     @Test

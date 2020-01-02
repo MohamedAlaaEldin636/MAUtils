@@ -18,11 +18,7 @@ package mohamedalaa.mautils.sample.gson
 import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import mohamedalaa.mautils.core_kotlin.infoPrintLn
-import mohamedalaa.mautils.core_kotlin.purplePrintLn
-import mohamedalaa.mautils.gson.TestGsonConverterB
 import mohamedalaa.mautils.gson.fromJson
-import mohamedalaa.mautils.gson.java.GsonConverter
 import mohamedalaa.mautils.gson.toJson
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,14 +26,18 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
+/**
+ * @see [TestObject]
+ */
 @Config(manifest = Config.NONE, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class TestSuperClasses {
 
     // ==> Second nest of sealed class
 
-    val windowTime1 = ConditionReminderOrAction.Timing.WindowTime(
+    private val windowTime1 = ConditionReminderOrAction.Timing.WindowTime(
         ConditionReminderOrAction.Timing.ExactTime(3, 42, true).apply {
             mido = "428093820"; int = 428093820
         },
@@ -46,7 +46,7 @@ class TestSuperClasses {
         mido = " kefwoiejf"
         int = 5648
     }
-    val windowTime2 = ConditionReminderOrAction.Timing.WindowTime(
+    private val windowTime2 = ConditionReminderOrAction.Timing.WindowTime(
         ConditionReminderOrAction.Timing.ExactTime(3, 42, true).apply {
             mido = "428093820"; int = 428093820
         },
@@ -56,34 +56,38 @@ class TestSuperClasses {
         int = 5648
     }
 
-    val j1 = windowTime1.toJson<ConditionReminderOrAction>()
-    val j2 = windowTime2.toJson<ConditionReminderOrAction>()
+    private val j1 = windowTime1.toJson<ConditionReminderOrAction>()
+    private val j2 = windowTime2.toJson<ConditionReminderOrAction>()
 
-    val r1 = j1.fromJson<ConditionReminderOrAction>()
-    val r2 = j2.fromJson<ConditionReminderOrAction>()
+    @Suppress("unused")
+    private val r1 = j1.fromJson<ConditionReminderOrAction>()
+    @Suppress("unused")
+    private val r2 = j2.fromJson<ConditionReminderOrAction>()
 
     // ==> third nest of sealed class
 
-    val daysOfMonth1: ConditionReminderOrAction =
+    private val daysOfMonth1: ConditionReminderOrAction =
         ConditionReminderOrAction.Timing.AbstractExactDate.DaysOfMonth(
             listOf(32, 43, 53, 55),
             StrangeEnum.STRANGE_3
         )
-    val daysOfMonth2: ConditionReminderOrAction =
+    private val daysOfMonth2: ConditionReminderOrAction =
         ConditionReminderOrAction.Timing.AbstractExactDate.DaysOfMonth(
             listOf(32, 43, 53, 55),
             StrangeEnum.STRANGE_3
         )
 
-    val jj1 = daysOfMonth1.toJson()
-    val jj2 = daysOfMonth2.toJson()
+    private val jj1 = daysOfMonth1.toJson()
+    private val jj2 = daysOfMonth2.toJson()
 
-    val rr1 = jj1.fromJson<ConditionReminderOrAction>()
-    val rr2 = jj2.fromJson<ConditionReminderOrAction>()
+    @Suppress("unused")
+    private val rr1 = jj1.fromJson<ConditionReminderOrAction>()
+    @Suppress("unused")
+    private val rr2 = jj2.fromJson<ConditionReminderOrAction>()
 
     // ==> additional check second sealed class but has inside it var of third sealed and first sealed isa.
 
-    val abstractWindowDate1: ConditionReminderOrAction = ConditionReminderOrAction.Timing.AbstractWindowDate(
+    private val abstractWindowDate1: ConditionReminderOrAction = ConditionReminderOrAction.Timing.AbstractWindowDate(
         (daysOfMonth1 as ConditionReminderOrAction.Timing.AbstractExactDate.DaysOfMonth).apply {
             aa = "mido"; int = 3232
         },
@@ -95,7 +99,7 @@ class TestSuperClasses {
         mido = "dewdwedwedewd"
         int = 300000
     }
-    val abstractWindowDate2: ConditionReminderOrAction = ConditionReminderOrAction.Timing.AbstractWindowDate(
+    private val abstractWindowDate2: ConditionReminderOrAction = ConditionReminderOrAction.Timing.AbstractWindowDate(
         (daysOfMonth1 as ConditionReminderOrAction.Timing.AbstractExactDate.DaysOfMonth).apply { aa = "mido"; int = 3232 },
         (daysOfMonth2 as ConditionReminderOrAction.Timing.AbstractExactDate.DaysOfMonth).apply { aa = "mido"; int = 3232 },
         ConditionReminderOrAction.SomeObjectAsWellIsa
@@ -104,15 +108,17 @@ class TestSuperClasses {
         int = 300000
     }
 
-    val aj1 = abstractWindowDate1.toJson()
-    val aj2 = abstractWindowDate2.toJson()
+    private val aj1 = abstractWindowDate1.toJson()
+    private val aj2 = abstractWindowDate2.toJson()
 
-    val ar1 = aj1.fromJson<ConditionReminderOrAction>()
-    val ar2 = aj2.fromJson<ConditionReminderOrAction>()
+    @Suppress("unused")
+    private val ar1 = aj1.fromJson<ConditionReminderOrAction>()
+    @Suppress("unused")
+    private val ar2 = aj2.fromJson<ConditionReminderOrAction>()
 
     // ==> Data class having third nest of instance of sealed class isa.
 
-    val reminderOrAction1 = ReminderOrAction(
+    private val reminderOrAction1 = ReminderOrAction(
         "",
         33,
         abstractWindowDate1,
@@ -121,7 +127,7 @@ class TestSuperClasses {
         32323.4232,
         32.3f
     )
-    val reminderOrAction2 = ReminderOrAction(
+    private val reminderOrAction2 = ReminderOrAction(
         "",
         33,
         abstractWindowDate2,
@@ -131,11 +137,13 @@ class TestSuperClasses {
         32.3f
     )
 
-    val j11 = reminderOrAction1.toJson()
-    val j22 = reminderOrAction2.toJson()
+    private val j11 = reminderOrAction1.toJson()
+    private val j22 = reminderOrAction2.toJson()
 
-    val r11 = j11.fromJson<ReminderOrAction>()
-    val r22 = j22.fromJson<ReminderOrAction>()
+    @Suppress("unused")
+    private val r11 = j11.fromJson<ReminderOrAction>()
+    @Suppress("unused")
+    private val r22 = j22.fromJson<ReminderOrAction>()
 
     /**
      * - gson serialization support superclass properties isa.
@@ -149,7 +157,6 @@ class TestSuperClasses {
         val jImpl1 = impl1.toJson()
         val jImpl2 = impl2.toJson()
         assertEquals(jImpl1, jImpl2)
-        infoPrintLn(jImpl1)
 
         val rImpl1 = jImpl1.fromJson<ImplOfOpenClassA>()
         val rImpl2 = jImpl2.fromJson<ImplOfOpenClassA>()
@@ -257,31 +264,20 @@ class TestSuperClasses {
         // gson ( NOTE you must declare TypeToken in a separate java class isa. )
         // can't be used anonymously nor declared in a kotlin file isa.
         val j13 = gson.toJson(map4)
-        val token3 = /*TT()*/ TestTypeToken1() // object : TypeToken<Map<String, List<Pair<Int, Int>>>>(){}
+        val token3 = TestTypeToken1()
         val r13: Map<String, List<Pair<Int, Int>>> = gson.fromJson(j13, token3.type)
         assertEquals(map4, r13)
+        // Proving that can't be used anonymously in case of gson isa.
+        val token3Anonymous = object : TypeToken<Map<String, List<Pair<Int, Int>>>>(){}
+        val r13Anonymous: Map<String, List<Pair<Int, Int>>> = gson.fromJson(j13, token3Anonymous.type)
+        assertNotEquals(map4, r13Anonymous) // NOTE NotEquals isa.
 
-        /*purplePrintLn("before")
-        map4.toJsonOrNull2() // todo el 7aga byna ezan make only gsonConverter for java devs only isa.
-        purplePrintLn("after")*/
-
-        val j14 = /*GC()*/GsonConverterMapOfStringAndListOfPairOfIntAndInt().toJson(map4)// map4.toJson()
-        val r14 = /*GC()*/GsonConverterMapOfStringAndListOfPairOfIntAndInt().fromJson(j14) // j14.fromJson<Map<String, List<Pair<Int, Int>>>>()
-        // todo gson converter must be declarec in java file which is kinda annoying so maybe u need to declare GsonConverter itself in java isa.
+        // No need for GsonConverter since we use code from kotlin not java isa.
+        val j14 = map4.toJson()
+        val r14 = j14.fromJson<Map<String, List<Pair<Int, Int>>>>()
         assertEquals(map4, r14)
 
-        val j15 = object : GsonConverter<Map<String, List<Pair<Int, Int>>>>(){}.toJson(map4)
-        val r15 = object : GsonConverter<Map<String, List<Pair<Int, Int>>>>(){}.fromJson(j15)
-        assertEquals(map4, r15)
-        // todo tb what if i can pass the parameterizedClass instance msln isa....
-
-
-        //  + 1 with nested varience but gsonConverter is used internally isa.
-        val j18 = map4.toJson()
-        val r18 = j18.fromJson<Map<String, List<Pair<Int, Int>>>>()
-        assertEquals(map4, r18)
-
-        // todo nested params but not varience isa, so no gson converter
+        // Nested params but not-variance isa, so no gson converter isa.
         val severalTypeParams1 = SeveralTypeParams(
             SeveralTypeParams(
                 SeveralTypeParams(
@@ -350,10 +346,49 @@ class TestSuperClasses {
         >>()
         assertEquals(rSeveralTypeParams1, severalTypeParams1)
         assertEquals(rSeveralTypeParams2, severalTypeParams2)
+
+        // using gson
+        val jSeveralTypeParams1Gson = gson.toJson(severalTypeParams1)
+        // even with token can't be solved isa.
+        try {
+            @Suppress("UNUSED_VARIABLE")
+            val rSeveralTypeParams1Gson: SeveralTypeParams<
+                SeveralTypeParams<
+                    SeveralTypeParams<
+                        ReminderOrAction,
+                        Float,
+                        String
+                        >,
+                    Double,
+                    ConditionReminderOrAction
+                    >,
+                Int,
+                Boolean
+            > = gson.fromJson(jSeveralTypeParams1Gson, TestTypeToken2().type)
+            // Not reached code isa.
+            assertTrue { false }
+        }catch (throwable: Throwable) {
+            assertTrue { throwable is RuntimeException }
+        }
+    }
+
+    @Test
+    fun nullableTypeParams() {
+        val list = listOf(6, null, 53) // Nullable elements list (Nullable type parameter)
+        val jsonString = list.toJson()
+        // below code makes no error will occur however listOfInts is currently actually List<Int?>?
+        val rList: List<Int> = jsonString.fromJson()
+        // can't even loop through the list isa.
+        assertTrue {
+            runCatching {
+                @Suppress("SENSELESS_COMPARISON")
+                rList.any { it == null }
+                // Not reached code isa.
+                false
+            }.getOrElse {
+                it is NullPointerException
+            }
+        }
     }
 
 }
-
-class JJJJJJ : TestGsonConverterB<Map<String, List<Pair<Int, Int>>>>()
-class TT : TypeToken<Map<String, List<Pair<Int, Int>>>>()
-class GC : GsonConverter<Map<String, List<Pair<Int, Int>>>>()
