@@ -19,6 +19,22 @@ package mohamedalaa.mautils.sample.gson
 
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 
+data class SeveralTypeParams<A, B, C>(
+    var a: A,
+    var b: B,
+    var c: C
+)
+
+object ObjectClassA
+
+class NotDataClass(
+    a1: Int,
+    a2: Int,
+    a3: Int
+) {
+    var totalAsString: String = (a1 + a2 + a3).toString()
+}
+
 open class OpenClassA(
     var abc: Boolean,
     var def: String
@@ -28,6 +44,10 @@ data class ImplOfOpenClassA(
     var a: String,
     var b: Long?
 ) : OpenClassA(true, "")
+
+enum class StrangeEnum {
+    STRANGE_1, STRANGE_2, STRANGE_3, STRANGE_4, STRANGE_5, STRANGE_6
+}
 
 /**
  * Used as complex class to test using gson isa,
@@ -77,7 +97,7 @@ sealed class ConditionReminderOrAction(var mido: String = "mido") {
 
             data class DaysOfWeek(var days: List<Int>) : AbstractExactDate()
 
-            data class DaysOfMonth(var days: List<Int>) : AbstractExactDate()
+            data class DaysOfMonth(var days: List<Int>, var strangeEnum: StrangeEnum = StrangeEnum.STRANGE_1) : AbstractExactDate()
 
             data class StartMidEndOfMonth(
                 var start: Boolean,

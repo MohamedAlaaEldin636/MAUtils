@@ -16,62 +16,19 @@
 package mohamedalaa.mautils.gson.internal
 
 import com.google.gson.*
-import mohamedalaa.mautils.core_kotlin.*
 import mohamedalaa.mautils.core_kotlin.extensions.applyIf
 import mohamedalaa.mautils.core_kotlin.extensions.contains
 import mohamedalaa.mautils.core_kotlin.extensions.toStringOrEmpty
 import mohamedalaa.mautils.core_kotlin.extensions.toStringOrNull
-import mohamedalaa.mautils.gson.allAnnotatedClasses
+import mohamedalaa.mautils.gson.*
 import mohamedalaa.mautils.gson.allAnnotatedClassesAsString
-import mohamedalaa.mautils.gson.fromJson
-import mohamedalaa.mautils.gson.java.fromJsonJava
-import mohamedalaa.mautils.gson.toJsonOrNull
+import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
 import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.reflect.Field
 import java.lang.reflect.Type
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.jvm.javaType
-
-// todo in the special cases of sealed class vars in a data class or direct selead class
-//  I don't check fields in super classes as well isa.
-
-private val gson = GsonBuilder()
-    .serializeNulls()
-    .setLenient()
-    .enableComplexMapKeySerialization()
-    .create()
-
-private fun generateDoubleCheckGson(excludedClasses: List<Class<*>>): Gson {
-    val gsonBuilder = GsonBuilder()
-
-    allAnnotatedClasses?.forEach {
-        if (it in excludedClasses) return@forEach
-
-        gsonBuilder.registerTypeAdapter(it, JsonSerializerForSealedClasses())
-        gsonBuilder.registerTypeAdapter(it, JsonDeserializerForSealedClasses())
-    }
-
-    return gsonBuilder
-        .serializeNulls()
-        .setLenient()
-        .enableComplexMapKeySerialization()
-        .create()
-}
 
 private const val KEY_CLASS_FULL_NAME = "KEY_CLASS_FULL_NAME"
 private const val KEY_NORMAL_SERIALIZATION_JSON_STRING = "KEY_NORMAL_SERIALIZATION_JSON_STRING"
-
-private inline fun <R> runCatchingToNull(block: () -> R): R?
-    = runCatching { block() }.getOrNull()
-
-// todo move below isa.
-fun Class<*>.declaredFieldsForSuperclassesOnly(initialList: List<Field> = emptyList()): List<Field> {
-    // interfaces
-    val superclass = superclass
-    val list = (superclass ?: return initialList).declaredFields.filterNotNull()
-    return superclass.declaredFieldsForSuperclassesOnly(initialList + list)
-}
 
 internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
@@ -86,11 +43,10 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
         val innerJsonObject = JSONObject()
         runCatching {
-            // todo zawwed el beow one isa.
             val classDeclaredFields = src.javaClass.declaredFields.filterNotNull()
             val classDeclaredFieldsNames = classDeclaredFields.map { it.name }
             val allSuperclassesDeclaredFields = src.javaClass.declaredFieldsForSuperclassesOnly().filter {
-                it.name !in classDeclaredFieldsNames // so there will be no clash of same name isa.
+                it.name !in classDeclaredFieldsNames // so there will be no clash of same name isa. ( might instead produce error in future isa. )
             }
             for (field in (classDeclaredFields + allSuperclassesDeclaredFields)) {
                 val isAccessible = field.isAccessible
@@ -109,29 +65,15 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
                 innerJsonObject.put(
                     jsonKey,
-                    // todo what if value was enum is that ok or not isa ?!
                     when (fieldInstance) {
                         null -> null
-                        is String, is Boolean, is Int, is Long, is Double -> fieldInstance
+                        is String, is Boolean, is Int, is Long, is Double, is Enum<*> -> fieldInstance
                         else -> if (jsonValue == null) null else runCatching {
                             JSONObject(jsonValue)
                         }.getOrElse {
                             runCatching { JSONArray(jsonValue) }.getOrNull()
                         }
                     }
-                    /*when (fieldInstance) {
-                        null -> null
-                        is String -> fieldInstance
-                        is Boolean -> jsonValue
-                        is Int -> jsonValue
-                        is Long -> jsonValue
-                        is Double -> jsonValue
-                        else -> if (jsonValue == null) null else runCatching {
-                            JSONObject(jsonValue)
-                        }.getOrElse {
-                            runCatching { JSONArray(jsonValue) }.getOrNull()
-                        }
-                    }*/
                 )
 
                 field.isAccessible = isAccessible
@@ -147,24 +89,7 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
 }
 
-// todo move below isa.
-fun Class<*>.getDeclaredFieldsForSuperclassesOnly(name: String): Field? {
-    val allFields = declaredFieldsForSuperclassesOnly()
-    return allFields.firstOrNull {
-        it.name == name
-    }
-}
-
 internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
-
-    private val excludedClasses = mutableListOf<Class<*>>()
-
-    // todo maybe del this later isa.
-    private fun generateDoubleCheckGson(excludeClass: Class<*>): Gson {
-        excludedClasses += excludeClass
-
-        return generateDoubleCheckGson(excludedClasses)
-    }
 
     override fun deserialize(
         json: JsonElement?,
@@ -179,7 +104,7 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
         val jsonObject = JSONObject(jsonAsString)
 
         val classFullName = jsonObject.optString(KEY_CLASS_FULL_NAME) ?: (typeOfT as? Class<*>)?.name.orEmpty()
-        val jClass = runCatchingToNull { Class.forName(classFullName) } ?: typeOfT as? Class<*>
+        val jClass = runCatching { Class.forName(classFullName) }.getOrNull() ?: typeOfT as? Class<*>
         if (jClass != null) {
             jClass.kotlin.objectInstance?.apply {
                 return this
@@ -201,24 +126,15 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 
                 val newValue = when (value) {
                     is JSONObject, is JSONArray -> {
-                        // todo what if key not direct inside it isa. t2reban solved by updating above ?: return null
-                        // but try to test it i mean value hna aha feha sealed class bs msh direct child f el value la2 gowa 7ad tany isa.
-                        val clazz = if (jClass == null) null else jClass.runCatching {
-                            //cyanPrintLn("$jClass ${fields.toList()}")
-                            //cyanPrintLn("-> ${jClass.methods.toList()}")
-                            //cyanPrintLn("-> ${jClass.kotlin.declaredMemberProperties.toList()}")
-                            // todo maybe try all propertied not the declared ones only isa. for superclasses isa.
-
-                            fields.firstOrNull {
-                                it?.name == key
-                            }?.type ?: kotlin.declaredMemberProperties.firstOrNull {
+                        val valueClass = if (jClass == null) null else jClass.runCatching {
+                            declaredFieldsForSuperclassesOnly(declaredFields.toList()).firstOrNull {
                                 it.name == key
-                            }?.returnType?.javaType
+                            }?.type
                         }.getOrNull()
 
                         deserialize(
                             runCatching { JsonParser().parse(valueAsString) }.getOrNull(),
-                            clazz ?: jClass/*wrong but not needed isa.*/, // param class from reflection isa. OR field with name key brdo reflection isa.
+                            valueClass ?: jClass,
                             context
                         )
                     }
@@ -227,20 +143,7 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
                 newParamsWithKeys += newValue to key
             }
 
-            // todo wrong what if child inside child we need to check if direct or noot by looping each JSON key/value pair isa.
             runCatching {
-                // todo keep trying every constructor isa. and if no way return null isa.
-
-                // newParams . subList acc to constructor params isa.
-
-
-                /*errorPrintLn("jClass $jClass")
-                errorPrintLn("normalSerializationJsonObject $normalSerializationJsonObject")*/
-
-
-                // todo reflection should be for every case not this special case
-                // so either use no-args one or the below approach then set every field
-                // BUT what if class is selead class msh 3aref see el class type mn el json isa.
                 for (constructor in jClass!!.constructors) {
                     runCatching {
                         val size = constructor.parameterTypes.size
@@ -248,20 +151,11 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
                         val constructorParams = newParamsWithKeys.subList(0, size).map { it.first }
                         val otherParamsWithKeys = newParamsWithKeys.subList(size, newParamsWithKeys.size)
 
-                        /*infoPrintLn("size $size, newParams $newParams")
-                        warnPrintLn("constructor.parameterTypes ${constructor.parameterTypes.toList()}")*/
-
-                        //infoPrintLn("size $size, newParams.size ${newParams.size}")
-
                         return constructor.newInstance(*constructorParams.toTypedArray()).applyIf(otherParamsWithKeys.isNotEmpty()) {
                             for ((param, key) in otherParamsWithKeys) {
                                 val field = runCatching {
-                                    javaClass.getDeclaredFieldsForSuperclassesOnly(key)!!
-                                }.getOrElse {
-                                    errorPrintLn("error isa is $it")
-
-                                    null
-                                } ?: continue
+                                    javaClass.getDeclaredFieldsForSuperclassesOnly(key)
+                                }.getOrNull() ?: continue
 
                                 val isAccessible = field.isAccessible
                                 field.isAccessible = true
@@ -276,16 +170,7 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
             }
         }
 
-        if (jClass == null) return null
-
-        var normalDeserialization = runCatchingToNull { gson.fromJson(normalSerializationJsonObject.toString(), jClass) }
-
-        val doubleCheckGson = generateDoubleCheckGson(jClass)
-        if (normalDeserialization != normalSerializationJsonObject.toString().fromJson(doubleCheckGson)) {
-            normalDeserialization = normalSerializationJsonObject.toString().fromJsonJava(jClass, doubleCheckGson)
-        }
-
-        return normalDeserialization
+        return normalSerializationJsonObject.toString().fromJsonOrNullJava(jClass ?: return null)
     }
 
 }

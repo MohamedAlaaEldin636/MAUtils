@@ -16,9 +16,7 @@
 package mohamedalaa.mautils.sample.gson
 
 import android.os.Build
-import mohamedalaa.mautils.core_kotlin.errorPrintLn
 import mohamedalaa.mautils.core_kotlin.infoPrintLn
-import mohamedalaa.mautils.core_kotlin.purplePrintLn
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.fromJsonOrNull
 import mohamedalaa.mautils.gson.java.fromJsonJava
@@ -118,7 +116,6 @@ class TestObject {
 
     @Test
     fun reminderChecks() {
-        //println("mohamedalaa.mautils.sample.gson.ConditionReminderOrAction\$Timing\$AbstractWindowDate")
 
         // ==> Second nest of sealed class
 
@@ -152,19 +149,15 @@ class TestObject {
         assertEquals(windowTime1.fromInclusive.int, 428093820)
         assertEquals((r1 as WindowTime).fromInclusive.int, 428093820)
         assertEquals(windowTime1.fromInclusive.mido, r1.fromInclusive.mido)
-        assertNotEquals(windowTime1.fromInclusive.mido, r1.toInclusive.mido) // Note NOT isa.
-        /*
-        Then
-        ExactTime inside windowTime has it's changes from super class but windowTime don't isa ?!
-         */
-        assertEquals(windowTime1.int, r1.int) // ERROR here
+        assertNotEquals(windowTime1.fromInclusive.mido, r1.toInclusive.mido) // Note NOT equals isa.
+        assertEquals(windowTime1.int, r1.int)
         assertEquals(windowTime1.mido, r1.mido)
         assertEquals(5648, r1.int)
 
         // ==> third nest of sealed class
 
-        val daysOfMonth1: ConditionReminderOrAction = DaysOfMonth(listOf(32, 43, 53, 55))
-        val daysOfMonth2: ConditionReminderOrAction = DaysOfMonth(listOf(32, 43, 53, 55))
+        val daysOfMonth1: ConditionReminderOrAction = DaysOfMonth(listOf(32, 43, 53, 55), StrangeEnum.STRANGE_3)
+        val daysOfMonth2: ConditionReminderOrAction = DaysOfMonth(listOf(32, 43, 53, 55), StrangeEnum.STRANGE_3)
 
         assertEquals(daysOfMonth1, daysOfMonth2)
 
@@ -210,11 +203,10 @@ class TestObject {
 
         assertEquals(ar1, abstractWindowDate1)
         assertEquals(ar2, abstractWindowDate2)
-        purplePrintLn("aj1 $aj1")
-        assertEquals(abstractWindowDate1.mido, ar1.mido) // todo ERROR here isa. -------------------------------------------------------------
+        assertEquals(abstractWindowDate1.mido, ar1.mido)
         assertEquals((abstractWindowDate1 as AbstractWindowDate).int, (ar1 as AbstractWindowDate).int)
-        assertEquals(abstractWindowDate1.int, 300000) // and here isa ?!?
-        assertEquals(abstractWindowDate1.fromInclusive.aa, ar1.fromInclusive.aa) // Error here isa.
+        assertEquals(abstractWindowDate1.int, 300000)
+        assertEquals(abstractWindowDate1.fromInclusive.aa, ar1.fromInclusive.aa)
         assertEquals(abstractWindowDate1.fromInclusive.mido, ar1.fromInclusive.mido)
         assertEquals(abstractWindowDate1.fromInclusive.int, ar1.fromInclusive.int)
 
@@ -249,15 +241,21 @@ class TestObject {
         assertEquals(r11, reminderOrAction1)
         assertEquals(r22, reminderOrAction2)
 
-        purplePrintLn(j11)
-
         assertEquals(
             (r11.condition1 as AbstractWindowDate).fromInclusive.int,
             (reminderOrAction1.condition1 as AbstractWindowDate).fromInclusive.int
         )
         assertEquals(
             (r11.condition1 as AbstractWindowDate).fromInclusive.int,
-            (abstractWindowDate1 as AbstractWindowDate).fromInclusive.int
+            abstractWindowDate1.fromInclusive.int
+        )
+        assertEquals(
+            (((r11.condition1 as AbstractWindowDate).fromInclusive) as DaysOfMonth).strangeEnum,
+            (abstractWindowDate1.fromInclusive as DaysOfMonth).strangeEnum
+        )
+        assertEquals(
+            (((r11.condition1 as AbstractWindowDate).fromInclusive) as DaysOfMonth).strangeEnum,
+            StrangeEnum.STRANGE_3
         )
     }
 

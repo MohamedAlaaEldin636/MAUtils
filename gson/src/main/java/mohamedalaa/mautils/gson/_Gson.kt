@@ -74,9 +74,12 @@ inline fun <reified E> String?.fromJsonOrNull(gson: Gson? = null): E? = this?.ru
     }
 
     val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
-    val collectionType = generateCollectionType<E>()
+    //val collectionType = generateCollectionType<E>()
 
-    try { usedGson.fromJson(this, collectionType) } catch (e: Exception) { null }
+    //try { usedGson.fromJson(this, collectionType) } catch (e: Exception) { null }
+
+    try { object : GsonConverter<E>(usedGson){}.fromJsonOrNull(this) } catch (e: Exception) { null }
+    //     try { object : GsonConverter<E>(usedGson){}.toJsonOrNull(this) } catch (e: Exception) { null }
 }
 
 /**
@@ -107,10 +110,22 @@ inline fun <reified E> String?.fromJson(gson: Gson? = null): E = fromJsonOrNull(
  */
 inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
     val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
+    //val collectionType = generateCollectionType<E>()
+
+    //try { usedGson.toJson(this, collectionType) } catch (e: Exception) { null }
+
+    // todo use below but after checking that it won't work in nested type variences isa.
+    // or to be more exact any nested of type that is either interface or t2reban open/sealed/abstract isa.
+    try { object : GsonConverter<E>(usedGson){}.toJsonOrNull(this) } catch (e: Exception) { null }
+}
+/*inline fun <reified E> E?.toJsonOrNull2(gson: Gson? = null): String? = this?.run {
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
     val collectionType = generateCollectionType<E>()
 
+    object : GsonConverter<E>(){}.toJsonOrNull(this)
+
     try { usedGson.toJson(this, collectionType) } catch (e: Exception) { null }
-}
+}*/
 
 /**
  * Exactly same as [toJsonOrNull], the only difference that instead of returning null
