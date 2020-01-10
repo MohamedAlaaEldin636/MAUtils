@@ -48,6 +48,9 @@ internal fun GsonConverter.Companion.canonicalize(type: Type): Type {
     }
 }
 
+/**
+ * - Eliminates any wildcard to it's first upper or lower bound isa.
+ */
 internal fun GsonConverter.Companion.canonicalizeOrNull(type: Type?): Type? = runCatching {
     canonicalize(type ?: return null)
 }.getOrNull()

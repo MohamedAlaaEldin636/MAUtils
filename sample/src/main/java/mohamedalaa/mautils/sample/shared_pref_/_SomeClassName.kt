@@ -17,7 +17,6 @@
 
 package mohamedalaa.mautils.sample.shared_pref_
 
-import mohamedalaa.mautils.core_kotlin.custom_classes.MutablePair
 import mohamedalaa.mautils.sample.general_custom_classes.Person
 import mohamedalaa.mautils.shared_pref_annotation.MAKClass
 import mohamedalaa.mautils.shared_pref_annotation.MAParameterizedKClass
@@ -27,9 +26,6 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
 @MASharedPrefFileConfigs(
     imports = [
         "mohamedalaa.mautils.sample.general_custom_classes.Person",
-
-        "mohamedalaa.mautils.core_kotlin.custom_classes.mutablePair",
-        "mohamedalaa.mautils.core_kotlin.custom_classes.MutablePair",
 
         "mohamedalaa.mautils.gson.toJsonOrNull",
         "mohamedalaa.mautils.gson.toJson",
@@ -115,10 +111,10 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
     defaultValue = "Person()"
 )
 @MASharedPrefKeyValuePair(
-    name = "mutablePairStringAndBoolean",
-    defaultValue = "\"string string \" mutablePair false",
+    name = "pairStringAndBoolean",
+    defaultValue = "\"string string \" to false",
     type = MAParameterizedKClass(
-        nonNullKClasses = [MutablePair::class, String::class, Boolean::class]
+        nonNullKClasses = [Pair::class, String::class, Boolean::class]
     )
 )
 /*@MASharedPrefKeyValuePair(

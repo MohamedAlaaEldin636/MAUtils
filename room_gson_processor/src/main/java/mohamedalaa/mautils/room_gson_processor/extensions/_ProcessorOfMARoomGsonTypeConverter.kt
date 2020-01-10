@@ -21,11 +21,15 @@ import mohamedalaa.mautils.core_kotlin.extensions.containsAny
 import mohamedalaa.mautils.core_kotlin.extensions.nearestIndexOf
 import mohamedalaa.mautils.core_kotlin.extensions.removeAll
 import mohamedalaa.mautils.room_gson_annotation.ProcessorConstants
+import mohamedalaa.mautils.room_gson_processor.error
 import mohamedalaa.mautils.room_gson_processor.utils.KotlinpoetUtils
+import mohamedalaa.mautils.room_gson_processor.warning
+import java.util.*
+import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 
-fun functionsInWithTypeParamBuild(element: Element): List<FunSpec> {
+fun ProcessingEnvironment.functionsInWithTypeParamBuild(element: Element): List<FunSpec> {
     // 1. Full & Simple Names
     val fullTypeName = element.asType().toString()
     val simpleName = withSimpleName(fullTypeName)
@@ -34,7 +38,7 @@ fun functionsInWithTypeParamBuild(element: Element): List<FunSpec> {
     return withBuildFunctions(simpleName, fullTypeName)
 }
 
-fun functionsInNoTypeParamBuild(element: Element): List<FunSpec> {
+fun ProcessingEnvironment.functionsInNoTypeParamBuild(element: Element): List<FunSpec> {
     // 1. Full & Simple Names
     val (simpleName, qualifiedName) = if (element is TypeElement) {
         element.simpleName.toString() to element.qualifiedName.toString()
@@ -49,7 +53,7 @@ fun functionsInNoTypeParamBuild(element: Element): List<FunSpec> {
     return buildFunctions(simpleName, qualifiedName)
 }
 
-fun noTypeParamBuild(element: Element): Pair<String, TypeSpec.Builder> {
+fun ProcessingEnvironment.noTypeParamBuild(element: Element): Pair<String, TypeSpec.Builder> {
     // 1. File Name ( Same as KClass name )
     val (simpleName, qualifiedName) = if (element is TypeElement) {
         element.simpleName.toString() to element.qualifiedName.toString()
@@ -74,7 +78,7 @@ fun noTypeParamBuild(element: Element): Pair<String, TypeSpec.Builder> {
     return kFileAndObjectName to objectBuilder
 }
 
-private fun buildFunctions(classSimpleName: String, classFullName: String): List<FunSpec> {
+private fun ProcessingEnvironment.buildFunctions(classSimpleName: String, classFullName: String): List<FunSpec> {
     val mutableList = mutableListOf<FunSpec>()
 
     // Name of fun
@@ -112,7 +116,7 @@ private fun buildFunctions(classSimpleName: String, classFullName: String): List
     return mutableList
 }
 
-fun withTypeParamBuild(element: Element): Pair<String, TypeSpec.Builder> {
+fun ProcessingEnvironment.withTypeParamBuild(element: Element): Pair<String, TypeSpec.Builder> {
     val fullTypeName = element.asType().toString()
 
     // 1. File Name ( Same as KClass name )
@@ -133,7 +137,7 @@ fun withTypeParamBuild(element: Element): Pair<String, TypeSpec.Builder> {
 }
 
 /** Same as [buildFunctions] but when second param in this fun is type param class isa. */
-private fun withBuildFunctions(classSimpleName: String, fullTypeName: String): List<FunSpec> {
+private fun ProcessingEnvironment.withBuildFunctions(classSimpleName: String, fullTypeName: String): List<FunSpec> {
     val mutableList = mutableListOf<FunSpec>()
 
     // Name of fun
@@ -179,7 +183,7 @@ private fun String.extractPureNameFromExtendName(): String {
     }
 }
 
-private fun withFullTypeName(fullTypeName: String): TypeName {
+private fun ProcessingEnvironment.withFullTypeName(fullTypeName: String): TypeName {
     var tempFullTypeName = fullTypeName
 
     var tempTypeName: TypeName? = null
@@ -199,7 +203,7 @@ private fun withFullTypeName(fullTypeName: String): TypeName {
         }
 
         tempTypeName = KotlinpoetUtils.parameterizedTypeName(
-            ClassName.bestGuess(classFullNameTypeParamParent),
+            ClassName.bestGuess(classFullNameTypeParamParent.extractPureNameFromExtendName()),
             *classFullNameTypeParamChildren.toTypedArray()
         ).copy(nullable = true)
 
@@ -217,7 +221,7 @@ private fun withFullTypeName(fullTypeName: String): TypeName {
  * return like-simple name from full name with type params
  * Ex. java.lang.Map<...Integer, ...Integer> returns MapIntegerInteger isa.
  */
-private fun withSimpleName(fullTypeName: String): String {
+private fun ProcessingEnvironment.withSimpleName(fullTypeName: String): String {
     var tempFullTypeName = fullTypeName.removeAll(">")
     var value = ""
     while (tempFullTypeName.containsAny("<", ",")) {

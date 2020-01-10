@@ -23,9 +23,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
- * @return if [LiveData.getValue] is not null then it returns it immediately otherwise it suspends
+ * @param lifecycleOwner [LifecycleOwner] used to observe the `receiver` value changes isa.
+ *
+ * @return if [LiveData.getValue] is not-null then it returns it immediately otherwise it suspends
  * until it become non null isa, so **CAUTION** use it if you are sure that after even long time
- * it will be non null or this will be suspended forever isa.
+ * it will be non-null or this will be suspended forever isa.
  */
 @MainThread
 suspend fun <T> LiveData<T>.getNotNullOrSuspendUntilNotNullValue(lifecycleOwner: LifecycleOwner): T {

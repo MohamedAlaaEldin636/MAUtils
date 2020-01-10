@@ -15,7 +15,14 @@
 
 package mohamedalaa.mautils.core_kotlin.extensions
 
+/**
+ * Creates new [Triple] instance with [Triple.first] same as `receiver` [Pair.first]
+ * and same thing for `second` as well and using [third] as [Triple.third] isa.
+ */
 infix fun <A, B, C> Pair<A, B>.triple(third: C) = Triple(first, second, third)
 
+/**
+ * Transforms all properties in `receiver` according to [transformation] block isa.
+ */
 fun <A, B> Triple<A, A, A>.map(transformation: (A) -> B): Triple<B, B, B>
     = Triple(transformation(first), transformation(second), transformation(third))

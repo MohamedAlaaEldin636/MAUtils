@@ -19,17 +19,27 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 
 
+/**
+ * @return same [F] instance with setting [bundle] in [Fragment.setArguments] funtion isa.
+ *
+ * @param [F] any [Fragment] instance isa.
+ *
+ * @see instanceWithArgBundle
+ */
 fun <F : Fragment> F.instanceWithArg(bundle: Bundle?): F
     = apply { arguments = bundle }
 
 /**
- * to retrieve values see below Ex. for clarification isa
+ * - Same as [instanceWithArg] but provides [Bundle] using [buildBundle] with given [values] isa.
+ * - To retrieve values see below Ex. for clarification isa.
  * ```
  * fragment.arguments?.apply {
  *      val getterBundle = getterBundle()
  *      // ...
  * }
  * ```
+ *
+ * @see instanceWithArg
  */
 fun <F : Fragment> F.instanceWithArgBundle(vararg values: Any?): F
     = apply { arguments = buildBundle(*values) }

@@ -14,26 +14,40 @@
   ~ See the License for the specific language governing permissions and limitations under the License.
   -->
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
     <data>
         <import type="mohamedalaa.mautils.mautils.R"/>
+        <import type="android.graphics.Color"/>
         <variable
             name="v1"
             type="mohamedalaa.mautils.sample.SmallUser"/>
+        <variable
+            name="integer"
+            type="Integer" />
+        <variable
+            name="someViewModel"
+            type="mohamedalaa.mautils.sample.general.SomeViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
 
-        <!--
+        view_setBackgroundTintColor="@{Color.BLUE}">
 
-
-            mautils:setToolbarMenu_resId="@{R.menu.visual_test_activity}"-->
+        <!-- mautils:setToolbarMenu_resId="@{R.menu.visual_test_activity}" -->
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+
+            android:visibility="@{true}"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:checked="@={someViewModel.mutableLiveDataBoolean}"/>
 
     </LinearLayout>
 

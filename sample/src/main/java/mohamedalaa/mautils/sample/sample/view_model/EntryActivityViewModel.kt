@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android.extensions
+package mohamedalaa.mautils.sample.sample.view_model
 
-import android.os.Bundle
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 
-/**
- * Used by kotlin devs only, for same functionality for java devs see [Bundle.javaGetGetterBundle]
- *
- * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
- */
-@JvmSynthetic
-fun Bundle.getterBundle(): KGetterBundle =
-    KGetterBundle(this)
+class EntryActivityViewModel(application: Application) : AndroidViewModel(application) {
+
+    // todo is it ok to be string isa ?!
+    val mutableLiveDataSearchQuery = MutableLiveData<CharSequence>()
+
+    val mutableLiveDataEditText1 = MutableLiveData<CharSequence>()
+
+}

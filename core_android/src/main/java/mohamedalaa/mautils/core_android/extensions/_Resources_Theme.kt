@@ -17,11 +17,17 @@
 
 package mohamedalaa.mautils.core_android.extensions
 
+import android.content.Context
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 
+/**
+ * @return color from attr res that refers to a color, Ex. R.attr.colorPrimary
+ *
+ * @see Context.getColorFromAttrRes
+ */
 @ColorInt
 fun Resources.Theme.getColorFromAttrRes(@AttrRes attrRes: Int): Int {
     val typedValue = TypedValue()

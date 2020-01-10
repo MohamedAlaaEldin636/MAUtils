@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-@file:JvmName("AnimatorSetUtils")
-
-package mohamedalaa.mautils.core_android.extensions
-
-import android.animation.Animator
-import android.animation.AnimatorSet
+package mohamedalaa.mautils.core_kotlin.extensions
 
 /**
- * Using [listener] for [AnimatorSet.addListener] instead of regular [Animator.AnimatorListener],
- * for more concise & idiomatic coding, for an example See [MAAnimatorAnimatorListener] isa.
+ * Quick append to `this` isa, useless in java consumer code since there is no operator fun usage in it isa.
  */
-fun AnimatorSet.addListenerMA(listener: Animator_AnimatorListener_Typealias?) {
-    val genListener =
-        MAAnimatorAnimatorListener(listener)
-    addListener(genListener)
+@JvmSynthetic
+operator fun StringBuilder.plusAssign(value: String) {
+    this.append(value)
 }

@@ -20,62 +20,34 @@ package mohamedalaa.mautils.core_kotlin.extensions
 import kotlin.math.roundToInt
 
 /**
- * @return true if number is even
+ * @return true if `receiver` number is even, otherwise false.
  *
- * @see [Int.isOdd]
+ * @see isOdd
  */
-fun Int.isEven(): Boolean = rem(2) == 0
+fun Number.isEven(): Boolean {
+    return when (this) {
+        is Int -> rem(2) == 0
+        is Short -> rem(2) == 0
+        is Byte -> rem(2) == 0
+        is Float -> rem(2) == 0f
+        is Double -> rem(2) == 0.0
+        is Long -> rem(2) == 0L
+        else -> throw RuntimeException("Not supported with class -> ${this.javaClass} isa.")
+    }
+}
 
 /**
- * @return true if number is even
+ * @return true if `receiver` number is odd, otherwise false.
  *
- * @see [Float.isOdd]
+ * @see isEven
  */
-fun Float.isEven(): Boolean = rem(2) == 0F
+fun Number.isOdd(): Boolean = isEven().not()
 
 /**
- * @return true if number is even
+ * @return true if `receiver` number is positive, otherwise false.
  *
- * @see [Long.isOdd]
+ * @see isNegative
  */
-fun Long.isEven(): Boolean = rem(2) == 0L
-
-/**
- * @return true if number is even
- *
- * @see [Double.isOdd]
- */
-fun Double.isEven(): Boolean = rem(2) == 0.0
-
-/**
- * @return true if number is odd
- *
- * @see [Int.isEven]
- */
-fun Int.isOdd(): Boolean = isEven().not()
-
-/**
- * @return true if number is odd
- *
- * @see [Float.isEven]
- */
-fun Float.isOdd(): Boolean = isEven().not()
-
-/**
- * @return true if number is odd
- *
- * @see [Long.isEven]
- */
-fun Long.isOdd(): Boolean = isEven().not()
-
-/**
- * @return true if number is odd
- *
- * @see [Double.isEven]
- */
-fun Double.isOdd(): Boolean = isEven().not()
-
-/** @return true if `receiver` number is positive, otherwise false. */
 fun Number.isPositive(): Boolean {
     return when (this) {
         is Int -> this >= 0
@@ -84,13 +56,18 @@ fun Number.isPositive(): Boolean {
         is Float -> this >= 0
         is Double -> this >= 0
         is Long -> this >= 0
-        else -> throw RuntimeException("Not supported Number.isPositive() with class -> ${this.javaClass} isa.")
+        else -> throw RuntimeException("Not supported with class -> ${this.javaClass} isa.")
     }
 }
 
-/** @return true if `receiver` number is negative, otherwise false. */
+/**
+ * @return true if `receiver` number is negative, otherwise false.
+ *
+ * @see isPositive
+ */
 fun Number.isNegative(): Boolean = isPositive().not()
 
-/** rounds the division result so 3.divRound() == 2 instead of 3.div(2) == 1 as 1.5 is rounded to 2 */
-fun Int.divRound(other: Int): Int
-    = toFloat().div(other.toFloat()).roundToInt()
+/**
+ * rounds half up the division result so 3.divRound() == 2 instead of 3.div(2) == 1 as 1.5 is rounded to 2.
+ */
+fun Int.divRound(other: Int): Int = toFloat().div(other.toFloat()).roundToInt()

@@ -55,13 +55,24 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Own Libraries
+    // -- Own Libraries -- //
+
+    // Core Kotlin
     api project (':core_kotlin')
 
-    // Other Libraries
-    api 'androidx.core:core-ktx:1.1.0'
+    // -- Other Libraries -- //
 
-    api 'androidx.fragment:fragment-ktx:1.1.0'
+    // Kotlin stdlib-jdk8
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // Core
+    api "androidx.core:core-ktx:$core_version"
+
+    // Fragment
+    api "androidx.fragment:fragment-ktx:$fragment_version"
+
+    // Lifecycle -> Runtime(Ex. lifecycleScope)
+    api "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
 }

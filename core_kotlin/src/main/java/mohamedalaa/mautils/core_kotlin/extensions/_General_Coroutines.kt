@@ -15,16 +15,8 @@
 
 package mohamedalaa.mautils.core_kotlin.extensions
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
-/**
- * Since you might need to use [Dispatchers.IO] and invoke [withContext] alot with [Dispatchers.Main]
- * this fun is to make code more concise isa.
- */
-suspend fun <T> withContextMain(block: suspend CoroutineScope.() -> T): T = withContext(Dispatchers.Main, block)
-
-@Suppress("unused")
+@JvmSynthetic // No need for a suspend function in a java consumer code isa.
+@Suppress("unused") // Used as extension function instead of a top-level one for IDE styling purposes isa.
 suspend fun Any.delayFramePerSecond(multiplier: Int = 1) = delay(17.times(multiplier.toLong()))

@@ -136,7 +136,7 @@ internal class LicenseItemRVAdapter(
         // Button Click isa.
         holder.linkMaterialButton.setOnOneClickListener {
             weakRefFragment.get()?.apply {
-                context?.launchWebLink(licenceModel.openSourceLink, createIntentChooser = true)
+                context?.launchLink(licenceModel.openSourceLink, createIntentChooser = true)
             }
         }
     }

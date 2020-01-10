@@ -23,10 +23,7 @@ import mohamedalaa.mautils.room_gson_processor.extensions.functionsInWithTypePar
 import mohamedalaa.mautils.room_gson_processor.extensions.noTypeParamBuild
 import mohamedalaa.mautils.room_gson_processor.extensions.withTypeParamBuild
 import java.io.IOException
-import javax.annotation.processing.AbstractProcessor
-import javax.annotation.processing.RoundEnvironment
-import javax.annotation.processing.SupportedAnnotationTypes
-import javax.annotation.processing.SupportedSourceVersion
+import javax.annotation.processing.*
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
@@ -45,7 +42,7 @@ class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
                 processingEnv.error("full type -> ${element.asType()}")
             }
 
-            allFunctions += buildFunctions(element)
+            allFunctions += processingEnv.buildFunctions(element)
 
             // Build object class and functions isa.
             /*val pair = fileAndObjectNameToObjectBuilder(element)
@@ -95,7 +92,7 @@ class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
     /**
      * @return pair.first is kFileName, .second fully done object builder isa.
      */
-    private fun buildFunctions(element: Element): List<FunSpec> {
+    private fun ProcessingEnvironment.buildFunctions(element: Element): List<FunSpec> {
         val asTypeString = element.asType().toString()
 
         return if (asTypeString.contains("<")) {
@@ -108,7 +105,7 @@ class ProcessorOfMARoomGsonTypeConverter : AbstractProcessor() {
     /**
      * @return pair.first is kFileName, .second fully done object builder isa.
      */
-    private fun fileAndObjectNameToObjectBuilder(element: Element): Pair<String, TypeSpec.Builder> {
+    private fun ProcessingEnvironment.fileAndObjectNameToObjectBuilder(element: Element): Pair<String, TypeSpec.Builder> {
         val asTypeString = element.asType().toString()
 
         return if (asTypeString.contains("<")) {

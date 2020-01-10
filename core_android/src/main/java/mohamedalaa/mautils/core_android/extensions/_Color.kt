@@ -22,7 +22,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.annotation.ColorInt
 import androidx.databinding.BindingConversion
 
-/** alpha value of color between 0f full transparent to 1f full opaque */
+/** alpha value of color between 0f full transparent to 1f full opaque isa. */
 val Int.alphaAsFloat: Float
     get() = Color.alpha(this).toFloat().div(255f)
 
@@ -67,7 +67,7 @@ fun Int.addColorAlpha(alpha: Float, dependOnCurrentAlpha: Boolean = false): Int 
  * Checks if [Color.alpha] is within provided opaque [range] isa.
  *
  * @return true if [range] Ex. 0f..0.5f corresponds to `receiver` color opaque value,
- * which in this Ex. returns true if color is half opaque isa.
+ * which in this Ex. returns true if color is half opaque or transparent isa.
  *
  * @throws RuntimeException in case if [range] not within the range of 0f to 1f isa.
  *

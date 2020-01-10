@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android.extensions
+package mohamedalaa.mautils.sample.general
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 
-/**
- * Used by kotlin devs only, for same functionality for java devs see [Intent.javaGetterBundle]
- *
- * Used to retrieve [Bundle] values created by [Context.startActivityBundle] isa.
- */
-@JvmSynthetic
-fun Intent.getterBundle() =
-    KGetterBundle(extras ?: Bundle())
+class SomeViewModel(application: Application) : AndroidViewModel(application) {
+
+
+    val mutableLiveDataBoolean = MutableLiveData<Boolean>()
+
+}

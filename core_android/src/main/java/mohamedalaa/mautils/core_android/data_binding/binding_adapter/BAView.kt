@@ -19,23 +19,22 @@ import android.graphics.PorterDuff
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
-import mohamedalaa.mautils.core_android.extensions.setBackgroundTint
+import mohamedalaa.mautils.core_android.extensions.setBackgroundTintCompat
 
 /**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/1/2019.
- *
+ * Contains functions annotated with [BindingAdapter] isa.
  */
 object BAView {
 
+    /**
+     * Same as [setBackgroundTintCompat] isa.
+     */
     @JvmStatic
-    @BindingAdapter("android:view_setBackgroundTintColor")
-    fun setBackgroundTintColor(view: View, @ColorInt color: Int?) {
-        color?.apply { view.setBackgroundTint(color) }
+    @BindingAdapter("view_setBackgroundTintColor", "view_setBackgroundTintPorterDuffMode", requireAll = false)
+    fun setBackgroundTintColor(view: View, @ColorInt color: Int?, porterDuffMode: PorterDuff.Mode?) {
+        if (color != null || porterDuffMode != null) {
+            view.setBackgroundTintCompat(color, porterDuffMode)
+        }
     }
 
-    @JvmStatic
-    @BindingAdapter("android:view_setBackgroundTintPorterDuffMode")
-    fun setBackgroundTintPorterDuffMode(view: View, porterDuffMode: PorterDuff.Mode?) {
-        porterDuffMode?.apply { view.setBackgroundTint(porterDuffMode = porterDuffMode) }
-    }
 }

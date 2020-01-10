@@ -151,7 +151,7 @@ internal class RCAdapterLicence(private val context: Context,
 
         val linkVisibility = if (licence.isLinkExists) {
             holder.itemView.linkButton.setOnClickListener {
-                licence.link?.apply { context.launchWebLink(this, createIntentChooser = true) }
+                licence.link?.apply { context.launchLink(this, createIntentChooser = true) }
             }
 
             View.VISIBLE
@@ -220,7 +220,7 @@ internal class RCAdapterLicence(private val context: Context,
             rootView.linkButton.setTextColor(this)
         }
         licenceIntent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_RC_ITEM_LINK_BUTTON_TINT)?.apply {
-            rootView.linkButton.setBackgroundTint(this)
+            rootView.linkButton.setBackgroundTintCompat(this)
         }
     }
 

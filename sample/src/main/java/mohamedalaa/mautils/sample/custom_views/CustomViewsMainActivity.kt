@@ -20,7 +20,6 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import mohamedalaa.mautils.core_android.extensions.*
-import mohamedalaa.mautils.core_kotlin.extensions.throwRuntimeException
 import mohamedalaa.mautils.gson.addValuesGsonForced
 import mohamedalaa.mautils.gson.getterBundleGson
 import mohamedalaa.mautils.lifecycle_extensions.extensions.getAndroidViewModelWithFactory
@@ -179,7 +178,7 @@ class CustomViewsMainActivity : AppCompatActivity() {
 
     private fun <T> T.assertSpecial(boolean: Boolean) {
         if (boolean.not()) {
-            throwRuntimeException("assert error isa.")
+            throw RuntimeException("assert error isa.")
         }
     }
 }

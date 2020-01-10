@@ -23,3 +23,8 @@ inline fun <T, R: Collection<T>> R?.performIfNotNullNorEmpty(action: R.() -> Uni
         this.action()
     }
 }
+
+/**
+ * @return `null` if `receiver` is null or empty, Otherwise a random element from this collection isa.
+ */
+fun <T> Collection<T>?.randomOrNull(): T? = if (this == null || isEmpty()) null else random()

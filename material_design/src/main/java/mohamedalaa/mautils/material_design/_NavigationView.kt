@@ -20,10 +20,10 @@ package mohamedalaa.mautils.material_design
 import android.view.MenuItem
 import androidx.core.view.forEachIndexed
 import com.google.android.material.navigation.NavigationView
-import mohamedalaa.mautils.core_android.extensions.indexOf
+import mohamedalaa.mautils.core_android.extensions.indexOfOrNull
 
 fun NavigationView.indexOfMenuItem(menuItem: MenuItem)
-    = menu.indexOf(menuItem)
+    = menu.indexOfOrNull(menuItem)
 
 /**
  * set/get current menu item by index

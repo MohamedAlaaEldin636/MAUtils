@@ -21,8 +21,13 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
+/**
+ * - Retrieves the binding responsible for the given `receiver`, If `receiver` is not a binding layout root,
+ * its parents will be searched for the binding. If there is no binding, `null` will be returned.
+ */
 fun <VDB : ViewDataBinding> View.findBindingOrNull(): VDB?
     = DataBindingUtil.findBinding(this)
 
+/** Same as [findBindingOrNull] but instead of returning `null` [RuntimeException] is thrown instead isa. */
 fun <VDB : ViewDataBinding> View.findBinding(): VDB
     = findBindingOrNull() ?: throw RuntimeException("Cannot find corresponding view data binding.")

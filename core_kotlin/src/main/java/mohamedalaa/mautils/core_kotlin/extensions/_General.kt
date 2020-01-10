@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-@file:JvmName("GeneralUtils")
+// @file:JvmName("GeneralUtils") -> currently not needed by any java consumer code isa.
 
 package mohamedalaa.mautils.core_kotlin.extensions
 
@@ -40,7 +40,9 @@ package mohamedalaa.mautils.core_kotlin.extensions
  *      // Code with non-null receiver.
  * }
  * ```
- * @receiver any nullable object.
+ *
+ * @receiver any nullable instance.
+ *
  * @return [Unit]
  */
 inline fun <T> T?.performIfNotNull(block: T.() -> Unit) {
@@ -60,22 +62,7 @@ inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T {
     }
 }
 
-/** @return true if any of [others] is == `receiver` isa. */
-fun <T> T.equalAny(vararg others: T): Boolean = this in others
-
-/** @return true if each object in [others] is == `receiver` isa. */
-fun <T> T.equalAll(vararg others: T): Boolean = others.all { it == this }
-
-/** EExactly like !! but shows your [msg] as [RuntimeException]'s msg isa. */
+/** Exactly like !! but shows your [msg] as [RuntimeException]'s msg isa. */
+@JvmSynthetic // in java consumer code it's better using the if == null condition isa.
 fun <T> T?.throwIfNull(msg: String = "Expected not null value"): T
     = this ?: throw RuntimeException(msg)
-
-/**
- * Used with when statement to make it expression so you ensure all events are consumed isa.
- *
- * Inspired from [link](https://www.youtube.com/watch?v=NNWejxBORgc)
- */
-val <T> T.exhaustive: T
-    get() = this
-
-fun throwRuntimeException(msg: String = "runtime exception thrown isa."): Nothing = throw RuntimeException(msg)

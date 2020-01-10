@@ -22,15 +22,26 @@ import android.util.Size
 import android.util.SizeF
 import android.util.SparseArray
 import androidx.core.os.bundleOf
+import org.jetbrains.annotations.Contract
 import java.io.Serializable
 
 /** @return true if `receiver` is null or isEmpty */
+@Contract("null -> true", pure = true)
 fun Bundle?.isNullOrEmpty(): Boolean = this == null || this.isEmpty
 
-/** @return [T] instance corresponding to given [key] after being casted or null if not found isa. */
+/** @return same [Bundle] if `not-null` OR new [Bundle] if `null isa. */
+@Contract("!null -> param1; null -> new", pure = true)
+fun Bundle?.orEmpty(): Bundle = this ?: Bundle()
+
+/**
+ * @return value of given [key] casted to [T] type or `null` if the [key] doesn't exist or if
+ * can't be casted isa.
+ */
 inline fun <reified T> Bundle?.getOrNull(key: String?): T? = this?.get(key) as? T
 
-/** @return [T] instance corresponding to given [key] after being casted or throws [RuntimeException] if not found isa. */
+/**
+ * Same as [Bundle.getOrNull] but instead of a `null` result [RuntimeException] is thrown instead isa.
+ */
 inline fun <reified T> Bundle?.get(key: String?): T = getOrNull<T>(key)
     ?: throw RuntimeException("Cannot get ${T::class}, from key == $key isa.")
 
@@ -43,7 +54,7 @@ private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"
  *
  * @see addValues
  * @see buildBundle
- * @see sizeInBytes
+ * @see sizeInBytesOrNull
  */
 fun Bundle.addValue(key: String?, value: Any?) {
     when(value) {
@@ -128,7 +139,7 @@ fun Bundle.addValue(key: String?, value: Any?) {
  * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
  *
  * @see addValue
- * @see sizeInBytes
+ * @see sizeInBytesOrNull
  */
 fun Bundle.addValues(vararg values: Any?) {
     values.forEachIndexed { index, value ->
@@ -141,10 +152,7 @@ fun Bundle.addValues(vararg values: Any?) {
 }
 
 /**
- * Increase Bundle with the given key/value pairs as elements, same as [bundleOf]
- * but for existing instance for bundle instead of creating a new one isa,
- *
- * so when try to get values use keys you used in [pairedValues] not like in [addValues] Mechanism.
+ * Same as [addValue] but for several values isa, where [Pair.first] is key and [Pair.second] is the value isa.
  */
 fun Bundle.addValuesWithKeys(vararg pairedValues: Pair<String, Any?>)
     = pairedValues.forEach { addValue(it.first, it.second) }
@@ -167,10 +175,11 @@ fun buildBundleWithKeys(vararg pairedValues: Pair<String, Any?>)
  * // Note must be in same order they added in isa.
  * val retrievedInt = getterBundle.get<Int>()
  * val retrievedStringList = getterBundle.getOrNull<List<String>>()
+ * val retrievedAnotherInt: Int = getterBundle.get()
  *
  * // Java Devs, check sample tests in library for more examples isa.
  *
- * JGetterBundle getterBundle = BundleUtils.javaGetterBundle(bundle);
+ * GetterBundle getterBundle = BundleUtils.getterBundle(bundle);
  * // Note must be in same order they added in isa.
  * int[] primitiveIntArray = getterBundle.getOrNull();
  * String string = getterBundle.get();
@@ -186,9 +195,7 @@ fun buildBundleWithKeys(vararg pairedValues: Pair<String, Any?>)
  *
  * **More VIP Info**
  *
- * 1- Use buildBundleGson of gson module to support **custom classes** as well,
- *
- * which can be serialized/deserialized using gson as well isa.
+ * 1- Use buildBundleGson if you use gson module in this library to support **custom classes** as well isa.
  *
  * **Warning**
  *
@@ -198,13 +205,13 @@ fun buildBundleWithKeys(vararg pairedValues: Pair<String, Any?>)
  * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
  *
  * @see addValues
- * @see sizeInBytes
+ * @see sizeInBytesOrNull
  */
 fun buildBundle(vararg values: Any?): Bundle
     = Bundle().apply { addValues(*values) }
 
 /** Returns the size of a [Bundle] in Bytes or null if cannot and error occurred while measuring isa. */
-fun Bundle.sizeInBytes() : Int? = runCatching {
+fun Bundle.sizeInBytesOrNull() : Int? = runCatching {
     val parcel = Parcel.obtain()
     parcel.writeValue(this)
 
@@ -215,42 +222,26 @@ fun Bundle.sizeInBytes() : Int? = runCatching {
 }.getOrNull()
 
 /**
- * Used by java devs only, for same functionality for kotlin devs see [Bundle.getterBundle]
+ * - Used by java consumer code only, for same functionality for kotlin devs see [Bundle.getterBundle].
  *
- * Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
+ * - Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
  */
 @JvmName("getterBundle")
-fun Bundle.javaGetGetterBundle(): JGetterBundle =
-    JGetterBundle(this)
+fun Bundle.javaGetGetterBundle(): GetterBundle = GetterBundle(this)
 
-class JGetterBundle internal constructor(private val bundle: Bundle) {
+/**
+ * - Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
+ */
+@JvmSynthetic
+@JvmName("kotlinGetterBundle")
+fun Bundle.getterBundle(): GetterBundle = GetterBundle(this)
 
-    private var counter = 0
-
-    /**
-     * @return [T] instance after being casted or null if not found isa,
-     *
-     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T> getOrNull(): T? {
-        val key = counter.toString()
-        counter++
-
-        return bundle.get(key) as? T
-    }
-
-    /**
-     * @return [T] instance after being casted or throws [RuntimeException] if not found isa,
-     *
-     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
-     */
-    fun <T> get(): T
-        = getOrNull() ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
-
-}
-
-class KGetterBundle internal constructor(@PublishedApi internal val bundle: Bundle) {
+/**
+ * Used to easily retrieve values inserted in a [Bundle] by using [buildBundle] or [addValues] isa,
+ *
+ * Note you must respect same order of inserting values when retrieving values from getter functions isa.
+ */
+class GetterBundle internal constructor(@PublishedApi internal val bundle: Bundle) {
 
     @PublishedApi
     internal var counter = 0
@@ -259,8 +250,29 @@ class KGetterBundle internal constructor(@PublishedApi internal val bundle: Bund
      * @return [T] instance after being casted or null if not found isa,
      *
      * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     *
+     * @see get
      */
+    @JvmName("kotlinGetOrNull")
     inline fun <reified T> getOrNull(): T? {
+        val key = counter.toString()
+        counter++
+
+        return bundle.get(key) as? T
+    }
+
+    /**
+     * - For java consumer code only, for same fun for kotlin use [getOrNull] isa.
+     *
+     * @return [T] instance after being casted or null if not found isa,
+     *
+     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     *
+     * @see javaGet
+     */
+    @Suppress("UNCHECKED_CAST")
+    @JvmName("getOrNull")
+    fun <T> javaGetOrNull(): T? {
         val key = counter.toString()
         counter++
 
@@ -271,8 +283,24 @@ class KGetterBundle internal constructor(@PublishedApi internal val bundle: Bund
      * @return [T] instance after being casted or throws [RuntimeException] if not found isa,
      *
      * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     *
+     * @see getOrNull
      */
+    @JvmName("kotlinGet")
     inline fun <reified T> get(): T
         = getOrNull() ?: throw RuntimeException("Cannot get ${T::class} from key `${counter.dec()}`")
+
+    /**
+     * - For java consumer code only, for same fun for kotlin use [get] isa.
+     *
+     * @return [T] instance after being casted or throws [RuntimeException] if not found isa,
+     *
+     * Note you must respect same order of inserting values via [buildBundle] or [addValues] isa.
+     *
+     * @see javaGetOrNull
+     */
+    @JvmName("get")
+    fun <T> javaGet(): T
+        = javaGetOrNull<T>() ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
 
 }

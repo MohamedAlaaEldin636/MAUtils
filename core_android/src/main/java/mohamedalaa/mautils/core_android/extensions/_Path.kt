@@ -21,7 +21,7 @@ import android.graphics.Path
 import android.graphics.PointF
 
 /**
- * Performs [Path.moveTo] with [firstX] & [firstY], the [Path.lineTo] with [secondX] & [secondY] isa.
+ * Performs [Path.moveTo] with [firstX] & [firstY], then [Path.lineTo] with [secondX] & [secondY] isa.
  */
 fun Path.moveThenLineTo(firstX: Float, firstY: Float, secondX: Float, secondY: Float) {
     moveTo(firstX, firstY)
@@ -29,7 +29,7 @@ fun Path.moveThenLineTo(firstX: Float, firstY: Float, secondX: Float, secondY: F
 }
 
 /**
- * Performs [Path.moveTo] with [firstPointF], the [Path.lineTo] with [secondPointF] isa.
+ * Performs [Path.moveTo] with [firstPointF], then [Path.lineTo] with [secondPointF] isa.
  */
 fun Path.moveThenLineTo(firstPointF: PointF, secondPointF: PointF)
     = moveThenLineTo(firstPointF.x, firstPointF.y, secondPointF.x, secondPointF.y)

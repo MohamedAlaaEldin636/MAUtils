@@ -19,33 +19,44 @@ import android.view.View
 import android.os.SystemClock
 import androidx.databinding.BindingAdapter
 
-abstract class OnOneClickListener : View.OnClickListener {
+/**
+ * Interface definition for a callback to be invoked when a view is clicked **ONLY** if last click
+ * has passed [clickThresholdInMillis] which has a default value of [DEFAULT_CLICK_THRESHOLD_IN_MILLIS] isa.
+ *
+ * @property clickThresholdInMillis max time in millis which doesn't permit invocation of [onOneClick]
+ * except when last click passes it isa.
+ */
+abstract class OnOneClickListener(
+    private var clickThresholdInMillis: Long = DEFAULT_CLICK_THRESHOLD_IN_MILLIS
+) : View.OnClickListener {
 
     companion object {
-        private const val CLICK_THRESHOLD: Long = 1_000
-
-        fun create(action: View.() -> Unit): OnOneClickListener = object : OnOneClickListener() {
-            override fun onOneClick(view: View) {
-                view.action()
-            }
-        }
+        /** Constant value of 1_000L which is 1 second isa. */
+        private const val DEFAULT_CLICK_THRESHOLD_IN_MILLIS: Long = 1_000 // 1 sec
     }
 
     private var lastClickTime: Long = 0
 
+    /** Instead override [onOneClick] isa. */
     final override fun onClick(view: View) {
         val currentTime = SystemClock.elapsedRealtime()
-        if (currentTime - lastClickTime > CLICK_THRESHOLD) {
+        if (currentTime - lastClickTime > clickThresholdInMillis) {
             lastClickTime = currentTime
             onOneClick(view)
         }
     }
 
+    /** Called when a view has been clicked only if satisfies the condition of [clickThresholdInMillis] isa. */
     abstract fun onOneClick(view: View)
 
 }
 
-@BindingAdapter("android:view_setOnOneClickListener")
+/**
+ * - Uses [View.setOnClickListener] with [OnOneClickListener] where [OnOneClickListener.onOneClick]
+ * invokes the given [listener]'s [View.OnClickListener.onClick] function isa.
+ * - Also you can use this in XML with `DataBinding` name of attribute is `view_setOnOneClickListener` isa.
+ */
+@BindingAdapter("view_setOnOneClickListener")
 fun View.setOnOneClickListener(listener: View.OnClickListener) {
     setOnClickListener(object : OnOneClickListener() {
         override fun onOneClick(view: View) {
@@ -54,14 +65,16 @@ fun View.setOnOneClickListener(listener: View.OnClickListener) {
     })
 }
 
+/**
+ * - Uses [View.setOnClickListener] with [OnOneClickListener] where [OnOneClickListener.onOneClick]
+ * invokes the given [action] isa.
+ *
+ * @see setOnOneClickListener
+ */
 fun View.setOnOneClickListener(action: (View) -> Unit) {
     setOnClickListener(object : OnOneClickListener() {
         override fun onOneClick(view: View) {
             action(view)
         }
     })
-}
-
-fun <T> T.buildOnOneClickListener(action: T.(View) -> Unit) = object : OnOneClickListener() {
-    override fun onOneClick(view: View) = action(view)
 }

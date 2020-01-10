@@ -11,7 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="mohamedalaa.mautils.sample.custom_views.CustomViewsMainActivity"/>
+        <activity android:name="mohamedalaa.mautils.sample.sample.EntryActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="mohamedalaa.mautils.sample.custom_views.CustomViewsMainActivity" />
         <activity android:name="mohamedalaa.mautils.sample.material_design.BoatActivity" />
         <activity
             android:name="mohamedalaa.mautils.sample.material_design.MaterialDesignMainActivity"
@@ -21,11 +28,7 @@
             android:name="mohamedalaa.mautils.sample.recycler_view.VisualTestActivity"
             android:theme="@style/AppThemeNoActionBar" />
         <activity android:name="mohamedalaa.mautils.sample.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

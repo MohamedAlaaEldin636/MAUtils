@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android.data_binding
+package mohamedalaa.mautils.sample.gson;
 
-import android.view.View
-import androidx.databinding.BindingConversion
+import java.util.List;
 
-@BindingConversion
-fun convertBooleanToViewVisibility(value: Boolean?): Int {
-    return if (value == true) View.VISIBLE else View.GONE
-}
+import kotlin.Pair;
+import mohamedalaa.mautils.gson.java.GsonConverter;
+import mohamedalaa.mautils.sample.fake_data.CustomObject;
+import mohamedalaa.mautils.sample.fake_data.CustomWithTypeParam;
+
+public class HelperJavaClass extends
+    GsonConverter<CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>> {}

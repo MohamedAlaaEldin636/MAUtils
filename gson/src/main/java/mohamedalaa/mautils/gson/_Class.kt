@@ -17,14 +17,14 @@ package mohamedalaa.mautils.gson
 
 import java.lang.reflect.Field
 
-fun Class<*>.declaredFieldsForSuperclassesOnly(initialList: List<Field> = emptyList()): List<Field> {
+internal fun Class<*>.declaredFieldsForSuperclassesOnly(initialList: List<Field> = emptyList()): List<Field> {
     // ignore interfaces isa. ( has no baking fields isa. )
     val superclass = superclass
     val list = (superclass ?: return initialList).declaredFields.filterNotNull()
     return superclass.declaredFieldsForSuperclassesOnly(initialList + list)
 }
 
-fun Class<*>.getDeclaredFieldsForSuperclassesOnly(name: String): Field? {
+internal fun Class<*>.getDeclaredFieldsForSuperclassesOnly(name: String): Field? {
     val allFields = declaredFieldsForSuperclassesOnly()
     return allFields.firstOrNull {
         it.name == name

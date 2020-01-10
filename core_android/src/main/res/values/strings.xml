@@ -14,8 +14,11 @@
   -->
 
 <resources>
-    <string name="you_do_not_have_application_that_can_open_web_links">You don\'t have application that can open web links</string>
-    <string name="open_web_link">Open web link</string>
-
     <string name="loading_please_wait">Loading, Please Wait.</string>
+
+    <string name="select_an_app">Select an App</string>
+
+    <string name="no_app_can_handle_this_action">No App can handle this Action</string>
+
+    <string name="type_here_3_dots_ellipsized">Type here…</string>
 </resources>

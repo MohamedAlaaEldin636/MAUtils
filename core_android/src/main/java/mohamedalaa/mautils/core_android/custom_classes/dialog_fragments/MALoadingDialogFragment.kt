@@ -27,7 +27,21 @@ import mohamedalaa.mautils.core_android.R
 import mohamedalaa.mautils.core_android.extensions.*
 
 /**
- * Shows loading [ProgressBar] until you dismiss the dialog isa.
+ * ### Usage
+ *
+ * - Shows fullscreen loading [ProgressBar] dialog which is non-dismiss-able & non-cancelable
+ * until you explicitly dismiss the dialog isa.
+ *
+ * ### Properties
+ * - [backgroundColor]
+ * - [tryingToDismissToastMsg]
+ * - [styleRes]
+ *
+ * @property backgroundColor background color of the fullscreen dialog isa.
+ * @property tryingToDismissToastMsg if [onBackPressed] is invoked then instead this message will be
+ * shown and if [String] is `null` oe empty then [R.string.loading_please_wait] is used instead isa.
+ * @property styleRes in case you want to insert specific [styleRes] to change the [ProgressBar]
+ * color isa.
  *
  * @see AndroidViewModel.beforeAndAfterDismissInLoadingDialog
  */
@@ -75,7 +89,10 @@ class MALoadingDialogFragment(
     }
 
     override fun onBackPressed() {
-        context?.toast(tryingToDismissToastMsg ?: getString(R.string.loading_please_wait), duration = Toast.LENGTH_LONG)
+        val msg = tryingToDismissToastMsg.orEmpty().run {
+            if (isNotEmpty()) this else getString(R.string.loading_please_wait)
+        }
+        context?.toast(msg, duration = Toast.LENGTH_LONG)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

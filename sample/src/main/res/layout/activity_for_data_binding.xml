@@ -46,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
 
-            android:view_setBackgroundTintColor="@{Color.RED}"
+            view_setBackgroundTintColor="@{Color.RED}"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

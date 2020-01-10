@@ -25,10 +25,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 
 /**
  * Uses [Drawable.setColorFilter], while [tintCompat] Uses [DrawableCompat],
- * so if the drawable has colorFilter use this one instead isa.
+ * so if the drawable has `colorFilter` use this one instead isa.
  *
  * @param porterDuffMode Tinting mode used, default is [PorterDuff.Mode.DST_ATOP]
- * @param mutate if you want to make drawable mutable before applying [Drawable.setColorFilter], default is false isa.
+ * @param mutate if you want to invoke [Drawable.mutate] before applying [Drawable.setColorFilter],
+ * default is false isa.
  *
  * @see [tintCompat]
  */

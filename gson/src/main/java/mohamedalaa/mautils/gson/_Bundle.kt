@@ -37,7 +37,8 @@ private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"
  * 1. Sometimes String is lighter in being saved in bundle than a serializable object
  * Ex. Imagine a huge complicated object and you want to save a small list of it in bundle
  * using any of the 3 fun above will save list as serializable which makes huge size
- * while there is specific limit for bundle in android see [Link](https://developer.android.com/guide/components/activities/parcelables-and-bundles)
+ * while there is specific limit for bundle in android see
+ * [Link](https://developer.android.com/guide/components/activities/parcelables-and-bundles)
  *
  * **Usage**
  * buildBundleGson(
@@ -120,6 +121,7 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
 /**
  * Returns a new [Bundle] with the given [values] as elements, and keys are the indices
  * so when retrieve it ensure same order of indices isa, to retrieve it use below code.
+ * todo include at same example how to use this fun so set and getter isa.
  * ```
  * // Kotlin Devs
  *
@@ -143,15 +145,17 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
  * 3. Supports any custom classes that can be serialized using [toJson] isa.
  *
  * ### Limitations
- * 1. If needs [GsonConverter] then it needs to be done manually so pass value as string
- * generated from [GsonConverter.toJson], Note in retrieval this limitation does not exist isa.
+ * 1. If the custom type needs [GsonConverter] **( For java consumer code only )** then it needs
+ * to be done manually so pass value as string generated from [GsonConverter.toJson] isa.
+ * todo make tests for kotlin and see if the functions need to be inlined to keep reference to
+ *  the type of the objects instead of taking it as Any? type isa.
  *
  * ### How it works
- * 1. If forced to be converted by json via [forceUsingJsonInBundle] then it's string value is used
+ * 1. If forced to be converted by json via [forceUsingJsonInBundle] then [toJsonOrNull] is used isa.
  * 2. trying to use [Bundle.addValue] and in case of any error then [toJsonOrNull] is used instead.
  *
  * ### When
- * It's obvious that this and [buildBundleGsonForced] are so similar but when to use each one
+ * - It's obvious that this and [buildBundleGsonForced] are so similar but when to use each one
  *
  * 1. in case a lot of variables needs regular [buildBundle] and a fallback is to use [toJsonOrNull]
  * use this fun, Note no [RuntimeException] will be thrown in any error since null will be put instead,

@@ -123,7 +123,8 @@ fun ViewGroup.forEachNested(action: (View) -> Unit) {
  * Returns a list containing the results of applying the given [transform] function to each [View]
  * in `receiver` isa.
  *
- * @see [ViewGroup.mapNotNull]
+ * @see ViewGroup.mapNotNull
+ * @see ViewGroup.mapNested
  */
 inline fun <T> ViewGroup.map(transform: (View) -> T): List<T>
     = children.toList().map { transform(it) }
@@ -131,6 +132,8 @@ inline fun <T> ViewGroup.map(transform: (View) -> T): List<T>
 /**
  * Returns a list containing the results of applying the given [transform] function to each [View]
  * in [ViewGroup.forEachNested] isa.
+ *
+ * @see ViewGroup.map
  */
 fun <T> ViewGroup.mapNested(transform: (View) -> T): List<T> {
     val list = mutableListOf<T>()

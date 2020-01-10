@@ -19,6 +19,7 @@ import android.app.Application
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import com.google.gson.reflect.TypeToken
+import mohamedalaa.mautils.core_kotlin.extensions.*
 import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
 import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
 import org.junit.Test
@@ -29,6 +30,15 @@ import org.robolectric.annotation.Config
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class Generics {
+
+    @Test
+    fun f1() {
+        verbosePrintLn("AAAA")
+        infoPrintLn("AAAA")
+        warnPrintLn("AAAA")
+        errorPrintLn("AAAA")
+        wtfPrintLn("AAAA")
+    }
 
     /**
      * - Get another type from shared pref surely throws exception of ast exception isa

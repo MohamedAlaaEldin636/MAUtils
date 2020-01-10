@@ -20,7 +20,6 @@ package mohamedalaa.mautils.shared_pref_core.internal
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import mohamedalaa.mautils.core_kotlin.extensions.throwRuntimeException
 import mohamedalaa.mautils.shared_pref_core.hasKey
 import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
 import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
@@ -62,7 +61,7 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
                     if (this != null) {
                         editor.putString(key, this)
                     }else {
-                        throwRuntimeException(
+                        throw RuntimeException(
                             "passed null value while removeKeyIfValueIsNull is false from .toJsonOrNull() conversion isa"
                         )
                     }
@@ -74,7 +73,7 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
                 if (removeKeyIfValueIsNull) {
                     editor.remove(key)
                 }else {
-                    throwRuntimeException(
+                    throw RuntimeException(
                         "passed null value while removeKeyIfValueIsNull is false isa"
                     )
                 }
@@ -83,7 +82,7 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
                     if (this != null) {
                         editor.putString(key, this)
                     }else {
-                        throwRuntimeException(
+                        throw RuntimeException(
                             "passed null value while removeKeyIfValueIsNull is false from .toJsonOrNull() conversion isa"
                         )
                     }

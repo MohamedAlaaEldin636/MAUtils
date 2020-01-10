@@ -18,7 +18,7 @@ package mohamedalaa.open_source_licences.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import mohamedalaa.mautils.core_android.extensions.launchWebLink
+import mohamedalaa.mautils.core_android.extensions.launchLink
 import mohamedalaa.mautils.core_android.extensions.postWithReceiver
 import mohamedalaa.mautils.gson.getterBundleGson
 import mohamedalaa.open_source_licences.R
@@ -58,7 +58,7 @@ internal class DetailedOpenSourceActivity : AppCompatActivity() {
         binding.toolbar.postWithReceiver {
             setNavigationOnClickListener { onBackPressed() }
             setOnMenuItemClickListener {
-                launchWebLink(licencesModel.openSourceLink, createIntentChooser = true)
+                launchLink(licencesModel.openSourceLink, createIntentChooser = true)
 
                 true
             }

@@ -16,6 +16,7 @@
 package mohamedalaa.mautils.core_android.extensions
 
 import android.app.Application
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.AndroidViewModel
@@ -26,8 +27,16 @@ import mohamedalaa.mautils.core_kotlin.extensions.delayFramePerSecond
 import kotlin.coroutines.CoroutineContext
 
 /**
- * Launches [MALoadingDialogFragment] then call [before] with [coroutineContext], then dismiss [MALoadingDialogFragment]
+ * - Launches [MALoadingDialogFragment] then call [before] with [coroutineContext], then dismiss [MALoadingDialogFragment]
  * then call [after] with [AndroidViewModel.viewModelScope] isa.
+ *
+ * - Perfect for usage of saving some data and you want to make user wait for the save to be finished
+ * without interrupting or interacting with the application isa.
+ *
+ * @param fragmentManager [FragmentManager] to launch [MALoadingDialogFragment] isa.
+ * @param coroutineContext [CoroutineContext] in which [before] block will run inside.
+ * @param before block running while [MALoadingDialogFragment] is shown.
+ * @param after block that runs after [MALoadingDialogFragment] is dismissed isa.
  */
 fun <R> AndroidViewModel.beforeAndAfterDismissInLoadingDialog(
     fragmentManager: FragmentManager,
@@ -55,9 +64,14 @@ fun <R> AndroidViewModel.beforeAndAfterDismissInLoadingDialog(
     }
 }
 
+/** Same as [AndroidViewModel.getApplication] but used as property for more concise code isa. */
 val AndroidViewModel.application: Application
-    get() = getApplication()
+    @JvmSynthetic get() = getApplication()
 
+/** Same as [Context.getString] exists only for more concise code isa. */
+@JvmSynthetic
 fun AndroidViewModel.getString(@StringRes res: Int): String = application.getString(res)
 
+/** Same as [Context.getString] exists only for more concise code isa. */
+@JvmSynthetic
 fun AndroidViewModel.getString(@StringRes res: Int, vararg args: Any): String = application.getString(res, *args)

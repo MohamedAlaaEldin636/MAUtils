@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_android.data_binding;
+package mohamedalaa.mautils.sample.small
 
-/**
- * <b>No included here </b> <br/>
- * 1. Int.toDrawable
- */
-public class DataBindingConversions {
+import mohamedalaa.mautils.core_android.extensions.logError
 
-
-
-}
+/*private fun abc() {
+    logError()
+}*/

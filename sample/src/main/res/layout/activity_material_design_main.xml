@@ -21,8 +21,6 @@
 
     tools:context="mohamedalaa.mautils.sample.material_design.MaterialDesignMainActivity">
 
-    <!--
-        <import type="mohamedalaa.mautils.core_android.data_binding.DataBindingBoxingUtils" />-->
     <data>
         <import type="mohamedalaa.mautils.mautils.R"/>
         <import type="android.graphics.Color"/>
@@ -54,7 +52,7 @@
 
             android:background="@drawable/circle_transparent"
 
-            android:view_setBackgroundTintColor="@{Color.BLUE}"
+            view_setBackgroundTintColor="@{Color.BLUE}"
 
             android:text="M"
             android:textColor="@android:color/black"

@@ -18,6 +18,7 @@
 package mohamedalaa.mautils.core_kotlin.extensions
 
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 /**
  * Rounds to the nearest [decimalPlace] count, with roundingMode == [BigDecimal.ROUND_HALF_UP]
@@ -30,9 +31,10 @@ import java.math.BigDecimal
  *
  * @see Double.round
  */
-fun Float.round(decimalPlace: Int): Float {
+@JvmOverloads
+fun Float.round(decimalPlace: Int, roundingMode: RoundingMode = RoundingMode.HALF_UP): Float {
     var bigDecimal = BigDecimal(this.toString())
-    bigDecimal = bigDecimal.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP)
+    bigDecimal = bigDecimal.setScale(decimalPlace, roundingMode.ordinal)
     return bigDecimal.toFloat()
 }
 
@@ -41,8 +43,9 @@ fun Float.round(decimalPlace: Int): Float {
  *
  * @see Float.round
  */
-fun Double.round(decimalPlace: Int): Float {
+@JvmOverloads
+fun Double.round(decimalPlace: Int, roundingMode: RoundingMode = RoundingMode.HALF_UP): Float {
     var bigDecimal = BigDecimal(this.toString())
-    bigDecimal = bigDecimal.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP)
+    bigDecimal = bigDecimal.setScale(decimalPlace, roundingMode.ordinal)
     return bigDecimal.toFloat()
 }

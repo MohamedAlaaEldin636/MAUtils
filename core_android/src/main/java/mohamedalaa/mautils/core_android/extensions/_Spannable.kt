@@ -19,47 +19,77 @@ package mohamedalaa.mautils.core_android.extensions
 
 import android.text.Spannable
 import androidx.core.text.set
+import mohamedalaa.mautils.core_kotlin.extensions.indexOfOrNull
+import java.util.*
 
 /**
- * Uses [Spannable.setSpan] for the whole [Spannable] isa.
+ * - Uses [androidx.core.text.set] for the whole [Spannable] isa.
  */
 operator fun Spannable.plusAssign(span: Any) {
     this[0..length] = span
 }
 
 /**
- * Uses [Spannable.setSpan] for the [Char] at provided [index] only isa.
+ * - Uses [androidx.core.text.set] for the [Char] at provided [index] only isa.
  */
 operator fun Spannable.set(index: Int, span: Any) {
     this[index..(index.inc())] = span
 }
 
 /**
- * Spans evey char in [string] by returned value of [generateNewSpan],
+ * - Same as [androidx.core.text.set] for each span in [spansList] isa.
+ * ```
+ * spannable.spanAll(0..3, listOf(
+ *      ForegroundColorSpan(Color.BLACK),
+ *      BackgroundColorSpan(Color.BLUE)
+ * ))
+ * ```
+ */
+fun Spannable.spanAll(range: IntRange, spansList: List<Any>) {
+    for (span in spansList) {
+        this[range] = span
+    }
+}
+
+/**
+ * - Uses [androidx.core.text.set] where [IntRange.start] is first occurrence of [string] in
+ * `receiver` and  [IntRange.endInclusive] (which is actually exclusive due to to [Spannable.setSpan] end param)
+ * is [IntRange.start] + [String.length] isa.
+ *
+ * @see Spannable.spanAll
+ */
+operator fun Spannable.set(string: String, span: Any) {
+    val startInclusive = indexOfOrNull(string) ?: return
+    val endExclusive = startInclusive + string.length
+    this[startInclusive..endExclusive] = span
+}
+
+/**
+ * - Spans evey char in [string] by returned value of [generateNewSpan],
  * if conditions of [ignoreCase], [allChars] are met.
  *
  * @param string all characters that need to be spanned.
  * @param ignoreCase if true then the spanning process will be case sensitive, default is false isa.
  * @param allChars true means all chars in `receiver` will be spanned if found inside [string], default is true,
- *
  * while false means the span will happen if whole [string] is in `receiver`, see below for more explanation isa.
- *
- * Ex. "ab ac ab ac".[spanChars] ("ac", allChars = true, ...) then each 'a' in receiver will be spanned
- *
- * while if it was false -> then only both "ac" will be spanned
+ * Ex. "ab ac ab ac".[spanChars]("ac", allChars = true, ...) then each 'a' & each 'c' in receiver will be spanned
+ * while if it was false -> then only each occurrence of "ac" together will be spanned so
+ * 'a' in "ab" won't be spanned isa.
  *
  * @return list of indices that got spanned isa.
  */
 @JvmOverloads
-fun Spannable.spanChars(string: String?,
-                        ignoreCase: Boolean = false,
-                        allChars: Boolean = true,
-                        generateNewSpan: () -> Any): List<Int> {
+fun Spannable.spanChars(
+    string: String?,
+    ignoreCase: Boolean = false,
+    allChars: Boolean = true,
+    generateNewSpan: () -> Any
+): List<Int> {
     if (string.isNullOrEmpty()) {
         return emptyList()
     }
 
-    val modifiedString = if (ignoreCase) string.toLowerCase() else string
+    val modifiedString = if (ignoreCase) string.toLowerCase(Locale.getDefault()) else string
 
     if (allChars) {
         val mutableList = mutableListOf<Int>()

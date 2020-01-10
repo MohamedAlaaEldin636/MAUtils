@@ -48,18 +48,22 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    // -- Own Libraries -- //
 
-    // Own Libraries
+    // Core Android
     api project (':core_android')
 
-    // Other Libraries
-    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    api 'com.google.code.gson:gson:2.8.5'
-
+    // Gson Annotations
     api project (':gson_annotation') // Can be excluded
+
+    // -- Other Libraries -- //
+
+    // Kotlin reflection
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    // Gson
+    api 'com.google.code.gson:gson:2.8.5'
 
     // -- Unit Testing -- //
 

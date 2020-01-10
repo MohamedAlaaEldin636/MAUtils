@@ -18,17 +18,25 @@
 package mohamedalaa.mautils.core_kotlin.extensions
 
 /**
- * Adds [element] only if not inside `receiver`
+ * Adds [element] only if not inside `receiver` isa.
  *
  * @return true if added, false otherwise
+ *
+ * @see move
+ * @see swap
+ * @see addIfNotNull
  */
-fun <T> MutableList<T>.addIfNotInside(element: T): Boolean = (element !in this).apply {
+fun <T> MutableList<T>.addDistinct(element: T): Boolean = (element !in this).apply {
     if (this) {
         add(element)
     }
 }
 
-// todo rename above to addDistinct afdal isa.
+/**
+ * Adds [element] only if `not-null` isa.
+ *
+ * @see addDistinct
+ */
 fun <T : Any> MutableList<T>.addIfNotNull(element: T?): Boolean {
     if (element != null) {
         add(element)

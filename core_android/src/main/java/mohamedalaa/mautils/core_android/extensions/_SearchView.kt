@@ -20,6 +20,11 @@ package mohamedalaa.mautils.core_android.extensions
 import android.widget.*
 import androidx.annotation.ColorInt
 
+/**
+ * set/get text color of [SearchView] isa.
+ *
+ * @see hintTextColor
+ */
 var SearchView.textColor: Int?
     get() {
         return firstNestedViewIsInstanceOrNull<EditText>()?.currentTextColor
@@ -34,6 +39,11 @@ var SearchView.textColor: Int?
         }
     }
 
+/**
+ * set/get hint text color of [SearchView] isa.
+ *
+ * @see textColor
+ */
 var SearchView.hintTextColor: Int?
     get() {
         return firstNestedViewIsInstanceOrNull<EditText>()?.currentHintTextColor
@@ -48,9 +58,33 @@ var SearchView.hintTextColor: Int?
         }
     }
 
-var SearchView.text: String?
+/**
+ * set/get text of [SearchView] isa.
+ *
+ * @see textColor
+ * @see hintText
+ * @see hintTextColor
+ */
+var SearchView.text: CharSequence?
     get() {
-        return firstNestedViewIsInstanceOrNull<EditText>()?.text?.toString()
+        return firstNestedViewIsInstanceOrNull<EditText>()?.text
+    }
+    set(value) {
+        firstNestedViewIsInstanceOrNull<EditText> {
+            this.setText(value)
+        }
+    }
+
+/**
+ * set/get hint text of [SearchView] isa.
+ *
+ * @see textColor
+ * @see text
+ * @see hintTextColor
+ */
+var SearchView.hintText: CharSequence?
+    get() {
+        return firstNestedViewIsInstanceOrNull<EditText>()?.hint
     }
     set(value) {
         if (value == null) {
@@ -58,10 +92,15 @@ var SearchView.text: String?
         }
 
         firstNestedViewIsInstanceOrNull<EditText> {
-            this.setText(value)
+            hint = value
         }
     }
 
+/**
+ * Performs [ImageView.setColorFilter] for every [ImageView] inside `receiver` with given [color] isa.
+ *
+ * @see allNestedViewsIsInstanceOrNull
+ */
 fun SearchView.setIconsTint(@ColorInt color: Int) {
     allNestedViewsIsInstanceOrNull<ImageView> {
         this.setColorFilter(color)
@@ -69,11 +108,28 @@ fun SearchView.setIconsTint(@ColorInt color: Int) {
 }
 
 /**
- * Using [listener] for [SearchView.setOnQueryTextListener] instead of regular [SearchView.OnQueryTextListener],
- * for more concise & idiomatic coding, for an example See [MASearchViewOnQueryTextListener] isa.
+ * - More concise & idiomatic way instead of mandatory implementing all functions, just implement
+ * what you want, see below Ex. on how to use it isa.
+ * ```
+ * fun setupOnQueryTextListener(searchView: SearchView) {
+ *      searchView.setOnQueryTextListenerMA {
+ *          onQueryTextChange {
+ *              // Your code here
+ *
+ *              true // Depends on what you wanna achieve
+ *          }
+ *
+ *          onQueryTextSubmit {
+ *              // Your code here
+ *
+ *              false // Depends on what you wanna achieve
+ *          }
+ *      }
+ * }
+ * ```
  */
-fun SearchView.setOnQueryTextListenerMA(listener: SearchView_OnQueryTextListener_Typealias?) {
-    val genListener =
-        MASearchViewOnQueryTextListener(listener)
-    setOnQueryTextListener(genListener)
+fun SearchView.setOnQueryTextListenerMA(listener: MASearchViewOnQueryTextListenerBuilder.() -> Unit) {
+    setOnQueryTextListener(
+        MASearchViewOnQueryTextListenerBuilder.getListener(listener)
+    )
 }

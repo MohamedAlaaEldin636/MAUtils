@@ -13,21 +13,27 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-@file:JvmName("CalendarUtils")
-
-package mohamedalaa.mautils.core_kotlin.extensions
-
-import java.util.*
-
-/** Exactly same as [Calendar.getInstance] */
-val calendar: Calendar
-    get() = Calendar.getInstance()
+package mohamedalaa.mautils.sample.gson;
 
 /**
- * Gets current year as string Ex. 2019, use it with [calendar], for more concise code isa,
- * ```
- * val text: String = calendar.currentYearAsString // 2019
- * ```
+ * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 1/6/2020.
  */
-val Calendar.currentYearAsString: String
-    get() = get(Calendar.YEAR).toString()
+public class Hello {
+
+    /**
+     * @deprecated Replace with `h2()`
+     */
+    @Deprecated
+    private static void hello1() {
+
+    }
+
+    private static void h2() {
+
+    }
+
+    private static void main1() {
+        hello1();
+    }
+
+}

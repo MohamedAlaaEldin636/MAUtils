@@ -19,13 +19,10 @@ package mohamedalaa.mautils.core_android.extensions
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
-import mohamedalaa.mautils.core_android.R
 
 /**
- * Exactly same as [Intent.getExtras].get([key]), but easier for nullability checks isa.
+ * - Exactly same as [Intent.getExtras].get([key]), but easier for nullability checks & conciser code isa.
  */
 inline fun <reified T> Intent?.getExtraOrNull(key: String): T? {
     this?.apply {
@@ -38,9 +35,7 @@ inline fun <reified T> Intent?.getExtraOrNull(key: String): T? {
 }
 
 /**
- * same as [getExtraOrNull], but throws exception instead if returning null isa.
- *
- * @throws RuntimeException in case of any error isa.
+ * - Same as [getExtraOrNull], but throws [RuntimeException] instead of returning `null` isa.
  */
 inline fun <reified T> Intent?.getExtra(key: String): T {
     this?.apply {
@@ -53,50 +48,13 @@ inline fun <reified T> Intent?.getExtra(key: String): T {
 }
 
 /**
- * @return true if `receiver` is null or it's [Intent.getExtras] is null or empty
+ * @return true if `receiver` is `null` or it's [Intent.getExtras] is `null` or empty isa.
  *
  * @see [Bundle.isNullOrEmpty]
  */
 fun Intent?.isNullOrEmpty(): Boolean = this == null || extras.isNullOrEmpty()
 
-// ---- Another receiver
-
 /**
- * Using [Context.startActivity] with given [url] to launch a browser isa.
- *
- * @param url web link url to launch isa.
- * @param showToastOnFailure if true a toast msg
- * [R.string.you_do_not_have_application_that_can_open_web_links] will be shown, default is true isa.
- * @param createIntentChooser if true [Intent.createChooser] will be used, default is false.
- *
- * @return true if [Intent] can be handled by the system, false means no app can handle it,
- * which if [showToastOnFailure] is true then it's msg will be shown isa.
- *
- * @see toast
- */
-@JvmOverloads
-fun Context.launchWebLink(url: String, showToastOnFailure: Boolean = true, createIntentChooser: Boolean = false): Boolean {
-    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-    val canHandleIntent = webIntent.resolveActivity(packageManager) != null
-    if (canHandleIntent) {
-        if (createIntentChooser) {
-            startActivity(Intent.createChooser(webIntent, getString(R.string.open_web_link)))
-        }else {
-            startActivity(webIntent)
-        }
-    }else if (showToastOnFailure) {
-        toast(getString(R.string.you_do_not_have_application_that_can_open_web_links), Toast.LENGTH_SHORT)
-    }
-
-    return canHandleIntent
-}
-
-/**
- * Used by java devs only, for same functionality for kotlin devs see [Intent.getterBundle]
- *
  * Used to retrieve [Bundle] values created by [Context.startActivityBundle] isa.
  */
-@JvmName("getterBundle")
-fun Intent.javaGetterBundle() =
-    JGetterBundle(extras ?: Bundle())
+fun Intent?.getterBundle(): GetterBundle = GetterBundle(this?.extras.orEmpty())

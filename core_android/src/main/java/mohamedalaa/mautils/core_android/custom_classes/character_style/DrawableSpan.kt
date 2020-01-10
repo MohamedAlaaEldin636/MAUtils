@@ -20,6 +20,12 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.text.style.ReplacementSpan
 
+/**
+ * - Span that replaces the text it's attached to with a Drawable of width [Drawable.getIntrinsicWidth]
+ * && height same as line's height isa.
+ *
+ * @see LinkSpan
+ */
 class DrawableSpan(private val drawable: Drawable): ReplacementSpan() {
 
     private val width = drawable.intrinsicWidth

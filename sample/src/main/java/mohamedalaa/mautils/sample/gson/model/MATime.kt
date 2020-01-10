@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.core_kotlin.custom_classes
+package mohamedalaa.mautils.sample.gson.model
 
-data class MutablePair<A, B>(
-    var first: A,
-    var second: B
+/**
+ * ### Properties
+ * - [timeInMillis]
+ * - [isLocal]
+ *
+ * @property isLocal if true means device's time Ex. [System.currentTimeMillis], false
+ * means global time in GMT isa.
+ */
+data class MATime(
+    var timeInMillis: Long,
+    var isLocal: Boolean = true
 )
-
-fun <A, B> Pair<A, B>.toMutablePair() = MutablePair(first, second)
-
-fun <A, B> MutablePair<A, B>.toPair() = Pair(first, second)
-
-infix fun <A, B> A.mutablePair(other: B) = MutablePair(this, other)

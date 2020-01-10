@@ -18,9 +18,11 @@
 package mohamedalaa.mautils.core_kotlin.extensions
 
 /**
- * Same as [Iterable.sumByDouble] but for [Float].
+ * Same as [Iterable.sumByDouble] but for [Float] type.
  *
  * @return the sum of all values produced by [selector] function applied to each element in the collection.
+ *
+ * @see sumByLong
  */
 inline fun <T> Iterable<T>.sumByFloat(selector: (T) -> Float): Float {
     var sum = 0f
@@ -30,7 +32,26 @@ inline fun <T> Iterable<T>.sumByFloat(selector: (T) -> Float): Float {
     return sum
 }
 
-/** @return true if element is inside `receiver`, false if `receiver` is null or element isn't inside it. */
+/**
+ * Same as [Iterable.sumByDouble] but for [Float] type.
+ *
+ * @return the sum of all values produced by [selector] function applied to each element in the collection.
+ *
+ * @see sumByFloat
+ */
+inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
+    var sum = 0L
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
+}
+
+/**
+ * @return true if element is inside `receiver`, false if `receiver` is null or element isn't inside it.
+ *
+ * @see indexOfOrNull
+ */
 operator fun <T> Iterable<T>?.contains(element: T): Boolean {
     if (this == null) {
         return false
@@ -40,9 +61,10 @@ operator fun <T> Iterable<T>?.contains(element: T): Boolean {
 }
 
 /**
- * @return first index of [element], or `null` if not in `receiver`,
- *
+ * @return first index of [element], or `null` if not inside `receiver`,
  * Gives more convenience for kotlin devs due to nullability checks isa.
+ *
+ * @see Iterable.contains
  */
 fun <T> Iterable<T>.indexOfOrNull(element: T): Int?
     = indexOf(element).run { if (this == -1) null else this }
@@ -102,12 +124,18 @@ inline fun <reified R> Iterable<*>.firstIsInstanceOrNull(): R? {
  *
  * @throws RuntimeException if no item in the list can be of instance [R].
  *
+ * @see Iterable.firstIsInstanceOrNull
  * @see Iterable.filterIsInstance
+ * @see Iterable.allIndicesOf
  */
 inline fun <reified R> Iterable<*>.firstIsInstance(): R
     = firstIsInstanceOrNull() ?: throw RuntimeException("Cannot apply predicate")
 
-/** @return all indices of [element] in `receiver`, or empty list if element doesn't exist isa. */
+/**
+ * @return all indices of [element] in `receiver`, or empty list if element doesn't exist isa.
+ *
+ * @see Iterable.firstIsInstanceOrNull
+ */
 fun <T> Iterable<T>.allIndicesOf(element: T): List<Int> = mapIndexedNotNull { index, it ->
     if (it == element) index else null
 }
@@ -122,6 +150,8 @@ fun <T> Iterable<T>.allIndicesOf(element: T): List<Int> = mapIndexedNotNull { in
  * ```
  *
  * @see Iterable.zipWithNext
+ * @see Iterable.partitionIndexed
+ * @see Iterable.zipFullReceiver
  */
 fun <T> Iterable<T>.pairedIteration(): List<Pair<T, T?>> {
     val pairOfLists = partitionIndexed { index, _ -> index.isEven() }
@@ -130,10 +160,16 @@ fun <T> Iterable<T>.pairedIteration(): List<Pair<T, T?>> {
 }
 
 /**
- * Returns a list of pairs built from the elements of `receiver` and [other] iterables
+ * - Returns a list of pairs built from the elements of `receiver` and [other] iterables
  * with the same index.
  *
- * The returned list has length of the **highest** iterable, not shortest like in [Iterable.zip].
+ * - The returned list has length of the **highest** iterable, not shortest like in [Iterable.zip].
+ *
+ * @see zipFullReceiver
+ * @see zipFullOther
+ * @see pairedIteration
+ * @see partitionIndexed
+ * @see zipSameSize
  */
 infix fun <T, R> Iterable<T>.zipFull(other: Iterable<R>): List<Pair<T?, R?>> {
     val firstIterator = iterator()
@@ -147,7 +183,12 @@ infix fun <T, R> Iterable<T>.zipFull(other: Iterable<R>): List<Pair<T?, R?>> {
     }.toList()
 }
 
-/** @return Same as [zipFull] but returned list has length of `receiver`. */
+/**
+ * @return Same as [zipFull] but returned list has length of `receiver`.
+ *
+ * @see zipFullOther
+ * @see zipFull
+ */
 infix fun <T, R> Iterable<T>.zipFullReceiver(other: Iterable<R>): List<Pair<T, R?>> {
     return if (count() > other.count()) {
         zipFull(other).mapNotNull { (it.first ?: return@mapNotNull null) to it.second }
@@ -156,7 +197,12 @@ infix fun <T, R> Iterable<T>.zipFullReceiver(other: Iterable<R>): List<Pair<T, R
     }
 }
 
-/** @return Same as [zipFull] but returned list has length of `other`. */
+/**
+ * @return Same as [zipFull] but returned list has length of [other].
+ *
+ * @see zipFullReceiver
+ * @see zipFull
+ */
 infix fun <T, R> Iterable<T>.zipFullOther(other: Iterable<R>): List<Pair<T?, R>> {
     return if (count() > other.count()) {
         zipFull(other).mapNotNull { it.first to (it.second ?: return@mapNotNull null) }
@@ -168,6 +214,8 @@ infix fun <T, R> Iterable<T>.zipFullOther(other: Iterable<R>): List<Pair<T?, R>>
 /**
  * @return Ensure both [Iterable]s (`receiver` and [other]) have same size or throws [RuntimeException]
  * then calls [Iterable.zip]
+ *
+ * @see zipFull
  */
 infix fun <T, R> Iterable<T>.zipSameSize(other: Iterable<R>): List<Pair<T, R>> {
     if (count() != other.count()) throw RuntimeException("Different sizes")

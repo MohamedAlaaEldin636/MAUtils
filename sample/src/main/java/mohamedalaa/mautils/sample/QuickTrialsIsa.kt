@@ -28,7 +28,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import mohamedalaa.mautils.core_android.extensions.addColorAlpha
-import mohamedalaa.mautils.core_android.extensions.addListenerMA
 import mohamedalaa.mautils.core_android.extensions.setOnQueryTextListenerMA
 import mohamedalaa.mautils.core_kotlin.extensions.contains
 import mohamedalaa.mautils.core_kotlin.extensions.firstIsInstance
@@ -107,11 +106,6 @@ abstract class CheckTypeParam<E> {
     }
 
     private fun f111(animatorSet: AnimatorSet) {
-        animatorSet.addListenerMA {
-            onAnimationCancel {
-
-            }
-        }
     }
 
     var color = 9
@@ -127,10 +121,6 @@ abstract class CheckTypeParam<E> {
                 // Your code here
 
                 true // Depends on what you wanna achieve
-            } onQueryTextSubmit {
-                // Your code here
-
-                false // Depends on what you wanna achieve
             }
         }
     }

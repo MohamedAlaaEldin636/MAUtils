@@ -21,13 +21,15 @@ import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import mohamedalaa.mautils.core_android.extensions.dismissToast
+import mohamedalaa.mautils.core_android.extensions.toast
 
 /**
  * ## Deprecation Under Condition
  *
- * If you `implement` material_design module then use [mohamedalaa.mautils.material_design.custom_classes.BaseApplication]
+ * If you `implement` material_design module of this library then use
+ * [mohamedalaa.mautils.material_design.custom_classes.BaseApplication]
  *
- * instead of this [BaseApplication], since it extends from [BaseApplication] and add more functionality
+ * instead of `this`, since it extends from `this` and add more functionality
  *
  * Ex. same approach of [Toast] but for [com.google.android.material.snackbar.Snackbar] isa.
  *
@@ -39,15 +41,15 @@ import mohamedalaa.mautils.core_android.extensions.dismissToast
  *
  * ## How to Use
  *
- * 1- either extend `this` class then put the derived class in manifest -> android:name=".YourApplication"
+ * 1. either extend `this` class then put the derived class in manifest -> android:name=".YourApplication"
  *
- * 2- or directly use `this` class in manifest -> android:name=".BaseApplication"
+ * 2. or directly use `this` class in manifest -> android:name=".BaseApplication"
  *
  * @see dismissToast
  * @see Context.toast
  */
 open class BaseApplication: Application() {
 
-    var toast: Toast? = null
+    internal var toast: Toast? = null
 
 }

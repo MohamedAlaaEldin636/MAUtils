@@ -34,13 +34,21 @@ fun Long.format(pattern: String, local: Locale = Locale.getDefault()): String
     = SimpleDateFormat(pattern, local).format(Date(this))
 
 /**
- * this is better since above due to languages might change isa.
+ * - Uses [SimpleDateFormat] to format each item in given array using [format] only if [Pair.second]
+ * is `true`, otherwise it uses the string in [Pair.first] as-is, then joins the array with
+ * [joinToString] isa.
  *
- * @param pairs [Pair.second] == format -> means to format it (true) or ignore it (false) and put it as it is isa.
- *
-todo docs val date = timeGameStarted.format("d MMM, yyyy $at : a")
-
-e3mel format kaza marra isa
+ * - Useful in cases where you want to have a specific string which might change according to
+ * language setting for Ex. notice the bold word -> 7 Jan **at** 7:33 PM what if you wanna change
+ * **at** according to selected language of the device then this function is better be used
+ * and here is how to use it isa.
+ * ```
+ * System.currentTimeMillis().format(
+ *      "d MMM" to true,
+ *      getString(R.string.at) to false,
+ *      "h:mm a" to true
+ * )
+ * ```
  */
 @JvmOverloads
 fun Long.format(vararg pairs: Pair<String, Boolean>, local: Locale = Locale.getDefault()): String {

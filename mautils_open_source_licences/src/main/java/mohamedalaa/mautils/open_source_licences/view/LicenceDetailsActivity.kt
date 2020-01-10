@@ -83,7 +83,7 @@ internal class LicenceDetailsActivity : AppCompatActivity() {
             linkButton.setTextColor(this)
         }
         intent.getExtraOrNull<Int>(OpenSourceLicencesActivity.INTENT_KEY_ITEM_DETAIL_ACTIVITY_LINK_BUTTON_TINT)?.apply {
-            linkButton.setBackgroundTint(this)
+            linkButton.setBackgroundTintCompat(this)
         }
 
         // Licence content configs isa.
@@ -114,7 +114,7 @@ internal class LicenceDetailsActivity : AppCompatActivity() {
             linkButton.visibility = View.VISIBLE
 
             linkButton.setOnClickListener {
-                licence.link?.apply { launchWebLink(this, createIntentChooser = true) }
+                licence.link?.apply { launchLink(this, createIntentChooser = true) }
             }
         }else {
             linkButton.visibility = View.GONE

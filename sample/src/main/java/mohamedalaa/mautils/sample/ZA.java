@@ -15,17 +15,60 @@
 
 package mohamedalaa.mautils.sample;
 
+import android.app.Application;
 import android.os.Bundle;
 
+import org.jetbrains.annotations.Contract;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
 import mohamedalaa.mautils.core_android.extensions.BundleUtils;
+import mohamedalaa.mautils.core_android.extensions.GetterBundle;
 
 /**
  * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/22/2019.
  */
 public class ZA {
 
-    public void dwed(Bundle bundle) {
-        BundleUtils.getterBundle(bundle);
+    public void dwed(
+        @NonNull Bundle bundle,
+        AndroidViewModel androidViewModel,
+        @Nullable Bundle bNullable
+    ) {
+        //BundleUtils.getterBundle(bundle);
+
+        //Application application = mohamedalaa.mautils.core_android.extensions._AndroidViewModelKt.getApplication(androidViewModel);
+
+        Bundle c = null;
+        boolean bb = BundleUtils.isNullOrEmpty(c);
+
+        GetterBundle getterBundle = BundleUtils.getterBundle(bundle);
+        int[] primitiveIntArray = getterBundle.getOrNull();
+        String string = getterBundle.get();
+
+        Bundle b2 = BundleUtils.orEmpty(bundle);
+        bNullable = null;
+        Bundle b3 = BundleUtils.orEmpty(bNullable);
+        if (b3 == bNullable) {
+
+        }
+
+        boolean b = BundleUtils.isNullOrEmpty(bundle);
+        if (b2 != null) {
+
+        }
+        if (bundle != null) {
+            if (abcdefg(bundle) != null) {
+
+            }
+        }
+    }
+
+    @Contract(value = "!null -> param1", pure = true)
+    @NonNull
+    private static Bundle abcdefg(@Nullable Bundle bundle) {
+        return bundle == null ? new Bundle() : bundle;
     }
 
 }

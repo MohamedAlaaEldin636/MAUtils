@@ -19,7 +19,6 @@ package mohamedalaa.mautils.gson
 
 import android.app.Activity
 import android.content.Context
-import mohamedalaa.mautils.core_android.extensions.javaStartActivity
 import mohamedalaa.mautils.core_android.extensions.startActivity
 
 /**
@@ -28,16 +27,8 @@ import mohamedalaa.mautils.core_android.extensions.startActivity
 inline fun <reified T : Activity> Context.startActivityBundleGson(vararg values: Any?)
     = startActivity<T>(buildBundleGson(*values))
 
-@JvmName("startActivityBundleGson")
-fun <T : Activity> Context.javaStartActivityBundleGson(jClass: Class<T>, vararg values: Any?)
-    = javaStartActivity(jClass, buildBundleGson(*values))
-
 /**
  * Combination of [startActivity] && [buildBundleGsonForced]
  */
 inline fun <reified T : Activity> Context.startActivityBundleGsonForced(vararg values: Any?)
     = startActivity<T>(buildBundleGsonForced(*values))
-
-@JvmName("startActivityBundleGsonForced")
-fun <T : Activity> Context.javaStartActivityBundleGsonForced(jClass: Class<T>, vararg values: Any?)
-    = javaStartActivity(jClass, buildBundleGsonForced(*values))

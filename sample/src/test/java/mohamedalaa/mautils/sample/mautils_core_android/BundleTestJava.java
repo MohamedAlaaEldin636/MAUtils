@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mohamedalaa.mautils.core_android.extensions.BundleUtils;
-import mohamedalaa.mautils.core_android.extensions.JGetterBundle;
 
 import static org.junit.Assert.assertEquals;
 
@@ -74,22 +73,22 @@ public class BundleTestJava {
         BundleUtils.addValues(bundle, primitiveIntArray, longArray, stringList, sparseArray);
 
         // Retrieving values ( Note must be in same order isa. )
-        JGetterBundle getterBundle = BundleUtils.getterBundle(bundle);
+        /*JGetterBundle getterBundle = BundleUtils.getterBundle(bundle);
         int[] primitiveIntArray = getterBundle.getOrNull();
         assertEquals(primitiveIntArray, primitiveIntArray);
         //noinspection deprecation
         assertEquals(longArray, getterBundle.get());
         List<String> reStringList = getterBundle.get();
         assertEquals(stringList, reStringList);
-        assertEquals(sparseArray, getterBundle.get());
+        assertEquals(sparseArray, getterBundle.get());*/
     }
 
     @Test
     public void nullableElementsList() {
         Bundle bundle = BundleUtils.buildBundle(nullableElementsFloatList, allNullableElementsFloatList);
 
-        JGetterBundle getterBundle = BundleUtils.getterBundle(bundle);
+        /*JGetterBundle getterBundle = BundleUtils.getterBundle(bundle);
         assertEquals(nullableElementsFloatList, getterBundle.get());
-        assertEquals(allNullableElementsFloatList, getterBundle.get());
+        assertEquals(allNullableElementsFloatList, getterBundle.get());*/
     }
 }

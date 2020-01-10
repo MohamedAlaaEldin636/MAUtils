@@ -17,13 +17,21 @@
 
 package mohamedalaa.mautils.core_kotlin.extensions
 
+import java.util.*
+
 /**
  * Parses the string as an [Int] number and returns the result OR [fallback] if the string
  * is not a valid representation of a number, or the string is null isa.
+ *
+ * @see toBooleanOrNull
  */
 fun String?.toIntOrElse(fallback: Int): Int = this?.toIntOrNull() ?: fallback
 
-/** @return index of the first occurrence among [stringsArray] or `null` if none is found. */
+/**
+ * @return index of the first occurrence of any item in [stringsArray] or `null` if none is found.
+ *
+ * @see removeAll
+ */
 @JvmOverloads
 fun String.nearestIndexOf(vararg stringsArray: String, startIndex: Int = 0, ignoreCase: Boolean = false): Int? {
     val indices = stringsArray.mapNotNull { indexOfOrNull(it, startIndex, ignoreCase) }
@@ -31,6 +39,11 @@ fun String.nearestIndexOf(vararg stringsArray: String, startIndex: Int = 0, igno
     return indices.min()
 }
 
+/**
+ * Removes all occurrences of each item in [values] isa.
+ *
+ * @see nearestIndexOf
+ */
 fun String.removeAll(vararg values: String): String {
     var tempFullString = this
 
@@ -42,21 +55,40 @@ fun String.removeAll(vararg values: String): String {
 }
 
 /**
- * in case of any error Ex. [endIndexString] not in `receiver` or has index before [startIndex]
- * then [substring] with just [startIndex] will be returned isa.
+ * - uses [kotlin.text.substring] with [startIndexInclusive] as it's start index and [endIndexExclusiveString]
+ * as it's end index after searching for it's index and you can start the search from first occurrence
+ * if [searchFirstNotLast] is `true` and from last occurrence if `false`, Also Note in case
+ * no occurrence is found then [kotlin.text.substring] with [startIndexInclusive] only is used isa.
  */
-fun String.substring(startIndex: Int, endIndexString: String, searchFirstNotLast: Boolean = true): String {
+fun String.substring(startIndexInclusive: Int, endIndexExclusiveString: String, searchFirstNotLast: Boolean = true): String {
     val result = if (searchFirstNotLast) {
-        indexOfOrNull(endIndexString)?.run {
-            runCatching { this@substring.substring(startIndex, this) }.getOrNull()
+        indexOfOrNull(endIndexExclusiveString)?.run {
+            runCatching { this@substring.substring(startIndexInclusive, this) }.getOrNull()
         }
     }else {
-        lastIndexOfOrNull(endIndexString)?.run {
-            runCatching { this@substring.substring(startIndex, this) }.getOrNull()
+        lastIndexOfOrNull(endIndexExclusiveString)?.run {
+            runCatching { this@substring.substring(startIndexInclusive, this) }.getOrNull()
         }
     }
 
-    return result ?: this@substring.substring(startIndex)
+    return result ?: this@substring.substring(startIndexInclusive)
 }
 
-fun String.toBooleanOrNull(): Boolean? = runCatching { toBoolean() }.getOrNull()
+/**
+ * @return `true` if the contents of this string is equal to the word "true"
+ *
+ * And `false` if the contents of this string is equal to the word "false",
+ *
+ * Otherwise `null` is returned isa,
+ *
+ * **Note we Ignore case of the `receiver` isa.**
+ *
+ * @see toIntOrElse
+ */
+fun String.toBooleanOrNull(): Boolean? {
+    return when (toLowerCase(Locale.getDefault())) {
+        true.toString() -> true
+        false.toString() -> false
+        else -> null
+    }
+}

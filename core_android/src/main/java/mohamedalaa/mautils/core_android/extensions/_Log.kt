@@ -16,20 +16,59 @@
 package mohamedalaa.mautils.core_android.extensions
 
 import android.util.Log
+import mohamedalaa.mautils.core_kotlin.extensions.lastIndexOfOrNull
 import mohamedalaa.mautils.core_kotlin.extensions.safeNext
 
-fun logError(msg: String) = privateLog(
-    LogLevel.ERROR,
+/**
+ * - Same as [Log.v] but with tag "V" and msg prefixed by class simple name and line of occurrence isa.
+ *
+ * @see logInfo
+ */
+fun logVerbose(msg: String) = privateLog(
+    LogLevel.VERBOSE,
     msg
 )
 
+/**
+ * - Same as [Log.i] but with tag "I" and msg prefixed by class simple name and line of occurrence isa.
+ *
+ * @see logVerbose
+ * @see logWarn
+ */
+fun logInfo(msg: String) = privateLog(
+    LogLevel.INFO,
+    msg
+)
+
+/**
+ * - Same as [Log.w] but with tag "W" and msg prefixed by class simple name and line of occurrence isa.
+ *
+ * @see logInfo
+ * @see logError
+ */
 fun logWarn(msg: String) = privateLog(
     LogLevel.WARN,
     msg
 )
 
-fun logVerbose(msg: String) = privateLog(
-    LogLevel.VERBOSE,
+/**
+ * - Same as [Log.e] but with tag "E" and msg prefixed by class simple name and line of occurrence isa.
+ *
+ * @see logWarn
+ * @see logWTF
+ */
+fun logError(msg: String) = privateLog(
+    LogLevel.ERROR,
+    msg
+)
+
+/**
+ * - Same as [Log.wtf] but with tag "WTF" and msg prefixed by class simple name and line of occurrence isa.
+ *
+ * @see logError
+ */
+fun logWTF(msg: String) = privateLog(
+    LogLevel.ASSERT,
     msg
 )
 
@@ -63,11 +102,7 @@ private enum class LogLevel {
 }
 
 private fun String.classSimpleName(): String {
-    return if ("." !in this) {
-        this
-    }else {
-        val indexOfLastDot = lastIndexOf(".")
-
-        substring(indexOfLastDot.inc())
-    }
+    return lastIndexOfOrNull(".")?.run {
+        if (this == lastIndex) "" else substring(inc())
+    } ?: this
 }

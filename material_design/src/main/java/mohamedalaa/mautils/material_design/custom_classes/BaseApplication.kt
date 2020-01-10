@@ -35,6 +35,6 @@ import mohamedalaa.mautils.material_design.dismissSnackbar
  */
 open class BaseApplication: BaseApplication() {
 
-    var snackbar: Snackbar? = null
+    internal var snackbar: Snackbar? = null
 
 }

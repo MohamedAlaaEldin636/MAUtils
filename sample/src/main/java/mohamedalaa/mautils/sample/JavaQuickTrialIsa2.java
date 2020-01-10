@@ -33,7 +33,6 @@ public class JavaQuickTrialIsa2 {
 
         //BundleUtils.
 
-        ContextUtils.startActivity(context, BoatActivity.class);
         //mohamedalaa.mautils.gson.ContextUtils.startActivityBundleGsonForced();
 
         //IntentUtils.

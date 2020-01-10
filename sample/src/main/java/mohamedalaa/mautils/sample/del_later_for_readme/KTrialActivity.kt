@@ -18,7 +18,6 @@ package mohamedalaa.mautils.sample.del_later_for_readme
 import android.animation.AnimatorSet
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import mohamedalaa.mautils.core_android.extensions.addListenerMA
 import mohamedalaa.mautils.core_android.extensions.hideKeyboardFrom
 import mohamedalaa.mautils.core_android.extensions.showKeyboardFor
 
@@ -42,18 +41,6 @@ class KTrialActivity : AppCompatActivity() {
     private lateinit var animatorSet: AnimatorSet
 
     private fun f2() {
-        animatorSet.addListenerMA {
-            onAnimationStart {
-                // Code for on anim start
-            } onAnimationEnd {
-                // Code for on anim end
-            } onAnimationCancel {
-                // Code for on anim cancel
-            }
-            // Don't need -> onAnimationRepeat { /* Do nothing */ }
-        }
-
-        // Quick inflation of a layout.xml
         //val rootViewOfLayout = inflateLayout(R.layout.layout/*, parent optional viewGroup, false optional attachToParent*/)
     }
 

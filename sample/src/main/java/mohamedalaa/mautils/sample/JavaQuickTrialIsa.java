@@ -18,15 +18,11 @@ package mohamedalaa.mautils.sample;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 
-import java.util.Calendar;
 import java.util.List;
 
 import kotlin.Pair;
-import mohamedalaa.mautils.core_android.extensions.AnimatorSetUtils;
 import mohamedalaa.mautils.core_android.extensions.ColorUtils;
-import mohamedalaa.mautils.core_kotlin.extensions.CalendarUtils;
 import mohamedalaa.mautils.core_kotlin.extensions.CollectionsUtils;
-import mohamedalaa.mautils.core_kotlin.extensions.GeneralUtils;
 import mohamedalaa.mautils.core_kotlin.extensions.IterableUtils;
 import mohamedalaa.mautils.core_kotlin.extensions.ListUtils;
 
@@ -36,9 +32,9 @@ import mohamedalaa.mautils.core_kotlin.extensions.ListUtils;
 public class JavaQuickTrialIsa {
 
     private void f1() {
-        Calendar calendar = CalendarUtils.getCalendar();
+        //Calendar calendar = CalendarUtils.getCalendar();
 
-        String year = CalendarUtils.getCurrentYearAsString(calendar);
+        //String year = CalendarUtils.getCurrentYearAsString(calendar);
     }
 
     private void f2(List<String> list) {
@@ -52,7 +48,7 @@ public class JavaQuickTrialIsa {
     private void f3(List<Integer> list) {
 
         // Auto check addition
-        ListUtils.addIfNotInside(list, 5);
+        ListUtils.addDistinct(list, 5);
 
         // Instead of
         if (!list.contains(5)) {
@@ -68,7 +64,7 @@ public class JavaQuickTrialIsa {
         int value = 9;
 
         // check if (int value) equals any of other int values
-        boolean isMatched = GeneralUtils.equalAny(value, 1, 2, 3, 4);
+        /*boolean isMatched = GeneralUtils.equalAny(value, 1, 2, 3, 4);
 
         // Instead of
         isMatched = value == 1 || value == 2 || value == 3 || value == 4;
@@ -82,28 +78,12 @@ public class JavaQuickTrialIsa {
             default:
                 isMatched = false;
                 break;
-        }
+        }*/
 
     }
 
     private void f111(AnimatorSet animatorSet, final Animator a1) {
-        AnimatorSetUtils.addListenerMA(animatorSet, maAnimatorAnimatorListener -> {
-            maAnimatorAnimatorListener.onAnimationStart(maAnimatorAnimatorListener, animator -> {
-                //
 
-                return null;
-            });
-
-            maAnimatorAnimatorListener.onAnimationCancel(maAnimatorAnimatorListener, animator -> {
-                // animator.someThing()
-
-                return null;
-            });
-
-            return null;
-        });
-
-        //SpannableUtils.spanChars()
     }
 
     private void ff1(int color) {

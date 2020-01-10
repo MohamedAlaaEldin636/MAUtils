@@ -19,6 +19,7 @@
 package mohamedalaa.mautils.core_android.extensions
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -29,12 +30,12 @@ import androidx.core.content.ContextCompat
 
 // ==> Layout
 
-/** Layout inflater from `this context`, used [LayoutInflater.from] */
+/** - Layout inflater from `receiver`, by using [LayoutInflater.from] */
 val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)
 
 /**
- * Inflates a layout from res
+ * - Inflates a layout from [layoutRes] isa.
  *
  * @param parent provide [ViewGroup.LayoutParams] to the returned root view, default is `null`
  * @param attachToRoot if true then the returned view will be attached to [parent] if not `null`,
@@ -55,7 +56,11 @@ fun Context.inflateLayout(@LayoutRes layoutRes: Int,
 @ColorInt
 fun Context.getColorFromRes(@ColorRes res: Int): Int = ContextCompat.getColor(this, res)
 
-/** @return color from attr res that refers to a color, Ex. R.attr.colorPrimary */
+/**
+ * @return color from attr res that refers to a color, Ex. R.attr.colorPrimary
+ *
+ * @see Resources.Theme.getColorFromAttrRes
+ */
 @ColorInt
 fun Context.getColorFromAttrRes(@AttrRes attrRes: Int): Int {
     val typedValue = TypedValue()
@@ -92,10 +97,12 @@ fun Context.getDrawableFromRes(@DrawableRes drawableRes: Int, @ColorInt tintColo
 fun Context.dpToPx(dp: Int): Float = TypedValue.applyDimension(
     TypedValue.COMPLEX_UNIT_DIP,
     dp.toFloat(),
-    resources.displayMetrics)
+    resources.displayMetrics
+)
 
 /** @return converted dimen from sp (scale-independent pixels) to px (pixels) */
 fun Context.spToPx(sp: Int): Float = TypedValue.applyDimension(
     TypedValue.COMPLEX_UNIT_SP,
     sp.toFloat(),
-    resources.displayMetrics)
+    resources.displayMetrics
+)

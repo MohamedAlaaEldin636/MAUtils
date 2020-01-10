@@ -27,7 +27,7 @@ import androidx.annotation.Px
 import androidx.annotation.RequiresApi
 
 /**
- * Create rounded rectangle drawable with ripple if [rippleColor] is not null, Note for android
+ * Create rounded rectangle drawable with ripple if [rippleColor] is not `null`, Note for android
  * API >= [Build.VERSION_CODES.LOLLIPOP] then RippleDrawable is Used isa, otherwise
  * [StateListDrawable] with [LayerDrawable] for other APIs isa.
  *
@@ -146,7 +146,8 @@ fun getCircle(@ColorInt solidColor: Int,
     )
 }
 
-/**Create circle drawable with ripple if [rippleColor] is not null, Note for android
+/**
+ * Create circle drawable with ripple if [rippleColor] is not null, Note for android
  * API >= [Build.VERSION_CODES.LOLLIPOP] then RippleDrawable is Used isa, otherwise
  * [StateListDrawable] with [LayerDrawable] for other APIs isa.
  *

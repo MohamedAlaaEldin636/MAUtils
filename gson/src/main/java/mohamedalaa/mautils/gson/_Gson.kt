@@ -24,10 +24,11 @@ import kotlin.Exception
 import mohamedalaa.mautils.gson.java.GsonConverter
 
 /**
- * Converts `this JSON String` to object of type [E], or null in case of any error occurs isa.
+ * ### Usage
+ * - Converts `receiver` ( JSON String ) to object of type [E], or null in case of any error occurs isa.
  *
- * ### Warning
- * **(Compile time checks, Note below example)**
+ * ### Warnings
+ * - **(Compile time checks, Note below example)**
  * ```
  * val list = listOf(6, null, 53) // Nullable elements list (Nullable type parameter)
  * val jsonString = list.toJson()
@@ -49,9 +50,16 @@ import mohamedalaa.mautils.gson.java.GsonConverter
  * val listOfInts: List<Int?>? = jsonString.fromJsonOrNullJava()
  * ```
  *
+ * - There might be changes to the format of the produced JSON String when using [toJsonOrNull] or [toJson]
+ * ONLY in special cases, Ex. JSON do not support abstract classes conversion but here we do support
+ * it by tweaking the produced JSON a little isa, But again if that special case isn't there
+ * then the conversion will be like any Standard JSON format isa.
+ *
  * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
- * @return object of type <E> from given JSON String or null if any problem occurs isa.
+ * @param E tye to convert to, from given JSON String isa.
+ *
+ * @return object of type [E] from given JSON String or null if any problem occurs isa.
  *
  * @see fromJson
  * @see toJsonOrNull
@@ -67,12 +75,8 @@ inline fun <reified E> String?.fromJsonOrNull(gson: Gson? = null): E? = this?.ru
 }
 
 /**
- * Exactly same as [fromJsonOrNull], the only difference that instead of returning null
- * a [RuntimeException] is thrown instead, so returned type is guaranteed to be not null isa.
- *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
- *
- * @return object of type <E> from given JSON String OR throws exception if any problem occurs isa.
+ * - Same as [fromJsonOrNull] but throws [RuntimeException] in case of any problems instead of
+ * returning `null` isa.
  *
  * @throws RuntimeException in case of any error occurred during conversion process isa.
  *
@@ -83,14 +87,12 @@ inline fun <reified E> String?.fromJson(gson: Gson? = null): E = fromJsonOrNull(
     ?: throw RuntimeException("Cannot convert $this to object of type ${E::class}")
 
 /**
- * Converts `receiver` object to a JSON String OR null in case of any error isa.
+ * - Converts `receiver` object to a JSON String OR null in case of any error isa.
  *
  * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
- * @return `receiver` object as JSON String OR null if any problem occurs isa.
- *
- * @see toJson
  * @see fromJsonOrNull
+ * @see toJson
  */
 inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run {
     val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
@@ -99,12 +101,8 @@ inline fun <reified E> E?.toJsonOrNull(gson: Gson? = null): String? = this?.run 
 }
 
 /**
- * Exactly same as [toJsonOrNull], the only difference that instead of returning null
- * a [RuntimeException] is thrown instead, so returned type is guaranteed to be not null isa.
- *
- * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
- *
- * @return `receiver` object as JSON String OR throws exception if any problem occurs isa.
+ * - Same as [toJsonOrNull] but throws [RuntimeException] in case of any problems instead of
+ * returning `null` isa.
  *
  * @throws RuntimeException in case of any error occurred during conversion process isa.
  *

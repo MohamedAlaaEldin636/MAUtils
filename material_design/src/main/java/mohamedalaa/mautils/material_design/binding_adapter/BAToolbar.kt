@@ -16,14 +16,15 @@
 package mohamedalaa.mautils.material_design.binding_adapter
 
 import android.view.View
+import android.widget.SearchView
 import androidx.annotation.ColorInt
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
-import mohamedalaa.mautils.core_android.extensions.postWithReceiver
-import mohamedalaa.mautils.material_design.findNavIconViewOrNull
-import mohamedalaa.mautils.material_design.setIconsTint
-import mohamedalaa.mautils.material_design.setTooltipTextCompat
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
+import mohamedalaa.mautils.core_android.extensions.*
+import mohamedalaa.mautils.material_design.*
 
 /**
  * ## List of Other bindingAdapters in extension functions isa.
@@ -51,9 +52,9 @@ object BAToolbar {
     }
 
     @JvmStatic
-    @BindingAdapter("mautils:toolbar_menuRes",
-        "mautils:toolbar_onMenuItemClickListener",
-        "mautils:toolbar_onNavigationIconClickListener",
+    @BindingAdapter("toolbar_menuRes",
+        "toolbar_onMenuItemClickListener",
+        "toolbar_onNavigationIconClickListener",
         requireAll = false)
     fun setupMenuAndIconsClicks(
         toolbar: Toolbar,
@@ -75,6 +76,65 @@ object BAToolbar {
             toolbar.navigationContentDescription = contentDescription
             setTooltipTextCompat(contentDescription)
         }
+    }
+
+    /**
+     * todo continue kdoc isa.
+     * todo now test 3 cases listener alone / 2-way alone / both isa.
+     * - Note you can use two-way data binding approach in addition to [maSearchViewOnQueryTextListenerBuilderBlock]
+     * if you want, But commonly it's either the [maSearchViewOnQueryTextListenerBuilderBlock] listener
+     * OR the two-way data binding approach but both are provided for full customization isa.
+     */
+    @JvmStatic
+    @BindingAdapter(
+        "toolbar_setupActionViewForSearchView_searchViewText",
+        "toolbar_setupActionViewForSearchView_searchViewTextAttrChanged",
+
+        "toolbar_setupActionViewForSearchView_maSearchViewOnQueryTextListenerBuilderBlock",
+
+        requireAll = false
+    )
+    fun setupActionViewForSearchView(
+        toolbar: Toolbar,
+
+        searchViewText: CharSequence?,
+        inverseBindingListener: InverseBindingListener?,
+
+        maSearchViewOnQueryTextListenerBuilderBlock: (MASearchViewOnQueryTextListenerBuilder.() -> Unit)?
+    ) {
+        // sometimes if post not used like below code and changes to menu of toolbar was done
+        // as well by binding adapter or done after this invocation then all colors are cleared
+        // and sometimes functionality as well, so below code is better and doesn't show any ui
+        // blinking of color changes for example isa.
+        toolbar.postWithReceiver {
+            // todo if works maybe we need a two-way data binding here isa.
+            val listener = maSearchViewOnQueryTextListenerBuilderBlock?.asListener()
+            menu.setupActionViewForSearchView(
+                searchViewText = searchViewText,
+                onQueryTextListener = {
+                    onQueryTextChange {
+                        inverseBindingListener?.onChange()
+
+                        listener?.onQueryTextChange(it) ?: false
+                    }
+
+                    onQueryTextSubmit {
+                        listener?.onQueryTextSubmit(it) ?: false
+                    }
+                }
+            )
+        }
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "toolbar_setupActionViewForSearchView_searchViewText", event = "toolbar_setupActionViewForSearchView_searchViewTextAttrChanged")
+    fun getToolbarMenuItemSearchViewText(toolbar: Toolbar): CharSequence? {
+        val searchView = toolbar.menu.firstNestedActionViewIsInstanceOrNull<SearchView>()
+            ?: return null
+
+        logError("- ${searchView.text}")
+
+        return searchView.text
     }
 
 }

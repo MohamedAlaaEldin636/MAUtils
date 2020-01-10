@@ -19,7 +19,6 @@ import android.widget.CompoundButton
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import mohamedalaa.mautils.core_kotlin.extensions.throwRuntimeException
 import mohamedalaa.mautils.core_kotlin.extensions.toStringOrEmpty
 
 /**
@@ -59,7 +58,7 @@ fun MAChipsContainer.setOnChipCheckedChangeListener(
 fun MAChipsContainer.setCurrentCheckedChipsNames(names: List<String>) {
     // Only 1 selection for Choice isa.
     if (chipsStyle == ChipsStyle.Choice && names.size != 1) {
-        throwRuntimeException("cannot use setCurrentCheckedChipsNames with style Choice EXCEPT with " +
+        throw RuntimeException("cannot use setCurrentCheckedChipsNames with style Choice EXCEPT with " +
             "1 string in the fun param of type List<String> isa.")
     }
 

@@ -22,10 +22,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mohamedalaa.mautils.core_android.extensions.logError
 import mohamedalaa.mautils.core_android.extensions.logWarn
 import mohamedalaa.mautils.core_kotlin.extensions.substring
-import mohamedalaa.mautils.core_kotlin.extensions.withContextMain
 import mohamedalaa.mautils.lifecycle_extensions.custom_classes.QuickMutableLiveData
 import mohamedalaa.open_source_licences.custom_classes.Constants
 import java.io.BufferedReader
@@ -55,8 +55,10 @@ internal class OpenSourceLicencesFragmentViewModel(
     init {
         viewModelScope.launch(Dispatchers.Default) {
             val assetManager: AssetManager? = application.assets
-            val subPathList = assetManager?.list(assetsFolderPath)?.toList()?.filterNotNull()
-                ?.filter { it.length > 4 && it.endsWith(".txt") }.orEmpty()
+            val subPathList = withContext(Dispatchers.IO) {
+                assetManager?.list(assetsFolderPath)?.toList()?.filterNotNull()
+                    ?.filter { it.length > 4 && it.endsWith(".txt") }.orEmpty()
+            }
 
             val apacheLicenceNameAndContent = listOf(Constants.APACHE_2_0_LICENCE_NAME to Constants.APACHE_2_0_LICENCE_CONTENT)
             val listOfLicencesNameAndContent = apacheLicenceNameAndContent + subPathList.mapNotNull {
@@ -75,7 +77,9 @@ internal class OpenSourceLicencesFragmentViewModel(
                 )
             }
 
-            withContextMain { mutableLiveDataLicencesNameAndContent.value = listOfLicencesNameAndContent }
+            withContext(Dispatchers.Main) {
+                mutableLiveDataLicencesNameAndContent.value = listOfLicencesNameAndContent
+            }
         }
     }
 

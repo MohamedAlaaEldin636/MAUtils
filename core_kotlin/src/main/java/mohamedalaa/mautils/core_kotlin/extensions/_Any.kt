@@ -17,7 +17,8 @@
 
 package mohamedalaa.mautils.core_kotlin.extensions
 
-/** @return null if receiver is null, otherwise conversion to string is returned isa. */
+/** @return `null` if receiver is null, otherwise conversion to string is returned isa. */
 fun Any?.toStringOrNull(): String? = this?.toString()
 
+/** @return empty string if receiver is null, otherwise conversion to string is returned isa. */
 fun Any?.toStringOrEmpty(): String = toStringOrNull() ?: ""

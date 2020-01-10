@@ -17,49 +17,68 @@ package mohamedalaa.mautils.core_android.extensions
 
 import android.widget.SearchView
 
-typealias SearchView_OnQueryTextListener_Typealias = MASearchViewOnQueryTextListener.() -> Unit
+/**
+ * Converts `receiver`'s block to [SearchView.OnQueryTextListener] in case you like to override
+ * specific functions on an existing `receiver` block isa.
+ */
+fun (MASearchViewOnQueryTextListenerBuilder.() -> Unit).asListener(): SearchView.OnQueryTextListener {
+    return MASearchViewOnQueryTextListenerBuilder.getListener(this)
+}
 
 /**
- * More concise & idiomatic way for using more than 1 fun interface, See example below.
- * ```
- * fun setupOnQueryTextListener(searchView: SearchView) {
- *      searchView.setOnQueryTextListenerMA {
- *          onQueryTextChange {
- *              // Your code here
+ * - Builder for [SearchView.OnQueryTextListener] Used by [setOnQueryTextListenerMA] isa.
  *
- *              true // Depends on what you wanna achieve
- *          } onQueryTextSubmit {
- *              // Your code here
- *
- *              false // Depends on what you wanna achieve
- *          }
- *      }
- * }
- * ```
+ * ### Functions
+ * - [onQueryTextChange]
+ * - [onQueryTextSubmitAction]
  *
  * @see [SearchView.setOnQueryTextListenerMA]
  */
-class MASearchViewOnQueryTextListener(listener: SearchView_OnQueryTextListener_Typealias?): SearchView.OnQueryTextListener {
+class MASearchViewOnQueryTextListenerBuilder private constructor() {
 
-    init {
-        listener?.invoke(this)
+    private var onQueryTextChangeAction: (String?) -> Boolean = { false }
+    private var onQueryTextSubmitAction: (String?) -> Boolean = { false }
+
+    companion object {
+
+        /** @return [SearchView.OnQueryTextListener] with modifications made in [listener] isa. */
+        internal fun getListener(listener: MASearchViewOnQueryTextListenerBuilder.() -> Unit): ListenerImpl {
+            return MASearchViewOnQueryTextListenerBuilder().apply(listener).run {
+                ListenerImpl(
+                    onQueryTextChangeAction,
+                    onQueryTextSubmitAction
+                )
+            }
+        }
+
     }
 
-    private var _onQueryTextChange: ((String?) -> Boolean)? = null
-    private var _onQueryTextSubmit: ((String?) -> Boolean)? = null
+    /**
+     * Same as [SearchView.OnQueryTextListener.onQueryTextChange] where return value is [action] isa.
+     */
+    @Suppress("unused") // Unused receiver but needed to be extension function for IDE style isa.
+    fun MASearchViewOnQueryTextListenerBuilder.onQueryTextChange(action: (String?) -> Boolean) {
+        onQueryTextChangeAction = action
+    }
 
-    override fun onQueryTextChange(newText: String?): Boolean
-        = _onQueryTextChange?.invoke(newText) ?: false
+    /**
+     * Same as [SearchView.OnQueryTextListener.onQueryTextSubmit] where return value is [action] isa.
+     */
+    @Suppress("unused") // Unused receiver but needed to be extension function for IDE style isa.
+    fun MASearchViewOnQueryTextListenerBuilder.onQueryTextSubmit(action: (String?) -> Boolean) {
+        onQueryTextSubmitAction = action
+    }
 
-    /** execute [action] when [onQueryTextChange] is triggered isa. */
-    infix fun MASearchViewOnQueryTextListener.onQueryTextChange(action: ((String?) -> Boolean)?): MASearchViewOnQueryTextListener
-        = apply { _onQueryTextChange = action }
+    // ----- Classes
 
-    override fun onQueryTextSubmit(query: String?): Boolean
-        = _onQueryTextSubmit?.invoke(query) ?: false
-
-    /** execute [action] when [onQueryTextSubmit] is triggered isa. */
-    infix fun MASearchViewOnQueryTextListener.onQueryTextSubmit(action: ((String?) -> Boolean)?): MASearchViewOnQueryTextListener
-        = apply { _onQueryTextSubmit = action }
+    internal class ListenerImpl(
+        private val onQueryTextChangeAction: (String?) -> Boolean,
+        private val onQueryTextSubmitAction: (String?) -> Boolean
+    ) : SearchView.OnQueryTextListener {
+        override fun onQueryTextChange(newText: String?): Boolean =
+            onQueryTextChangeAction(newText)
+        override fun onQueryTextSubmit(query: String?): Boolean =
+            onQueryTextSubmitAction(query)
+    }
 
 }

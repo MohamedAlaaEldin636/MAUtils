@@ -30,8 +30,7 @@ import mohamedalaa.mautils.core_android.custom_classes.BaseApplication
  * **Also** it has additional functionality
  *
  * - if your [Application] extends from [BaseApplication] then the [Toast] object
- *
- * will be stored in [BaseApplication.toast] so it gives 2 advantages
+ * will be stored in [BaseApplication] so it gives 2 advantages
  * 1. can be dismissed via [dismissToast]
  * 2. whenever you call this fun to [Toast], if previous [Toast] has not took it's full [Toast.getDuration]
  * it will be dismissed immediately followed by the [Toast.show] of current [Toast],
@@ -47,6 +46,7 @@ import mohamedalaa.mautils.core_android.custom_classes.BaseApplication
  *
  * @see BaseApplication
  * @see dismissToast
+ * @see longToast
  */
 @JvmOverloads
 fun Context.toast(msg: String, duration: Int = Toast.LENGTH_SHORT, modifications: ((Toast) -> Unit)? = null) {
@@ -75,7 +75,7 @@ fun Context.longToast(msg: String, modifications: ((Toast) -> Unit)? = null)
 
 /**
  * Works only if Your [Application] extends [BaseApplication], used to dismiss the [Toast]
- * that's bounded to [BaseApplication] via [toast] isa.
+ * that's bounded to [BaseApplication] via [toast] or [longToast] isa.
  *
  * @see toast
  */
