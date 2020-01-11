@@ -64,14 +64,14 @@
 
             android:layout_gravity="center_horizontal"/>
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="50dp"/>
-
         <EditText
             android:id="@+id/editText1"
 
             editText_textTwoWay="@={viewModel.mutableLiveDataEditText1}"
+            editText_textTwoWay_enableDistinguishChangeCauser="@{true}"
+
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -84,6 +84,85 @@
             android:layout_margin="8dp"
 
             android:layout_gravity="center_horizontal"/>
+
+        <EditText
+            android:id="@+id/editText2"
+
+            android:layout_margin="8dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            tools:background="@color/colorAccent"
+            android:background="@{true ? @color/colorAccent : @color/colorPrimary}"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+
+            android:layout_margin="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editText2ShowMaterialButton"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+
+                android:text="Show"
+                android:textAllCaps="false"
+
+                android:layout_gravity="center_horizontal"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editText2HideMaterialButton"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+
+                android:text="Hide"
+                android:textAllCaps="false"
+
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editText2GlobalIsShownMaterialButton"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+
+                android:text="Global Is Show ?"
+                android:textAllCaps="false"
+
+                android:layout_gravity="center_horizontal"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editText2GlobalHideMaterialButton"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+
+                android:text="Global Hide"
+                android:textAllCaps="false"
+
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

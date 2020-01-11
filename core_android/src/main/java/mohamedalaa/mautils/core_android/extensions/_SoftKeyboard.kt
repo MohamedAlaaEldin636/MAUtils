@@ -23,57 +23,58 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 /**
- * Shows soft keyboard for given [view] isa.
+ * - Shows soft keyboard for given [view] with given [flag] which is provided to
+ * [InputMethodManager.showSoftInput] function isa.
  *
  * @see hideKeyboardFrom
  */
 @JvmOverloads
-fun Context.showKeyboardFor(view: View, requestFocus: Boolean = false) {
+fun Context.showKeyboardFor(
+    view: View,
+    flag: Int = 0,
+    requestFocus: Boolean = false
+) {
     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
 
     if (requestFocus) {
         view.requestFocus()
     }
 
-    imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    imm.showSoftInput(view, flag)
 }
 
 /**
- * Hides soft keyboard for given [view] isa.
+ * - Hides soft keyboard for given [view] with given [flag] which is provided to
+ * [InputMethodManager.hideSoftInputFromWindow] function isa.
  *
  * @see hideKeyboard
  * @see showKeyboardFor
  */
 @JvmOverloads
-fun Context.hideKeyboardFrom(view: View, clearFocus: Boolean = false) {
+fun Context.hideKeyboardFrom(
+    view: View,
+    flag: Int = 0,
+    clearFocus: Boolean = false
+) {
     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
 
     if (clearFocus) {
         view.clearFocus()
     }
 
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
+    imm.hideSoftInputFromWindow(view.windowToken, flag)
 }
 
-/*
-todo instead check this out isa.
-1. check all show/hide fun here and if need to change flags
-2. try for is shown hide with flag implicit thing and get result kda isa.
-and if true re-show now u know it is shown and see if it makes ui noticed change isa.
+/**
+ * - Hides soft keyboard if currently shown with given [flag] which is provided to
+ * [InputMethodManager.hideSoftInputFromWindow] function isa,
+ * **NOTE** this function is Not 100% accurate, for more accuracy try [Context.hideKeyboardFrom]
  */
-/** @return true if soft keyboard is currently shown, Note this is not 100% accurate. */
-fun Context.isKeyboardShown(): Boolean {
-    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager
-
-    return imm?.isAcceptingText ?: false
-}
-
-/** Hides soft keyboard if currently shown, Not 100% accurate, for more accuracy try [Context.hideKeyboardFrom] */
-fun Activity.hideKeyboard() {
+fun Activity.hideKeyboard(flag: Int = 0) {
     val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
 
     // Find the currently focused view, so we can grab the correct window token from it.
     val view = currentFocus ?: (window.decorView.rootView ?: return)
 
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
+    imm.hideSoftInputFromWindow(view.windowToken, flag)
 }

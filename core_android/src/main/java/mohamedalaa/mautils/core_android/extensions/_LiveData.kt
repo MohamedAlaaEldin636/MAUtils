@@ -28,6 +28,9 @@ import kotlin.coroutines.suspendCoroutine
  * @return if [LiveData.getValue] is not-null then it returns it immediately otherwise it suspends
  * until it become non null isa, so **CAUTION** use it if you are sure that after even long time
  * it will be non-null or this will be suspended forever isa.
+ *
+ * @see observeUnique
+ * @see observeOldAndNew
  */
 @MainThread
 suspend fun <T> LiveData<T>.getNotNullOrSuspendUntilNotNullValue(lifecycleOwner: LifecycleOwner): T {
@@ -43,4 +46,84 @@ suspend fun <T> LiveData<T>.getNotNullOrSuspendUntilNotNullValue(lifecycleOwner:
         }
         observe(lifecycleOwner, observer)
     }
+}
+
+/**
+ * - Invokes [onChangeBlock] only if last value isn't the same as the value in [Observer.onChanged] isa.
+ *
+ * @see observeOldAndNew
+ * @see getNotNullOrSuspendUntilNotNullValue
+ */
+fun <T> LiveData<T>.observeUnique(lifecycleOwner: LifecycleOwner, onChangeBlock: (T?) -> Unit) {
+    observe(lifecycleOwner, object : Observer<T?> {
+        private var isInitialInvocation: Boolean = true
+        private var lastValue: T? = null
+
+        override fun onChanged(it: T?) {
+            if (isInitialInvocation || lastValue != it) {
+                isInitialInvocation = false
+
+                lastValue = it
+                onChangeBlock(it)
+            }
+        }
+    })
+}
+
+/**
+ * Observe `receiver` only once so [onChangeBlock] is only invoked once followed by [LiveData.removeObserver] isa.
+ *
+ * @see observeOnceNotNullValue
+ * @see observeUnique
+ * @see observeOldAndNew
+ * @see getNotNullOrSuspendUntilNotNullValue
+ */
+fun <T> LiveData<T?>.observeOnce(lifecycleOwner: LifecycleOwner, onChangeBlock: (T?) -> Unit) {
+    observe(lifecycleOwner, object : Observer<T?> {
+        override fun onChanged(it: T?) {
+            onChangeBlock(it)
+
+            removeObserver(this)
+        }
+    })
+}
+
+/**
+ * Same as [observeOnce] **BUT** only if [Observer.onChanged] has a non-null param otherwise
+ * we wait till next invocation and once a non-null value param found then [onChangeBlock] is called
+ * then [LiveData.removeObserver] is called immediately after it isa.
+ *
+ * @see observeUnique
+ * @see observeOldAndNew
+ * @see getNotNullOrSuspendUntilNotNullValue
+ */
+fun <T> LiveData<T?>.observeOnceNotNullValue(lifecycleOwner: LifecycleOwner, onChangeBlock: (T) -> Unit) {
+    observe(lifecycleOwner, object : Observer<T?> {
+        override fun onChanged(it: T?) {
+            onChangeBlock(it ?: return)
+
+            removeObserver(this)
+        }
+    })
+}
+
+/**
+ * - Same as [LiveData.observe] but instead of given only the value of [Observer.onChanged] fun
+ * it as well gives you the value before it, so `old` and `new` values isa.
+ * - Note initial value of `old` value will be value of [LiveData.getValue] on invocation of this function isa.
+ *
+ * @see observeUnique
+ * @see getNotNullOrSuspendUntilNotNullValue
+ */
+fun <T> LiveData<T>.observeOldAndNew(owner: LifecycleOwner, onChangedAction: (old: T?, new: T?) -> Unit) {
+    observe(owner, object : Observer<T> {
+        private var oldValue: T? = this@observeOldAndNew.value
+
+        @Synchronized
+        override fun onChanged(newValue: T?) {
+            onChangedAction(oldValue, newValue)
+
+            oldValue = newValue
+        }
+    })
 }

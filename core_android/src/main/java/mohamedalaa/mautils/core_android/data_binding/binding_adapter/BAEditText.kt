@@ -15,39 +15,113 @@
 
 package mohamedalaa.mautils.core_android.data_binding.binding_adapter
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.databinding.adapters.ListenerUtil
-import mohamedalaa.mautils.core_android.extensions.logError
+import mohamedalaa.mautils.core_android.R
+import mohamedalaa.mautils.core_android.data_binding.binding_adapter.internal.TextWatcherImpl
 import mohamedalaa.mautils.core_kotlin.extensions.toStringOrEmpty
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 1/10/2020.
- *
- */
 object BAEditText {
 
+    /**
+     * Used as [InverseBindingAdapter] for [setTextTwoWay] isa.
+     */
     @JvmStatic
     @InverseBindingAdapter(attribute = "editText_textTwoWay", event = "editText_textTwoWayAttrChanged")
     fun getTextTwoWay(editText: EditText): CharSequence? {
-        return editText.text.apply {
-            logError("getTextTwoWay() is invoked el7.\neditText.text $this")
-        }
+        return editText.text
     }
 
-    // implement InverseBindingListener msln kda isa.
+    /**
+     * ### This approach ensures 2 important things when using two-way data binding for EditText's text isa.
+     * 1. In case of a dynamic change the observer will be invoked once only.
+     * 2. On any change you can distinguish between if it is a user change or a dynamic change (opt-in feature).
+     *
+     * ### How to use
+     * In Xml
+     * ```
+     * editText_textTwoWay="@={viewModel.mutableLiveDataEditText1}"
+     * editText_textTwoWay_enableDistinguishChangeCauser="@{true}"
+     * ```
+     * Then to observe
+     * ```
+     * viewModel.mutableLiveDataEditText1.observe(this, Observer {
+     *      val isUserInputChangeNotDynamicallyChanged = editText.getTag(
+     *          R.id.editText_textTwoWay_isUserInputChangeNotDynamicallyChanged
+     *      ) as? Boolean
+     *      val toastMsg = when (isUserInputChangeNotDynamicallyChanged) {
+     *          true -> {
+     *              // changed by user isa.
+     *              "User Change"
+     *          }
+     *          false -> {
+     *              // changed dynamically isa.
+     *              "Dynamic Change"
+     *          }
+     *          null -> {
+     *              // If you did opt-in, Then should never happen, but just in case, Handle it as you want here isa.
+     *              "UNKNOWN Change"
+     *          }
+     *      }
+     *
+     *      toast(toastMsg) // Same as Toast(...).show()
+     * })
+     * ```
+     *
+     * ### Why this approach
+     * - In case of using regular approach android:text=@={viewModel.liveDataEditTextValue},
+     *
+     * And to observe changes you used in you activity `viewModel.liveDataEditTextValue.observe(lifecycleOwner, observerBlock)`
+     *
+     * Then instead of user changing the value by typing on keyboard what If the you(developer) wants
+     * to make a change by using viewModel.liveDataEditTextValue.value = "Some Value",
+     *
+     * Then observerBlock will be triggered twice, surely you can at that point check last value and
+     * ignore this one, But what if you care about changing same value then you will never know
+     *
+     * And even more critical case what if you want at this point to know whether it is a change made
+     * by the user OR by you so how to know that too,
+     *
+     * Here is why we use the above approach instead
+     * ```
+     * editText_textTwoWay="@={viewModel.liveDataEditTextValue}"
+     * editText_textTwoWay_enableDistinguishChangeCauser="@{true}"
+     * ```
+     *
+     * - [enableDistinguishChangeCauser] is made opt-in Since No need to add a tag to a `View`
+     * if it won't be used isa.
+     *
+     * ### CAUTION
+     * - You should never change the tag of [editText] with the key [R.id.editText_textTwoWay_isUserInputChangeNotDynamicallyChanged]
+     * it is just intended to be used as [EditText.getTag] only isa.
+     */
     @JvmStatic
-    @BindingAdapter("editText_textTwoWay", "editText_textTwoWayAttrChanged", requireAll = false)
-    fun setTextTwoWay(editText: EditText, textTwoWay: CharSequence?, inverseBindingListener: InverseBindingListener?) {
+    @BindingAdapter(
+        "editText_textTwoWay",
+        "editText_textTwoWayAttrChanged",
+
+        "editText_textTwoWay_enableDistinguishChangeCauser",
+
+        requireAll = false
+    )
+    fun setTextTwoWay(
+        editText: EditText,
+
+        textTwoWay: CharSequence?,
+        inverseBindingListener: InverseBindingListener?,
+
+        enableDistinguishChangeCauser: Boolean?
+    ) {
         // Listener
         val currentTextTwoWay: String = textTwoWay.toStringOrEmpty()
         val listener = TextWatcherImpl(
+            editText,
             currentTextTwoWay,
-            inverseBindingListener
+            inverseBindingListener,
+            enableDistinguishChangeCauser ?: false
         )
 
         val oldListener = ListenerUtil.trackListener(editText, listener, editText.id)
@@ -57,70 +131,13 @@ object BAEditText {
         editText.addTextChangedListener(listener)
 
         val editTextCurrentText: String = editText.text.toStringOrEmpty()
-        logError("setTextTwoWay() is invoked el7. ${editTextCurrentText == currentTextTwoWay}, $editTextCurrentText == $currentTextTwoWay") // todo log also in onChange of vm isa.
         if (editTextCurrentText == currentTextTwoWay) {
             return
         }
 
-        // todo called it here isa.
+        // Let listener knows we are about to call `setText()` isa.
         listener.isChangedFromBindingAdapterAnnotation = true
         editText.setText(currentTextTwoWay)
-    }
-
-    internal class TextWatcherImpl(
-        currentTextTwoWay: String,
-        private val inverseBindingListener: InverseBindingListener?
-    ) : TextWatcher {
-
-        private var observerValue: String = currentTextTwoWay
-
-        // todo might solve was programmatic or from xml
-        // but still how to remove the twice invoke da isa ?!
-        private var isChangedProgrammatically: Boolean = false
-
-        // todo call this one isa.
-        var isChangedFromBindingAdapterAnnotation = false
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            val paramValue: String = s.toStringOrEmpty()
-            isChangedProgrammatically = paramValue == observerValue
-
-            observerValue = paramValue
-        }
-
-        override fun afterTextChanged(s: Editable?) {
-            // only prob if in case programmatically change SAME value then no change happen isa.
-            // another is change same value xml isa -> cuz then it is considered programmatically isa.
-
-            // -> maybe consider the getValue if has anything to do with it isa... and communicate via
-            // special tag with special id isa...
-            // todo also see kdoc of inversebindginadapter and see 7war el ObserverField<> da kda isa.
-            // AND INVERSE BINDING LISTENER AS WELL ISA.
-            if (isChangedProgrammatically.not()) {
-                inverseBindingListener?.apply {
-                    logError("InverseBindingListener.onChange() is invoked el7.\ns -> $s")
-                    onChange()
-                }
-            }else {
-                if (isChangedFromBindingAdapterAnnotation) {
-                    isChangedFromBindingAdapterAnnotation = false
-                }else {
-                    // track log first isa.
-                    logError("Changed from xml by same value so should call onChane() isa")
-
-                    // changed from xml by same value isa....
-
-                    // 1. having weak ref of edit text isa.
-                    // 2. before this and above on change,
-                    //      setTag of it is an action by programmatically or by xml isa. TODO this isa.
-                    // and maybe add in xml a way of enabling it so that if false
-                    // no need to set tag msh da meory da wala eh isa.
-                    inverseBindingListener?.onChange()
-                }
-            }
-        }
     }
 
 }

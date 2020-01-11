@@ -15,7 +15,11 @@
 
 package mohamedalaa.mautils.material_design.binding_adapter
 
+import android.graphics.Color
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.SearchView
 import androidx.annotation.ColorInt
 import androidx.annotation.MenuRes
@@ -23,8 +27,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import androidx.databinding.ObservableField
+import mohamedalaa.mautils.core_android.data_binding.binding_adapter.BAEditText
 import mohamedalaa.mautils.core_android.extensions.*
+import mohamedalaa.mautils.core_kotlin.extensions.toStringOrNull
 import mohamedalaa.mautils.material_design.*
+import java.lang.ref.WeakReference
 
 /**
  * ## List of Other bindingAdapters in extension functions isa.
@@ -79,11 +87,24 @@ object BAToolbar {
     }
 
     /**
-     * todo continue kdoc isa.
-     * todo now test 3 cases listener alone / 2-way alone / both isa.
+     * ### Usage
+     * - Used to setup [Toolbar.getMenu] with [Menu.setupActionViewForSearchView] isa.
      * - Note you can use two-way data binding approach in addition to [maSearchViewOnQueryTextListenerBuilderBlock]
      * if you want, But commonly it's either the [maSearchViewOnQueryTextListenerBuilderBlock] listener
-     * OR the two-way data binding approach but both are provided for full customization isa.
+     * OR the two-way data binding approach but both are provided for full customization isa,
+     * **Also Note** two-way data binding is for [SearchView.text] only isa.
+     * - Other params in this fun corresponds to all other in [Menu.setupActionViewForSearchView]
+     * to support full xml customization isa.
+     *
+     * ### CAUTION
+     * - when using two-way use it with below code because dynamic change will trigger observer
+     * to be invoked twice isa.
+     * viewModel.mutableLiveDataSearchQuery.observeOldAndNew(this) { old, new ->
+     *      // Read CharSequence doc as it says equals has unknown result isa.
+     *      if (old.toStringOrNull() == new.toStringOrNull()) return@observeOldAndNew
+     *
+     *      logError("changed text isa is -> $new")
+     * }
      */
     @JvmStatic
     @BindingAdapter(
@@ -91,6 +112,13 @@ object BAToolbar {
         "toolbar_setupActionViewForSearchView_searchViewTextAttrChanged",
 
         "toolbar_setupActionViewForSearchView_maSearchViewOnQueryTextListenerBuilderBlock",
+
+        "toolbar_setupActionViewForSearchView_imageViewsTintColor",
+        "toolbar_setupActionViewForSearchView_searchViewTextColor",
+        "toolbar_setupActionViewForSearchView_searchViewHintTextColor",
+        "toolbar_setupActionViewForSearchView_searchViewHintText",
+
+        "toolbar_setupActionViewForSearchView_onCloseListener",
 
         requireAll = false
     )
@@ -100,14 +128,20 @@ object BAToolbar {
         searchViewText: CharSequence?,
         inverseBindingListener: InverseBindingListener?,
 
-        maSearchViewOnQueryTextListenerBuilderBlock: (MASearchViewOnQueryTextListenerBuilder.() -> Unit)?
+        maSearchViewOnQueryTextListenerBuilderBlock: (MASearchViewOnQueryTextListenerBuilder.() -> Unit)?,
+
+        @ColorInt imageViewsTintColor: Int?,
+        @ColorInt searchViewTextColor: Int?,
+        @ColorInt searchViewHintTextColor: Int?,
+        searchViewHintText: CharSequence?,
+
+        onCloseListener: (() -> Boolean)?
     ) {
-        // sometimes if post not used like below code and changes to menu of toolbar was done
-        // as well by binding adapter or done after this invocation then all colors are cleared
-        // and sometimes functionality as well, so below code is better and doesn't show any ui
-        // blinking of color changes for example isa.
+        // sometimes if `postWithReceiver` not used like below code and changes to menu of toolbar
+        // was done as well by binding adapter or done after this invocation then all colors are
+        // cleared and sometimes functionality as well, so below code is better and doesn't show
+        // any ui blinking of color changes for example isa.
         toolbar.postWithReceiver {
-            // todo if works maybe we need a two-way data binding here isa.
             val listener = maSearchViewOnQueryTextListenerBuilderBlock?.asListener()
             menu.setupActionViewForSearchView(
                 searchViewText = searchViewText,
@@ -121,7 +155,14 @@ object BAToolbar {
                     onQueryTextSubmit {
                         listener?.onQueryTextSubmit(it) ?: false
                     }
-                }
+                },
+
+                imageViewsTintColor = imageViewsTintColor ?: Color.WHITE,
+                searchViewTextColor = searchViewTextColor ?: Color.WHITE,
+                searchViewHintTextColor = searchViewHintTextColor ?: Color.WHITE.addColorAlpha(0.75f),
+                searchViewHintText = searchViewHintText,
+
+                onCloseListener = onCloseListener
             )
         }
     }
@@ -131,8 +172,6 @@ object BAToolbar {
     fun getToolbarMenuItemSearchViewText(toolbar: Toolbar): CharSequence? {
         val searchView = toolbar.menu.firstNestedActionViewIsInstanceOrNull<SearchView>()
             ?: return null
-
-        logError("- ${searchView.text}")
 
         return searchView.text
     }

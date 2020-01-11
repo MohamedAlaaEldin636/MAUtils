@@ -43,6 +43,7 @@ import mohamedalaa.open_source_licences.model.OpenSourceLicencesModel
 import mohamedalaa.open_source_licences.view.rv_adapter.LicenseItemRVAdapter
 import mohamedalaa.open_source_licences.view_model.fragments.OpenSourceLicencesFragmentViewModel
 
+// todo same maintain search text if wan empty or null so check it out isa.
 class OpenSourceLicencesFragment(
     private var licenseModelList: List<LicenceModel> = emptyList(),
     openSourceLicencesModel: OpenSourceLicencesModel? = null
@@ -60,7 +61,6 @@ class OpenSourceLicencesFragment(
 
     /** null means searchView not shown isa. */
     private var searchText: String? = null
-    private var keyboardWasShown = false
     private var matchCase = false
     private var anyLetter = false
     private var includeAuthor = false
@@ -132,16 +132,9 @@ class OpenSourceLicencesFragment(
         return binding.root
     }
 
-    override fun onPause() {
-        keyboardWasShown = context?.isKeyboardShown() ?: false
-
-        super.onPause()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         outState.addValues(
             viewModel.mutableLiveDataSearchText.value,
-            keyboardWasShown,
             viewModel.mutableLiveDataMatchCase.value,
             viewModel.mutableLiveDataAnyLetter.value,
             viewModel.mutableLiveDataIncludeAuthor.value,
@@ -172,7 +165,6 @@ class OpenSourceLicencesFragment(
             val innerGetterBundle = getterBundle()
 
             searchText = innerGetterBundle.getOrNull()
-            keyboardWasShown = innerGetterBundle.get()
             matchCase = innerGetterBundle.get()
             anyLetter = innerGetterBundle.get()
             includeAuthor = innerGetterBundle.get()
@@ -204,12 +196,6 @@ class OpenSourceLicencesFragment(
                 setSelectionToLastChar()
 
                 searchView.isIconified = viewModel.mutableLiveDataSearchViewIsIconified.value ?: true
-
-                if (keyboardWasShown) {
-                    showKeyboardFor(searchView, true)
-                }else {
-                    searchView.clearFocus()
-                }
 
                 imeOptions = EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_FULLSCREEN
             }

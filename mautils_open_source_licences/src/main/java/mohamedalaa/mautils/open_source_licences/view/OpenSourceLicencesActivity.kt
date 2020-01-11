@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_open_source_licences.*
 import kotlinx.android.synthetic.main.activity_open_source_licences.view.*
 import mohamedalaa.mautils.core_android.extensions.*
+import mohamedalaa.mautils.core_kotlin.extensions.toStringOrEmpty
 import mohamedalaa.mautils.open_source_licences.R
 import mohamedalaa.mautils.open_source_licences.async_tasks.ReadFromAssetsAsyncTask
 import mohamedalaa.mautils.open_source_licences.custom_classes.CustomDividerItemDecoration
@@ -53,7 +54,6 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
     private var licences: List<Licence>? = null
 
     private var searchText: String? = null
-    private var keyboardWasShown: Boolean = false
 
     companion object {
 
@@ -126,10 +126,10 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         private const val SAVED_INSTANCE_KEY_BUNDLES_SIZE = "SAVED_INSTANCE_KEY_BUNDLES_SIZE"
         private const val SAVED_INSTANCE_KEY_LIST_AS_ITEM = "SAVED_INSTANCE_KEY_LIST_AS_ITEM"
 
-        private const val SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN = "SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN"
         private const val SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT = "SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT"
     }
 
+    // todo maintain having same search on orient changes + night mode so enable take styleRes of app isa.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         intent.getExtraOrNull<Int>(INTENT_KEY_THEME_STYLE_RES)?.run { setTheme(this) }
@@ -144,12 +144,6 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
         setupData(intent.getExtraOrNull<String>(INTENT_KEY_ASSETS_FOLDER_PATH) ?: "")
     }
 
-    override fun onPause() {
-        keyboardWasShown = isKeyboardShown()
-
-        super.onPause()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         val keyWithBundle = licences?.mapIndexed { index, licence ->
             val bundle = Bundle()
@@ -160,7 +154,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
             index.toString() to bundle
         }
 
-        outState?.apply {
+        outState.apply {
             keyWithBundle?.run {
                 forEach {
                     putBundle(it.first, it.second)
@@ -169,8 +163,7 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
                 putInt(SAVED_INSTANCE_KEY_BUNDLES_SIZE, size)
             }
 
-            putBoolean(SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN, keyboardWasShown)
-            putString(SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT, if (group.visibility == View.VISIBLE) (searchView.text ?: "") else null)
+            putString(SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT, if (group.visibility == View.VISIBLE) (searchView.text.toStringOrEmpty()) else null)
         }
 
         super.onSaveInstanceState(outState)
@@ -181,7 +174,6 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
     private fun checkSavedInstanceState(savedInstanceState: Bundle?){
         savedInstanceState?.apply {
             searchText = getOrNull(SAVED_INSTANCE_KEY_SEARCH_VIEW_TEXT)
-            keyboardWasShown = getOrNull(SAVED_INSTANCE_KEY_SEARCH_VIEW_KEYBOARD_IS_SHOWN) ?: false
 
             val size = getOrNull<Int>(SAVED_INSTANCE_KEY_BUNDLES_SIZE) ?: return
 
@@ -225,12 +217,6 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
 
                 searchView.text = it
                 searchView.firstNestedViewIsInstanceOrNull<EditText> { setSelectionToLastChar() }
-
-                if (keyboardWasShown) {
-                    showKeyboardFor(searchView, true)
-                }else {
-                    searchView.clearFocus()
-                }
             }
         }
 
@@ -283,7 +269,9 @@ class OpenSourceLicencesActivity : AppCompatActivity(), ReadFromAssetsAsyncTask.
                 updateStateVisibilities(rcAdapter.getCurrentList())
 
                 true
-            } onQueryTextSubmit {
+            }
+
+            onQueryTextSubmit {
                 hideKeyboardFrom(searchView)
 
                 true

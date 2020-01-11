@@ -261,8 +261,6 @@ fun Menu.setupActionViewForSearchView(
             imeOptions = EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_FULLSCREEN
 
             searchView.isIconified = searchViewText == null
-            logWarn("text != searchViewText -> $text != $searchViewText")
-            // todo see log cat's warnings isa.
             if (text != searchViewText && searchViewText != null) {
                 setText(searchViewText)
                 setSelectionToLastChar(true)
