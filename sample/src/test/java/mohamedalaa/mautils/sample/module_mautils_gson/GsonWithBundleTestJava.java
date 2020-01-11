@@ -26,8 +26,8 @@ import org.robolectric.RobolectricTestRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import mohamedalaa.mautils.gson.GetterBundleGson;
 import mohamedalaa.mautils.gson.GsonBundleUtils;
-import mohamedalaa.mautils.gson.JGetterBundleGson;
 import mohamedalaa.mautils.sample.fake_data.CustomObject;
 import mohamedalaa.mautils.sample.fake_data.CustomWithTypeParam;
 
@@ -60,9 +60,9 @@ public class GsonWithBundleTestJava {
     @Test
     public void custom_objects() {
         Bundle bundle = GsonBundleUtils.buildBundleGson(customObject);
-        JGetterBundleGson getterBundleGson = GsonBundleUtils.getterBundleGson(bundle);
+        GetterBundleGson getterBundleGson = GsonBundleUtils.getterBundleGson(bundle);
 
-        CustomObject re = getterBundleGson.get(CustomObject.class);
+        CustomObject re = getterBundleGson.getOrNull(CustomObject.class);
 
         System.out.println(customObject);
         System.out.println(re);

@@ -46,13 +46,20 @@ import kotlin.test.assertEquals
 class ComplexClasses : BaseComplexClass() {
 
     @Test
+    fun nums() {
+        buildBundleGsonForced(
+
+        )
+    }
+
+    @Test
     fun withNulls() {
         val gc = GCROA()
         val j1 = gc.toJson(reminderOrAction1WithSomeNulls)
         val r1 = gc.fromJson(j1)
 
         assertStringEquality(j1, r1.toJson())
-        assertEquals(reminderOrAction1, r1)
+        assertEquals(reminderOrAction1WithSomeNulls, r1)
 
         // DismissOrSnoozeConstraint.Pattern("dwdqlwldkql", 45)
         assertEquals(
@@ -63,6 +70,26 @@ class ComplexClasses : BaseComplexClass() {
             (reminderOrAction1WithSomeNulls.dismissConstraintAsJsonString as DismissOrSnoozeConstraint.Pattern).canUseBackupAfterTimeInSeconds,
             45
         )
+
+        val b = buildBundleGson(5, "dsds", reminderOrAction1WithSomeNulls)
+        b.getterBundleGson().apply {
+            assertEquals(5, get())
+
+            val s = get<String>()
+            assertEquals(s, "dsds")
+
+            val z = get<ReminderOrAction>()
+            assertEquals(z, reminderOrAction1WithSomeNulls)
+
+            assertEquals(
+                (reminderOrAction1WithSomeNulls.dismissConstraintAsJsonString as DismissOrSnoozeConstraint.Pattern).patternAsJsonString,
+                (z.dismissConstraintAsJsonString as DismissOrSnoozeConstraint.Pattern).patternAsJsonString
+            )
+            assertEquals(
+                (reminderOrAction1WithSomeNulls.dismissConstraintAsJsonString as DismissOrSnoozeConstraint.Pattern).canUseBackupAfterTimeInSeconds,
+                (z.dismissConstraintAsJsonString as DismissOrSnoozeConstraint.Pattern).canUseBackupAfterTimeInSeconds
+            )
+        }
     }
 
     @Test
@@ -233,7 +260,7 @@ class ComplexClasses : BaseComplexClass() {
         assertEquals(rInt, 33)
     }
 
-    @Test
+    /*@Test
     fun bundle_take2() {
         assertEquals(reminderOrAction1, reminderOrAction2)
         val bundle = buildBundleGson2 {
@@ -250,7 +277,7 @@ class ComplexClasses : BaseComplexClass() {
 
         assertEquals(reminderOrAction1, r1)
         assertEquals(reminderOrAction2, r2)
-    }
+    }*/
 
     /*
     // dunno how for java devs yet isa.

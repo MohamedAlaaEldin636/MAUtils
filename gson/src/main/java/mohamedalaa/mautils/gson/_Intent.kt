@@ -19,13 +19,10 @@ package mohamedalaa.mautils.gson
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
+import mohamedalaa.mautils.core_android.extensions.orEmpty
 
 /**
- * Used by java devs only, for same functionality for kotlin devs see [Intent.getterBundleGson]
- *
- * Used to retrieve [Bundle] values created by [Context.startActivityBundleGson]
- * OR [Context.startActivityBundleGsonForced] isa.
+ * - Used to retrieve [GetterBundleGson] created by [Context.startActivityBundleGson]
+ * OR [Context.startActivityBundleGsonForced], which is extracted from [Intent.getExtras] isa.
  */
-@JvmName("getterBundleGson")
-fun Intent.javaGetterBundleGson() = JGetterBundleGson(extras ?: Bundle())
+fun Intent.getterBundleGson() = GetterBundleGson(extras.orEmpty())

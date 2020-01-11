@@ -75,7 +75,7 @@ class GsonWithBundleTest {
         val bundle = buildBundleGson(nestedPair2)
 
         val getterBundleGson = bundle.getterBundleGson()
-        assertEquals(nestedPair2, getterBundleGson.get(CustomWithTypeParamOfNestedPairs()))
+        assertEquals(nestedPair2, getterBundleGson.get())
     }
 
 }

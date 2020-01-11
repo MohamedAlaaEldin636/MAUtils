@@ -21,16 +21,14 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.SparseArray
 import com.google.gson.Gson
-import mohamedalaa.mautils.core_android.extensions.addValue
-import mohamedalaa.mautils.core_android.extensions.buildBundle
-import mohamedalaa.mautils.core_android.extensions.buildBundleWithKeys
+import mohamedalaa.mautils.core_android.extensions.*
 import mohamedalaa.mautils.gson.java.GsonConverter
 import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
 
 private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"
 
 /**
- * Used in case you want any object to be added as string in Bundle while using
+ * - Used in case you want any object to be added as json string in Bundle while using
  * [buildBundleGson], [addValuesGson] or [addValueGson]
  *
  * **Benefits**
@@ -41,23 +39,30 @@ private const val BUNDLE_KEY_OBJECTS_SIZE = "BUNDLE_KEY_OBJECTS_SIZE"
  * [Link](https://developer.android.com/guide/components/activities/parcelables-and-bundles)
  *
  * **Usage**
- * buildBundleGson(
+ * ```
+ * val bundle = buildBundleGson(
  *      customObject.forceUsingJsonInBundle(),
  *      12,
  *      "other objects"
  * )
+ *
+ * // To retrieve it
+ * val getterBundleGson = bundle.getterBundleGson()
+ * val r1 = getterBundleGson<CustomObject>()
+ * assertEquals(customObject, r1) // true
+ * ```
  */
 inline fun <reified E> E?.forceUsingJsonInBundle(gson: Gson? = null) = ForceUsingJsonInBundle(toJsonOrNull(gson))
 
 data class ForceUsingJsonInBundle @PublishedApi internal constructor (val jsonString: String?)
 
 /**
- * Same as [buildBundleGson] but for 1 value only isa.
+ * Same as [buildBundleGson] but for 1 value only, And return same value of `receiver` but with the
+ * provided key/value pair isa.
  *
  * @see addValuesGson
  * @see buildBundleGson
  * @see getterBundleGson
- * @see javaGetGetterBundleGson
  */
 @JvmOverloads
 fun Bundle.addValueGson(key: String?, value: Any?, gson: Gson? = null) {
@@ -73,17 +78,14 @@ fun Bundle.addValueGson(key: String?, value: Any?, gson: Gson? = null) {
 }
 
 /**
- * Same as [buildBundleGsonForced] but for 1 value only isa.
+ * Same as [buildBundleGsonForced] but for 1 value only, And return same value of `receiver`
+ * but with the provided key/value pair isa.
  *
  * @throws IllegalArgumentException When a value is not a supported type of [Bundle].
  */
 @JvmOverloads
 fun Bundle.addValueGsonForced(key: String?, value: Any?, gson: Gson? = null) {
-    val stringValue = value.toJsonOrNull(gson)
-
-    stringValue?.apply {
-        putString(key, this)
-    } ?: addValue(key, value)
+    putString(key, value.toJsonOrNull(gson))
 }
 
 private fun Bundle.privateAddValuesGson(vararg values: Any?, gson: Gson?, forced: Boolean) {
@@ -121,21 +123,20 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
 /**
  * Returns a new [Bundle] with the given [values] as elements, and keys are the indices
  * so when retrieve it ensure same order of indices isa, to retrieve it use below code.
- * todo include at same example how to use this fun so set and getter isa.
  * ```
  * // Kotlin Devs
  *
- * val getterBundle = bundle.getterBundleGson()
+ * val getterBundleGson = bundle.getterBundleGson()
  * // Note must be in same order they added in isa.
  * val retrievedCustomObject = getterBundleGson.get<CustomObject>()
  * val retrievedListOfCustomObject = getterBundleGson.get<List<CustomObject>>()
  *
  * // Java Devs
  *
- * JGetterBundle getterBundle = BundleUtils.javaGetterBundle(bundle);
+ * GetterBundleGson getterBundleGson = BundleUtils.javaGetterBundleGson(bundle);
  * // Note must be in same order they added in isa.
- * int[] primitiveIntArray = getterBundle.getOrNull();
- * String string = getterBundle.get();
+ * int[] primitiveIntArray = getterBundleGson.getOrNull();
+ * CustomObject customObject = getterBundleGson.get();
  * ```
  *
  * ### Notes
@@ -146,39 +147,45 @@ fun Bundle.addValuesGsonForced(vararg values: Any?, gson: Gson? = null)
  *
  * ### Limitations
  * 1. If the custom type needs [GsonConverter] **( For java consumer code only )** then it needs
- * to be done manually so pass value as string generated from [GsonConverter.toJson] isa.
- * todo make tests for kotlin and see if the functions need to be inlined to keep reference to
- *  the type of the objects instead of taking it as Any? type isa.
+ * to be done manually so pass value as string generated from [GsonConverter.toJson] isa,
+ * And to retrieve it either call [GetterBundleGson.javaGetOrNull] with [GsonConverter] instance
+ * **OR** get value as [String] `getterBundleGson.get<String>()` then use [GsonConverter.fromJson]
+ * to get the value isa.
  *
  * ### How it works
  * 1. If forced to be converted by json via [forceUsingJsonInBundle] then [toJsonOrNull] is used isa.
- * 2. trying to use [Bundle.addValue] and in case of any error then [toJsonOrNull] is used instead.
+ * 2. Else then we try to use [Bundle.addValue] and in case of any error [toJsonOrNull] is used instead.
  *
  * ### When
  * - It's obvious that this and [buildBundleGsonForced] are so similar but when to use each one
  *
- * 1. in case a lot of variables needs regular [buildBundle] and a fallback is to use [toJsonOrNull]
- * use this fun, Note no [RuntimeException] will be thrown in any error since null will be put instead,
- * Another VIP Note is there can be exception to go firstly with [toJsonOrNull] in this case
- * by using [forceUsingJsonInBundle]
+ * 1. In case a lot of variables needs regular [buildBundle] and a fallback is to use [toJsonOrNull]
+ * use this fun, **Note** no [RuntimeException] will be thrown in any error since `null` will be
+ * put instead, **Another Note** you can use [forceUsingJsonInBundle] with any number of params to
+ * force using [toJsonOrNull] for these params instead of trying [Bundle.addValue].
  *
- * 2. while [buildBundleGsonForced] is exactly the opposite if most of variables needs [toJsonOrNull]
- * and fallback to it if null is returned from [toJsonOrNull] is [buildBundle], Note so
- * [IllegalArgumentException] will be thrown due to [buildBundle] if an error occurred,
- * CANNOT Use [forceUsingJsonInBundle] otherwise unexpected behaviours will occur without errors isa.
+ * 2. In case All of the variables are custom objects and need [toJsonOrNull] then use
+ * [buildBundleGsonForced] so also note no [RuntimeException] will be thrown and in that case
+ * `null` will be put instead isa.
  *
  * 3. It's recommended to use this fun with [forceUsingJsonInBundle] when needed
  * since gson not able to serialize everything for example .toJson works with [Double] very good
- * but with other number, deserialization will not be correct.
+ * but with other numbers, deserialization will not be correct.
  *
  * @see addValueGson
+ * @see startActivityBundleGson
+ * @see startActivityBundleGsonForced
  */
 @JvmOverloads
 fun buildBundleGson(vararg values: Any?, gson: Gson? = null): Bundle
     = Bundle().apply { addValuesGson(*values, gson = gson) }
 
 /**
- * Same as [buildBundleGson] but with several differences See **When** section in doc of [buildBundleGson]
+ * Same as [buildBundleGson] but with several differences See **When** section in documentation
+ * of [buildBundleGson] isa.
+ *
+ * @see startActivityBundleGson
+ * @see startActivityBundleGsonForced
  */
 @JvmOverloads
 fun buildBundleGsonForced(vararg values: Any?, gson: Gson? = null): Bundle
@@ -202,6 +209,10 @@ private fun Bundle.privateAddValuesGsonWithKeys(vararg pairedValues: Pair<String
 
 /**
  * Combination of [addValuesGson] && [Bundle.addValuesWithKeys]
+ *
+ * @see addValuesGsonForcedWithKeys
+ * @see buildBundleGsonWithKeys
+ * @see buildBundleGsonForcedWithKeys
  */
 @JvmOverloads
 fun Bundle.addValuesGsonWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null)
@@ -216,6 +227,11 @@ fun Bundle.addValuesGsonForcedWithKeys(vararg pairedValues: Pair<String, Any?>, 
 
 /**
  * Combination of [buildBundleGson] && [buildBundleWithKeys]
+ *
+ * @see addValuesGsonWithKeys
+ * @see addValuesGsonForcedWithKeys
+ * @see addValuesGsonForced
+ * @see buildBundleGsonForcedWithKeys
  */
 @JvmOverloads
 fun buildBundleGsonWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null): Bundle
@@ -228,42 +244,98 @@ fun buildBundleGsonWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson?
 fun buildBundleGsonForcedWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null): Bundle
     = Bundle().apply { addValuesGsonForcedWithKeys(*pairedValues, gson = gson) }
 
-class KGetterBundleGson internal constructor(@PublishedApi internal val bundle: Bundle) {
+fun Bundle?.getterBundleGson(): GetterBundleGson = GetterBundleGson(orEmpty())
+
+class GetterBundleGson internal constructor(@PublishedApi internal val bundle: Bundle) {
 
     @PublishedApi
     internal var counter = 0
 
-    inline fun <reified T> getOrNull(gsonConverter: GsonConverter<T>? = null, gson: Gson? = null): T? {
+    /**
+     * @return [T] instance after being casted if wan't saved as a json string or after being
+     * converted by [fromJsonOrNull] if saved as json string or `null` if not found isa,
+     *
+     * Note you must respect same order of inserting values via [buildBundleGson], [addValuesGson],
+     * [buildBundleGsonForced] or [addValuesGsonForced] isa.
+     *
+     * @param T type you want to get an instance of it isa.
+     *
+     * @see get
+     */
+    @JvmName("kotlinGetOrNull")
+    inline fun <reified T> getOrNull(gson: Gson? = null): T? {
         val key = counter.toString()
         counter++
 
         return when (val any = bundle.get(key)) {
             is String -> when {
-                gsonConverter != null -> gsonConverter.fromJsonOrNull(any)
-                else -> any.fromJsonOrNull(gson) ?: any as? T
+                T::class == String::class -> any as? T
+                else -> any.fromJsonOrNull<T>(gson)
             }
             else -> any as? T
         }
     }
 
-    inline fun <reified T> get(gsonConverter: GsonConverter<T>? = null, gson: Gson? = null): T
-        = getOrNull(gsonConverter, gson) ?: throw RuntimeException("Cannot get ${T::class} from key `${counter.dec()}`")
+    /**
+     * Same as [GetterBundleGson.getOrNull] but instead of returning `null` [RuntimeException]
+     * is thrown instead isa.
+     */
+    @JvmName("kotlinGet")
+    inline fun <reified T> get(gson: Gson? = null): T
+        = getOrNull<T>(gson) ?: throw RuntimeException("Cannot get ${T::class} from key `${counter.dec()}`")
 
-}
-
-class JGetterBundleGson internal constructor(private val bundle: Bundle) {
-
-    private var counter = 0
-
+    /**
+     * - You can use either no-args overloaded method, or just provide [elementClass] OR provide
+     * [gsonConverter], And in any of theses 3 cases you can optionally pass [gson] instance if you
+     * want.
+     * - When to use each approach, Well that depend on [T],Check below example for more explanation isa.
+     * ```
+     * // Custom Class
+     * BackupReminderOrAction backupReminderOrAction1 = new BackupReminderOrAction(
+     *      "Some String",
+     *      3231
+     * );
+     * // Custom With Type Param
+     * CustomWithTypeParam<Float, String> pairs = new CustomWithTypeParam<>(
+     *      3f, "a", "b", "c"
+     * );
+     *
+     * Bundle bundle = GsonBundleUtils.buildBundleGson(
+     *      "abc", // Type which is normally supported by `Bundle`
+     *      backupReminderOrAction1,
+     *      pairs
+     * );
+     *
+     * GetterBundleGson getterBundleGson = GsonBundleUtils.getterBundleGson(bundle);
+     *
+     * // Value normally supported by `Bundle` -> No arguments need to be provided isa.
+     * String string = getterBundleGson.getOrNull();
+     * assertEquals(string, "abc");
+     *
+     * // Custom Class -> You have to provide the class as a parameter isa.
+     * BackupReminderOrAction r1 = getterBundleGson.getOrNull(BackupReminderOrAction.class);
+     * assertEquals(backupReminderOrAction1, r1);
+     *
+     * // Custom With Type Param -> You have to provide GsonConverter of the class as a parameter isa.
+     * CustomWithTypeParam<Float, String> r2 = getterBundleGson.getOrNull(
+     *      null,
+     *      new GsonConverter<CustomWithTypeParam<Float, String>>() {}
+     * );
+     * assertEquals(pairs, r2);
+     * // All assertions succeeded el7.
+     * ```
+     */
     @Suppress("UNCHECKED_CAST")
     @JvmOverloads
-    fun <T> getOrNull(elementClass: Class<T>? = null, gson: Gson? = null, gsonConverter: GsonConverter<T>? = null): T? {
+    @JvmName("getOrNull")
+    fun <T> javaGetOrNull(elementClass: Class<T>? = null, gsonConverter: GsonConverter<T>? = null, gson: Gson? = null): T? {
         val key = counter.toString()
         counter++
 
         return when (val any = bundle.get(key)) {
             is String -> when {
                 gsonConverter != null -> gsonConverter.fromJsonOrNull(any)
+                elementClass == String::class.java -> any as? T
                 elementClass != null -> any.fromJsonOrNullJava(elementClass, gson)
                 else -> any as? T
             }
@@ -271,11 +343,10 @@ class JGetterBundleGson internal constructor(private val bundle: Bundle) {
         }
     }
 
+    /** Same as [javaGetOrNull] but throws [RuntimeException] instead of retuning `null` isa. */
     @JvmOverloads
-    fun <T> get(elementClass: Class<T>? = null, gson: Gson? = null): T
-        = getOrNull(elementClass, gson) ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
+    @JvmName("get")
+    fun <T> javaGet(elementClass: Class<T>? = null, gsonConverter: GsonConverter<T>? = null, gson: Gson? = null): T
+        = javaGetOrNull(elementClass, gsonConverter, gson) ?: throw RuntimeException("Cannot get <T> from key `${counter.dec()}`")
 
 }
-
-@JvmName("getterBundleGson")
-fun Bundle.javaGetGetterBundleGson() = JGetterBundleGson(this)
