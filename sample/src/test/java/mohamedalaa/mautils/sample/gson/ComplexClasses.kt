@@ -40,6 +40,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.test.assertEquals
 
+// todo same like reminderOrAction1 but some fields become null kda garab w 2ole isa.
 @Config(manifest = Config.NONE, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class ComplexClasses : BaseComplexClass() {
@@ -172,11 +173,11 @@ class ComplexClasses : BaseComplexClass() {
         val j1 = gc.toJson(reminderOrAction1)//.apply(::println)
         val r1 = gc.fromJson(j1)
 
-        infoPrintLn("Expected")
+        /*infoPrintLn("Expected")
         warnPrintLn(j1)
         infoPrintLn("Actual")
         infoPrintLn(r1.toJson())
-        println()
+        println()*/
 
         assertStringEquality(j1, r1.toJson())
         assertEquals(reminderOrAction1, r1)

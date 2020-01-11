@@ -16,7 +16,6 @@
 package mohamedalaa.mautils.gson.internal
 
 import com.google.gson.*
-import mohamedalaa.mautils.core_android.extensions.logError
 import mohamedalaa.mautils.core_kotlin.extensions.*
 import mohamedalaa.mautils.gson.*
 import mohamedalaa.mautils.gson.allAnnotatedClassesAsString
@@ -25,6 +24,7 @@ import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
 import mohamedalaa.mautils.gson.java.toJsonOrNull2
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.reflect.Field
 import java.lang.reflect.Type
 
 private const val KEY_CLASS_FULL_NAME = "KEY_CLASS_FULL_NAME"
@@ -56,22 +56,13 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                 var jsonValue = fieldInstance.toJsonOrNull2(field.genericType)
                 val jsonKey = field.name
 
-                /*warnPrintLn("${field.type}, ${fieldInstance?.javaClass}, ${field.genericType}, " +
-                    "${(field.genericType as? Class<*>)?.kotlin?.isSealed}")*/ // todo use genericType directly kda isa.
                 if (field.type != fieldInstance?.javaClass) {
                     val fieldTypeAsString = field.type.toStringOrEmpty()
                     if (allAnnotatedClassesAsString.any { it in fieldTypeAsString }) {
                         jsonValue = serialize(fieldInstance, field.type, context).toStringOrNull()
-                    }/*else infoPrintLn("with else isa.")*/
-                }/*else if (field.type.toStringOrEmpty() != field.genericType.toStringOrEmpty()) {
-                    errorPrintLn("NEW CHECK isa")
-                    // jsonValue = ; toJson2 isa.
-                }*/else if (field.needSpecialSerialize()) {
-                    // todo only if field.type == exact sealed class isa. ezan == msh in el allAnnotated ones isa.
-                    //errorPrintLn(field.type.toStringOrEmpty())
-
-                    // todo la2 elle gowa homa bs ell mmkn yet3emelohom kda bs da yet3emel 3ade isa.... new function here isa..
-                    jsonValue = serialize2(fieldInstance, field.type, context).toStringOrNull()
+                    }
+                }else if (field.needSpecialSerialize()) {
+                    jsonValue = serializeSpecialCase(fieldInstance, field.type, context).toStringOrNull()
                 }
 
                 innerJsonObject.put(
@@ -98,7 +89,7 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
         return runCatching { JsonParser().parse(jsonObject.toString()) }.getOrNull()
     }
 
-    fun serialize2(
+    private fun serializeSpecialCase(
         src: Any?,
         typeOfSrc: Type?,
         context: JsonSerializationContext?
@@ -122,22 +113,13 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                 var jsonValue = fieldInstance.toJsonOrNull2(field.genericType)
                 val jsonKey = field.name
 
-                /*warnPrintLn("${field.type}, ${fieldInstance?.javaClass}, ${field.genericType}, " +
-                    "${(field.genericType as? Class<*>)?.kotlin?.isSealed}")*/ // todo use genericType directly kda isa.
                 if (field.type != fieldInstance?.javaClass) {
                     val fieldTypeAsString = field.type.toStringOrEmpty()
                     if (allAnnotatedClassesAsString.any { it in fieldTypeAsString }) {
                         jsonValue = serialize(fieldInstance, field.type, context).toStringOrNull()
-                    }/*else infoPrintLn("with else isa.")*/
-                }/*else if (field.type.toStringOrEmpty() != field.genericType.toStringOrEmpty()) {
-                    errorPrintLn("NEW CHECK isa")
-                    // jsonValue = ; toJson2 isa.
-                }*/else if (field.needSpecialSerialize()) {
-                    // todo only if field.type == exact sealed class isa. ezan == msh in el allAnnotated ones isa.
-                    //errorPrintLn(field.type.toStringOrEmpty())
-
-                    // todo la2 elle gowa homa bs ell mmkn yet3emelohom kda bs da yet3emel 3ade isa.... new function here isa..
-                    jsonValue = serialize2(fieldInstance, field.type, context).toStringOrNull()
+                    }
+                }else if (field.needSpecialSerialize()) {
+                    jsonValue = serializeSpecialCase(fieldInstance, field.type, context).toStringOrNull()
                 }
 
                 innerJsonObject.put(
@@ -164,19 +146,6 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
 internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 
-    fun deserialize2(
-        jsonAsString: String?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
-    ): Any? {
-        return runCatching {
-            val jsonArray = JSONArray(jsonAsString)
-
-            jsonArray.toString().fromJsonOrNull2(typeOfT!!)
-        }.getOrNull()
-    }
-
-    // todo this do not understand serialize in some cases isa.
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type?,
@@ -187,13 +156,10 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
             return null
         }
 
-        // todo handle case if was array JSON ARRAY ISA.
         val jsonObject = runCatching {
             JSONObject(jsonAsString)
         }.getOrElse {
-            return deserialize2(jsonAsString, typeOfT, context)
-
-            //JSONObject(jsonAsString)
+            return deserializeJSONArray(jsonAsString, typeOfT, context)
         }
 
         val classFullName = jsonObject.optString(KEY_CLASS_FULL_NAME) ?: (typeOfT as? Class<*>)?.name.orEmpty()
@@ -210,98 +176,32 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
         if (KEY_CLASS_FULL_NAME in normalSerializationJsonObject.toString()
             && KEY_NORMAL_SERIALIZATION_JSON_STRING in normalSerializationJsonObject.toString()) {
 
-            warnPrintLn("typeOfT $typeOfT")
             val allKeys = normalSerializationJsonObject.keys()
             val newParamsWithKeys = mutableListOf<Pair<Any?, String>>()
-            runCatching {
-                for (index in 0 until normalSerializationJsonObject.length()) {
-                    val key = allKeys.next()
-                    val value = normalSerializationJsonObject.get(key)
-                    val valueAsString = value.toStringOrEmpty()
+            for (index in 0 until normalSerializationJsonObject.length()) {
+                val key = allKeys.next()
+                val value = normalSerializationJsonObject.get(key)
+                val valueAsString = value.toStringOrEmpty()
 
-                    /*if (key == "timing") {
-                        infoPrintLn("timing, ${value == valueAsString} ->\n$value,\n$valueAsString")
+                val newValue = when (value) {
+                    is JSONObject, is JSONArray -> {
+                        val valueClass = if (jClass == null) null else jClass.runCatching {
+                            declaredFieldsForSuperclassesOnly(declaredFields.toList()).firstOrNull {
+                                it.name == key
+                            }?.genericType
+                        }.getOrNull()
 
-                        if (value is JSONObject) {
-                            var valueClass = if (jClass == null) null else jClass.runCatching {
-                                declaredFieldsForSuperclassesOnly(declaredFields.toList()).firstOrNull {
-                                    it.name == key
-                                }?.type
-                            }.getOrNull()
-                            if (value is JSONObject && value.optString(KEY_CLASS_FULL_NAME).isNullOrEmpty().not()) {
-                                valueClass = runCatching { Class.forName(value.optString(KEY_CLASS_FULL_NAME)) }
-                                    .getOrNull() ?: valueClass
-                            }
-
-                            errorPrintLn("$jClass")
-                            errorPrintLn("$valueClass")
-                            errorPrintLn("${runCatching { JsonParser().parse(valueAsString) }.getOrNull()}")
-                            errorPrintLn(deserialize(
-                                runCatching { JsonParser().parse(valueAsString) }.getOrNull(),
-                                valueClass ?: jClass,
-                                context
-                            ))
-                        }
-                    }*/
-
-                    val newValue = when (value) {
-                        is JSONObject, is JSONArray -> {
-                            val valueClass = if (jClass == null) null else jClass.runCatching {
-                                declaredFieldsForSuperclassesOnly(declaredFields.toList()).firstOrNull {
-                                    it.name == key
-                                }?.genericType
-                            }.getOrNull()
-                            /*if (value is JSONObject && value.optString(KEY_CLASS_FULL_NAME).isNullOrEmpty().not()) {
-                                valueClass = runCatching { Class.forName(value.optString(KEY_CLASS_FULL_NAME)) }
-                                    .getOrNull() ?: valueClass
-                            }*/
-
-                            runCatching {
-                                deserialize(
-                                    runCatching { JsonParser().parse(valueAsString) }.getOrElse {
-                                        println("HHHHHHHHHHHHHHHHHHHH")
-                                        println("H/ $it")
-
-                                        null
-                                    },
-                                    valueClass ?: jClass,
-                                    context
-                                )
-                            }.getOrElse {
-                                infoPrintLn("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
-                                infoPrintLn("$valueClass ?: $jClass")
-                                infoPrintLn("E/ $it")
-                            }
-
-                            wtfPrintLn("valueClass ?: jClass -> $valueClass ?: $jClass")
-                            deserialize(
-                                runCatching { JsonParser().parse(valueAsString) }.getOrNull(),
-                                valueClass ?: jClass,
-                                context
-                            )
-                        }
-                        else -> value
+                        deserialize(
+                            runCatching { JsonParser().parse(valueAsString) }.getOrNull(),
+                            valueClass ?: jClass,
+                            context
+                        )
                     }
-                    newParamsWithKeys += newValue to key
+                    else -> value
                 }
-            }.getOrElse {
-                errorPrintLn("EEEEEEEEEEEEERRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOORRRRRRRRRR")
-                errorPrintLn(typeOfT.toStringOrEmpty())
-
-                errorPrintLn(allKeys.toList())
-                errorPrintLn("E/ $it")
-                throw it
+                newParamsWithKeys += newValue to key
             }
 
-            if ("class mohamedalaa.mautils.sample.gson.model.repeat.RepeatUntilPolicy" == typeOfT.toStringOrEmpty()) {
-                errorPrintLn("newParamsWithKeys $newParamsWithKeys")
-            }
-            if ("? extends mohamedalaa.mautils.sample.gson.model.repeat.RepeatPolicy" in typeOfT.toStringOrEmpty()) {
-                errorPrintLn("newParamsWithKeys $newParamsWithKeys")
-            }
-            if ("class mohamedalaa.mautils.sample.gson.model.NotifyAsReminderOrAction" in typeOfT.toStringOrEmpty()) {
-                errorPrintLn("newParamsWithKeys $newParamsWithKeys")
-            }
             runCatching {
                 for (constructor in jClass!!.constructors) {
                     runCatching {
@@ -310,24 +210,11 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
                         val constructorParams = newParamsWithKeys.subList(0, size).map { it.first }
                         val otherParamsWithKeys = newParamsWithKeys.subList(size, newParamsWithKeys.size)
 
-                        if ("class mohamedalaa.mautils.sample.gson.model.repeat.RepeatUntilPolicy" == typeOfT.toStringOrEmpty()) {
-                            infoPrintLn("constructorParams $constructorParams")
-                            infoPrintLn("otherParamsWithKeys $otherParamsWithKeys")
-                        }
-                        return constructor.newInstance(*constructorParams.toTypedArray()).apply {
-                            if ("class mohamedalaa.mautils.sample.gson.model.repeat.RepeatUntilPolicy" == typeOfT.toStringOrEmpty()) {
-                                infoPrintLn("full class isa is $this")
-                            }
-                            if ("? extends mohamedalaa.mautils.sample.gson.model.repeat.RepeatPolicy" == typeOfT.toStringOrEmpty()) {
-                                infoPrintLn("full class isa is $this")
-                            }
-                        }.applyIf(otherParamsWithKeys.isNotEmpty()) {
+                        return constructor.newInstance(*constructorParams.toTypedArray()).applyIf(otherParamsWithKeys.isNotEmpty()) {
                             for ((param, key) in otherParamsWithKeys) {
                                 val field = runCatching {
                                     javaClass.getDeclaredFieldsForSuperclassesOnly(key)
                                 }.getOrNull() ?: continue
-
-                                warnPrintLn("1")
 
                                 val isAccessible = field.isAccessible
                                 field.isAccessible = true
@@ -337,10 +224,6 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
                                 field.isAccessible = isAccessible
                             }
                         }
-                    }.getOrElse {
-                        if ("class mohamedalaa.mautils.sample.gson.model.repeat.RepeatUntilPolicy" == typeOfT.toStringOrEmpty()) {
-                            infoPrintLn("error isa is $it")
-                        }
                     }
                 }
             }
@@ -349,14 +232,33 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
         return normalSerializationJsonObject.toString().fromJsonOrNullJava(jClass ?: return null)
     }
 
-}
+    private fun deserializeJSONArray(
+        jsonAsString: String?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): Any? {
+        return runCatching {
+            val jsonArray = JSONArray(jsonAsString)
 
-fun <T> Iterator<T>.toList(): List<T> {
-    val list = mutableListOf<T>()
-
-    for (item in this) {
-        list += item
+            jsonArray.toString().fromJsonOrNull2(typeOfT!!)
+        }.getOrNull()
     }
 
-    return list
+}
+
+private fun Field.needSpecialSerialize(): Boolean {
+    val classDeclaredFields = type.declaredFields.filterNotNull()
+    val classDeclaredFieldsNames = classDeclaredFields.map { it.name }
+    val allSuperclassesDeclaredFields = type.declaredFieldsForSuperclassesOnly().filter {
+        it.name !in classDeclaredFieldsNames // so there will be no clash of same name isa. ( might instead produce error in future isa. )
+    }
+    for (field in (classDeclaredFields + allSuperclassesDeclaredFields)) {
+        if (allAnnotatedClassesAsString.any { it in field.type.toStringOrEmpty() }) {
+            val jClass = field.genericType as? Class<*> ?: continue
+            val additionalRequirementMet = jClass.isInterface || jClass.kotlin.isSealed || jClass.kotlin.isAbstract
+            if (additionalRequirementMet) return true
+        }
+    }
+
+    return false
 }
