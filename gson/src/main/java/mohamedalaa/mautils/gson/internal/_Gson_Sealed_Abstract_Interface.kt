@@ -16,12 +16,12 @@
 package mohamedalaa.mautils.gson.internal
 
 import com.google.gson.*
+import com.google.gson.internal.`$Gson$Types`
 import mohamedalaa.mautils.core_kotlin.extensions.*
 import mohamedalaa.mautils.gson.*
 import mohamedalaa.mautils.gson.allAnnotatedClassesAsString
-import mohamedalaa.mautils.gson.java.fromJsonOrNull2
+import mohamedalaa.mautils.gson.java.GsonConverter
 import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
-import mohamedalaa.mautils.gson.java.toJsonOrNull2
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.reflect.Field
@@ -53,7 +53,7 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                 field.isAccessible = true
 
                 val fieldInstance = field.get(src)
-                var jsonValue = fieldInstance.toJsonOrNull2(field.genericType)
+                var jsonValue = fieldInstance.toJsonOrNullWithFullTypeInfo(field.genericType)
                 val jsonKey = field.name
 
                 if (field.type != fieldInstance?.javaClass) {
@@ -62,7 +62,7 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                         jsonValue = serialize(fieldInstance, field.type, context).toStringOrNull()
                     }
                 }else if (field.needSpecialSerialize()) {
-                    jsonValue = serializeSpecialCase(fieldInstance, field.type, context).toStringOrNull()
+                    jsonValue = serializeSpecialCase(fieldInstance, context).toStringOrNull()
                 }
 
                 innerJsonObject.put(
@@ -91,7 +91,6 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
 
     private fun serializeSpecialCase(
         src: Any?,
-        typeOfSrc: Type?,
         context: JsonSerializationContext?
     ): JsonElement? {
         if (src == null) {
@@ -110,7 +109,7 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                 field.isAccessible = true
 
                 val fieldInstance = field.get(src)
-                var jsonValue = fieldInstance.toJsonOrNull2(field.genericType)
+                var jsonValue = fieldInstance.toJsonOrNullWithFullTypeInfo(field.genericType)
                 val jsonKey = field.name
 
                 if (field.type != fieldInstance?.javaClass) {
@@ -119,7 +118,7 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                         jsonValue = serialize(fieldInstance, field.type, context).toStringOrNull()
                     }
                 }else if (field.needSpecialSerialize()) {
-                    jsonValue = serializeSpecialCase(fieldInstance, field.type, context).toStringOrNull()
+                    jsonValue = serializeSpecialCase(fieldInstance, context).toStringOrNull()
                 }
 
                 innerJsonObject.put(
@@ -159,7 +158,7 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
         val jsonObject = runCatching {
             JSONObject(jsonAsString)
         }.getOrElse {
-            return deserializeJSONArray(jsonAsString, typeOfT, context)
+            return deserializeJSONArray(jsonAsString, typeOfT)
         }
 
         val classFullName = jsonObject.optString(KEY_CLASS_FULL_NAME) ?: (typeOfT as? Class<*>)?.name.orEmpty()
@@ -234,13 +233,12 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 
     private fun deserializeJSONArray(
         jsonAsString: String?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
+        typeOfT: Type?
     ): Any? {
         return runCatching {
             val jsonArray = JSONArray(jsonAsString)
 
-            jsonArray.toString().fromJsonOrNull2(typeOfT!!)
+            jsonArray.toString().fromJsonOrNullWithFullTypeInfo(typeOfT!!)
         }.getOrNull()
     }
 
@@ -261,4 +259,44 @@ private fun Field.needSpecialSerialize(): Boolean {
     }
 
     return false
+}
+
+private fun Any?.toJsonOrNullWithFullTypeInfo(genericType: Type, gson: Gson? = null): String? = this?.run {
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
+
+    try { object : GsonConverterWithFullTypeInfo(genericType, usedGson){}.toJsonOrNull(this) } catch (e: Exception) { null }
+}
+
+private fun String?.fromJsonOrNullWithFullTypeInfo(genericType: Type, gson: Gson? = null): Any? = this?.run {
+    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
+
+    try { object : GsonConverterWithFullTypeInfo(genericType, usedGson){}.fromJsonOrNull(this) } catch (e: Exception) { null }
+}
+
+private abstract class GsonConverterWithFullTypeInfo(
+    private val genericType: Type,
+    private val gson: Gson? = null
+) {
+
+    fun <E> toJsonOrNull(element: E?): String? {
+        val type = GsonConverter.canonicalizeOrNull(genericType) ?: `$Gson$Types`.canonicalize(genericType)
+
+        val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
+
+        return try { usedGson.toJson(element, type) } catch (e: Exception) { null }
+    }
+
+    fun <E> fromJsonOrNull(json: String?): E? {
+        val type = GsonConverter.canonicalizeOrNull(genericType) ?: `$Gson$Types`.canonicalize(genericType)
+
+        (type as? Class<*>)?.kotlin?.objectInstance?.apply {
+            @Suppress("UNCHECKED_CAST")
+            return this as E?
+        }
+
+        val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
+
+        return try { usedGson.fromJson(json, type) } catch (e: Exception) { null }
+    }
+
 }
