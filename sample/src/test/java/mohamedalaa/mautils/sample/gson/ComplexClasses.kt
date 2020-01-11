@@ -46,6 +46,26 @@ import kotlin.test.assertEquals
 class ComplexClasses : BaseComplexClass() {
 
     @Test
+    fun withNulls() {
+        val gc = GCROA()
+        val j1 = gc.toJson(reminderOrAction1WithSomeNulls)
+        val r1 = gc.fromJson(j1)
+
+        assertStringEquality(j1, r1.toJson())
+        assertEquals(reminderOrAction1, r1)
+
+        // DismissOrSnoozeConstraint.Pattern("dwdqlwldkql", 45)
+        assertEquals(
+            (reminderOrAction1WithSomeNulls.dismissConstraintAsJsonString as DismissOrSnoozeConstraint.Pattern).patternAsJsonString,
+            "dwdqlwldkql"
+        )
+        assertEquals(
+            (reminderOrAction1WithSomeNulls.dismissConstraintAsJsonString as DismissOrSnoozeConstraint.Pattern).canUseBackupAfterTimeInSeconds,
+            45
+        )
+    }
+
+    @Test
     fun fullDataInClassIsa() {
         assertEquals(
             reminderOrAction1.id,
