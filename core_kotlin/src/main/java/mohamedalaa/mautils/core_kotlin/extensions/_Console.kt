@@ -16,53 +16,94 @@
 package mohamedalaa.mautils.core_kotlin.extensions
 
 /**
- * Shows a purple color on console instead of the regular fixed color isa.
+ * Same as [print], But shows a purple color on console instead of the regular fixed color isa.
  */
-fun verbosePrintLn(any: Any?) {
+fun verbosePrint(any: Any?) {
     val prefix = "\u001b[0;35m" // PURPLE
     val suffix = "\u001b[0m" // Text Reset
 
     println("${prefix}V/ $any$suffix")
 }
+/**
+ * Same as [println], But shows a purple color on console instead of the regular fixed color isa.
+ */
+fun verbosePrintLn(any: Any?) {
+    verbosePrint(any)
+    println()
+}
 
 /**
- * Shows a yellow color on console instead of the regular fixed color isa.
+ * Same as [print], But shows a yellow color on console instead of the regular fixed color isa.
  */
-fun infoPrintLn(any: Any?) {
+fun infoPrint(any: Any?) {
     val prefix = "\u001b[0;33m" // YELLOW
     val suffix = "\u001b[0m" // Text Reset
 
-    println("${prefix}I/ $any$suffix")
+    print("${prefix}I/ $any$suffix")
+}
+/**
+ * Same as [println], But shows a yellow color on console instead of the regular fixed color isa.
+ */
+fun infoPrintLn(any: Any?) {
+    infoPrint(any)
+    println()
 }
 
 /**
- * Shows a blue color on console instead of the regular fixed color isa.
+ * Same as [print], But shows a blue color on console instead of the regular fixed color isa.
+ *
+ * @param noPrefix if `true` then just [any] will be printed else a prefix of "W/ " will be printed isa.
  */
-fun warnPrintLn(any: Any?) {
+fun warnPrint(any: Any?, noPrefix: Boolean = true) {
     val prefix = "\u001b[0;34m" // BLUE
     val suffix = "\u001b[0m" // Text Reset
 
-    println("${prefix}W/ $any$suffix")
+    if (noPrefix) {
+        print("$prefix$any$suffix")
+    }else {
+        print("${prefix}W/ $any$suffix")
+    }
+}
+/**
+ * Same as [println], But shows a blue color on console instead of the regular fixed color isa.
+ */
+fun warnPrintLn(any: Any?, noPrefix: Boolean = true) {
+    warnPrint(any, noPrefix)
+    println()
 }
 
 /**
- * Shows a red color on console instead of the regular fixed color isa.
+ * Same as [print], But shows a red color on console instead of the regular fixed color isa.
  */
-fun errorPrintLn(any: Any?) {
+fun errorPrint(any: Any?) {
     val prefix = "\u001b[0;31m" // RED
     val suffix = "\u001b[0m" // Text Reset
 
     println("${prefix}E/ $any$suffix")
 }
+/**
+ * Same as [println], But shows a red color on console instead of the regular fixed color isa.
+ */
+fun errorPrintLn(any: Any?) {
+    errorPrint(any)
+    println()
+}
 
 /**
- * Shows a red background color on console instead of just white text color with no background isa.
+ * Same as [print], But shows a red background color on console instead of just white text color with no background isa.
  */
-fun wtfPrintLn(any: Any?) {
+fun wtfPrint(any: Any?) {
     val additionalPrefix = "\u001b[41m" // RED Background
     val prefix = "\u001b[0;30m" // BLACK but with this background appears as WHITE isa.
 
     val suffix = "\u001b[0m" // Text Reset
 
     println("$additionalPrefix${prefix}WTF/ $any$suffix")
+}
+/**
+ * Same as [println], But shows a red background color on console instead of just white text color with no background isa.
+ */
+fun wtfPrintLn(any: Any?) {
+    wtfPrint(any)
+    println()
 }
