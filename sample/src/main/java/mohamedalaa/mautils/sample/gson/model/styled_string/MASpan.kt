@@ -18,7 +18,7 @@ package mohamedalaa.mautils.sample.gson.model.styled_string
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 
 /**
- * todo Can be used in 3 ways isa.
+ *  Can be used in 3 ways isa.
  * 1. press bold then type then press on bold to un-bold so B is highlighted this is a bar above keyboard isa,
  * in hz scroll if large isa.
  * 2. if bar not needed or even if exists have Insert option like in microsoft work in menu items of a toolbar isa.

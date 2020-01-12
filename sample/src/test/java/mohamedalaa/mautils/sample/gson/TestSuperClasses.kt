@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package mohamedalaa.mautils.sample.gson
 
 import android.os.Build
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.toJson
@@ -193,10 +196,9 @@ class TestSuperClasses {
 
     @Test
     fun compareGsonApproaches() {
-        val gson = Gson()
-
+        // using gson -> same
         val int = 3
-        // using gson
+        val gson = Gson()
         val j1 = gson.toJson(int)
         val r1 = gson.fromJson(j1, Int::class.java)
         assertEquals(int, r1)
@@ -205,8 +207,8 @@ class TestSuperClasses {
         val r2 = j2.fromJson<Int>()
         assertEquals(int, r2)
 
-        val objectClassA = ObjectClassA
         // using gson isa ( not equals )
+        val objectClassA = ObjectClassA
         val j3 = gson.toJson(objectClassA)
         val r3 = gson.fromJson(j3, ObjectClassA::class.java)
         assertNotEquals(objectClassA, r3) // NOT equals
@@ -215,8 +217,8 @@ class TestSuperClasses {
         val r4 = j4.fromJson<ObjectClassA>()
         assertEquals(objectClassA, r4)
 
+        // using gson isa. -> same
         val strangeEnum = StrangeEnum.STRANGE_5
-        // using gson isa.
         val j5 = gson.toJson(strangeEnum)
         val r5 = gson.fromJson(j5, StrangeEnum::class.java)
         assertEquals(strangeEnum, r5)
@@ -225,32 +227,37 @@ class TestSuperClasses {
         val r6 = j6.fromJson<StrangeEnum>()
         assertEquals(strangeEnum, r6)
 
+        // using gson isa. -> needs type token
         val map1 = mapOf(4 to "")
-        // using gson isa. ( needs type token )
         val j7 = gson.toJson(map1)
         val token = object : TypeToken<Map<Int, String>>(){}
         val r7: Map<Int, String> = gson.fromJson(j7, token.type)
         assertEquals(map1, r7)
 
-        // no need for GsonConverter as long as param types are not nested in-out annotated types isa.
+        // no need for GsonConverter since this is a kotlin consumer code isa.
         val j8 = map1.toJson()
         val r8 = j8.fromJson<Map<Int, String>>()
         assertEquals(map1, r8)
 
-        // both need conversions isa.
+        // using gson isa. -> can't since `reminderOrAction1` has a property of a sealed class type
         val map2: Map<List<Int>, ReminderOrAction> = mapOf(listOf(2) to reminderOrAction1)
         // Can't do it just because reminderOrAction1 can't be converted isa.
-        /*val j9 = gson.toJson(map2)
-        val token1 = object : TypeToken<Map<List<Int>, ReminderOrAction>>(){}
-        val r9: Map<List<Int>, ReminderOrAction> = gson.fromJson(j9, token1.type)
-        assertEquals(map2, r9)*/
+        try {
+            val j9 = gson.toJson(map2)
+            val token1 = object : TypeToken<Map<List<Int>, ReminderOrAction>>(){}
+            val r9: Map<List<Int>, ReminderOrAction> = gson.fromJson(j9, token1.type)
+            // Not reached code
+            throw RuntimeException("r9 -> $r9")
+        }catch (e: Exception) {
+            assertTrue { e is JsonSyntaxException }
+        }
 
         val j10 = map2.toJson()
         val r10 = j10.fromJson<Map<List<Int>, ReminderOrAction>>()
         assertEquals(map2, r10)
 
+        // gson -> again need type token
         val map3: Map<String, List<Int>> = mapOf("" to listOf(4, 5, 33))
-        // gson
         val j11 = gson.toJson(map3)
         val token2 = object : TypeToken<Map<String, List<Int>>>(){}
         val r11: Map<String, List<Int>> = gson.fromJson(j11, token2.type)
@@ -260,9 +267,10 @@ class TestSuperClasses {
         val r12 = j12.fromJson<Map<String, List<Int>>>()
         assertEquals(map3, r12)
 
+        // gson ( NOTE you must declare TypeToken in a separate java class isa. )
+        // can't be used anonymously nor declared in a kotlin file isa,
+        // can only be used anonymously if from java consumer code isa.
         val map4: Map<String, List<Pair<Int, Int>>> = mapOf("" to listOf(4 to 3, 5 to 3, 33 to 3))
-        // gson ( NOTE you must declare TypeToken in a separate java class isa. ) TODO can java CALLER GsonConverter be anonymoous isa.
-        // can't be used anonymously nor declared in a kotlin file isa.
         val j13 = gson.toJson(map4)
         val token3 = TestTypeToken1()
         val r13: Map<String, List<Pair<Int, Int>>> = gson.fromJson(j13, token3.type)
@@ -273,12 +281,14 @@ class TestSuperClasses {
         val r13Anonymous: Map<String, List<Pair<Int, Int>>> = gson.fromJson(j13Anonymous, token3Anonymous.type)
         assertNotEquals(map4, r13Anonymous) // NOTE NotEquals isa. ALTHOUGH if java code calls it, it can becomes equals isa.
 
-        // No need for GsonConverter since we use code from kotlin not java isa.
+        // No need for GsonConverter since we use code from kotlin not java isa,
+        // HOWEVER even if java consumer code then GsonConverter can be anonymous check this out
+        // in the java test class isa.
         val j14 = map4.toJson()
         val r14 = j14.fromJson<Map<String, List<Pair<Int, Int>>>>()
         assertEquals(map4, r14)
 
-        // Nested params but not-variance isa, so no gson converter isa.
+        // No matter how much nested type params still no need for GsonConverter ( again cuz kotlin consumer code ) isa.
         val severalTypeParams1 = SeveralTypeParams(
             SeveralTypeParams(
                 SeveralTypeParams(
@@ -348,9 +358,9 @@ class TestSuperClasses {
         assertEquals(rSeveralTypeParams1, severalTypeParams1)
         assertEquals(rSeveralTypeParams2, severalTypeParams2)
 
-        // using gson
-        val jSeveralTypeParams1Gson = gson.toJson(severalTypeParams1)
-        // even with token can't be solved isa. TODO does java CALLER GsonConverter do it isa ?!
+        // using gson -> even with token can't be solved isa.
+        val testTypeToken2 = TestTypeToken2()
+        val jSeveralTypeParams1Gson = gson.toJson(severalTypeParams1, testTypeToken2.type)
         try {
             @Suppress("UNUSED_VARIABLE")
             val rSeveralTypeParams1Gson: SeveralTypeParams<
@@ -365,8 +375,8 @@ class TestSuperClasses {
                     >,
                 Int,
                 Boolean
-            > = gson.fromJson(jSeveralTypeParams1Gson, TestTypeToken2().type)
-            // Not reached code isa.
+            > = gson.fromJson(jSeveralTypeParams1Gson, testTypeToken2.type)
+            // Not reached code ( proving gson can't convert this ) isa.
             assertTrue { false }
         }catch (throwable: Throwable) {
             assertTrue { throwable is RuntimeException }

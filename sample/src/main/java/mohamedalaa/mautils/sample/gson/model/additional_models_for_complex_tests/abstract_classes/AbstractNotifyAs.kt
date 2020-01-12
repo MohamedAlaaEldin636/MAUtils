@@ -17,7 +17,5 @@ package mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_test
 
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 
-// todo I think this might make a problem along with interface
-// cuz of the _internal kinda dependendent on path so let's change that isa.
 @MASealedAbstractOrInterface
 abstract class AbstractNotifyAs

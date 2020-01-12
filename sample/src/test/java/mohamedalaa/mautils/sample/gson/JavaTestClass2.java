@@ -23,24 +23,13 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import kotlin.Pair;
-import kotlin.Triple;
 import mohamedalaa.mautils.gson.GetterBundleGson;
 import mohamedalaa.mautils.gson.GsonBundleUtils;
 import mohamedalaa.mautils.gson.java.GsonConverter;
-import mohamedalaa.mautils.gson.java.GsonUtils;
-import mohamedalaa.mautils.sample.fake_data.CustomObject;
 import mohamedalaa.mautils.sample.fake_data.CustomWithTypeParam;
 import mohamedalaa.mautils.sample.gson.model.BackupReminderOrAction;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @Config(manifest = Config.NONE, sdk = {Build.VERSION_CODES.P})
 @RunWith(RobolectricTestRunner.class)

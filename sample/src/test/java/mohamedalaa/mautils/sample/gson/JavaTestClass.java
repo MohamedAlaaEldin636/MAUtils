@@ -61,21 +61,16 @@ public class JavaTestClass {
     public void nestedTypeParams_whereNoNestingForVarianceOnesIsa() {
         assertTrue(stringList.size() > 0);
 
-        // non-nested type params isa.
+        // Non-nested type params, yet still use gsonConverter cuz not all the time it works without it isa.
         Triple<Float, String, Integer> triple1 = new Triple<>(
             5.356f, "sasasas", 4232
         );
-        String jTriple1 = GsonUtils.toJson(triple1, Triple.class);
-        @SuppressWarnings("unchecked")
-        Triple<Float, String, Integer> rTriple1 = GsonUtils.fromJson(jTriple1, Triple.class);
-        assertNotEquals(triple1, rTriple1);
+        GsonConverter<Triple<Float, String, Integer>> triple1GsonConverter = new GsonConverter<Triple<Float, String, Integer>>() {};
+        String jTriple1 = triple1GsonConverter.toJson(triple1);
+        Triple<Float, String, Integer> rTriple1 = triple1GsonConverter.fromJson(jTriple1);
+        assertEquals(triple1, rTriple1);
 
-        GsonConverter<Triple<Float, String, Integer>> gsonConverter = new GsonConverter<Triple<Float, String, Integer>>(){};
-        String jTriple11 = gsonConverter.toJson(triple1);
-        Triple<Float, String, Integer> rTriple11 = gsonConverter.fromJson(jTriple11);
-        assertEquals(triple1, rTriple11);
-
-        // but the type param inside the variance type has field of List<String> isa.
+        // same isa.
         CustomWithTypeParam<CustomWithTypeParam<Pair<Float, Integer>, Boolean>, Pair<Integer, CustomObject>> v1 = new CustomWithTypeParam<>(
             new CustomWithTypeParam<>(
                 new Pair<>(3.5659f, 43443),
@@ -87,28 +82,23 @@ public class JavaTestClass {
             "sasaas",
             "saaaaaaaaaaaaaaaaaaaaaa"
         );
-        String j1 = GsonUtils.toJson(v1, CustomWithTypeParam.class);
-        @SuppressWarnings("unchecked")
+        GsonConverter<CustomWithTypeParam<CustomWithTypeParam<Pair<Float, Integer>, Boolean>, Pair<Integer, CustomObject>>> v1GsonConverter
+            = new GsonConverter<CustomWithTypeParam<CustomWithTypeParam<Pair<Float, Integer>, Boolean>, Pair<Integer, CustomObject>>>() {};
+        String j1 = v1GsonConverter.toJson(v1);
         CustomWithTypeParam<CustomWithTypeParam<Pair<Float, Integer>, Boolean>, Pair<Integer, CustomObject>> r1 =
-            GsonUtils.fromJson(j1, CustomWithTypeParam.class);
-        assertNotEquals(v1, r1); // still needs gsonConverter isa.
+            v1GsonConverter.fromJson(j1);
+        assertEquals(v1, r1);
     }
 
     @Test
     public void a1() {
+        // In case you don't want to call it anonymously ( case called in several other places ) isa.
         CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>> value1 =
             new CustomWithTypeParam<>();
         String jsonString = new HelperJavaClass().toJson(value1);
         CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>
             rValue1 = new HelperJavaClass().fromJson(jsonString);
         assertEquals(value1, rValue1);
-
-        // No need for gsonConverter isa.
-        String jsonString1 = GsonUtils.toJson(value1, CustomWithTypeParam.class);
-        @SuppressWarnings("unchecked")
-        CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>
-            rValue2 = GsonUtils.fromJson(jsonString1, CustomWithTypeParam.class);
-        assertEquals(value1, rValue2);
 
         List<String> stringList = new ArrayList<>(); stringList.add("Dewd"); stringList.add("Dewdwde");
         CustomObject customObject1 = new CustomObject("namesasa", 442242, "Sasas", stringList);
@@ -129,11 +119,13 @@ public class JavaTestClass {
         );
         value1.setElement2(pair);
 
-        String jsonString3 = GsonUtils.toJson(value1, CustomWithTypeParam.class);
+        // Has to use GsonConverter since there is/are type param/s isa.
+        String jsonString3 = GsonUtils.toJson(value1);
         @SuppressWarnings("unchecked")
         CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>
             rValue3 = GsonUtils.fromJson(jsonString3, CustomWithTypeParam.class);
         assertNotEquals(value1, rValue3);
+
         CustomWithTypeParam<CustomObject, Pair<List<CustomObject>, CustomWithTypeParam<Pair<Float, Integer>, Boolean>>>
             rValue3GsonConverter = new HelperJavaClass().fromJson(jsonString3);
         assertEquals(value1, rValue3GsonConverter);
@@ -149,10 +141,8 @@ public class JavaTestClass {
         int r1 = gson.fromJson(j1, int.class);
         assertEquals(int1, r1);
 
-        // using ma json isa. ( no benefit so far isa. ) -> json
-        // todo why not like gson don't take int.class as param just auto infer it isa.
-        //  AND if so make nice @deprecation annotation not just deletion this is stable version isa.
-        String j2 = GsonUtils.toJson(int1, int.class);
+        // using this library isa. ( no benefit so far isa. ) -> json
+        String j2 = GsonUtils.toJson(int1);
         int r2 = GsonUtils.fromJson(j2, int.class);
         assertEquals(int1, r2);
 
@@ -160,10 +150,10 @@ public class JavaTestClass {
         ObjectClassA objectClassA = ObjectClassA.INSTANCE;
         String j3 = gson.toJson(objectClassA);
         ObjectClassA r3 = gson.fromJson(j3, ObjectClassA.class);
-        assertNotEquals(objectClassA, r3);
+        assertNotEquals(objectClassA, r3); // Not Equals
 
         // json -> same instance isa. -> benefits +1
-        String j4 = GsonUtils.toJson(objectClassA, ObjectClassA.class);
+        String j4 = GsonUtils.toJson(objectClassA);
         ObjectClassA r4 = GsonUtils.fromJson(j4, ObjectClassA.class);
         assertEquals(objectClassA, r4);
 
@@ -174,25 +164,24 @@ public class JavaTestClass {
         assertEquals(strangeEnum, r5);
 
         // json -> same isa.
-        String j6 = GsonUtils.toJson(strangeEnum, StrangeEnum.class);
+        String j6 = GsonUtils.toJson(strangeEnum);
         StrangeEnum r6 = GsonUtils.fromJson(j6, StrangeEnum.class);
         assertEquals(strangeEnum, r6);
 
-        // gson todo maybe the 1 that didn't work was cuz we didn't use type token in toJson isa ?! check it out isa.
+        // gson
         Map<Integer, String> map1 = new HashMap<>(); map1.put(4, "");
         TypeToken<Map<Integer, String>> token = new TypeToken<Map<Integer, String>>() {};
         String j7 = gson.toJson(map1, token.getType());
         Map<Integer, String> r7 = gson.fromJson(j7, token.getType());
         assertEquals(map1, r7);
 
-        // json -> no benefit since GsonConverter always needed in case of type params existence isa.
+        // json -> same since GsonConverter always needed in case of type params existence isa.
         GsonConverter<Map<Integer, String>> gsonConverter1 = new GsonConverter<Map<Integer, String>>() {};
         String j8 = gsonConverter1.toJson(map1);
         Map<Integer, String> r8 = gsonConverter1.fromJson(j8);
         assertEquals(map1, r8);
 
-        // todo make another property but abstract class & another for interface isa, besides the sealed class one isa.
-        // gson
+        // gson -> can't convert sealed/abstract/interface types isa.
         List<Integer> map2IntegerList = new ArrayList<>(); map2IntegerList.add(2);
         Map<List<Integer>, ReminderOrAction> map2 = new HashMap<>(); map2.put(map2IntegerList, testSuperClasses.getReminderOrAction1());
         /*val j9 = gson.toJson(map2)
@@ -230,14 +219,14 @@ public class JavaTestClass {
         TypeToken<Map<String, List<Pair<Integer, Integer>>>> token4 = new TypeToken<Map<String, List<Pair<Integer, Integer>>>>() {};
         String j13 = gson.toJson(map4, token4.getType());
         Map<String, List<Pair<Integer, Integer>>> r13 = gson.fromJson(j13, token4.getType());
-        assertEquals(map4, r13); // todo ->->-> actually works see if in kotlin u didn't use token in the .toJson isa.
-        // trying non-anonymous isa.
+        assertEquals(map4, r13);
+        // trying non-anonymous isa. ( doesn't work in case of a kotlin consumer code isa. )
         TestTypeToken1 token4NonA = new TestTypeToken1();
         String j13NonA = gson.toJson(map4, token4NonA.getType());
         Map<String, List<Pair<Integer, Integer>>> r13NonA = gson.fromJson(j13NonA, token4NonA.getType());
         assertEquals(map4, r13NonA);
 
-        // json -> trying anonymous isa. todo benefit++ ?! isa.
+        // json -> trying anonymous isa.
         GsonConverter<Map<String, List<Pair<Integer, Integer>>>> gsonConverter4 = new GsonConverter<Map<String, List<Pair<Integer, Integer>>>>() {};
         String j14 = gsonConverter4.toJson(map4);
         Map<String, List<Pair<Integer, Integer>>> r14 = gsonConverter4.fromJson(j14);
