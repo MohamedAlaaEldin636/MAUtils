@@ -19,8 +19,4 @@ package mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_test
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 1/12/2020.
  *
  */
-data class InterfaceCond_Timing_ConcreteExactDate(
-    var dayOfMonth: Int,
-    var month: Int,
-    var year: Int
-) : InterfaceCond_Timing
+interface IC_Timing : InterfaceCond

@@ -19,7 +19,6 @@ import com.google.gson.*
 import com.google.gson.internal.`$Gson$Types`
 import mohamedalaa.mautils.core_kotlin.extensions.*
 import mohamedalaa.mautils.gson.*
-import mohamedalaa.mautils.gson.allAnnotatedClassesAsString
 import mohamedalaa.mautils.gson.java.GsonConverter
 import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
 import org.json.JSONArray
@@ -58,22 +57,13 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                 val jsonKey = field.name
 
                 if (field.type != fieldInstance?.javaClass) {
-                    val fieldTypeAsString = field.type.toStringOrEmpty()
-
-                    val expected = allAnnotatedClassesAsString.any { it in fieldTypeAsString }
-                    val other = allAnnotatedClasses?.any {
+                    val isSubclassOfAnnotatedClasses = allAnnotatedClasses?.any {
                         field.type.kotlin.isSubclassOf(it.kotlin)
                     } ?: false
-                    if (expected != other) {
-                        errorPrintLn("1 NOT SAME -> ${field.type}, ${fieldInstance?.javaClass}")
-                    }
-
-                    if (allAnnotatedClassesAsString.any { it in fieldTypeAsString }/*todo depend on path so only for NESTED sealed class*/) {
-                        //errorPrintLn("fieldTypeAsString $fieldTypeAsString\n${fieldInstance?.javaClass}")
+                    if (isSubclassOfAnnotatedClasses) {
                         jsonValue = serialize(fieldInstance, field.type, context).toStringOrNull()
                     }
                 }else if (field.needSpecialSerialize()) {
-                    //infoPrintLn("field.genericType ${field.genericType}")
                     jsonValue = serializeSpecialCase(fieldInstance, context).toStringOrNull()
                 }
 
@@ -125,31 +115,15 @@ internal class JsonSerializerForSealedClasses : JsonSerializer<Any> {
                 val jsonKey = field.name
 
                 if (field.type != fieldInstance?.javaClass) {
-                    val fieldTypeAsString = field.type.toStringOrEmpty()
-
-                    /*
-                    1. check all current tests have same result isa
-                    2. change naming where expected fail and see if other succeeeds isa.
-                     */
-                    val expected = allAnnotatedClassesAsString.any { it in fieldTypeAsString }
-                    val other = allAnnotatedClasses?.any {
+                    val isSubclassOfAnnotatedClasses = allAnnotatedClasses?.any {
                         field.type.kotlin.isSubclassOf(it.kotlin)
                     } ?: false
-                    if (expected != other) {
-                        errorPrintLn("2 NOT SAME -> ${field.type}, ${fieldInstance?.javaClass}")
-                    }
 
-                    if (allAnnotatedClassesAsString.any { it in fieldTypeAsString }/*todo depend on path so only for NESTED sealed class*/) {
-                        //errorPrintLn("fieldTypeAsString $fieldTypeAsString\n${fieldInstance?.javaClass}")
+                    if (isSubclassOfAnnotatedClasses) {
                         jsonValue = serialize(fieldInstance, field.type, context).toStringOrNull()
-                    }else {
-                        //println("field.genericType ${field.genericType}")
                     }
                 }else if (field.needSpecialSerialize()) {
-                    //infoPrintLn("field.genericType ${field.genericType}")
                     jsonValue = serializeSpecialCase(fieldInstance, context).toStringOrNull()
-                }else {
-                    //warnPrintLn("field.genericType ${field.genericType}")
                 }
 
                 innerJsonObject.put(
@@ -276,7 +250,7 @@ internal class JsonDeserializerForSealedClasses : JsonDeserializer<Any> {
 }
 
 /**
- * @return `true` if fields inside `receiver`'s [Field.getType] are from [allAnnotatedClassesAsString] isa.
+ * @return `true` if any field inside class of type `receiver`'s [Field.getType] is subclass of [allAnnotatedClasses] isa.
  */
 private fun Field.needSpecialSerialize(): Boolean {
     val classDeclaredFields = type.declaredFields.filterNotNull()
@@ -285,23 +259,13 @@ private fun Field.needSpecialSerialize(): Boolean {
         it.name !in classDeclaredFieldsNames // so there will be no clash of same name isa. ( might instead produce error in future isa. )
     }
     for (field in (classDeclaredFields + allSuperclassesDeclaredFields)) {
-        val expected = allAnnotatedClassesAsString.any { it in field.type.toStringOrEmpty() }
-        val other = allAnnotatedClasses?.any {
+        val isSubclassOfAnnotatedClasses = allAnnotatedClasses?.any {
             field.type.kotlin.isSubclassOf(it.kotlin)
         } ?: false
 
-        val shouldReturnFalse = expected != other
-
-        if (allAnnotatedClassesAsString.any { it in field.type.toStringOrEmpty() }/*todo dependent on NESTED sealed class pahs isa.*/) {
+        if (isSubclassOfAnnotatedClasses) {
             val jClass = field.genericType as? Class<*> ?: continue
             val additionalRequirementMet = jClass.isInterface || jClass.kotlin.isSealed || jClass.kotlin.isAbstract
-
-            if (shouldReturnFalse && additionalRequirementMet) {
-                errorPrintLn("1 NOT SAME -> ${field.type}, ${field.type.javaClass}")
-            }else if (shouldReturnFalse.not() && additionalRequirementMet.not()) {
-                errorPrintLn("2 NOT SAME -> ${field.type}, ${field.type.javaClass}")
-            }
-            // if not same, should be false isa.
             if (additionalRequirementMet) return true
         }
     }

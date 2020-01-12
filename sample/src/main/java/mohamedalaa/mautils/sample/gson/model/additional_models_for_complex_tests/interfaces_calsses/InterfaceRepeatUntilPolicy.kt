@@ -15,8 +15,6 @@
 
 package mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.interfaces_calsses
 
-import mohamedalaa.mautils.sample.gson.model.ConditionReminderOrAction
-
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 1/12/2020.
  *
@@ -27,5 +25,5 @@ data class InterfaceRepeatUntilPolicy(
     var snoozeNumberInSingleAlarm: Int = 0,
     var snoozeNumberOverall: Int = 0,
 
-    var timing: InterfaceCond_Timing
+    var timing: IC_Timing
 )

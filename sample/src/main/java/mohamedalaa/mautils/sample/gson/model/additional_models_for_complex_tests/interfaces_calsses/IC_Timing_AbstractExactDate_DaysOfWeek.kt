@@ -15,13 +15,8 @@
 
 package mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.interfaces_calsses
 
-import mohamedalaa.mautils.sample.gson.model.ConditionReminderOrAction
-
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 1/12/2020.
  *
  */
-data class InterfaceCond_Timing_WindowTime(
-    var fromInclusive: InterfaceCond_Timing_ExactTime,
-    var toInclusive: InterfaceCond_Timing_ExactTime
-) : InterfaceCond_Timing
+data class IC_Timing_AbstractExactDate_DaysOfWeek(var days: List<Int>) : IC_Timing_AbstractExactDate

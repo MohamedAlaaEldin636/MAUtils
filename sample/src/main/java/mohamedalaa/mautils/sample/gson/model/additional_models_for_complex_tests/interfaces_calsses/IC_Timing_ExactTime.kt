@@ -19,4 +19,8 @@ package mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_test
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 1/12/2020.
  *
  */
-interface InterfaceCond_Timing_AbstractExactDate : InterfaceCond_Timing
+data class IC_Timing_ExactTime(
+    var hourFormat12: Int,
+    var min: Int,
+    var isAM: Boolean
+) : IC_Timing

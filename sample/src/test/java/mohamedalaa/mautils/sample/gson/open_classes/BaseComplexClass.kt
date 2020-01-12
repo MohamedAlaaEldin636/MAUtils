@@ -157,13 +157,13 @@ open class BaseComplexClass {
                             true,
                             0,
                             0,
-                            InterfaceCond_Timing_ConcreteWindowDate(
-                                InterfaceCond_Timing_ConcreteExactDate(
+                            IC_Timing_ConcreteWindowDate(
+                                IC_Timing_ConcreteExactDate(
                                     5,
                                     Calendar.JULY,
                                     2012
                                 ),
-                                InterfaceCond_Timing_ConcreteExactDate(
+                                IC_Timing_ConcreteExactDate(
                                     31,
                                     Calendar.JULY,
                                     2012
@@ -302,13 +302,13 @@ open class BaseComplexClass {
                             true,
                             0,
                             0,
-                            InterfaceCond_Timing_ConcreteWindowDate(
-                                InterfaceCond_Timing_ConcreteExactDate(
+                            IC_Timing_ConcreteWindowDate(
+                                IC_Timing_ConcreteExactDate(
                                     5,
                                     Calendar.JULY,
                                     2012
                                 ),
-                                InterfaceCond_Timing_ConcreteExactDate(
+                                IC_Timing_ConcreteExactDate(
                                     31,
                                     Calendar.JULY,
                                     2012
