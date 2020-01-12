@@ -46,6 +46,14 @@ import kotlin.test.assertEquals
 class ComplexClasses : BaseComplexClass() {
 
     @Test
+    fun abccc() {
+        val j1 = reminderOrAction1.toJson()
+        val r1 = j1.fromJson<ReminderOrAction>()
+
+        assertEquals(reminderOrAction1, r1)
+    }
+
+    @Test
     fun nums() {
         buildBundleGsonForced(
 

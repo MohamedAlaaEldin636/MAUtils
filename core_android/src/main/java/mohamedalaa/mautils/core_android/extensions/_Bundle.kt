@@ -224,7 +224,6 @@ fun Bundle.sizeInBytesOrNull() : Int? = runCatching {
 /**
  * - Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
  */
-@JvmSynthetic
 fun Bundle.getterBundle(): GetterBundle = GetterBundle(this)
 
 /**

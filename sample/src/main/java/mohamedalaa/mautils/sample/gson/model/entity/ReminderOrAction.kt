@@ -22,6 +22,9 @@ import mohamedalaa.mautils.sample.gson.model.repeat.ChainedRepeatPolicy
 import mohamedalaa.mautils.sample.gson.model.styled_string.MAStyledString
 import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
 import mohamedalaa.mautils.sample.gson.model.*
+import mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.abstract_classes.AbstractNotifyAs
+import mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.abstract_classes.AbstractNotifyAs_Alarm
+import mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.interfaces_calsses.InterfaceChainedRepeatPolicy
 
 /**
  * ### Properties
@@ -112,6 +115,11 @@ data class ReminderOrAction(
     var turnOnConstraintAsJsonString: DismissOrSnoozeConstraint? = null,
 
     @MARoomGsonTypeConverter
-    var notifyAsReminderOrActionAsJsonString: NotifyAsReminderOrAction = NotifyAsReminderOrAction.Alarm()
+    var notifyAsReminderOrActionAsJsonString: NotifyAsReminderOrAction = NotifyAsReminderOrAction.Alarm(),
+
+    @MARoomGsonTypeConverter
+    var abstractNotifyAs: AbstractNotifyAs = AbstractNotifyAs_Alarm(),
+
+    var interfaceChainedRepeatPolicy: InterfaceChainedRepeatPolicy = InterfaceChainedRepeatPolicy()
 
 )

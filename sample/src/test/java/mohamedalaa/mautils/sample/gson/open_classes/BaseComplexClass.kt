@@ -16,6 +16,10 @@
 package mohamedalaa.mautils.sample.gson.open_classes
 
 import mohamedalaa.mautils.sample.gson.model.*
+import mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.abstract_classes.AbstractNotifyAs_Action_WithAlarm
+import mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.abstract_classes.AbstractNotifyAs_Alarm
+import mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.abstract_classes.AT_SilentMode
+import mohamedalaa.mautils.sample.gson.model.additional_models_for_complex_tests.interfaces_calsses.*
 import mohamedalaa.mautils.sample.gson.model.entity.ReminderOrAction
 import mohamedalaa.mautils.sample.gson.model.repeat.ChainedRepeatPolicy
 import mohamedalaa.mautils.sample.gson.model.repeat.RepeatPolicy
@@ -136,6 +140,39 @@ open class BaseComplexClass {
                     TaskReminderOrAction.SilentMode(false)
                 ),
                 NotifyAsReminderOrAction.Alarm()
+            ),
+            abstractNotifyAs = AbstractNotifyAs_Action_WithAlarm(
+                listOf(
+                    AT_SilentMode(false)
+                ),
+                AbstractNotifyAs_Alarm()
+            ),
+            interfaceChainedRepeatPolicy = InterfaceChainedRepeatPolicy(
+                3,
+                listOf(
+                    IRP_SameConditions(
+                        4,
+                        1,
+                        InterfaceRepeatUntilPolicy(
+                            true,
+                            0,
+                            0,
+                            InterfaceCond_Timing_ConcreteWindowDate(
+                                InterfaceCond_Timing_ConcreteExactDate(
+                                    5,
+                                    Calendar.JULY,
+                                    2012
+                                ),
+                                InterfaceCond_Timing_ConcreteExactDate(
+                                    31,
+                                    Calendar.JULY,
+                                    2012
+                                )
+                            )
+                        )
+                    ),
+                    InterfaceRepeatPolicy_BackToAnotherRepeatPolicyStep(0)
+                )
             )
         )
     }
@@ -248,6 +285,39 @@ open class BaseComplexClass {
                     TaskReminderOrAction.SilentMode(false)
                 ),
                 NotifyAsReminderOrAction.Alarm()
+            ),
+            abstractNotifyAs = AbstractNotifyAs_Action_WithAlarm(
+                listOf(
+                    AT_SilentMode(false)
+                ),
+                AbstractNotifyAs_Alarm()
+            ),
+            interfaceChainedRepeatPolicy = InterfaceChainedRepeatPolicy(
+                3,
+                listOf(
+                    IRP_SameConditions(
+                        4,
+                        1,
+                        InterfaceRepeatUntilPolicy(
+                            true,
+                            0,
+                            0,
+                            InterfaceCond_Timing_ConcreteWindowDate(
+                                InterfaceCond_Timing_ConcreteExactDate(
+                                    5,
+                                    Calendar.JULY,
+                                    2012
+                                ),
+                                InterfaceCond_Timing_ConcreteExactDate(
+                                    31,
+                                    Calendar.JULY,
+                                    2012
+                                )
+                            )
+                        )
+                    ),
+                    InterfaceRepeatPolicy_BackToAnotherRepeatPolicyStep(0)
+                )
             )
         )
     }
