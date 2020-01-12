@@ -244,8 +244,17 @@ fun buildBundleGsonWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson?
 fun buildBundleGsonForcedWithKeys(vararg pairedValues: Pair<String, Any?>, gson: Gson? = null): Bundle
     = Bundle().apply { addValuesGsonForcedWithKeys(*pairedValues, gson = gson) }
 
+/**
+ * - Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
+ */
 fun Bundle?.getterBundleGson(): GetterBundleGson = GetterBundleGson(orEmpty())
 
+/**
+ * - Used to easily retrieve values inserted in a [Bundle] by using [buildBundleGson] or one of
+ * it's other alternatives [buildBundleGsonForced], [addValuesGson] or [addValuesGsonForced] isa.
+ * - Note you must respect same order of inserting values when retrieving values from getter functions isa.
+ * - To get instance of this class use [Bundle.getterBundleGson] isa.
+ */
 class GetterBundleGson internal constructor(@PublishedApi internal val bundle: Bundle) {
 
     @PublishedApi

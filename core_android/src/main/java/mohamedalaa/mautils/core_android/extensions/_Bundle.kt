@@ -222,24 +222,15 @@ fun Bundle.sizeInBytesOrNull() : Int? = runCatching {
 }.getOrNull()
 
 /**
- * - Used by java consumer code only, for same functionality for kotlin devs see [Bundle.getterBundle].
- *
- * - Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
- */
-@JvmName("getterBundle")
-fun Bundle.javaGetGetterBundle(): GetterBundle = GetterBundle(this)
-
-/**
  * - Used to retrieve [Bundle] vales created by [buildBundle] or [addValues] isa.
  */
 @JvmSynthetic
-@JvmName("kotlinGetterBundle")
 fun Bundle.getterBundle(): GetterBundle = GetterBundle(this)
 
 /**
- * Used to easily retrieve values inserted in a [Bundle] by using [buildBundle] or [addValues] isa,
- *
- * Note you must respect same order of inserting values when retrieving values from getter functions isa.
+ * - Used to easily retrieve values inserted in a [Bundle] by using [buildBundle] or [addValues] isa.
+ * - Note you must respect same order of inserting values when retrieving values from getter functions isa.
+ * - To get instance of this class use [Bundle.getterBundle] isa.
  */
 class GetterBundle internal constructor(@PublishedApi internal val bundle: Bundle) {
 
