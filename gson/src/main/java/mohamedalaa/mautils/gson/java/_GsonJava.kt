@@ -23,6 +23,7 @@ import mohamedalaa.mautils.gson.addTypeAdapters
 import mohamedalaa.mautils.gson.internal.canonicalizeOrNull
 import mohamedalaa.mautils.gson.privateGeneratedGson
 import mohamedalaa.mautils.gson.toJsonOrNull
+import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -32,37 +33,30 @@ import java.lang.reflect.Type
  * 2. If the type has type params then you have to use [GsonConverter.toJsonOrNull] instead isa.
  *
  * ### Usage
- * - Converts `receiver` object to a JSON String OR null in case of any error isa.
+ * - Converts `receiver` object to a JSON String OR `null` in case of any error isa.
+ * - [elementClass] param isn't needed to be provided as [Class] will be inferred from `receiver`
+ * **BUT** needed in case of using `superclass` of the given `receiver` which is needed in
+ * case of classes annotated with [MASealedAbstractOrInterface] isa.
  *
  * @param gson in case you want a special configuration for [Gson], Note default value used is [privateGeneratedGson] isa.
  *
- * @return JSON String OR null if any problem occurs isa.
+ * @return JSON String OR `null` if any problem occurs isa.
  *
  * @see toJsonJava
  * @see fromJsonOrNullJava
  */
 @JvmOverloads
 @JvmName("toJsonOrNull")
-fun <E> E?.toJsonOrNullJava(gson: Gson? = null): String? = this?.run {
+fun <E> E?.toJsonOrNullJava(elementClass: Class<E>? = null, gson: Gson? = null): String? = this?.run {
     val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
 
-    try { usedGson.toJson(this) } catch (e: Exception) { null }
-}
-
-/** Should be replaced with [toJsonOrNullJava] isa. */
-@Deprecated(
-    message = "No need to provide elementClass param as it will be auto inferred.",
-    replaceWith = ReplaceWith(
-        expression = "toJsonOrNullJava(gson) /* GsonUtils.toJsonOrNull(gson) in case of java consumer isa. */"
-    ),
-    level = DeprecationLevel.WARNING
-)
-@JvmOverloads
-@JvmName("toJsonOrNull")
-fun <E> E?.toJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): String? = this?.run {
-    val usedGson = gson?.addTypeAdapters() ?: privateGeneratedGson
-
-    try { usedGson.toJson(this, elementClass) } catch (e: Exception) { null }
+    try {
+        if (elementClass == null) {
+            usedGson.toJson(this)
+        }else {
+            usedGson.toJson(this, elementClass)
+        }
+    } catch (e: Exception) { null }
 }
 
 /**
@@ -76,20 +70,7 @@ fun <E> E?.toJsonOrNullJava(elementClass: Class<E>, gson: Gson? = null): String?
  */
 @JvmOverloads
 @JvmName("toJson")
-fun <E> E?.toJsonJava(gson: Gson? = null): String = toJsonOrNullJava(gson)
-    ?: throw RuntimeException("Cannot convert $this to JSON String")
-
-/** Should be replaced with [toJsonJava] isa. */
-@Deprecated(
-    message = "No need to provide elementClass param as it will be auto inferred.",
-    replaceWith = ReplaceWith(
-        expression = "toJsonJava(gson) /* GsonUtils.toJson(gson) in case of java consumer isa. */"
-    ),
-    level = DeprecationLevel.WARNING
-)
-@JvmOverloads
-@JvmName("toJson")
-fun <E> E?.toJsonJava(elementClass: Class<E>, gson: Gson? = null): String = @Suppress("DEPRECATION") toJsonOrNullJava(elementClass, gson)
+fun <E> E?.toJsonJava(elementClass: Class<E>? = null, gson: Gson? = null): String = @Suppress("DEPRECATION") toJsonOrNullJava(elementClass, gson)
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
 /**

@@ -636,4 +636,150 @@ open class BaseComplexClass {
         )
     }
 
+    val customClass: ReminderOrAction = kotlin.run {
+        ReminderOrAction(
+            id = 1,
+            useLocalTiming = true,
+            creationDate = 0L,
+            chatId = "dwede",
+            backupReminderOrAction = BackupReminderOrAction(
+                "Dewdwe",
+                3
+            ),
+            title = MAStyledString(
+                "dewldke;wled;wled;weldwe",
+                listOf(
+                    MAIndexedSpan(
+                        3, 4, MASpan.Bold
+                    ),
+                    MAIndexedSpan(
+                        3, 4, MASpan.Link("https://www.google.com")
+                    )
+                )
+            ),
+            additionalNotes = MAStyledString(
+                "aaaAaAadewldke;wled;wled;weldwe",
+                listOf(
+                    MAIndexedSpan(
+                        3, 4, MASpan.Bold
+                    ),
+                    MAIndexedSpan(
+                        3, 4, MASpan.Link("https://www.google.com")
+                    )
+                )
+            ),
+            isFavorite = true,
+            isHidden = false,
+            conditions = listOf(
+                listOf(
+                    ConditionReminderOrAction.Timing.AbstractWindowDate(
+                        ConditionReminderOrAction.Timing.AbstractExactDate.DaysOfMonth(
+                            listOf(
+                                Calendar.FRIDAY,
+                                Calendar.SATURDAY
+                            )
+                        ),
+                        ConditionReminderOrAction.Timing.AbstractExactDate.StartMidEndOfMonth(
+                            start = true,
+                            mid = false,
+                            midTendsToLowerRounding = false,
+                            end = false
+                        )
+                    ),
+                    ConditionReminderOrAction.Place(
+                        "4"
+                    )
+                ),
+                listOf(
+                    ConditionReminderOrAction.Place(
+                        "4"
+                    ),
+                    ConditionReminderOrAction.Activity(
+                        2,
+                        useEnterTransitionType = true,
+                        useExitTransitionType = false
+                    )
+                )
+            ),
+            chainedRepeatPolicy = ChainedRepeatPolicy(
+                3,
+                listOf(
+                    RepeatPolicy.SameConditions(
+                        4,
+                        1,
+                        RepeatUntilPolicy(
+                            true,
+                            0,
+                            0,
+                            ConditionReminderOrAction.Timing.ConcreteWindowDate(
+                                ConditionReminderOrAction.Timing.ConcreteExactDate(
+                                    5,
+                                    Calendar.JULY,
+                                    2012
+                                ),
+                                ConditionReminderOrAction.Timing.ConcreteExactDate(
+                                    31,
+                                    Calendar.JULY,
+                                    2012
+                                )
+                            )
+                        )
+                    ),
+                    RepeatPolicy.BackToAnotherRepeatPolicyStep(0)
+                )
+            ),
+            snoozePolicyAsJsonString = SnoozePolicy.Custom(
+                7,
+                3,
+                true
+            ),
+            trashTimeInMillis = null,
+            isGentleAlarm = false,
+            priorNotificationTimeInMillis = 4L,
+            dismissConstraintAsJsonString = DismissOrSnoozeConstraint.Pattern("dwdqlwldkql"),
+            snoozeConstraintAsJsonString = DismissOrSnoozeConstraint.LikeDismissConstraint(),
+            turnOffConstraintAsJsonString = null,
+            turnOnConstraintAsJsonString = DismissOrSnoozeConstraint.QuestionAndAnswer("qq", "aaaaa"),
+            notifyAsReminderOrActionAsJsonString = NotifyAsReminderOrAction.Action.WithAlarm(
+                listOf(
+                    TaskReminderOrAction.SilentMode(false)
+                ),
+                NotifyAsReminderOrAction.Alarm()
+            ),
+            abstractNotifyAs = AbstractNotifyAs_Action_WithAlarm(
+                listOf(
+                    AT_SilentMode(false)
+                ),
+                AbstractNotifyAs_Alarm()
+            ),
+            interfaceChainedRepeatPolicy = InterfaceChainedRepeatPolicy(
+                3,
+                listOf(
+                    IRP_SameConditions(
+                        4,
+                        1,
+                        InterfaceRepeatUntilPolicy(
+                            true,
+                            0,
+                            0,
+                            IC_Timing_ConcreteWindowDate(
+                                IC_Timing_ConcreteExactDate(
+                                    5,
+                                    Calendar.JULY,
+                                    2012
+                                ),
+                                IC_Timing_ConcreteExactDate(
+                                    31,
+                                    Calendar.JULY,
+                                    2012
+                                )
+                            )
+                        )
+                    ),
+                    InterfaceRepeatPolicy_BackToAnotherRepeatPolicyStep(0)
+                )
+            )
+        )
+    }
+
 }

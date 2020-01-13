@@ -13,47 +13,40 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.gson
+package mohamedalaa.mautils.sample.gson
 
-/*
 import android.os.Build
-import mohamedalaa.mautils.sample.gson.ObjectClass
+import mohamedalaa.mautils.gson.buildBundleGson
+import mohamedalaa.mautils.gson.getterBundleGson
+import mohamedalaa.mautils.gson.toJson
+import mohamedalaa.mautils.sample.gson.model.entity.ReminderOrAction
+import mohamedalaa.mautils.sample.gson.open_classes.BaseComplexClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 
 @Config(manifest = Config.NONE, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
-class TestObject {
-
-    */
-/**
-     * Below test succeeded el7, in last version but we wanna change that for objects isa.
-     *//*
+class BundleTests : BaseComplexClass() {
 
     @Test
-    fun objectJson() {
-        val o1 = mohamedalaa.mautils.sample.gson.ObjectClass
-        val o2 = mohamedalaa.mautils.sample.gson.ObjectClass
+    fun f1() {
+        val bundle = buildBundleGson(
+            "string",
+            this.customClass,
+            33
+        )
 
-        assertEquals(o1, o2)
+        val getterBundle = bundle.getterBundleGson()
+        val string = getterBundle.get<String>()
+        val customClass = getterBundle.get<ReminderOrAction>()
+        val int = getterBundle.get<Int>()
 
-        val j1 = o1.toJson()
-        val j2 = o2.toJson()
-
-        assertEquals(j1, j2)
-
-        val r1 = j1.fromJson<mohamedalaa.mautils.sample.gson.ObjectClass>()
-        val r2 = j2.fromJson<mohamedalaa.mautils.sample.gson.ObjectClass>()
-
-        assertNotEquals(r1, r2) // NOT Equals
-        assertEquals(r1.javaClass, r2.javaClass)
+        assertEquals("string", string)
+        assertEquals(customClass, this.customClass)
+        assertEquals(int, 33)
     }
 
-
-
 }
-*/

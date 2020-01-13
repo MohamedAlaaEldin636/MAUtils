@@ -21,22 +21,35 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotate Sealed Class, Abstract Class or Interface
+ * <ul>
+ *     <li>
+ *         Annotate Sealed Class, Abstract Class or Interface, And after that they can be converted via
+ *         <code>toJson</code>/<code>fromJson</code> functions.
+ *     </li>
+ * </ul>
  * <br></br>
- * in case it's inside one of the objects that needs to be serialized/deserialized, see examples below isa
- * <br></br>
+ * Checkout the below example
+ * </br>
  * <pre>
- * class Holder {
- *     // this is an abstract class which needs to be annotated isa.
- *     AbstractClass abstractClass;
- * }
+ * // Declaration
+ * <code>@MASealedAbstractOrInterface</code>
+ * abstract class AbstractClass
+ *
+ * data class Impl(var int: Int) : AbstractClass
+ *
+ * // Conversion
+ * val abstractClass: AbstractClass = Impl(33)
+ * val json = abstractClass.toJson()
+ * val value = json.fromJson< AbstractClass >()
+ * assertEquals(abstractClass, value) // Test passed
  * </pre>
- * // now to serialize and deserialize `Holder` class you  need to annotated the abstract class
- * <br></br>
- * // otherwise it won't be deserialized correctly or throws an error isa.
- * <br></br>
- * <b>Note</b> <br/>
- * - Currently does not support type params in the annotated class, since it does not make much sense.
+ *
+ * <ul>
+ *     <li>
+ *         Not only that but also if a field inside a class with AbstractClass as a type
+ *         that class can be serialized/deserialized correctly without any problem isa.
+ *     </li>
+ * </ul>
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)

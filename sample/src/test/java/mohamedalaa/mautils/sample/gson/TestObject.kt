@@ -16,9 +16,9 @@
 package mohamedalaa.mautils.sample.gson
 
 import android.os.Build
+import com.google.gson.Gson
 import mohamedalaa.mautils.gson.fromJson
 import mohamedalaa.mautils.gson.fromJsonOrNull
-import mohamedalaa.mautils.gson.java.fromJsonJava
 import mohamedalaa.mautils.gson.toJson
 import mohamedalaa.mautils.gson.toJsonOrNull
 import org.junit.Test
@@ -38,26 +38,59 @@ import kotlin.test.assertNotEquals
 @RunWith(RobolectricTestRunner::class)
 class TestObject {
 
+    @Test
+    fun sealedInsideData() {
+        val dataClass = DataClass(
+            "some string",
+            SealedClass.ObjectClass
+        )
+        val json = dataClass.toJson()
+        val value = json.fromJson<DataClass>()
+        assertEquals(dataClass, value)
+    }
+
+    @Test
+    fun sealedF111332() {
+        val sealedClass = SealedClass.DataClass(77)
+        val json = sealedClass.toJson<SealedClass>() // Must be explicitly defined since the inferred instance is .DataClass now isa.
+        val value = json.fromJson<SealedClass>()
+        assertEquals(sealedClass, value)
+
+        val sealedClass2 = SealedClass.DataClass(77)
+        val json2 = sealedClass2.toJson() // had to explicitly define toJson.<SealedClass> isa.
+        val value2 = runCatching {
+            json2.fromJson<SealedClass>()
+        }.getOrNull() // error can'tbe converted, since it has been wrongly serialized.
+        assertNotEquals(sealedClass2, value2)
+    }
+
+    @Test
+    fun sealedF1() {
+        val sealedClass: SealedClass = SealedClass.DataClass(77)
+        val json = sealedClass.toJson()
+        val value = json.fromJson<SealedClass>()
+        assertEquals(sealedClass, value)
+
+        val abstractClassKt: AbstractClassKt = ImplKt("sasasasdasdasdasdadsaas")
+        val json2 = abstractClassKt.toJson()
+        val value2 = json2.fromJson<AbstractClassKt>()
+        assertEquals(abstractClassKt, value2)
+    }
+
     /**
      * Below test succeeded el7, in last version but we wanna change that for objects isa.
      */
     @Test
     fun objectJson() {
-        val o1 = ObjectClass
-        val o2 = ObjectClass
-
-        assertEquals(o1, o2)
-
+        val o1 = ObjectClass // creation code -> object ObjectClass
         val j1 = o1.toJson()
-        val j2 = o2.toJson()
+        val r1 = j1.fromJson<ObjectClass>()
+        assertEquals(o1, r1)
 
-        assertEquals(j1, j2)
-
-        val r1 = j1.fromJsonJava(ObjectClass::class.java) // j1.fromJson<ObjectClass>()
-        val r2 = j2.fromJson<ObjectClass>()
-
-        assertEquals(r1, r2)
-        assertEquals(r1.javaClass, r2.javaClass)
+        val gson = Gson()
+        val j2 = gson.toJson(o1)
+        val r2 = gson.fromJson(j2, ObjectClass::class.java)
+        assertNotEquals(o1, r2)
     }
 
     @Test

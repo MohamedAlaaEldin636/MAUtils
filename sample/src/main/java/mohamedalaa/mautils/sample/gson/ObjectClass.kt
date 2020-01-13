@@ -37,3 +37,26 @@ sealed class TestSealedClassA {
     ) : TestSealedClassA()
 
 }
+
+@MASealedAbstractOrInterface
+sealed class SealedClass {
+    data class DataClass(var int: Int) : SealedClass()
+    object ObjectClass : SealedClass()
+}
+
+object OC1 {
+    @JvmStatic
+    fun <E> toJson(element: E, clazz: Class<E>) {
+
+    }
+}
+
+// -- Even if sealedClass/abstractClass/Interface property inside another class -- //
+
+// Declaration
+data class DataClass(
+    var string: String,
+    var sealedClass: SealedClass
+)
+
+// Conversion
