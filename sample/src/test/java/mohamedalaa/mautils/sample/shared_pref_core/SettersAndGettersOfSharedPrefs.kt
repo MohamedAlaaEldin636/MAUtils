@@ -38,6 +38,45 @@ class SettersAndGettersOfSharedPrefs : BaseComplexClass() {
     private val fileName = "fileName"
 
     @Test
+    fun complexTypes() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+
+        val set = setOf("abc", null, "cde")
+        context.sharedPrefSet(fileName, "key1", set)
+        assertEquals(
+            set,
+            context.sharedPrefGet<Set<String?>?>(
+                fileName, "key1", null
+            )
+        )
+        val set2: Set<String?>? = null
+        context.sharedPrefSet(fileName, "set2", set2, true)
+        assertEquals(
+            set2,
+            context.sharedPrefGet<Set<String?>?>(
+                fileName, "set2", null
+            )
+        )
+
+        val set3 = setOf(2, null, 45)
+        context.sharedPrefSet(fileName, "key2", set3)
+        assertEquals(
+            set3,
+            context.sharedPrefGet<Set<Int?>?>(
+                fileName, "key2", null
+            )
+        )
+        val set4: Set<Int?>? = null
+        context.sharedPrefSet(fileName, "set4", set4, true)
+        assertEquals(
+            set4,
+            context.sharedPrefGet<Set<Int?>?>(
+                fileName, "set4", null
+            )
+        )
+    }
+
+    @Test
     fun complexGson() {
         val context = ApplicationProvider.getApplicationContext<Context>()
 

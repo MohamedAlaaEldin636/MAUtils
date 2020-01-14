@@ -229,7 +229,7 @@ internal fun <T> SharedPreferences.getAndIfNeedJsonConversion(
         }
         Set::class.java -> {
             try {
-                getStringSet(key, defValue as Set<String?>) as T to false
+                getStringSet(key, defValue as? Set<String?>) as T to false
             }catch (classCastException: ClassCastException) {
                 null to true
             }
