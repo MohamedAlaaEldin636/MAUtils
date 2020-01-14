@@ -19,11 +19,14 @@ package mohamedalaa.mautils.core_android.extensions
 
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
+import androidx.databinding.BindingAdapter
 
 /**
  * - If [resId] is `null` or `0` then we clear the image using [ImageView.setImageDrawable] with a `null`
  * param, Otherwise [ImageView.setImageResource] with param [resId] is used instead isa.
+ * - Also you can use this in XML with `DataBinding` name of attribute is `imageView_setImageResOrRemove` isa.
  */
+@BindingAdapter("imageView_setImageResOrRemove")
 fun ImageView.setImageResOrRemove(@DrawableRes resId: Int?) {
     if (resId != null && resId != 0) setImageResource(resId) else setImageDrawable(null)
 }

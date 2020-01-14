@@ -15,30 +15,13 @@
 
 package mohamedalaa.mautils.core_android.data_binding.binding_adapter
 
-import android.graphics.PorterDuff
-import android.view.View
-import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
-import mohamedalaa.mautils.core_android.extensions.setBackgroundTintCompat
-import mohamedalaa.mautils.core_android.extensions.setOnOneClickListener
+import mohamedalaa.mautils.core_android.extensions.setImageResOrRemove
 
 /**
  * - Contains functions annotated with [BindingAdapter] isa.
  *
  * ### Additional Not-Mentioned here [BindingAdapter] functions
- * - [setOnOneClickListener]
+ * - [setImageResOrRemove]
  */
-object BAView {
-
-    /**
-     * Same as [setBackgroundTintCompat] isa.
-     */
-    @JvmStatic
-    @BindingAdapter("view_setBackgroundTintColor", "view_setBackgroundTintPorterDuffMode", requireAll = false)
-    fun setBackgroundTintColor(view: View, @ColorInt color: Int?, porterDuffMode: PorterDuff.Mode?) {
-        if (color != null || porterDuffMode != null) {
-            view.setBackgroundTintCompat(color, porterDuffMode)
-        }
-    }
-
-}
+object BAImageView
