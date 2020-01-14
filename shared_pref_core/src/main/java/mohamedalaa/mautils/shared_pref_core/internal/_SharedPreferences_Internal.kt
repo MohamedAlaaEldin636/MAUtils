@@ -34,7 +34,6 @@ internal inline fun <reified T> Context.internal_sharedPrefSetComplex(
 
     key: String,
     value: T,
-    removeKeyIfValueIsNull: Boolean,
 
     mode: Int,
     commit: Boolean
@@ -45,13 +44,7 @@ internal inline fun <reified T> Context.internal_sharedPrefSetComplex(
     if (useJsonConversion) {
         val json = value.toJsonOrNull()
         if (json == null) {
-            if (removeKeyIfValueIsNull) {
-                editor.remove(key)
-            }else {
-                throw RuntimeException(
-                    "passed null value while removeKeyIfValueIsNull is false isa"
-                )
-            }
+            editor.remove(key)
         }else {
             editor.putString(key, json)
         }
@@ -73,7 +66,6 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
     key: String,
     value: T,
     jClass: Class<T>?,
-    removeKeyIfValueIsNull: Boolean,
 
     mode: Int,
     commit: Boolean,
@@ -86,13 +78,7 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
     if (useJsonConversion) {
         val json = if (gsonConverter != null) gsonConverter.toJsonOrNull(value) else value.toJsonOrNullJava(jClass)
         if (json == null) {
-            if (removeKeyIfValueIsNull) {
-                editor.remove(key)
-            }else {
-                throw RuntimeException(
-                    "passed null value while removeKeyIfValueIsNull is false isa"
-                )
-            }
+            editor.remove(key)
         }else {
             editor.putString(key, json)
         }
@@ -139,7 +125,7 @@ internal inline fun <reified T> Context.internal_sharedPrefGetComplex(
     fileName: String,
 
     key: String,
-    defValue: T,
+    defValue: T?,
 
     mode: Int
 ): T {
@@ -166,7 +152,7 @@ internal fun <T> Context.internal_sharedPrefGetComplex(
     fileName: String,
 
     key: String,
-    defValue: T,
+    defValue: T?,
     jClass: Class<T>?,
 
     mode: Int,
@@ -204,7 +190,7 @@ internal fun <T> Context.internal_sharedPrefGetComplex(
 @PublishedApi
 internal fun <T> SharedPreferences.getAndIfNeedJsonConversion(
     key: String,
-    defValue: T,
+    defValue: T?,
     jClass: Class<T>
 ): Pair<T?, Boolean> {
     if (hasKey(key).not()) {

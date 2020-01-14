@@ -50,7 +50,11 @@ class SettersAndGettersOfSharedPrefs : BaseComplexClass() {
             )
         )
         val set2: Set<String?>? = null
-        context.sharedPrefSet(fileName, "set2", set2, true)
+        context.sharedPrefSet(
+            fileName = fileName,
+            key = "set2",
+            value = set2
+        )
         assertEquals(
             set2,
             context.sharedPrefGet<Set<String?>?>(
