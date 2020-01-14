@@ -70,7 +70,7 @@ fun <E> E?.toJsonOrNullJava(elementClass: Class<E>? = null, gson: Gson? = null):
  */
 @JvmOverloads
 @JvmName("toJson")
-fun <E> E?.toJsonJava(elementClass: Class<E>? = null, gson: Gson? = null): String = @Suppress("DEPRECATION") toJsonOrNullJava(elementClass, gson)
+fun <E> E?.toJsonJava(elementClass: Class<E>? = null, gson: Gson? = null): String = toJsonOrNullJava(elementClass, gson)
     ?: throw RuntimeException("Cannot convert $this to JSON String")
 
 /**

@@ -20,19 +20,16 @@ package mohamedalaa.mautils.shared_pref_core.internal
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import mohamedalaa.mautils.gson.fromJsonOrNull
+import mohamedalaa.mautils.gson.java.GsonConverter
+import mohamedalaa.mautils.gson.java.fromJsonOrNullJava
+import mohamedalaa.mautils.gson.java.toJsonOrNullJava
+import mohamedalaa.mautils.gson.toJsonOrNull
 import mohamedalaa.mautils.shared_pref_core.hasKey
-import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
-import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
 
-/**
- * @param convertToString is used if [value] is not one of the supported types by [SharedPreferences] isa.
- *
- * @see [sharedPrefSet]
- */
 @SuppressLint("ApplySharedPref")
-@Synchronized
 @PublishedApi
-internal fun <T> Context.internal_sharedPrefSetComplex(
+internal inline fun <reified T> Context.internal_sharedPrefSetComplex(
     fileName: String,
 
     key: String,
@@ -40,54 +37,64 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
     removeKeyIfValueIsNull: Boolean,
 
     mode: Int,
-    commit: Boolean,
-
-    convertToString: (T) -> String?
+    commit: Boolean
 ): Boolean? {
     val editor = applicationContext.getSharedPreferences(fileName, mode).edit()
 
-    when (value) {
-        is String -> editor.putString(key, value)
-        is Int -> editor.putInt(key, value)
-        is Boolean -> editor.putBoolean(key, value)
-        is Long -> editor.putLong(key, value)
-        is Float -> editor.putFloat(key, value)
-        is Set<*> -> {
-            try {
-                @Suppress("UNCHECKED_CAST")
-                editor.putStringSet(key, value as Set<String?>)
-            }catch (throwable: ClassCastException) {
-                convertToString(value).apply {
-                    if (this != null) {
-                        editor.putString(key, this)
-                    }else {
-                        throw RuntimeException(
-                            "passed null value while removeKeyIfValueIsNull is false from .toJsonOrNull() conversion isa"
-                        )
-                    }
-                }
-            }
-        }
-        else -> {
-            if (value == null) {
-                if (removeKeyIfValueIsNull) {
-                    editor.remove(key)
-                }else {
-                    throw RuntimeException(
-                        "passed null value while removeKeyIfValueIsNull is false isa"
-                    )
-                }
+    val useJsonConversion = editor.saveOrNotIfNeedJsonConversion(key, value)
+    if (useJsonConversion) {
+        val json = value.toJsonOrNull()
+        if (json == null) {
+            if (removeKeyIfValueIsNull) {
+                editor.remove(key)
             }else {
-                convertToString(value).apply {
-                    if (this != null) {
-                        editor.putString(key, this)
-                    }else {
-                        throw RuntimeException(
-                            "passed null value while removeKeyIfValueIsNull is false from .toJsonOrNull() conversion isa"
-                        )
-                    }
-                }
+                throw RuntimeException(
+                    "passed null value while removeKeyIfValueIsNull is false isa"
+                )
             }
+        }else {
+            editor.putString(key, json)
+        }
+    }
+
+    return if (commit) {
+        editor.commit()
+    }else {
+        editor.apply()
+
+        null
+    }
+}
+@SuppressLint("ApplySharedPref")
+@PublishedApi
+internal fun <T> Context.internal_sharedPrefSetComplex(
+    fileName: String,
+
+    key: String,
+    value: T,
+    jClass: Class<T>?,
+    removeKeyIfValueIsNull: Boolean,
+
+    mode: Int,
+    commit: Boolean,
+
+    gsonConverter: GsonConverter<T>? = null
+): Boolean? {
+    val editor = applicationContext.getSharedPreferences(fileName, mode).edit()
+
+    val useJsonConversion = editor.saveOrNotIfNeedJsonConversion(key, value)
+    if (useJsonConversion) {
+        val json = if (gsonConverter != null) gsonConverter.toJsonOrNull(value) else value.toJsonOrNullJava(jClass)
+        if (json == null) {
+            if (removeKeyIfValueIsNull) {
+                editor.remove(key)
+            }else {
+                throw RuntimeException(
+                    "passed null value while removeKeyIfValueIsNull is false isa"
+                )
+            }
+        }else {
+            editor.putString(key, json)
         }
     }
 
@@ -101,10 +108,57 @@ internal fun <T> Context.internal_sharedPrefSetComplex(
 }
 
 /**
- * @param convertFromString is used if [jClass] don't refer to any of the supported types by [SharedPreferences] isa.
- *
- * @see [sharedPrefGet]
+ * @return `true` if saved meaning [value] is not-null && is one of the normally supported types
+ * for [SharedPreferences], `false` meaning needs `gson module` conversion isa.
  */
+@PublishedApi
+internal fun <T> SharedPreferences.Editor.saveOrNotIfNeedJsonConversion(key: String, value: T): Boolean {
+    var useJsonConversion = false
+    when (value) {
+        is String -> putString(key, value)
+        is Int -> putInt(key, value)
+        is Boolean -> putBoolean(key, value)
+        is Long -> putLong(key, value)
+        is Float -> putFloat(key, value)
+        is Set<*> -> {
+            try {
+                @Suppress("UNCHECKED_CAST")
+                putStringSet(key, value as Set<String?>)
+            }catch (throwable: ClassCastException) {
+                useJsonConversion = true
+            }
+        }
+        else -> useJsonConversion = true
+    }
+    return useJsonConversion
+}
+
+@Suppress("UNCHECKED_CAST")
+@PublishedApi
+internal inline fun <reified T> Context.internal_sharedPrefGetComplex(
+    fileName: String,
+
+    key: String,
+    defValue: T,
+
+    mode: Int
+): T {
+    val sharedPref = applicationContext.getSharedPreferences(fileName, mode)
+
+    val (possibleValue, useJsonConversion) = sharedPref.getAndIfNeedJsonConversion(
+        key,
+        defValue,
+        T::class.java
+    )
+
+    return if (useJsonConversion) {
+        val value = sharedPref.getString(key, null)?.fromJsonOrNull<T>()
+
+        value as T
+    }else {
+        possibleValue as T
+    }
+}
 @Suppress("UNCHECKED_CAST")
 @Synchronized
 @PublishedApi
@@ -113,47 +167,73 @@ internal fun <T> Context.internal_sharedPrefGetComplex(
 
     key: String,
     defValue: T,
-    jClass: Class<T>,
+    jClass: Class<T>?,
 
     mode: Int,
 
-    convertFromString: (String?) -> T
+    gsonConverter: GsonConverter<T>? = null
 ): T {
     val sharedPref = applicationContext.getSharedPreferences(fileName, mode)
 
-    if (sharedPref.hasKey(key).not()) {
-        return defValue
+    val (possibleValue, useJsonConversion) = if (jClass == null) {
+        null to true
+    }else {
+        sharedPref.getAndIfNeedJsonConversion(
+            key,
+            defValue,
+            jClass
+        )
+    }
+
+    return if (useJsonConversion) {
+        val value = if (jClass == null) null else sharedPref.getString(key, null)?.run {
+            if (gsonConverter != null) gsonConverter.fromJson(this) else fromJsonOrNullJava(jClass)
+        }
+
+        value as T
+    }else {
+        possibleValue as T
+    }
+}
+
+/**
+ * @return [Pair.second] `false` [jClass] is one of the normally supported types for [SharedPreferences],
+ * `true` meaning needs `gson module` conversion isa.
+ */
+@Suppress("UNCHECKED_CAST")
+@PublishedApi
+internal fun <T> SharedPreferences.getAndIfNeedJsonConversion(
+    key: String,
+    defValue: T,
+    jClass: Class<T>
+): Pair<T?, Boolean> {
+    if (hasKey(key).not()) {
+        return defValue to false
     }
 
     return when (jClass) {
         String::class.java -> {
-            sharedPref.getString(key, defValue as? String) as T
+            getString(key, defValue as? String) as T to false
         }
         Int::class.javaPrimitiveType, Int::class.javaObjectType -> {
-            sharedPref.getInt(key, defValue as? Int ?: 0) as T
+            getInt(key, defValue as? Int ?: 0) as T to false
         }
         Boolean::class.javaPrimitiveType, Boolean::class.javaObjectType -> {
-            sharedPref.getBoolean(key, defValue as? Boolean ?: false) as T
+            getBoolean(key, defValue as? Boolean ?: false) as T to false
         }
         Long::class.javaPrimitiveType, Long::class.javaObjectType -> {
-            sharedPref.getLong(key, defValue as? Long ?: 0L) as T
+            getLong(key, defValue as? Long ?: 0L) as T to false
         }
         Float::class.javaPrimitiveType, Float::class.javaObjectType -> {
-            sharedPref.getFloat(key, defValue as? Float ?: 0f) as T
+            getFloat(key, defValue as? Float ?: 0f) as T to false
         }
         Set::class.java -> {
             try {
-                sharedPref.getStringSet(key, defValue as Set<String?>) as T
+                getStringSet(key, defValue as Set<String?>) as T to false
             }catch (classCastException: ClassCastException) {
-                convertFromString(
-                    sharedPref.getString(key, null)
-                )
+                null to true
             }
         }
-        else -> {
-            convertFromString(
-                sharedPref.getString(key, null)
-            )
-        }
+        else -> null to true
     }
 }

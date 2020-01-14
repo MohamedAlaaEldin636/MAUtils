@@ -51,7 +51,9 @@ fun Context.sharedPrefClearAll(
 }
 
 /**
+ * - removes given [key] using [SharedPreferences.Editor.remove] isa.
  * - **NOTE** All removals are done first isa.
+ *
  * @return value of [SharedPreferences.Editor.commit] or null if Used [SharedPreferences.Editor.apply] isa.
  *
  * @see sharedPrefClearAll
@@ -79,6 +81,7 @@ fun Context.sharedPrefRemoveKey(
 }
 
 /** @return true if [key] exists in `receiver`, otherwise false is returned isa. */
+@PublishedApi
 internal fun SharedPreferences.hasKey(key: String) = key in all?.keys
 
 /** @return true if [key] exists in this [fileName] with the specified [mode], otherwise false is returned isa. */

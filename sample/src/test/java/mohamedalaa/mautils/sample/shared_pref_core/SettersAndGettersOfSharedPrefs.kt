@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.shared_pref_core
+package mohamedalaa.mautils.sample.shared_pref_core
 
 import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
-import mohamedalaa.mautils.shared_pref_core.helper_classes.CustomClass
-import mohamedalaa.mautils.shared_pref_core.helper_classes.MyEnum
+import mohamedalaa.mautils.sample.gson.model.entity.ReminderOrAction
+import mohamedalaa.mautils.sample.gson.open_classes.BaseComplexClass
+import mohamedalaa.mautils.sample.shared_pref_core.helper_classes.CustomClass
+import mohamedalaa.mautils.sample.shared_pref_core.helper_classes.MyEnum
+import mohamedalaa.mautils.shared_pref_core.sharedPrefGet
+import mohamedalaa.mautils.shared_pref_core.sharedPrefHasKey
+import mohamedalaa.mautils.shared_pref_core.sharedPrefSet
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -28,9 +33,22 @@ import kotlin.test.assertEquals
 
 @Config(manifest = Config.NONE, sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
-class SettersAndGettersOfSharedPrefs {
+class SettersAndGettersOfSharedPrefs : BaseComplexClass() {
 
     private val fileName = "fileName"
+
+    @Test
+    fun complexGson() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+
+        context.sharedPrefSet(fileName, "key1", reminderOrAction1)
+        assertEquals(
+            reminderOrAction1,
+            context.sharedPrefGet<ReminderOrAction?>(
+                fileName, "key1", null
+            )
+        )
+    }
 
     @Test
     fun simple_supported_by_sharedPrefs_types() {
