@@ -25,6 +25,9 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefPair
 
 // todo -> update wiki isa.
 @MASharedPrefFileConfigs(
+    imports = [
+        "mohamedalaa.mautils.sample.general_custom_classes.randomInstance"
+    ],
     supportJavaConsumerCode = true,
     addClearFun = true,
     addFileNameFun = true,
@@ -64,6 +67,7 @@ import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefPair
 )
 @MASharedPrefPair(
     name = "person",
+    defaultValue = "Person.randomInstance()",
     type = MAParameterizedKClass(
         maKClass = [
             // No need to import Person in MASharedPrefFileConfig, Since it is declared in type isa.

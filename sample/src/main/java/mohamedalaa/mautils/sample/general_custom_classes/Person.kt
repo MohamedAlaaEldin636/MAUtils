@@ -19,4 +19,10 @@ data class Person(
     var name: String = "name",
     var age: Int = 0,
     var address: Address = Address()
+) { companion object }
+
+fun Person.Companion.randomInstance(): Person = Person(
+    "Random",
+    44,
+    Address("Random", "Random")
 )
