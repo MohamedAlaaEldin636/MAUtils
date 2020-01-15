@@ -19,8 +19,6 @@ import mohamedalaa.mautils.shared_pref_processor.extensions.toUpperCaseFirstLett
 
 object Constants {
 
-    const val GENERATED_FILE_PACKAGE_SUFFIX_WITH_DOT = ".mautils_sharedPref"
-
     /** @return "SharedPref${annotatedClassName}Kt" isa. */
     fun getKotlinFileName(annotatedClassName: String): String {
         return "SharedPref${annotatedClassName}Kt"

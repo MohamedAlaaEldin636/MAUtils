@@ -20,7 +20,7 @@ package mohamedalaa.mautils.shared_pref_annotation
 import kotlin.reflect.KClass
 
 /**
- * Represents a KClass via [kClass] with being null or notNull via [nullable] isa.
+ * Represents a [KClass] via [kClass] param with being `null` or non-Null via [nullable] param isa.
  *
  * @see MAParameterizedKClass
  */

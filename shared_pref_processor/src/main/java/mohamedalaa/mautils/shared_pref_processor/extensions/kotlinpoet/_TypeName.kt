@@ -32,7 +32,7 @@ import kotlin.reflect.jvm.internal.impl.name.FqName
 fun TypeName.analyzeDeeplyToListOfTypeNames(convertJavaPrimitivesToKotlin: Boolean = true): List<TypeName> {
     val conversionBlock: TypeName.() -> TypeName = {
         if (convertJavaPrimitivesToKotlin) {
-            convertPrimitivesAndStringOfJavaToKotlinAsTypeName()
+            convertJavaToKotlinTypeAsTypeName()
         }else {
             this
         }
@@ -63,7 +63,7 @@ fun List<TypeName>.analyzeDeeplyToListOfTypeNames(convertJavaPrimitivesToKotlin:
 /**
  * Converts [String] and all primitives (int, byte, short, long, float, double, boolean, and char) isa.
  */
-fun TypeName.convertPrimitivesAndStringOfJavaToKotlinAsTypeName(): TypeName {
+fun TypeName.convertJavaToKotlinTypeAsTypeName(): TypeName {
     return when (this) {
         String::class.java.asTypeName() -> String::class.asTypeName()
 

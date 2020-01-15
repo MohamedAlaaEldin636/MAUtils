@@ -27,9 +27,24 @@ import org.robolectric.annotation.Config;
 import androidx.test.core.app.ApplicationProvider;
 import mohamedalaa.mautils.shared_pref_core.SharedPrefUtils;
 
+import static junit.framework.TestCase.assertEquals;
+
 @Config(manifest = Config.NONE, sdk = {Build.VERSION_CODES.P})
 @RunWith(RobolectricTestRunner.class)
 public class OtherOfSharedPrefJava {
+
+    @Test
+    public void v1() {
+        Context context = ApplicationProvider.getApplicationContext();
+
+        // No need for specific type name like putString
+        String string = "string";
+        SharedPrefUtils.set(context, "fileName", "key", string);
+        assertEquals(
+            string,
+            SharedPrefUtils.get(context, "fileName", "k1")
+        );
+    }
 
     @Test
     public void clearAll_removeKey_hasKey() {

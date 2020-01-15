@@ -23,24 +23,24 @@ import kotlin.reflect.KClass
  * - Used to describe the class with types params and with nullability in mind isa.
  * - In case non-nullable class/typeParams use [nonNullKClasses] isa.
  *      ```
- *      // Kotlin -> [Set]<[Int]>
+ *      // Kotlin -> Set<[Int]>
  *      MAParameterizedKClass.build(
  *          arrayOf(
  *              Set::class, Int::class
  *          )
  *      )
- *      // Java -> [Set]<[Float]>
+ *      // Java -> Set<[Float]>
  *      MAParameterizedKClass.Builder.build(
  *          new Class<?>[]{Set.class, Float.class}
  *      );
  *      ```
  * - In case need nullability use [maKClass] isa.
  *      ```
- *      // Kotlin -> [Set]<[Int]?>
+ *      // Kotlin -> Set<[Int]?>
  *      MAParameterizedKClass.build(
  *          maKClass = *arrayOf(
- *              MAKClass.build(Set::class),
- *              MAKClass.build(Int::class, true)
+ *              MAKClass(Set::class),
+ *              MAKClass(Int::class, true)
  *          )
  *      )
  *      ```

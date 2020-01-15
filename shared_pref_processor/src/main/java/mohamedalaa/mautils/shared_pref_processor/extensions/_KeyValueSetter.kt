@@ -68,8 +68,18 @@ fun Context.sharedPref_SomeClassName_SetName(
 
         null/* or gsonConverter*/
     )
+
+    // after deprecation -> without names of params isa, but same order isa.
+    sharedPrefSet<Set<String?>>(
+        fileName = privateFileName,
+        key = "mySetOfStrings",
+        value = value,
+        mode = Context.MODE_PRIVATE,
+        commit = commit
+    )
+
 }
- */
+*/
 @Suppress("unused")
 fun ProcessingEnvironment.buildSetComplexFun(
     annotatedClassName: String,
@@ -78,7 +88,7 @@ fun ProcessingEnvironment.buildSetComplexFun(
 
     fileConfigsSupportsJavaConsumer: Boolean,
 
-    gsonConverterSimpleName: String?,
+    @Suppress("UNUSED_PARAMETER") gsonConverterSimpleName: String?,
 
     valueTypeName: TypeName,
     isManualConversion: Boolean
@@ -126,6 +136,7 @@ fun ProcessingEnvironment.buildSetComplexFun(
 
         // fun code isa.
         if (isManualConversion) {
+            // Left to maintain compatibility isa.
             val stringAsTypeName = String::class.asTypeName().copy(nullable = valueCanBeNullable)
             addStatement(
                 "val $VAR_NAME_CONVERTED_VALUE_ANY_TO_STRING = ${VAR_NAME_VALUE}.run { ${maSharedPrefKeyValuePair.convertAnyToString} }"
@@ -146,19 +157,17 @@ fun ProcessingEnvironment.buildSetComplexFun(
                 stringAsTypeName
             )
         }else {
-            val gsonConverter = gsonConverterSimpleName?.run { "$this()" }
+            // Even after change -> maintains compatibility isa.
             addStatement(
                 "return sharedPrefSet<%T>(" +
                     "$VAR_NAME_PRIVATE_FILE_NAME, " +
 
                     "\"${maSharedPrefKeyValuePair.name}\", " +
                     "$VAR_NAME_VALUE, " +
-                    "$valueCanBeNullable, " +
 
                     "Context.MODE_PRIVATE, " +
-                    "$VAR_NAME_COMMIT, " +
+                    VAR_NAME_COMMIT +
 
-                    "$gsonConverter" +
                     ")",
                 toBeUsedValueTypeName
             )

@@ -68,6 +68,15 @@ internal fun Context.sharedPref_SomeClassName_GetName2(
 
         null/* or gsonConverter*/
     ).run { fromJson() }
+
+    // After Deprecation isa.
+    sharedPrefGet(
+        fileName = privateFileName,
+        key = "mySetOfStrings",
+        defValue = defValue,
+        mode = Context.MODE_PRIVATE
+    )
+
 }
  */
 fun ProcessingEnvironment.buildGetComplexFun(
@@ -77,7 +86,7 @@ fun ProcessingEnvironment.buildGetComplexFun(
 
     fileConfigsSupportsJavaConsumer: Boolean,
 
-    gsonConverterSimpleName: String?,
+    @Suppress("UNUSED_PARAMETER") gsonConverterSimpleName: String?,
 
     annotationMirrorOfGivenMASharedPrefKeyValuePair: AnnotationMirror?,
 
@@ -193,7 +202,6 @@ fun ProcessingEnvironment.buildGetComplexFun(
                 stringAsTypeName
             )
         }else {
-            val gsonConverter = gsonConverterSimpleName?.run { "$this()" }
             addStatement(
                 "return sharedPrefGet<%T>(" +
                     "$VAR_NAME_PRIVATE_FILE_NAME, " +
@@ -201,9 +209,8 @@ fun ProcessingEnvironment.buildGetComplexFun(
                     "\"${maSharedPrefKeyValuePair.name}\", " +
                     "$VAR_NAME_DEF_VALUE, " +
 
-                    "Context.MODE_PRIVATE, " +
+                    "Context.MODE_PRIVATE" +
 
-                    "$gsonConverter" +
                     ")",
                 toBeUsedValueTypeName
             )

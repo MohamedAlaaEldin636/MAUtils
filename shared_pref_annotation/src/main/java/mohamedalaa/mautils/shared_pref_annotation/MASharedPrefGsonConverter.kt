@@ -16,10 +16,13 @@
 package mohamedalaa.mautils.shared_pref_annotation
 
 /**
- * - Used only with [MASharedPrefKeyValuePair] isa.
- * - Used in case of auto conversion when the key/value pair type specified in [MASharedPrefKeyValuePair.type]
- * matches the one in the class annotated with this annotation isa.
+ * ### Deprecation reasons isa.
+ * - Since generated code is in kotlin -> No need for `GsonConverter` so that's a better approach isa.
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
+@Deprecated(
+    "Instead of MASharedPrefKeyValuePair, Use MASharedPrefPair, then just remove this",
+    level = DeprecationLevel.WARNING
+)
 annotation class MASharedPrefGsonConverter

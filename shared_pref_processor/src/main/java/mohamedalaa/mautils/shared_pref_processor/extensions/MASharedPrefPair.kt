@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-@file:Suppress("UNCHECKED_CAST")
-
 package mohamedalaa.mautils.shared_pref_processor.extensions
 
 import com.squareup.kotlinpoet.TypeName
@@ -22,32 +20,15 @@ import com.squareup.kotlinpoet.asTypeName
 import mohamedalaa.mautils.core_kotlin.extensions.triple
 import mohamedalaa.mautils.shared_pref_annotation.MAParameterizedKClass
 import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
-import mohamedalaa.mautils.shared_pref_processor.extensions.kotlinpoet.analyzeDeeplyToListOfTypeNames
+import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefPair
 import mohamedalaa.mautils.shared_pref_processor.extensions.kotlinpoet.convertJavaToKotlinTypeAsTypeName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.MirroredTypesException
 import javax.lang.model.type.TypeMirror
 
-fun MASharedPrefKeyValuePair.getMatchedGsonConverterOrNull(
-    processingEnv: ProcessingEnvironment,
-    listOfElementsAnnotatedByGsonConverterAndTheirTypeNamesListAnalyzed: List<Pair<TypeElement, List<TypeName>>>
-): TypeElement? = processingEnv.run {
-    if (listOfElementsAnnotatedByGsonConverterAndTheirTypeNamesListAnalyzed.isEmpty()) return null
-
-    // Key Value pair annotation type names isa.
-    val keyValuePairAnnotationTypeNames = getAllKClassesNotNullAsTypeMirrors(processingEnv).map {
-        it.asTypeName()
-    }.analyzeDeeplyToListOfTypeNames()
-
-    // Matched item isa.
-    listOfElementsAnnotatedByGsonConverterAndTheirTypeNamesListAnalyzed.firstOrNull {
-        it.second == keyValuePairAnnotationTypeNames
-    }?.first
-}
-
 /** takes care of nullability isa do not worry isa. */
-fun MASharedPrefKeyValuePair.asTypeName(processingEnv: ProcessingEnvironment): TypeName {
+fun MASharedPrefPair.asTypeName(processingEnv: ProcessingEnvironment): TypeName {
     val listOfTypeMirrorsAndIsNullable = getAllKClassesNotNullAsTypeMirrorsAndIsNullable(processingEnv)
 
     val mutableListOfTypeNameAndNumberOfTypeArgsAndIsNullable = mutableListOf<Triple<TypeName, Int, Boolean>>()
@@ -66,7 +47,22 @@ fun MASharedPrefKeyValuePair.asTypeName(processingEnv: ProcessingEnvironment): T
     }.toTypeName(processingEnv)
 }
 
-fun MASharedPrefKeyValuePair.getAllKClassesNotNullAsTypeMirrorsAndIsNullable(
+/** @return true if nullable class, we don't look at any type parameters isa. */
+fun MASharedPrefPair.classIsNullable(): Boolean {
+    val (nonNullTypeMirrorAndIsNullable, _) = getNonNullAndMAKClassTypeMirrorAndIsNullable()
+
+    return if (nonNullTypeMirrorAndIsNullable.isNotEmpty()) {
+        false
+    }else {
+        type.maKClass.first().nullable
+    }
+}
+
+private fun MASharedPrefPair.getAllKClassesNotNullAsTypeMirrors(
+    processingEnv: ProcessingEnvironment
+): List<TypeMirror> = getAllKClassesNotNullAsTypeMirrorsAndIsNullable(processingEnv).map { it.first }
+
+private fun MASharedPrefPair.getAllKClassesNotNullAsTypeMirrorsAndIsNullable(
     processingEnv: ProcessingEnvironment
 ): List<Pair<TypeMirror, Boolean>> = processingEnv.run {
     val (nonNullTypeMirrorAndIsNullable, maKClassTypeMirrorAndIsNullable) = getNonNullAndMAKClassTypeMirrorAndIsNullable()
@@ -91,22 +87,7 @@ fun MASharedPrefKeyValuePair.getAllKClassesNotNullAsTypeMirrorsAndIsNullable(
     }
 }
 
-fun MASharedPrefKeyValuePair.getAllKClassesNotNullAsTypeMirrors(
-    processingEnv: ProcessingEnvironment
-): List<TypeMirror> = getAllKClassesNotNullAsTypeMirrorsAndIsNullable(processingEnv).map { it.first }
-
-/** @return true if nullable class, we don't look at any type parameters isa. */
-fun MASharedPrefKeyValuePair.classIsNullable(): Boolean {
-    val (nonNullTypeMirrorAndIsNullable, _) = getNonNullAndMAKClassTypeMirrorAndIsNullable()
-
-    return if (nonNullTypeMirrorAndIsNullable.isNotEmpty()) {
-        false
-    }else {
-        type.maKClass.first().nullable
-    }
-}
-
-fun MASharedPrefKeyValuePair.getNonNullAndMAKClassTypeMirrorAndIsNullable()
+private fun MASharedPrefPair.getNonNullAndMAKClassTypeMirrorAndIsNullable()
     : Pair<List<Pair<TypeMirror, Boolean>>, List<Pair<TypeMirror, Boolean>>> {
     val nonNullTypeMirrorAndIsNullable = (try {
         @Suppress("UNCHECKED_CAST")

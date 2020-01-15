@@ -21,8 +21,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import kotlin.Deprecated;
-
 /**
  * <h3>Features</h3>
  *
@@ -35,11 +33,11 @@ import kotlin.Deprecated;
  *         highly customizable according to your needs.
  *     </li>
  *     <li>
- *         Supports any type with either auto or manual conversion according to your needs.
+ *         Supports any type not just the normally supported types isa.
  *     </li>
  *     <li>
  *         <b>Supports expressions</b> to be used in {@link MASharedPrefKeyValuePair#defaultValue()}
- *         instead of only constant values isa.
+ *         instead of only constant values (in kotlin programming language) isa.
  *     </li>
  *     <li>
  *         All generated functions(methods) that would edit the SharedPreferences are annotated
@@ -58,7 +56,7 @@ import kotlin.Deprecated;
  *         instead of sharedPrefClassName_SetIntValue() isa.
  *     </li>
  *     <li>
- *         Annotate this class with {@link MASharedPrefKeyValuePair} for each shared pref key/value pair,
+ *         Annotate this class with {@link MASharedPrefPair} for each shared pref key/value pair,
  *         And Additionally for more configs or general defaults You can as well annotate with
  *         {@link MASharedPrefFileConfigs} isa.
  *     </li>
@@ -85,18 +83,12 @@ import kotlin.Deprecated;
  *         of the commit function isa.
  *     </li>
  * </ou>
- *
- * @deprecated Use MASharedPrefPair instead isa.
  */
-@SuppressWarnings({"JavadocReference", "unused", "deprecation"})
-@Repeatable(MASharedPrefKeyValuePair.Container.class)
+@SuppressWarnings({"unused"})
+@Repeatable(MASharedPrefPair.Container.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-@Deprecated(
-    message = "Use MASharedPrefPair instead isa."
-)
-@java.lang.Deprecated
-public @interface MASharedPrefKeyValuePair {
+public @interface MASharedPrefPair {
 
     /**
      * <ul>
@@ -113,12 +105,14 @@ public @interface MASharedPrefKeyValuePair {
      *         Type of value of this key/value pair in the sharedPref file isa.
      *     </li>
      *     <li>
-     *         This can have type parameters and nested type parameters check {@link MAParameterizedKClass}
-     *         to know how to use it isa.
+     *         This type can have type parameters and nested type parameters check
+     *         {@link MAParameterizedKClass} to know how to use it along with how to declare nullability
+     *         for class and type params as well isa.
      *     </li>
      *     <li>
-     *         If class (not type params) is <code>null</code> then {@link #supportSetterAndGetterNullValues}
-     *         is considered as true even if false isa.
+     *         Note if class type(not type params) is <code>null</code> then generated getter/setter
+     *         functions are nullable, otherwise then are non-null meaning setter accepts only
+     *         non-null param value and getter returns only non-null value isa.
      *     </li>
      * </ul>
      *
@@ -149,7 +143,7 @@ public @interface MASharedPrefKeyValuePair {
      *         Otherwise one of the following default values acc. to type will be used instead isa.
      *         <ol type="I">
      *              <li>
-     *                  0 for {@link Integer} && {@link Long} && {@link Float}
+     *                  0 for numbers isa.
      *              </li>
      *              <li>
      *                  false for {@link Boolean}
@@ -181,78 +175,14 @@ public @interface MASharedPrefKeyValuePair {
     String defaultValue() default "null";
 
     /**
-     * If true then the set fun will have nullable value as the param <b>Note this MEANS</b>
-     * if a null value passed then the key will be deleted from the shared pref, for more info see
-     * {@link mohamedalaa.mautils.core_android.extensions.SharedPrefUtils.sharedPrefSet}
-     *
-     * @see MASharedPrefKeyValuePair#supportSetterAndGetterNullValues()
-     */
-    boolean supportSetterNullValue() default false;
-    /**
-     * If true then the get fun will return nullable value and will have nullable type as the
-     * defaultValue See {@link MASharedPrefKeyValuePair#defaultValue()}.
-     *
-     * @see MASharedPrefKeyValuePair#supportSetterAndGetterNullValues()
-     */
-    boolean supportGetterNullValue() default false;
-    /**
-     * If true then any values to {@link MASharedPrefKeyValuePair#supportSetterNullValue()} &
-     * {@link MASharedPrefKeyValuePair#supportGetterNullValue()} is ignored and consider both true,
-     * If false then this has no effect at all that's why that is the default value.
-     * <br/>
-     * <b>VIP NOTE</b> <br/>
-     * If {@link MASharedPrefKeyValuePair#type()} is nullable via {@link MAKClass#nullable()}
-     * (which means when the class itself is nullable not any or all of it's type params)
-     * then this value is considered true even if false isa.
-     */
-    boolean supportSetterAndGetterNullValues() default false;
-
-    /**
      * <ul>
      *     <li>
-     *         In case {@link #type()} is not one of the directly supported types by SharedPreferences
-     *         then it will be converted to string to be saved isa, conversions can be done
-     *         by two ways -> Auto & Manual
-     *         <ul>
-     *             <li>
-     *                 <strong>Auto Conversion</strong> ( Recommended )<br/>
-     *                 - (Recommended) Any type will be automatically converted to/from string for
-     *                 you using <code>toJsonOrNull</code> & <code>fromJsonOrNull</code> functions inside
-     *                 gson module in this library isa.
-     *             </li>
-     *             <li>
-     *                 <strong>Manual Conversion</strong> <br/>
-     *                 you use this parameter as a conversion expression coded in kotlin Considering
-     *                 the {@link MASharedPrefKeyValuePair#type()} as the `receiver` (for java developers
-     *                 this means consider yourself coding inside the class) <br/>
-     *                 So for example to convert any class to string you can use "toString()"
-     *             </li>
-     *         </ul>
-     *     </li>
-     *     <li>
-     *         If {@link MASharedPrefKeyValuePair#convertStringToAny()} is empty an error will be thrown
-     *         while processing this annotation telling u to either make both empty for auto conversion
-     *         or both non-empty for manual conversion isa.
-     *     </li>
-     * </ul>
-     */
-    String convertAnyToString() default "";
-    /** Opposite purpose of {@link MASharedPrefKeyValuePair#convertAnyToString()} isa. */
-    String convertStringToAny() default "";
-
-    /**
-     * <ul>
-     *     <li>
-     *         If {@link MASharedPrefKeyValuePair.JavaConsumerCode#SUPPORT} or in case if
-     *         {@link MASharedPrefKeyValuePair.JavaConsumerCode#BEHAVE_AS_IN_CONFIGS} &&
-     *         {@link MASharedPrefFileConfigs#supportJavaConsumerCode()} is true
+     *         If {@link MASharedPrefPair.JavaConsumerCode#SUPPORT} or in case if
+     *         {@link MASharedPrefPair.JavaConsumerCode#BEHAVE_AS_IN_CONFIGS} &&
+     *         {@link MASharedPrefFileConfigs#supportJavaConsumerCode()} is <code>true</code>
      *         then java consumer can call this method otherwise only kotlin consumer will be able
      *         to see this fun by not generating {@link kotlin.jvm.JvmOverloads} & {@link kotlin.jvm.JvmName},
      *         which is useful if you don't need it to make the generated code smaller isa.
-     *     </li>
-     *     <li>
-     *         This fun exists even {@link MASharedPrefFileConfigs} has a similar fun in case you
-     *         want 1 fun to support java while the rest don't for a smaller generated code isa.
      *     </li>
      * </ul>
      */
@@ -265,7 +195,7 @@ public @interface MASharedPrefKeyValuePair {
     @Retention(RetentionPolicy.SOURCE)
     @Target({ElementType.TYPE})
     @interface Container {
-        MASharedPrefKeyValuePair[] value();
+        MASharedPrefPair[] value();
     }
 
     /**
