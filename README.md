@@ -1,7 +1,7 @@
 # MAUtils
 [![](https://jitpack.io/v/MohamedAlaaEldin636/MAUtils.svg)](https://jitpack.io/#MohamedAlaaEldin636/MAUtils)
 [![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=14)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [**Wiki Home Page**](https://github.com/MohamedAlaaEldin636/MAUtils/wiki) 
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [**Wiki Home Page**](https://github.com/MohamedAlaaEldin636/MAUtils/wiki)
 
 
 # Library is in Progress (Alpha Development Stage)
