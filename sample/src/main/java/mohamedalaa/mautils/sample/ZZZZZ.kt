@@ -19,11 +19,14 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import mohamedalaa.mautils.core_android.extensions.getCircle
 import mohamedalaa.mautils.core_android.extensions.tintColorFilter
+import mohamedalaa.mautils.gson.toJsonOrNull
 import mohamedalaa.mautils.sample.custom_classes.helper_classes.GameTarneebTypeTrumpSuit
 import mohamedalaa.mautils.sample.shared_pref_.SharedPref_SomeClassName_NoContext
 
 private fun sas(d: Drawable) {
     val a: GameTarneebTypeTrumpSuit
+
+    d.toJsonOrNull()
 
     d.tintColorFilter(Color.WHITE)
     getCircle(2)

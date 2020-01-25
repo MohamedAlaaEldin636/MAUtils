@@ -17,12 +17,6 @@
 
 package mohamedalaa.mautils.sample.core_android.annotation_processing_isa
 
-import mohamedalaa.mautils.sample.general_custom_classes.Person
-import mohamedalaa.mautils.shared_pref_annotation.MAKClass
-import mohamedalaa.mautils.shared_pref_annotation.MAParameterizedKClass
-import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefFileConfigs
-import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
-
 // below class just used to ensure no problem in case of two same named files but in different packages will have no problem
 // in generated file which in old version could make some bugs isa.
 /*

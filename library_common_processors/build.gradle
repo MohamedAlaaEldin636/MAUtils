@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.room_gson_annotation
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
 
-/**
- * Created by <a href="https://github.com/MohamedAlaaEldin636">Mohamed</a> on 4/26/2019.
- *
- */
-object ProcessorConstants {
+//apply plugin: 'com.github.dcendents.android-maven'
 
-    val generationPackage: String = MARoomGsonTypeConverter::class.java.getPackage().name
+//group='com.github.MohamedAlaaEldin636'
 
-    const val generationClassNamePrefix = "TypeConverter"
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    const val generationClassSimpleName = "MAAutoTypeConverters"
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    // Own Libraries
+    api project (':library_common_annotations')
+
+    api project (':kotlin_poet')
+
+    api project (':core_kotlin')
 }
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8

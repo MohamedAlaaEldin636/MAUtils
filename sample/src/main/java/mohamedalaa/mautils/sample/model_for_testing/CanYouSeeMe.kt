@@ -15,8 +15,12 @@
 
 package mohamedalaa.mautils.sample.model_for_testing
 
+import com.maproductions.mohamedalaa.library_common_annotations.MAKClass
+import com.maproductions.mohamedalaa.library_common_annotations.MAParameterizedKClass
 import mohamedalaa.mautils.gson_annotation.MASealedAbstractOrInterface
+import mohamedalaa.mautils.room_gson_annotation.MAAutoTypeConverters
 import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverter
+import mohamedalaa.mautils.room_gson_annotation.MARoomGsonTypeConverterType
 
 /**
  * Created by [Mohamed](https://github.com/MohamedAlaaEldin636) on 4/4/2019.
@@ -31,3 +35,39 @@ sealed class CanYouSeeMe(
 )
 
 typealias IntMap<T> = Map<Int, T>
+
+enum class SomeEnumClass {
+    A, B, C, D, E, F
+}
+
+@MARoomGsonTypeConverterType(
+    MAParameterizedKClass(
+        nonNullKClasses = [SomeEnumClass::class]
+    )
+)
+class _AllTypesOne
+
+@MARoomGsonTypeConverterType(
+    MAParameterizedKClass(
+        nonNullKClasses = [List::class, SomeEnumClass::class]
+    )
+)
+@MARoomGsonTypeConverterType(
+    MAParameterizedKClass(
+        nonNullKClasses = [List::class, List::class, List::class, SomeEnumClass::class]
+    )
+)
+@MARoomGsonTypeConverterType(
+    MAParameterizedKClass(
+        maKClass = [
+            MAKClass(Pair::class),
+            MAKClass(Int::class, true),
+            MAKClass(Float::class)
+        ]
+    )
+)
+class _AllTypesTwo // todo use them isa.
+
+private fun ab(a: MAAutoTypeConverters_AllTypesOne, b: MAAutoTypeConverters_AllTypesTwo, c: MAAutoTypeConverters) {
+}
+

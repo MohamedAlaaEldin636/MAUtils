@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package mohamedalaa.mautils.room_gson_processor
+package com.maproductions.mohamedalaa.library_common_processors
 
+import mohamedalaa.mautils.core_kotlin.extensions.toStringOrNull
 import javax.annotation.processing.ProcessingEnvironment
 import javax.tools.Diagnostic
 
@@ -27,9 +28,30 @@ fun ProcessingEnvironment.error(msg: String): Nothing {
     throw RuntimeException(msg)
 }
 
-fun ProcessingEnvironment.warning(msg: String) {
+fun ProcessingEnvironment.note(msg: String) {
+    messager.printMessage(
+        Diagnostic.Kind.NOTE,
+        msg
+    )
+}
+
+fun ProcessingEnvironment.mandatoryWarning(msg: String) {
+    messager.printMessage(
+        Diagnostic.Kind.MANDATORY_WARNING,
+        msg
+    )
+}
+
+fun ProcessingEnvironment.warning(msg: Any?) {
     messager.printMessage(
         Diagnostic.Kind.WARNING,
+        msg.toStringOrNull() ?: "null"
+    )
+}
+
+fun ProcessingEnvironment.other(msg: String) {
+    messager.printMessage(
+        Diagnostic.Kind.OTHER,
         msg
     )
 }

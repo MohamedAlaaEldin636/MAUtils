@@ -16,7 +16,6 @@
 package mohamedalaa.mautils.sample
 
 import android.content.Context
-import android.content.SharedPreferences
 import mohamedalaa.mautils.gson.fromJsonOrNull
 import mohamedalaa.mautils.gson.toJsonOrNull
 import mohamedalaa.mautils.sample.general_custom_classes.GsonConverterPairOfPairOfIntAndSetOfFloatAndString
@@ -25,8 +24,6 @@ import mohamedalaa.mautils.sample.general_custom_classes.Person
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_asSharedPreferences
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_clearAll
 import mohamedalaa.mautils.sample.shared_pref_.sharedPref_SomeClassName_registerSharedPrefChangeListener*/
-import mohamedalaa.mautils.shared_pref_annotation.MAParameterizedKClass
-import mohamedalaa.mautils.shared_pref_annotation.MASharedPrefKeyValuePair
 import mohamedalaa.mautils.shared_pref_core.*
 import kotlin.test.assertEquals
 
