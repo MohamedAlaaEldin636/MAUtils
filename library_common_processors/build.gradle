@@ -16,9 +16,9 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
-//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 
-//group='com.github.MohamedAlaaEldin636'
+group='com.github.MohamedAlaaEldin636'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
