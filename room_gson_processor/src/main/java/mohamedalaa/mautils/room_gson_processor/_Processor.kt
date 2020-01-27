@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+@file:Suppress("FunctionName")
+
 package mohamedalaa.mautils.room_gson_processor
 
 import com.maproductions.mohamedalaa.library_common_processors.asTypeName
@@ -28,14 +30,21 @@ import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.TypeElement
 
 fun RoundEnvironment.process(processingEnv: ProcessingEnvironment) = processingEnv.performIfNotNull {
-    val maRoomGsonTypeConverterElements = getElementsAnnotatedWith(MARoomGsonTypeConverter::class.java).filterNotNull()
-    val maRoomGsonTypeConverterTypeElements = (
-        (getElementsAnnotatedWith(MARoomGsonTypeConverterType.Container::class.java) +
-            getElementsAnnotatedWith(MARoomGsonTypeConverterType::class.java)
-        )
-    ).distinct().filterNotNull()
+    // MARoomGsonTypeConverter
+    process_MARoomGsonTypeConverter(this)
 
-    // -- MARoomGsonTypeConverter -- //
+    // MARoomGsonTypeConverterType
+    process_MARoomGsonTypeConverterType(this)
+
+
+}
+
+// ---- Private fun
+
+private fun RoundEnvironment.process_MARoomGsonTypeConverter(processingEnv: ProcessingEnvironment) = processingEnv.performIfNotNull {
+    // Get all elements isa.
+    val maRoomGsonTypeConverterElements = getElementsAnnotatedWith(MARoomGsonTypeConverter::class.java).filterNotNull()
+    if (maRoomGsonTypeConverterElements.isEmpty()) return@performIfNotNull
 
     // Create conversion functions toJson/fromJson for each type isa.
     val allFunctionsFromOneTypeAnnotation = mutableListOf<FunSpec>()
@@ -61,8 +70,24 @@ fun RoundEnvironment.process(processingEnv: ProcessingEnvironment) = processingE
         .addType(kClass)
         .build()
 
-    // -- MARoomGsonTypeConverterType -- //
+    // Generate all the code made above isa.
+    try {
+        kFile.writeTo(processingEnv.filer)
+    }catch (e: IOException) {
+        e.printStackTrace()
+    }
+}
 
+private fun RoundEnvironment.process_MARoomGsonTypeConverterType(processingEnv: ProcessingEnvironment) = processingEnv.performIfNotNull {
+    // Get all elements isa.
+    val maRoomGsonTypeConverterTypeElements = (
+        (getElementsAnnotatedWith(MARoomGsonTypeConverterType.Container::class.java) +
+            getElementsAnnotatedWith(MARoomGsonTypeConverterType::class.java)
+            )
+    ).distinct().filterNotNull()
+    if (maRoomGsonTypeConverterTypeElements.isEmpty()) return@performIfNotNull
+
+    // loop through each element to generate its kFile for it isa.
     val allFunctionsFromSeveralTypesAnnotation = mutableListOf<FunSpec>()
     val listOfKFiles = mutableListOf<FileSpec>()
     for (element in maRoomGsonTypeConverterTypeElements) {
@@ -107,18 +132,12 @@ fun RoundEnvironment.process(processingEnv: ProcessingEnvironment) = processingE
     }
 
     // Generate all the code made above isa.
-    try {
-        kFile.writeTo(processingEnv.filer)
-
-        for (item in listOfKFiles) {
-            try {
-                item.writeTo(processingEnv.filer)
-            }catch (e: IOException) {
-                e.printStackTrace()
-            }
+    for (item in listOfKFiles) {
+        try {
+            item.writeTo(processingEnv.filer)
+        }catch (e: IOException) {
+            e.printStackTrace()
         }
-    }catch (e: IOException) {
-        e.printStackTrace()
     }
 }
 
