@@ -114,6 +114,7 @@ Remember that's only in case the custom type is suitable for `SharedPreferences`
 1. You can think of this module as kotlin-stdlib it has extension functions to facilitate common usages in kotlin programming language.
 
 ---
+# K/kdls(ss)s/s
 
 # [License](https://github.com/MohamedAlaaEldin636/MAUtils/blob/master/LICENSE.MD) [▴](#contents-)
 
@@ -136,8 +137,8 @@ See the License for the specific language governing permissions and limitations 
 
 | Permissions         | Limitations           | Conditions   |
 | ------------------- | --------------------- | ----------- |
-| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Commercial Use         | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/disable_use_icon.png" height="15" width="15"/> Trademark use | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/warning_icon.png" height="15" width="15"/> License and copyright notice |
-| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Modification           | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/disable_use_icon.png" height="15" width="15"/> Liability     |   <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/warning_icon.png" height="15" width="15"/> State changes |
-| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Distribution           | <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/disable_use_icon.png" height="15" width="15"/> Warranty      |    - |
-| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Patent use             | -         |   - |
-| <img src="https://github.com/MohamedAlaaEldin636/VIP-Reminder-Capstone-Project/blob/master/forReadMeFiles/enable_use_icon.png" height="15" width="15"/> Private use            | -                 |  - |
+| :heavy_check_mark: Commercial Use | :x: Trademark use | :information_source: License and copyright notice |
+| :heavy_check_mark: Modification | :x: Liability | :information_source: State changes |
+| :heavy_check_mark: Distribution | :x: Warranty | - |
+| :heavy_check_mark: Patent use | - | - |
+| :heavy_check_mark: Private use | - | - |
